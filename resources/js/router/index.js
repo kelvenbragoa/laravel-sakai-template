@@ -6,12 +6,32 @@ const router = createRouter({
     routes: [
         {
             path: '/',
+            name: 'Login',
+            component: () => import('@/views/pages/auth/Login.vue')
+        },
+        {
+            path: '/dashboard',
             component: AppLayout,
             children: [
                 {
-                    path: '/',
-                    name: 'dashboard',
-                    component: () => import('@/views/Dashboard.vue')
+                    path: '/dashboards',
+                    name: 'dashboards',
+                    component: () => import('@/views/pages/Dashboard.vue')
+                },
+                {
+                    path: '/teste/:id',
+                    name: 'teste',
+                    component: () => import('@/views/pages/Teste.vue')
+                },
+                {
+                    path: '/cargaone/:id',
+                    name: 'cargaone',
+                    component: () => import('@/views/pages/cgateone/carga/Carga.vue')
+                },
+                {
+                    path: '/terminalone/:id',
+                    name: 'terminalone',
+                    component: () => import('@/views/pages/cgateone/terminal/Terminal.vue')
                 },
                 {
                     path: '/uikit/formlayout',
@@ -103,6 +123,11 @@ const router = createRouter({
                     path: '/documentation',
                     name: 'documentation',
                     component: () => import('@/views/pages/Documentation.vue')
+                },
+                {
+                    path: '/user',
+                    name: 'user',
+                    component: () => import('@/views/pages/users/User.vue')
                 }
             ]
         },
@@ -131,6 +156,16 @@ const router = createRouter({
             path: '/auth/error',
             name: 'error',
             component: () => import('@/views/pages/auth/Error.vue')
+        },
+        {
+            path: '/dados',
+            name: 'dados',
+            component: () => import('@/views/pages/Testes.vue')
+        },
+        {
+            path: '/pdf',
+            name: 'pdf',
+            component: () => import('@/views/pages/PdfTeste.vue')
         }
     ]
 });

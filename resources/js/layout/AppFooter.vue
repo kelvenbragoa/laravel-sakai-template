@@ -2,7 +2,12 @@
 
 <template>
     <div class="layout-footer">
-        SAKAI by
-        <a href="https://primevue.org" target="_blank" rel="noopener noreferrer" class="text-primary font-bold hover:underline">PrimeVue</a>
+        <div class="flex items-center justify-center">
+            <Image src="/images/logo.png" alt="Image" width="100" />
+        </div>
+        <span class="mx-1">
+            Por
+        </span>
+        <a href="/" target="_blank" rel="noopener noreferrer" class="text-black font-bold hover:underline capitalize">c-gate</a>
     </div>
 </template>

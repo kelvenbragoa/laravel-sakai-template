@@ -10,19 +10,21 @@ const checked = ref(false);
 
 <template>
     <FloatingConfigurator />
-    <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
+    
+    <div class="dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden" style="background-color: #f9f9f9; border: 0px solid black;">
         
         <div class="flex flex-col items-center justify-center">
             
             <div style="border-radius: 56px; padding: 0.3rem;" class="blue-gradient">
-                <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
+                <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px; border: 0px solid red; background-color: #ffffff;">
                     <div class="text-center mb-8">
                         <!-- <img src="@/images/login.png" alt="Descrição da imagem" class="my-image" /> -->
                         <!-- <img :src="require('@/assets/images/login.png')" alt="Descrição da imagem" /> -->
                         <div class="flex items-center justify-center w-full">
-                            <Image src="/images/logo.png" alt="Image" width="200" />
+                            <!-- <Image src="@/assets/images/logo.png" alt="Image" width="200" /> -->
+                             <img src="http://[::1]:5173/resources/js/assets/images/logo.png" alt="logo" style="width: 200px"/>
                         </div>
-                        <div class="m-20">
+                        <div class="m-20">      
 
                         </div>
                         <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Bem vindo de volta!</div>
@@ -43,7 +45,7 @@ const checked = ref(false);
                             </div>
                             <span class="font-medium no-underline ml-2 text-right cursor-pointer corPrimaria">Esqueceste a senha?</span>
                         </div>
-                        <Button label="Entrar" class="w-full facebook-button hover" as="router-link" to="/dashboards"></Button>
+                        <Button label="Entrar" class="w-full facebook-button hover" as="router-link" to="/dashboard"></Button>
                     </div>
                 </div>
             </div>
@@ -98,5 +100,9 @@ const checked = ref(false);
     outline: none!important;
     border: 1px solid #1558b0!important;
     
+}
+
+body{
+    background-color: #ffffff!important;
 }
 </style>

@@ -3,7 +3,7 @@
 <template>
     <div class="layout-footer">
         <div class="flex items-center justify-center">
-            <Image src="/images/logo.png" alt="Image" width="100" />
+            <Image src="http://[::1]:5173/resources/js/assets/images/logo.png" alt="Image" width="100" />
         </div>
         <span class="mx-1">
             Por

@@ -356,8 +356,8 @@ function calculateCustomerTotal(name) {
             <div class="formUserAdd" style="margin-top: 15px; width: 100%">
             <div class="field formUserAddI" style="width: 100%; border: 0px solid black">
                 <label for="senha" class="my-5">Senha</label>
-                <Password v-model="value" class="btnPass w-full" placeholder="Senha"/>
-                
+                <!-- <Password v-model="value" class="btnPass w-full" placeholder="Senha" style="width: 100%; border: 1px solid red; outline: 0px;"/> -->
+                <Password id="senha" v-model="password" placeholder="Senha" :toggleMask="true" class="mb-4 inputsCaixas camposTextos" fluid :feedback="false"></Password>
                 
             </div>
             </div>
@@ -367,6 +367,7 @@ function calculateCustomerTotal(name) {
                 <button class="p-button p-component cores" @click="saveData()">Salvar</button>
                 <button class="p-button p-component p-button-secondary mx-2" @click="dialogVisible = false">Cancelar</button>
             </div>
+           
         </Dialog>
         
     </div>
@@ -489,6 +490,10 @@ export default {
     margin: 0px 0px;
 
 }
+
+.camposTextos:focus{
+    border: #1558b0 1px solid!important;
+}
 .btnExports:last-child{
     color: #4271d4;
     background-color: #ffffff;
@@ -500,6 +505,11 @@ export default {
 }
 
 .btnPass{
+    width: 100%!important;
+    border: 0px!important;
+    outline: 0px!important;
+}
+.p-inputtext{
     width: 100%!important;
 }
 

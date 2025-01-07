@@ -22,12 +22,21 @@ onMounted(() => {
 });
 
 const fetchData = async () => {
-  try {
-    const data = await getCarga(1, 10, "", null); 
-    cargaData.value = data || []; 
-  } catch (error) {
-    console.error("Erro ao buscar as transações:", error);
-  }
+  // try {
+  //   const data = await getCarga(1, 10, "", null); 
+  //   cargaData.value = data || []; 
+  // } catch (error) {
+  //   console.error("Erro ao buscar as transações:", error);
+  // }
+  axios
+    .get("http://20.87.9.35/api/v1/transacoes/lista")
+    .then((res) => {
+      cargaData.value = res.data   || []; 
+            console.log(res.data)
+    })
+    .catch((error) => {
+            console.log(error);
+    });
 };
 </script>
 

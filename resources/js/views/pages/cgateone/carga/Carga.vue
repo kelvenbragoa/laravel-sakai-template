@@ -105,6 +105,8 @@ import { getCarga } from '@/api';
 import { useRoute } from 'vue-router';
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import logo from '../../../../assets/images/logo.png'
+console.log(`logo: ${logo}`)
 // import * as autoTable from 'jspdf-autotable'
 // import * as jsPDF from 'jspdf' 
 
@@ -144,6 +146,14 @@ const formatDate = (dateString) => {
 
 
 onMounted(async () => {
+  //  axios
+  //           .get("http://20.87.9.35/api/v1/transacoes/lista")
+  //           .then((res) => {
+  //                   console.log(res.data)
+  //           })
+  //           .catch((error) => {
+  //                   console.log(error);
+  //           });
   try {
     const result = await getCarga(1, 10, "", null); 
     console.log("Resposta da API:", result);
@@ -192,7 +202,7 @@ const generatePDF = (rowData) => {
   
   doc.setFontSize(10);
   doc.text(`Detalhes da Carga: ${rowData.document_number}`, 20, 13);
-  doc.addImage("/images/logo.png" , 'JPEG', larguraPagina-60, 7, 40, 10);
+  doc.addImage("https://www.cornelder.co.mz/" , 'JPEG', larguraPagina-60, 7, 40, 10);
       let y = 15;
       // Linha de separação
       doc.setLineWidth(0.1);

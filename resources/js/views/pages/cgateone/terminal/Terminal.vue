@@ -39,7 +39,7 @@
           <Tag :value="data.status" :severity="getSeverity(data.status)" />
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select Status" style="min-width: 12rem" :showClear="true">
+          <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Status" style="min-width: 12rem" :showClear="true">
             <template #option="slotProps">
               <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />
             </template>
@@ -85,7 +85,7 @@ const filters = ref({
   truck_license_plate_number: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   status: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
-const statuses = ref(['Pending', 'Completed', 'In Progress', 'Cancelled']); 
+const statuses = ref(['Pending', 'Done', 'Started', 'Cancelled']); 
 const loading = ref(true);
 
 

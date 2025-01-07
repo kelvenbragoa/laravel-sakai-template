@@ -14,8 +14,8 @@ const router = createRouter({
             component: AppLayout,
             children: [
                 {
-                    path: '/dashboards',
-                    name: 'dashboards',
+                    path: '/dashboard',
+                    name: 'dashboard',
                     component: () => import('@/views/pages/Dashboard.vue')
                 },
                 {
@@ -166,6 +166,11 @@ const router = createRouter({
             path: '/pdf',
             name: 'pdf',
             component: () => import('@/views/pages/PdfTeste.vue')
+        },
+        {
+            path: '/dadoteste',
+            name: 'dadoteste',
+            component: () => import('@/views/pages/DadosUser.vue')
         }
     ]
 });

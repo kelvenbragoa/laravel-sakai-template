@@ -161,7 +161,19 @@ const generatePDF = (rowData) => {
       }
       doc.setLineWidth(0.1);
       doc.line(20, y, 190, y);
-      y+=40
+      y+=10
+      doc.text("Imagens", 20, y)
+      y+=10
+      const squareSize = 50; // Tamanho de cada quadrado (50x50)
+      const startX = 20; // Posição X do primeiro quadrado
+      const startY = y; // Posição Y de todos os quadrados
+      const spacing = 10; // Espaçamento entre os quadrados
+
+      // Desenhando os quadrados
+      for (let i = 0; i < 3; i++) {
+        const x = startX + i * (squareSize + spacing); // Calculando a posição X de cada quadrado
+        doc.rect(x, startY, squareSize, squareSize); // Desenhando o quadrado
+      }
       // doc.addImage(rowData.trailer_1_internal_cargo_photo , 'JPEG', 20, y, 180, 160);
 
       const data = new Date()

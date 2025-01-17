@@ -1,0 +1,63 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "name": "Ana Silva",
+        "email": "ana.silva@example.com",
+        "phone": "+258841234567",
+        "address": "Rua Principal, Beira",
+        "age": 30,
+        "gender": "Feminino",
+        "monthlyFee": "1500.00 MZN",
+        "time": "08:00",
+        "tier": "Juniores",
+        "estado": "Ativo"
+      },
+      {
+        "id": 2,
+        "name": "Carlos Almeida",
+        "email": "carlos.almeida@example.com",
+        "phone": "+258821234567",
+        "address": "Avenida Marginal, Maputo",
+        "age": 45,
+        "gender": "Masculino",
+        "monthlyFee": "2000.00 MZN",
+        "time": "10:00",
+        "tier": "Seniores",
+        "estado": "Inativo"
+      }
+    ],
+    "tools": [
+      {
+        "id": 1,
+        "name": "Martelo",
+        "status": "Disponível",
+        "pricePerDay": "100.00 MZN",
+        "category": "Construção"
+      },
+      {
+        "id": 2,
+        "name": "Furadeira",
+        "status": "Alugada",
+        "pricePerDay": "300.00 MZN",
+        "category": "Construção"
+      }
+    ],
+    "infractions": [
+      {
+        "id": 1,
+        "driver": "Ana Silva",
+        "description": "Estacionamento irregular",
+        "fineAmount": "500.00 MZN",
+        "date": "2025-01-10"
+      },
+      {
+        "id": 2,
+        "driver": "Carlos Almeida",
+        "description": "Excesso de velocidade",
+        "fineAmount": "1500.00 MZN",
+        "date": "2025-01-08"
+      }
+    ]
+  }
+  

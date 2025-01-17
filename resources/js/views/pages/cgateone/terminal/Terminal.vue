@@ -62,6 +62,27 @@ import { FilterMatchMode } from '@primevue/core/api';
 import { getCarga, getTransactions } from '@/api'; 
 import { useRoute } from 'vue-router';
 import { jsPDF } from "jspdf";
+import json from "../../../../../../public/user.json"
+
+const users = ref([]);
+
+  const loadJson = async () => {
+  try {
+    const response = await fetch('/user.json'); 
+    users.value = await response.json();
+   // console.log(users.value)
+    for(let userL in users.value.users){
+      console.log(users.value.users[userL])
+    }
+  } catch (error) {
+    console.error('Erro ao carregar o JSON:', error);
+  }
+};
+
+onMounted(() => {
+  loadJson();
+});
+
 
 
 const route = useRoute();

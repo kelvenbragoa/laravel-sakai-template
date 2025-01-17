@@ -171,6 +171,11 @@ const router = createRouter({
             path: '/dadoteste',
             name: 'dadoteste',
             component: () => import('@/views/pages/DadosUser.vue')
+        },
+        {
+            path: "/roper",
+            name: 'roper',
+            component: () => import('@/views/pages/RolePermissionsTeste.vue')
         }
     ]
 });

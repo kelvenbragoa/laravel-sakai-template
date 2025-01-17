@@ -2,14 +2,49 @@
 import { CustomerService } from '@/service/CustomerService';
 import { ProductService } from '@/service/ProductService';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
-import { onBeforeMount, reactive, ref } from 'vue';
+import { onBeforeMount, onMounted, reactive, ref } from 'vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 
 let dialogoUserVisble = ref(false)
 let dialogUserUpdateVisible = ref(false)
+let dialoUserUpdg = ref([
+    {
+        ativo: false,
+        dados: []
+    }
+])
+let verificarA = ref([])
+
+
 
 const toast = useToast()
+
+const usersL = ref([])
+const fetchUsers = async () => {
+  try {
+    const response = await fetch("/api/users");
+    const data = await response.json();
+    // permissions.value = Array.isArray(data) ? data : []; 
+    usersL.value = data.data.data
+    console.log(usersL.value)
+    // verificarA.value.push = usersL.value.
+
+
+    // console.log(permissions)
+    for(let items in usersL.value){
+        // verificarA.value.push = pe
+    //   console.log(usersL.value[items]["is_active"])
+    verificarA.value.push(usersL.value[items]["is_active"]==1?true:false)
+    }
+
+    console.log("---------------------------------------------------")
+    console.log(verificarA.value)
+    // console.log(permissions.value)
+  } catch (error) {
+    console.error("Erro ao buscar Users:", error);
+  }
+};
 
 
 const salvarDadosShow = () => {
@@ -200,6 +235,10 @@ function calculateCustomerTotal(name) {
 
     return total;
 }
+
+onMounted(()=>{
+    fetchUsers();
+})
 </script>
 
 <template>
@@ -211,9 +250,7 @@ function calculateCustomerTotal(name) {
             <Button label="Show" @click="show()" />
         </div> -->
 
-        <DataTable
-            :value="customers1"
-            :paginator="true"
+        <!-- :paginator="true"
             :rows="10"
             dataKey="id"
             :rowHover="true"
@@ -222,7 +259,12 @@ function calculateCustomerTotal(name) {
             :loading="loading1"
             :filters="filters1"
             :globalFilterFields="['name', 'country.name', 'representative.name', 'balance', 'status']"
-            showGridlines
+            showGridlines -->
+
+        <DataTable
+            :value="usersL"
+            :paginator="true"
+            :rows="10"
         >
             <template #header>
                 <div class="flex justify-between">
@@ -240,25 +282,26 @@ function calculateCustomerTotal(name) {
             </template>
             <template #empty> No customers found. </template>
             <template #loading> Loading customers data. Please wait. </template>
+            <Column field="id" header="Id"  style="min-width: 10rem">
+                
+            </Column>
             <Column field="name" header="Nome" style="min-width: 12rem">
-                <template #body="{ data }">
+                <!-- <template #body="{ data }">
                     {{ data.name }}
                 </template>
                 <template #filter="{ filterModel }">
                     <InputText v-model="filterModel.value" type="text" placeholder="Search by name" />
-                </template>
+                </template> -->
             </Column>
             
-            <Column header="Data  de registro" filterField="date" dataType="date" style="min-width: 10rem">
-                <template #body="{ data }">
-                    {{ formatDate(data.date) }}
-                </template>
-                <template #filter="{ filterModel }">
-                    <DatePicker v-model="filterModel.value" dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" />
-                </template>
+             <Column field="email" header="Email"  style="min-width: 10rem">
+                
             </Column>
             
-            <Column header="Nível de Acesso" field="status" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
+            <Column field="mobile" header="Telefone"  style="min-width: 10rem">
+                
+            </Column>
+            <!--<Column header="Nível de Acesso" field="status" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
                 <template #body="{ data }">
                     <Tag :value="data.status" :severity="getSeverity(data.status)" />
                 </template>
@@ -270,7 +313,7 @@ function calculateCustomerTotal(name) {
                         </template>
                     </Select>
                 </template>
-            </Column>
+            </Column>-->
             <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
                  <template #body="{ data }">
                     <div style="display: flex; gap: 0px">
@@ -286,15 +329,34 @@ function calculateCustomerTotal(name) {
                 </template>
                
             </Column>
-            <Column field="verified" header="Verified" dataType="boolean" bodyClass="text-center" style="min-width: 8rem">
-                <template #body="{ data }">
+            <Column field="is_active" header="Ativo" dataType="boolean" bodyClass="text-center" style="min-width: 8rem">
+                <template #body="{data}" >
+
+                   <div v-if="data.is_active==1">
+                        <i class="pi pi-times-circle text-red-500"></i>
+
+                   </div>
+
+                   <div v-else>
+                    <i class="pi pi-check-circle text-green-500 "></i>
+                   </div>
+
+                </template>
+    
+                <!-- <template #body="{ data }" v-if="data.is_active">
                     <i class="pi" :class="{ 'pi-check-circle text-green-500 ': data.verified, 'pi-times-circle text-red-500': !data.verified }"></i>
                 </template>
                 <template #filter="{ filterModel }">
                     <label for="verified-filter" class="font-bold"> Verified </label>
                     <Checkbox v-model="filterModel.value" :indeterminate="filterModel.value === null" binary inputId="verified-filter" />
+                </template> -->
+            </Column> 
+            <!-- <Column header="Ativo">
+                <template #body="{data}" v-if="data.is_active">
+                    
+                    <h2>ativado</h2>
                 </template>
-            </Column>
+            </Column> -->
         </DataTable>
     </div>
 

@@ -36,7 +36,6 @@ export default defineConfig({
             // "@/": path.join(__dirname, "/resources/js/"),
             "~": path.join(__dirname, "/node_modules/"),
             '@': fileURLToPath(new URL('./resources/js/', import.meta.url))
-
         },
     },
 });

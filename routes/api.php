@@ -11,7 +11,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::resource('roles',RolesController::class);
+Route::resource('roles',RolesController::class);;
 Route::post('/roles/{roleId}/rolepermission', [RolesController::class, 'storeRolePermission'])->name('roles.storeRolePermission');
 Route::get('/roles/{roleId}/rolepermission', [RolesController::class, 'addRolePermission'])->name('roles.addRolePermission');
 Route::resource('permissions',PermissionsController::class);

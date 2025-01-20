@@ -176,77 +176,121 @@ const addRole = async () => {
 <template>
   <div>
 
+    <!-- Tabela de Roles -->
+    <DataTable :value="permissions" :paginator="true" :rows="10">
+      <template #header>
+          <div class="flex justify-between">
+              <IconField class="searchText">
+                  <InputIcon>
+                      <i class="pi pi-search" />
+                  </InputIcon>
+                  <InputText v-model="value" placeholder="Pesquisar" />
+              </IconField>
+              <div class="btnsL">
+                  <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogoUserVisble = true"/>
+              </div>
+              
+          </div>
+        </template>
+      <div>
+        
+        <Column field="id" header="Id: "/>
+        <Column field="created_at" header="Criado em:" />
+
+        <Column field="name" header="Permisões: "/>
+
+        <Column header="Ações" style="display: flex; gap: 10px">
+          <template #body="slotProps">
+            <Button
+            
+              label=""
+              icon="pi pi-pencil"
+              class="p-button-warning btnEstiliza"
+              style=" border: 0px; background-color: transparent; color: #1558b0"
+              @click="showEditRoleDialog(slotProps.data)"
+            />
+            <!-- <Button
+              label=""
+              icon="pi pi-key"
+              class="p-button-success"
+              style="padding: 5px 0px;background-color: transparent; color: #000000; border: 0px"
+              @click="managePermissions(slotProps.data)"
+            /> -->
+            <Button
+              label=""
+              icon="pi pi-trash"
+              class="p-button-danger btnEstilizaDel"
+              style="padding: 5px 0px;background-color: transparent; color: #ff0000; border: 0px"
+              @click="removeRole(slotProps.data.id)"
+            />
+          </template>
+        </Column>
+      </div>
+      
+    </DataTable>
+
     <!-- <div class="roles">
       {{roles}}
     </div> -->
-    <h1>Gestão de Roles e Permissions</h1>
+    <!-- <h1>Gestão de Roles e Permissions</h1> -->
 
-    <!-- Botão para adicionar nova Role -->
+    <!-- Botão para adicionar nova Role
     <Button
       label="Add"
       icon="pi pi-plus"
       class="p-button-success mb-3"
       @click="showAddDialog = true"
-    />
+    /> -->
+
+    <div style="height: 40px;"></div>
 
     <DataTable :value="roles" responsiveLayout="scroll" :paginator="true" :rows="10">
+       <template #header>
+        <div class="flex justify-between">
+            <IconField class="searchText">
+                <InputIcon>
+                    <i class="pi pi-search" />
+                </InputIcon>
+                <InputText v-model="value" placeholder="Pesquisar" />
+            </IconField>
+            <div class="btnsL">
+                <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogoUserVisble = true"/>
+            </div>
+            
+        </div>
+      </template>
+
       <Column field="id" header="ID" />
       <Column field="name" header="Role" />
       <Column header="Ações" style="display: flex; gap: 10px">
         <template #body="slotProps">
           <Button
-            label=""
-            icon="pi pi-pencil"
-            class="p-button-warning"
-            @click="showEditRoleDialog(slotProps.data)"
-          />
-          <Button
-            label=""
-            icon="pi pi-key"
-            class="p-button-success"
-            @click="managePermissions(slotProps.data)"
-          />
-          <Button
-            label=""
-            icon="pi pi-trash"
-            class="p-button-danger"
-            @click="removeRole(slotProps.data.id)"
-          />
+            
+              label=""
+              icon="pi pi-pencil"
+              class="p-button-warning btnEstiliza"
+              style=" border: 0px; background-color: transparent; color: #1558b0"
+              @click="showEditRoleDialog(slotProps.data)"
+            />
+            <Button
+              label=""
+              icon="pi pi-key"
+              class="p-button-success btnPermission"
+              style="padding: 5px 0px;background-color: transparent; color: #000000; border: 0px"
+              @click="managePermissions(slotProps.data)"
+            />
+            <Button
+              label=""
+              icon="pi pi-trash"
+              class="p-button-danger btnEstilizaDel"
+              style="padding: 5px 0px;background-color: transparent; color: #ff0000; border: 0px"
+              @click="removeRole(slotProps.data.id)"
+            />
         </template>
       </Column>
     </DataTable>
 
-    <!-- Tabela de Roles -->
-    <DataTable :value="permissions" :paginator="true" :rows="4">
-      <Column field="id" header="Id: "/>
-      <Column field="created_at" header="Criado em:" />
-
-      <Column field="name" header="Permisões: "/>
-
-      <Column header="Ações" style="display: flex; gap: 10px">
-        <template #body="slotProps">
-          <Button
-            label=""
-            icon="pi pi-pencil"
-            class="p-button-warning"
-            @click="showEditRoleDialog(slotProps.data)"
-          />
-          <Button
-            label=""
-            icon="pi pi-key"
-            class="p-button-success"
-            @click="managePermissions(slotProps.data)"
-          />
-          <Button
-            label=""
-            icon="pi pi-trash"
-            class="p-button-danger"
-            @click="removeRole(slotProps.data.id)"
-          />
-        </template>
-      </Column>
-      
-    </DataTable>
+    
     
 
     <!-- Dialog para Gerenciar Permissões -->
@@ -323,5 +367,79 @@ const addRole = async () => {
 
 
 <style>
-/* Estilo customizado */
+:deep(.p-datatable-frozen-tbody) {
+    font-weight: bold;
+}
+
+:deep(.p-datatable-scrollable .p-frozen-column) {
+    font-weight: bold;
+}
+.cores{
+    background-color: #1558b0;
+    border: 1px solid #1558b0;
+}
+
+.cores:hover{
+    background-color: #1558b0cf!important;
+    border: 1px solid #1558b088!important;
+}
+.camposAgrupadosFormulario{
+    display: flex;
+    justify-content: space-between;
+}
+.camposAgrupadosFormulario .formUserAdd{
+    width: calc((100% / 2) - 5px);
+}
+
+.camposTextos, .dropdownSexo{
+    width: 100%;
+    margin: 0px 0px;
+
+}
+
+.camposTextos:focus{
+    border: #1558b0 1px solid!important;
+}
+.btnExports:last-child{
+    color: #4271d4;
+    background-color: #ffffff;
+}
+
+.labelDrop{
+    margin: 15px 0px;
+    display: block;
+}
+
+.btnPass{
+    width: 100%!important;
+    border: 0px!important;
+    outline: 0px!important;
+}
+.p-inputtext{
+    width: 100%!important;
+}
+
+.btnEstiliza:hover{
+    color: #1558b0a4!important;
+    background: #1558b033!important;
+    transition: all .5s ease!important;
+    
+}
+
+.btnEstilizaDel:hover{
+    color: #ff0000a5!important;
+    background: #ff000032!important;
+    transition: all .5s ease!important;
+    
+}
+
+.searchText:focus{
+    border: #1558b0 1px solid!important;
+}
+.btnPermission:hover{
+  background: #00000015!important;
+  color: #555555!important;
+  transition: all .3s ease;
+  border-radius: 5px;
+}
 </style>

@@ -141,8 +141,8 @@ onMounted(()=>{
                     
                 </div>
             </template>
-            <template #empty> No customers found. </template>
-            <template #loading> Loading customers data. Please wait. </template>
+            <template #empty> Vazio. </template>
+            <template #loading> Carregando... </template>
             <Column field="id" header="Id"  style="min-width: 10rem">
                 
             </Column>
@@ -157,13 +157,22 @@ onMounted(()=>{
             <Column field="mobile" header="Telefone"  style="min-width: 10rem">
                 
             </Column>
+
+            
             <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
                  <template #body="{ data }">
                     <div style="display: flex; gap: 0px">
 
                         <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style=" border: 0px; background-color: transparent; color: #1558b0; display: none" />
-                        <Button class="btnEstiliza" label="" icon="pi pi-refresh" style=" border: 0px; background-color: transparent; color: #1558b0" @click="dialogUserUpdateVisible = true" />
+                        <Button class="btnEstiliza" label="" icon="pi  pi-pencil" style=" border: 0px; background-color: transparent; color: #1558b0" @click="dialogUserUpdateVisible = true" />
                         <div>
+                            <Button
+                                label=""
+                                icon="pi pi-key"
+                                class="p-button-success btnPermission"
+                                style="padding: 5px 0px;background-color: transparent; color: #000000; border: 0px"
+                                @click="managePermissions(slotProps.data)"
+                                />
                             
                             <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="padding: 5px 0px;background-color: transparent; color: #ff0000; border: 0px" @click="openConfirmation" />
                             
@@ -186,6 +195,20 @@ onMounted(()=>{
 
                 </template>
             </Column> 
+
+            <!-- <Column header="Permissões">
+            <template #body="{data}">
+                <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style=" border: 0px; background-color: transparent; color: #1558b0; display: none" />
+                <div style="display: flex; gap: 10px">
+                    <Button label="Criar" rounded />
+                    <Button label="Apagar" severity="success" rounded />
+                    <Button label="Atualizar" severity="info" rounded />
+                </div>
+
+            </template>
+            </Column> -->
+
+
         </DataTable>
     </div>
 
@@ -463,6 +486,13 @@ onMounted(()=>{
 
 .searchText:focus{
     border: #1558b0 1px solid!important;
+}
+
+.btnPermission:hover{
+  background: #00000015!important;
+  color: #555555!important;
+  transition: all .3s ease;
+  border-radius: 5px;
 }
 
 

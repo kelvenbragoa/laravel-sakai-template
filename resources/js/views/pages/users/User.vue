@@ -8,12 +8,6 @@ import { useToast } from 'primevue/usetoast';
 
 let dialogoUserVisble = ref(false)
 let dialogUserUpdateVisible = ref(false)
-let dialoUserUpdg = ref([
-    {
-        ativo: false,
-        dados: []
-    }
-])
 let verificarA = ref([])
 
 
@@ -100,141 +94,8 @@ function closeConfirmation() {
 
 
 
-const customers1 = ref(null);
-const customers2 = ref(null);
-const customers3 = ref(null);
-const filters1 = ref(null);
-const loading1 = ref(null);
-const balanceFrozen = ref(false);
-const products = ref(null);
-const expandedRows = ref([]);
-const statuses = reactive(['Security', 'Admin', 'Outros', 'Admin', 'Security', 'Outros']);
-const representatives = reactive([
-    { name: 'Amy Elsner', image: 'amyelsner.png' },
-    { name: 'Anna Fali', image: 'annafali.png' },
-    { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-    { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-    { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-    { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-    { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-    { name: 'Onyama Limba', image: 'onyamalimba.png' },
-    { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-    { name: 'XuXue Feng', image: 'xuxuefeng.png' }
-]);
 
-function getOrderSeverity(order) {
-    switch (order.status) {
-        case 'DELIVERED':
-            return 'success';
 
-        case 'CANCELLED':
-            return 'danger';
-
-        case 'PENDING':
-            return 'warn';
-
-        case 'RETURNED':
-            return 'info';
-
-        default:
-            return null;
-    }
-}
-
-function getSeverity(status) {
-    switch (status) {
-        case 'Admin':
-            return 'danger';
-
-        case 'Outros':
-            return 'success';
-
-        case 'Security':
-            return 'info';
-
-        case 'negotiation':
-            return 'warn';
-
-        case 'renewal':
-            return null;
-    }
-}
-
-function getStockSeverity(product) {
-    switch (product.inventoryStatus) {
-        case 'INSTOCK':
-            return 'success';
-
-        case 'LOWSTOCK':
-            return 'warn';
-
-        case 'OUTOFSTOCK':
-            return 'danger';
-
-        default:
-            return null;
-    }
-}
-
-onBeforeMount(() => {
-    ProductService.getProductsWithOrdersSmall().then((data) => (products.value = data));
-    CustomerService.getCustomersLarge().then((data) => {
-        customers1.value = data;
-        loading1.value = false;
-        customers1.value.forEach((customer) => (customer.date = new Date(customer.date)));
-    });
-    CustomerService.getCustomersLarge().then((data) => (customers2.value = data));
-    CustomerService.getCustomersMedium().then((data) => (customers3.value = data));
-
-    initFilters1();
-});
-
-function initFilters1() {
-    filters1.value = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-        'country.name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-        representative: { value: null, matchMode: FilterMatchMode.IN },
-        date: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
-        balance: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
-        status: { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
-        activity: { value: [0, 100], matchMode: FilterMatchMode.BETWEEN },
-        verified: { value: null, matchMode: FilterMatchMode.EQUALS }
-    };
-}
-
-function expandAll() {
-    expandedRows.value = products.value.reduce((acc, p) => (acc[p.id] = true) && acc, {});
-}
-
-function collapseAll() {
-    expandedRows.value = null;
-}
-
-function formatCurrency(value) {
-    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-}
-
-function formatDate(value) {
-    return value.toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-}
-
-function calculateCustomerTotal(name) {
-    let total = 0;
-    if (customers3.value) {
-        for (let customer of customers3.value) {
-            if (customer.representative.name === name) {
-                total++;
-            }
-        }
-    }
-
-    return total;
-}
 
 onMounted(()=>{
     fetchUsers();
@@ -268,11 +129,11 @@ onMounted(()=>{
         >
             <template #header>
                 <div class="flex justify-between">
-                    <IconField>
+                    <IconField class="searchText">
                         <InputIcon>
                             <i class="pi pi-search" />
                         </InputIcon>
-                        <InputText v-model="filters1['global'].value" placeholder="Pesquisar" />
+                        <InputText v-model="value" placeholder="Pesquisar" />
                     </IconField>
                     <div class="btnsL">
                         <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogoUserVisble = true"/>
@@ -286,12 +147,7 @@ onMounted(()=>{
                 
             </Column>
             <Column field="name" header="Nome" style="min-width: 12rem">
-                <!-- <template #body="{ data }">
-                    {{ data.name }}
-                </template>
-                <template #filter="{ filterModel }">
-                    <InputText v-model="filterModel.value" type="text" placeholder="Search by name" />
-                </template> -->
+
             </Column>
             
              <Column field="email" header="Email"  style="min-width: 10rem">
@@ -301,19 +157,6 @@ onMounted(()=>{
             <Column field="mobile" header="Telefone"  style="min-width: 10rem">
                 
             </Column>
-            <!--<Column header="Nível de Acesso" field="status" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
-                <template #body="{ data }">
-                    <Tag :value="data.status" :severity="getSeverity(data.status)" />
-                </template>
-                <template #filter="{ filterModel }">
-                    
-                    <Select v-model="filterModel.value" :options="statuses" placeholder="Select One" showClear>
-                        <template #option="slotProps">
-                            <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />
-                        </template>
-                    </Select>
-                </template>
-            </Column>-->
             <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
                  <template #body="{ data }">
                     <div style="display: flex; gap: 0px">
@@ -342,21 +185,7 @@ onMounted(()=>{
                    </div>
 
                 </template>
-    
-                <!-- <template #body="{ data }" v-if="data.is_active">
-                    <i class="pi" :class="{ 'pi-check-circle text-green-500 ': data.verified, 'pi-times-circle text-red-500': !data.verified }"></i>
-                </template>
-                <template #filter="{ filterModel }">
-                    <label for="verified-filter" class="font-bold"> Verified </label>
-                    <Checkbox v-model="filterModel.value" :indeterminate="filterModel.value === null" binary inputId="verified-filter" />
-                </template> -->
             </Column> 
-            <!-- <Column header="Ativo">
-                <template #body="{data}" v-if="data.is_active">
-                    
-                    <h2>ativado</h2>
-                </template>
-            </Column> -->
         </DataTable>
     </div>
 
@@ -563,113 +392,6 @@ onMounted(()=>{
     </div>
 </template>
 
-<script>
-
-import { ref } from "vue";
-import Dialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
-import Dropdown from "primevue/dropdown";
-import Password from "primevue/password";
-import { useToast } from 'primevue/usetoast';
-
-const nomeL = ref('')
-const apelidoL = ref('')
-const emailL = ref('')
-const senhaL = ref('')
-const sayHello = () => {
-  console.log("Hello World");
-};  
-
-
-const salvarDados = () => {
-    // console.log("Salvo");
-    let dadoUserAdd = {
-        nome: nomeL.value,
-        apelido: apelidoL.value,
-        email: emailL.value,
-        senha: senhaL.value,
-        gates: gateItem.value.name,
-        sexos: sexoItem.value.name,
-        acessos: acessoItem.value.name
-    }
-    dialogoUserVisble = false
-    console.log(`Dialog visible: ${dialogoUserVisble}`)
-    console.log(dadoUserAdd)
-}
-
-const atualizarDados = () => {
-    // console.log("Salvo");
-    let dadoUserAdd = {
-        nome: nomeL.value,
-        apelido: apelidoL.value,
-        email: emailL.value,
-        senha: senhaL.value,
-        gates: gateItem.value.name,
-        sexos: sexoItem.value.name,
-        acessos: acessoItem.value.name
-    }
-    console.log(dadoUserAdd)
-}
-const value = ref(null);
-const dropdownItems = ref([
-    { name: 'Option 1', code: 'Option 1' },
-    { name: 'Option 2', code: 'Option 2' },
-    { name: 'Option 3', code: 'Option 3' }
-]);
-
-
-const sexo = ref([
-    { name: 'Masculino', code: 'M' },
-    { name: 'Feminino', code: 'F' }
-]);
-
-const sexoItem = ref(null);
-
-const acesso = ref([
-    { name: 'Segurança', code: 'security' },
-    { name: 'Outros', code: 'others' }
-]);
-
-const acessoItem = ref(null);
-
-const gate = ref([
-    { name: '4', code: 'quatro' },
-    { name: '6', code: 'seis' },  
-    { name: '11A', code: 'onzea' }
-]);
-
-const gateItem = ref(null);
-
-
-
-
-export default {
-  components: {
-    Dialog,
-    InputText,
-    Dropdown,
-    Password,
-  },
-
-  data() {
-        return {
-            dialogVisible: false,
-            dialogVisibleUpdate: false,
-        };
-    },
-    saveData(){
-        console.log("Salvo")
-    },
-
-    updateData(){
-        console.log("Atualizado")
-    },
-  setup() {
-   
-
-  },
-};
-</script>
 
 
 <style scoped lang="scss">
@@ -737,6 +459,10 @@ export default {
     background: #ff000032!important;
     transition: all .5s ease!important;
     
+}
+
+.searchText:focus{
+    border: #1558b0 1px solid!important;
 }
 
 

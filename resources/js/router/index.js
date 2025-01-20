@@ -128,6 +128,11 @@ const router = createRouter({
                     path: '/user',
                     name: 'user',
                     component: () => import('@/views/pages/users/User.vue')
+                },
+                {
+                    path: "/rolespermissions",
+                    name: "rolespermissions",
+                    component: () => import('@/views/pages/permitionroles/Permition.vue')
                 }
             ]
         },

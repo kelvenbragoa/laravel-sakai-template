@@ -155,7 +155,7 @@ const model = ref([
                    {
                         label: "Permissões",
                         icon: 'pi pi-key',
-                        to: '/users'
+                        to: '/rolespermissions'
                     },
                     {
                         label: 'User',

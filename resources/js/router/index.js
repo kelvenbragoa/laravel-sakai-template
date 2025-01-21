@@ -181,6 +181,11 @@ const router = createRouter({
             path: "/roper",
             name: 'roper',
             component: () => import('@/views/pages/RolePermissionsTeste.vue')
+        },
+        {
+            path: "/add",
+            name: 'add',
+            component: () => import('@/views/pages/AddData.vue')
         }
     ]
 });

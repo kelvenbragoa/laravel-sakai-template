@@ -8,13 +8,83 @@ import { useToast } from 'primevue/usetoast';
 
 let dialogoUserVisble = ref(false)
 let dialogUserUpdateVisible = ref(false)
+let dialogRoleUpdateVisible = ref(false)
 let verificarA = ref([])
+const checked = ref(true);
+const checked2 = ref([false])
+
+const filtroDados = ref("")
+
+const roles = ref()
+const rolesItems = ref([])
+const permissions = ref([])
+
+const permissionsItems = ([])
+
+const loading = ref(false);
+
+const fetchPermissions = async () =>{
+    try{
+        loading.value = true;
+        const res = await fetch("/api/permissions")
+        const dados = await res.json()
+        // permissionsItems.value = dados.data.data
+        console.log("-------------------------------------")
+        console.log("Permissions")
+       for(let k in dados.data.data){
+        console.log("Key: "+dados.data.data[k].name)
+        permissionsItems.push(dados.data.data[k].name)
+        // permissionsItems.value.add(dados.data.data[k].name)
+       }
+        console.log(permissionsItems)
+        loading.value = false;
+    }catch(error){
+        console.log(error)
+    }
+}
+
+const fetchRoles = async ()=>{
+    try{
+        const response = await fetch("/api/roles");
+        const data = await response.json();
+        rolesItems.value = data.data.data
+    }catch(erro){
+        console.log(erro)
+    }
+}
 
 
+
+const sexoItem = ref([
+    { name: 'Masculino', code: 'M' },
+    { name: 'Feminino', code: 'F' }
+]);
+
+const gateItem = ref([
+    { name: 'Gate 4', code: '4' },
+    { name: 'Gate 5', code: '5' },
+    { name: 'Gate 6', code: '6' },
+    { name: 'Gate 11A', code: '11A' },
+    { name: 'Gate 8A', code: '8A' }
+])
+
+const acessoItem = ref([
+    { name: 'Administrador', code: 'Admin' },
+    { name: 'Manager', code: 'Manager' },
+    { name: 'Operator', code: 'Operator' },
+    { name: 'Super Admin', code: 'SuperAdmin' }
+
+])
+
+const acesso = ref()
+const gate = ref()
+
+const sexo = ref();
 
 const toast = useToast()
 
 const usersL = ref([])
+const userFiltro = ref([])
 const fetchUsers = async () => {
   try {
     const response = await fetch("/api/users");
@@ -22,6 +92,7 @@ const fetchUsers = async () => {
     // permissions.value = Array.isArray(data) ? data : []; 
     usersL.value = data.data.data
     console.log(usersL.value)
+    userFiltro.value = data.data.data
     // verificarA.value.push = usersL.value.
 
 
@@ -34,11 +105,33 @@ const fetchUsers = async () => {
 
     console.log("---------------------------------------------------")
     console.log(verificarA.value)
+    console.log("Tamanho")
+    console.log(verificarA.value.length)
+    console.log(data.data.data.length)
     // console.log(permissions.value)
   } catch (error) {
     console.error("Erro ao buscar Users:", error);
   }
 };
+
+const filtroChange = () => {
+    loading.value = true;
+    if (filtroDados.value.trim() === "") {
+        console.log("Vazio");
+        userFiltro.value = [...usersL.value]; 
+        loading.value = false;
+    } else {
+        console.log("Preenchido");
+        console.log(filtroDados.value);
+        userFiltro.value = usersL.value.filter((user) =>
+            user.name.toLowerCase().includes(filtroDados.value.toLowerCase()) ||
+            user.email.toLowerCase().includes(filtroDados.value.toLocaleLowerCase())
+        );
+        loading.value = false;
+        console.log(userFiltro.value)
+    }
+};
+
 
 
 const salvarDadosShow = () => {
@@ -91,21 +184,51 @@ function closeConfirmation() {
     toast.add({severity: "success", summary: "Confirmação", detail:"Usuário eliminado", life: 3000})
 }
 
+const salvarPermissions = async ()=>{
+    console.log("Dados salvos")
+    dialogRoleUpdateVisible.value = false
+    console.log(permissions.value)
+}
 
 
+// dialogUserUpdateVisible = true
 
+const nomeUpdate = ref()
+const emailUpdate = ref()
+const mobileUpdate = ref()
+const atualizarDados = (dados)=>{
+    dialogUserUpdateVisible.value = true
+    nomeUpdate.value =  dados.name
+    emailUpdate.value = dados.email
+    mobileUpdate.value = dados.mobile
+    
+    console.log("mfkdsflm")
+}
 
+const disableMk = ()=>{
+    dialogUserUpdateVisible.value = false
+    console.log("Cancelar")
+}
 
 
 onMounted(()=>{
     fetchUsers();
+    fetchRoles();
+    fetchPermissions();
 })
 </script>
 
 <template>
+    <div v-if="loading" class="loader-overlay">
+        <div class="louderL">
+            <ProgressSpinner />
+        </div>
+        
+    </div>
     <div class="card">
 
         <div class="font-semibold text-xl mb-4">Users</div>
+        <!-- Dados: {{filtroDados}} -->
          <!-- <div class="card flex justify-center">
             <Toast />
             <Button label="Show" @click="show()" />
@@ -123,7 +246,7 @@ onMounted(()=>{
             showGridlines -->
 
         <DataTable
-            :value="usersL"
+            :value="userFiltro"
             :paginator="true"
             :rows="10"
         >
@@ -133,7 +256,7 @@ onMounted(()=>{
                         <InputIcon>
                             <i class="pi pi-search" />
                         </InputIcon>
-                        <InputText v-model="value" placeholder="Pesquisar" />
+                        <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
                     </IconField>
                     <div class="btnsL">
                         <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogoUserVisble = true"/>
@@ -142,7 +265,8 @@ onMounted(()=>{
                 </div>
             </template>
             <template #empty> Vazio. </template>
-            <template #loading> Carregando... </template>
+           
+
             <Column field="id" header="Id"  style="min-width: 10rem">
                 
             </Column>
@@ -164,14 +288,14 @@ onMounted(()=>{
                     <div style="display: flex; gap: 0px">
 
                         <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style=" border: 0px; background-color: transparent; color: #1558b0; display: none" />
-                        <Button class="btnEstiliza" label="" icon="pi  pi-pencil" style=" border: 0px; background-color: transparent; color: #1558b0" @click="dialogUserUpdateVisible = true" />
+                        <Button class="btnEstiliza" label="" icon="pi  pi-pencil" style=" border: 0px; background-color: transparent; color: #1558b0" @click="atualizarDados(data)" />
                         <div>
                             <Button
                                 label=""
                                 icon="pi pi-key"
                                 class="p-button-success btnPermission"
                                 style="padding: 5px 0px;background-color: transparent; color: #000000; border: 0px"
-                                @click="managePermissions(slotProps.data)"
+                                @click="dialogRoleUpdateVisible = true"
                                 />
                             
                             <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="padding: 5px 0px;background-color: transparent; color: #ff0000; border: 0px" @click="openConfirmation" />
@@ -183,15 +307,23 @@ onMounted(()=>{
             </Column>
             <Column field="is_active" header="Ativo" dataType="boolean" bodyClass="text-center" style="min-width: 8rem">
                 <template #body="{data}" >
+                    <!-- <div> {{verificarA[data.id]}} </div> -->
 
-                   <div v-if="data.is_active==1">
+                   <div v-if="data.is_active==1" style="display: flex; align-items: center; justify-items: center; gap: 10px">
                         <i class="pi pi-times-circle text-red-500"></i>
+                         <!-- <InputSwitch v-model="checked2" /> -->
+                         <InputSwitch v-model="verificarA[data.id]" />
+                         <!-- {{data.is_active}} -->
 
                    </div>
 
-                   <div v-else>
+                   <div v-if="data.is_active==0" style="display: flex; align-items: center; justify-items: center; gap: 10px">
                     <i class="pi pi-check-circle text-green-500 "></i>
+                        <!-- <InputSwitch v-model="checked" /> -->
+                        <InputSwitch  v-model="verificarA[data.id]"/>
                    </div>
+
+                   
 
                 </template>
             </Column> 
@@ -251,21 +383,6 @@ onMounted(()=>{
             </div>
         </div>
 
-        <!-- Apelido -->
-        <div class="formUserAdd">
-            <div class="field formUserAddI">
-            <label for="apelido">Apelido</label>
-            <InputText
-                id="apelido"
-                v-model="apelidoL"
-                required
-                autofocus
-                class="camposTextos"
-            />
-            </div>
-        </div>
-        </div>
-
         <!-- Email -->
         <div class="formUserAdd">
         <div class="field formUserAddI">
@@ -279,24 +396,48 @@ onMounted(()=>{
             />
         </div>
         </div>
+        
+        </div>
+
+        <!-- Numero -->
+        
+
+        <div class="formUserAdd">
+            <div class="field formUserAddI">
+            <label for="apelido">Telefone</label>
+            <!-- <InputText
+                id="celular"
+                v-model="apelidoL"
+                required
+                autofocus
+                class="camposTextos"
+            /> -->
+            <!-- <InputNumber v-model="apelidoL" inputId="integeronly" fluid /> -->
+            <InputNumber v-model="apelidoL" inputId="withoutgrouping" :useGrouping="false" fluid />
+
+
+
+
+            </div>
+        </div>
         <!-- Portão -->
         <div class="formUserAdd">
             <label for="portao" class="labelDrop">Portão</label>
-            <Select id="portao" v-model="gateItem" :options="gate" optionLabel="name" placeholder="Selecione o Portão" class="w-full"></Select>
+            <Select id="portao" v-model="gate" :options="gateItem" optionLabel="name" placeholder="Selecione o Portão" class="w-full"></Select>
         </div>
 
             <div class="camposAgrupadosFormulario">
             <!-- Sexo -->
             <div class="formUserAdd">
                 <label for="sexo" class="labelDrop">Sexo</label>
-                <Select id="sexo" v-model="sexoItem" :options="sexo" optionLabel="name" placeholder="Selecione o sexo" class="w-full"></Select>
+                <Select id="sexo" v-model="sexo" :options="sexoItem" optionLabel="name" placeholder="Selecione o sexo" class="w-full"></Select>
             
             </div>
 
             <!-- Acesso -->
             <div class="formUserAdd">
                 <label for="acesso" class="labelDrop">Acesso</label>
-                <Select id="sexo" v-model="acessoItem" :options="acesso" optionLabel="name" placeholder="S. Nivel de acesso" class="w-full"></Select>
+                <Select id="sexo" v-model="acesso" :options="rolesItems" optionLabel="name" placeholder="S. Nivel de acesso" class="w-full"></Select>
             </div>
             </div>
 
@@ -337,27 +478,12 @@ onMounted(()=>{
             <label for="name">Nome</label>
             <InputText
                 id="name"
-                v-model="nomeL"
+                v-model="nomeUpdate"
                 required
                 autofocus
                 class="camposTextos"
             />
             </div>
-        </div>
-
-        <!-- Apelido -->
-        <div class="formUserAdd">
-            <div class="field formUserAddI">
-            <label for="apelido">Apelido</label>
-            <InputText
-                id="apelido"
-                v-model="apelidoL"
-                required
-                autofocus
-                class="camposTextos"
-            />
-            </div>
-        </div>
         </div>
 
         <!-- Email -->
@@ -366,30 +492,44 @@ onMounted(()=>{
             <label for="email">Email</label>
             <InputText
             id="email"
-            v-model="emailL"
+            v-model="emailUpdate"
             required
             autofocus
             class="camposTextos"
             />
         </div>
         </div>
+        
+        </div>
+
+        <!-- Numero -->
+        
+
+        <div class="formUserAdd">
+            <div class="field formUserAddI">
+            <label for="apelido">Telefone</label>
+            <InputNumber v-model="mobileUpdate" inputId="withoutgrouping" :useGrouping="false" fluid />
+            <!-- <InputNumber v-model="mobileUpdate" inputId="integeronly" fluid /> -->
+            </div>
+        </div>
+        <!-- Portão -->
         <div class="formUserAdd">
             <label for="portao" class="labelDrop">Portão</label>
-            <Select id="portao" v-model="gateItem" :options="gate" optionLabel="name" placeholder="Selecione o Portão" class="w-full"></Select>
+            <Select id="portao" v-model="gate" :options="gateItem" optionLabel="name" placeholder="Selecione o Portão" class="w-full"></Select>
         </div>
 
             <div class="camposAgrupadosFormulario">
             <!-- Sexo -->
             <div class="formUserAdd">
                 <label for="sexo" class="labelDrop">Sexo</label>
-                <Select id="sexo" v-model="sexoItem" :options="sexo" optionLabel="name" placeholder="Selecione o sexo" class="w-full"></Select>
+                <Select id="sexo" v-model="sexo" :options="sexoItem" optionLabel="name" placeholder="Selecione o sexo" class="w-full"></Select>
             
             </div>
 
             <!-- Acesso -->
             <div class="formUserAdd">
                 <label for="acesso" class="labelDrop">Acesso</label>
-                <Select id="sexo" v-model="acessoItem" :options="acesso" optionLabel="name" placeholder="S. Nivel de acesso" class="w-full"></Select>
+                <Select id="sexo" v-model="acesso" :options="rolesItems" optionLabel="name" placeholder="S. Nivel de acesso" class="w-full"></Select>
             </div>
             </div>
 
@@ -397,7 +537,6 @@ onMounted(()=>{
             <div class="formUserAdd" style="margin-top: 15px; width: 100%">
             <div class="field formUserAddI" style="width: 100%; border: 0px solid black">
                 <label for="senha" class="my-5">Senha</label>
-                <!-- <Password v-model="value" class="btnPass w-full" placeholder="Senha" style="width: 100%; border: 1px solid red; outline: 0px;"/> -->
                 <Password id="senha" v-model="senhaL" placeholder="Senha" :toggleMask="true" class="mb-4 inputsCaixas camposTextos" fluid :feedback="false"></Password>
                 
             </div>
@@ -406,10 +545,35 @@ onMounted(()=>{
             <hr class="my-5">
              <div class="flex">
                 <button class="p-button p-component cores" @click="atualizarDadosShow">Atualizar</button>
-                <button class="p-button p-component p-button-secondary mx-2" @click="dialogUserUpdateVisible = false">Cancelar</button>
+                <button class="p-button p-component p-button-secondary mx-2" @click="disableMk">Cancelar</button>
                 <!-- <button @click="sayHello">Clique Aqui</button> -->
             </div>
            
+        </Dialog>
+
+        <Dialog
+         header="Adicionar permissions"
+            v-model:visible="dialogRoleUpdateVisible"
+            :closable="true"
+            :modal="true"
+           
+            :draggable="false"
+            :resizable="false"
+            style="width: 30vw; min-height: 5vh"
+            
+            :footer="productDialogFooterForm"
+            >
+            <!-- optionLabel="name" -->
+                <hr>
+                <!-- <Select id="permis" v-model="permissions" :options="permissionsItems"  placeholder="S. Nivel de acesso" class="w-full" style="margin-top: 15px;"></Select> -->
+
+            <MultiSelect name="permissions" v-model="permissions" :options="permissionsItems" filter placeholder="Selecione permissões" :maxSelectedLabels="3" class="w-full md:w-80" style="margin-top: 15px; width: 100%" />
+            <!-- <Message v-if="$form.city?.invalid" severity="error" size="small" variant="simple">{{ $form.city.error?.message }}</Message> -->
+            <hr class="my-5">
+             <div class="flex">
+                <button class="p-button p-component cores" @click="salvarPermissions">Salvar</button>
+                <button class="p-button p-component p-button-secondary mx-2" @click="dialogRoleUpdateVisible = false">Cancelar</button>
+            </div>
         </Dialog>
         
     </div>
@@ -493,6 +657,19 @@ onMounted(()=>{
   color: #555555!important;
   transition: all .3s ease;
   border-radius: 5px;
+}
+
+.louderL{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.192);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 

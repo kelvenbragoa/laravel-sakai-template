@@ -29,7 +29,7 @@ const fetchRoles = async () => {
     //     console.log(roles.value[items][item])
     //   }
     // }
-    // console.log(data.data)
+     console.log(data.data)
   } catch (error) {
     console.error("Erro ao buscar roles:", error);
   }

@@ -86,6 +86,114 @@ import { useRoute } from 'vue-router';
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
+//como criar um select no primevue
+
+
+// <template>
+//     <div class="card flex justify-center">
+//         <Select v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="w-full md:w-56" />
+//     </div>
+// </template>
+
+// <script setup>
+// import { ref } from "vue";
+
+// const selectedCity = ref();
+// const cities = ref([
+//     { name: 'New York', code: 'NY' },
+//     { name: 'Rome', code: 'RM' },
+//     { name: 'London', code: 'LDN' },
+//     { name: 'Istanbul', code: 'IST' },
+//     { name: 'Paris', code: 'PRS' }
+// ]);
+// </script>
+
+
+// <template>
+//     <div class="card flex flex-wrap gap-4">
+//         <div class="flex-auto">
+//             <label for="integeronly" class="font-bold block mb-2"> Integer Only </label>
+//             <InputNumber v-model="value1" inputId="integeronly" fluid />
+//         </div>
+//         <div class="flex-auto">
+//             <label for="withoutgrouping" class="font-bold block mb-2"> Without Grouping </label>
+//             <InputNumber v-model="value2" inputId="withoutgrouping" :useGrouping="false" fluid />
+//         </div>
+//         <div class="flex-auto">
+//             <label for="minmaxfraction" class="font-bold block mb-2"> Min-Max Fraction Digits </label>
+//             <InputNumber v-model="value3" inputId="minmaxfraction" :minFractionDigits="2" :maxFractionDigits="5" fluid />
+//         </div>
+//         <div class="flex-auto">
+//             <label for="minmax" class="font-bold block mb-2"> Min-Max Boundaries </label>
+//             <InputNumber v-model="value4" inputId="minmax" :min="0" :max="100" fluid />
+//         </div>
+//     </div>
+// </template>
+
+// <script setup>
+// import { ref } from "vue";
+
+// const value1 = ref(42723);
+// const value2 = ref(58151);
+// const value3 = ref(2351.35);
+// const value4 = ref(50);
+// </script>
+
+
+//Multi select
+
+
+// <template>
+//     <div class="card flex justify-center">
+//         <Form v-slot="$form" :resolver="resolver" :initialValues="initialValues" @submit="onFormSubmit" class="flex justify-center flex-col gap-4">
+//             <div class="flex flex-col gap-1">
+//                 <MultiSelect name="city" :options="cities" optionLabel="name" filter placeholder="Select Cities" :maxSelectedLabels="3" class="w-full md:w-80" />
+//                 <Message v-if="$form.city?.invalid" severity="error" size="small" variant="simple">{{ $form.city.error?.message }}</Message>
+//             </div>
+//             <Button type="submit" severity="secondary" label="Submit" />
+//         </Form>
+//     </div>
+// </template>
+
+// <script setup>
+// import { ref } from 'vue';
+// import { zodResolver } from '@primevue/forms/resolvers/zod';
+// import { useToast } from "primevue/usetoast";
+// import { z } from 'zod';
+
+// const toast = useToast();
+// const initialValues = ref({
+//     city: []
+// });
+// const resolver = ref(zodResolver(
+//     z.object({
+//         city: z
+//             .array(
+//                 z.object({
+//                     name: z.string().min(1, 'City is required.')
+//                 })
+//             )
+//             .min(1, 'City is required.')
+//     })
+// ));
+// const cities = ref([
+//     { name: 'New York', code: 'NY' },
+//     { name: 'Rome', code: 'RM' },
+//     { name: 'London', code: 'LDN' },
+//     { name: 'Istanbul', code: 'IST' },
+//     { name: 'Paris', code: 'PRS' }
+// ]);
+
+// const onFormSubmit = ({ valid }) => {
+//     if (valid) {
+//         toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
+//     }
+// };
+// </script>
+        
+
+
+
 
 const route = useRoute();
 const userId = route.params.id;

@@ -46,7 +46,7 @@ const fetchPermissions = async () => {
     // for(let items in permissions.value){
     //   console.log(permissions.value[items])
     // }
-    // console.log(permissions.value)
+    console.log(permissions.value)
   } catch (error) {
     console.error("Erro ao buscar permissions:", error);
   }

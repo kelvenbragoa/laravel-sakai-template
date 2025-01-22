@@ -37,37 +37,72 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     //
+    //     // $randomPassword = Str::random(8) . '!@#';
+    //     $registerUserData = $request->validate([
+    //         'name' => 'required|string',
+    //         'email' => 'required|string|email|unique:users',
+    //         'password'=>'required|min:8',
+    //         'mobile' => 'required',
+    //         'roles' => 'required|array',
+    //         'roles.*.name' => 'required|string',
+    //     ]);
+
+    //     // return $registerUserData['roles'];
+    //     $user = User::create([
+    //         'name' => $registerUserData['name'],
+    //         'email' => strtolower($registerUserData['email']),
+    //         'is_active' => 1,
+    //         'mobile' => $registerUserData['mobile'] ?? null,
+    //         'password' => Hash::make($registerUserData['password']),
+    //     ]);
+
+    //     $roleNames = collect($registerUserData['roles'])->pluck('name')->toArray();
+
+
+    //     $user->syncRoles($roleNames);
+
+    //     return response()->json([
+    //         'data' => $user
+    //     ]);
+    // }
+
     public function store(Request $request)
     {
-        //
-        // $randomPassword = Str::random(8) . '!@#';
-        $registerUserData = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password'=>'required|min:8',
-            'mobile' => 'required',
-            'roles' => 'required|array',
-            'roles.*.name' => 'required|string',
-        ]);
+        try {
+            $registerUserData = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|string|email|unique:users',
+                'password' => 'required|min:8',
+                'mobile' => 'required',
+                'roles' => 'required|array',
+                'roles.*.name' => 'required|string',
+            ]);
 
-        // return $registerUserData['roles'];
-        $user = User::create([
-            'name' => $registerUserData['name'],
-            'email' => strtolower($registerUserData['email']),
-            'is_active' => 1,
-            'mobile' => $registerUserData['mobile'] ?? null,
-            'password' => Hash::make($registerUserData['password']),
-        ]);
+            $user = User::create([
+                'name' => $registerUserData['name'],
+                'email' => strtolower($registerUserData['email']),
+                'is_active' => 1,
+                'mobile' => $registerUserData['mobile'] ?? null,
+                'password' => Hash::make($registerUserData['password']),
+            ]);
 
-        $roleNames = collect($registerUserData['roles'])->pluck('name')->toArray();
+            $roleNames = collect($registerUserData['roles'])->pluck('name')->toArray();
+            $user->syncRoles($roleNames);
 
-
-        $user->syncRoles($roleNames);
-
-        return response()->json([
-            'data' => $user
-        ]);
+            return response()->json([
+                'data' => $user
+            ]);
+        } catch (\Exception $e) {
+            // Retorna o erro com a mensagem detalhada
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.

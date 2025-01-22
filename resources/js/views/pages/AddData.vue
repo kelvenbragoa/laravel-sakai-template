@@ -77,37 +77,74 @@ const fetchRoles = async () => {
   }
 };
 const addUser = async () => {
-  try {
-    const payload = {
-      name: "John Doe",
-      email: "domingosmartinho34sea@gmail.com",
-      password: "12345678",
-      mobile: "987654321",
-      roles: [{ name: "Admin" }],
-    };
+  // Definindo os dados do payload com informações do usuário e suas permissões
+  const payload = {
+    name: "Domingos Doe",
+    email: "teste34sea@gmail.com",
+    password: "12345678",
+    mobile: "987654321",
+    roles: [{ name: "Manager" }], // Atribuindo o ID da role ao invés de apenas o nome
+  };
 
+  try {
+    // Realizando a requisição POST para criar o usuário
     const response = await axios.post("/api/users", payload, {
       headers: {
-        'Content-Type': 'application/json',
-      }
+        "Content-Type": "application/json",
+      },
     });
 
+    // Exibindo uma notificação de sucesso se o usuário for criado com sucesso
     toast.add({
       severity: "success",
-      summary: "Sucesso",
-      detail: "Usuário adicionado com sucesso!",
+      summary: "Usuário Criado",
+      detail: `Usuário ${response.data.name} criado com sucesso!`,
       life: 3000,
     });
   } catch (error) {
-    console.error("Erro detalhado:", error.response?.data); // Log da resposta completa
+    // Exibindo erro se a criação do usuário falhar
+    console.error("Erro ao adicionar usuário:", error.response?.data || error);
+
     toast.add({
       severity: "error",
       summary: "Erro",
-      detail: error.response?.data?.message || "Erro ao adicionar usuário",
+      detail: error.response?.data?.message || "Erro ao criar o usuário.",
       life: 3000,
     });
   }
 };
+
+// const addUser = async () => {
+//   // Dados de exemplo para o usuário
+//   const user = {
+//     name: 'João Silva',
+//     email: 'joao.silyfdvadscddsas@example.com',
+//     password: 'senha123',
+//     mobile: '999999999',
+//     roles: [{ name: 'Admin' }],
+//   };
+
+//   try {
+//     const response = await axios.post('/api/users', user, {
+//       headers: {
+//         'Content-Type': 'application/json'
+//       }
+//     });
+
+//     console.log('Usuário adicionado', response.data);
+//     // Mensagem de sucesso (console.log para testar)
+//     alert('Usuário adicionado com sucesso!');
+//   } catch (error) {
+//     console.error('Erro ao adicionar usuário:', error);
+//     // Mensagem de erro (console.log para testar)
+//     alert('Falha ao adicionar usuário.');
+//   }
+// };
+
+
+
+
+
 
 
 onMounted(fetchRoles);

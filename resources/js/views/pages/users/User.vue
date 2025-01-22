@@ -9,6 +9,18 @@ import { useToast } from 'primevue/usetoast';
 let dialogoUserVisble = ref(false)
 let dialogUserUpdateVisible = ref(false)
 let dialogRoleUpdateVisible = ref(false)
+const rolesName = ref([])
+
+const formDataSave =  reactive(
+    {
+        name: "",
+        email: "",
+        password: "",
+        mobile: "",
+        password: "",
+        roles: [], 
+    }
+)
 let verificarA = ref([])
 const checked = ref(true);
 const checked2 = ref([false])
@@ -47,7 +59,22 @@ const fetchRoles = async ()=>{
     try{
         const response = await fetch("/api/roles");
         const data = await response.json();
-        rolesItems.value = data.data.data
+        console.log("Roles")
+        console.log(data.data.data[1].guard_name)
+        console.log("---------------------------------------------")
+        rolesItems.value = data.data.data.filter((roles)=>{
+            // console.log(roles.guard_name.includes('web'))
+           return roles.guard_name.includes('web')
+            //  user.name.toLowerCase().includes(filtroDados.value.toLowerCase())
+        })
+
+        for(let items in rolesItems.value){
+            // rolesName.value.push = 
+            // console.log(rolesItems.value[items])
+            rolesName.value.push({"name": rolesItems.value[items].name})
+        }
+        console.log("Roles Names")
+        console.log(rolesName.value)
     }catch(erro){
         console.log(erro)
     }
@@ -133,22 +160,88 @@ const filtroChange = () => {
 };
 
 
+const addUser = async () => {
+  // Definindo os dados do payload com informações do usuário e suas permissões
+  const payload = {
+    name: "Domingos Doe",
+    email: "teste34sea@gmail.com",
+    password: "12345678",
+    mobile: "987654321",
+    roles: [{ name: "Manager" }], // Atribuindo o ID da role ao invés de apenas o nome
+  };
 
-const salvarDadosShow = () => {
-     let dadoUserAdd = {
-        nome: nomeL.value,
-        apelido: apelidoL.value,
-        email: emailL.value,
-        senha: senhaL.value,
-        gates: gateItem.value.name,
-        sexos: sexoItem.value.name,
-        acessos: acessoItem.value.name
-    }
+  try {
+    // Realizando a requisição POST para criar o usuário
+    const response = await axios.post("/api/users", payload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Exibindo uma notificação de sucesso se o usuário for criado com sucesso
+    toast.add({
+      severity: "success",
+      summary: "Usuário Criado",
+      detail: `Usuário ${response.data.name} criado com sucesso!`,
+      life: 3000,
+    });
+  } catch (error) {
+    // Exibindo erro se a criação do usuário falhar
+    console.error("Erro ao adicionar usuário:", error.response?.data || error);
+
+    toast.add({
+      severity: "error",
+      summary: "Erro",
+      detail: error.response?.data?.message || "Erro ao criar o usuário.",
+      life: 3000,
+    });
+  }
+};
+
+
+const salvarDadosShow = async () => {
+    //  let dadoUserAdd = {
+    //     nome: nomeL.value,
+    //     apelido: apelidoL.value,
+    //     email: emailL.value,
+    //     senha: senhaL.value,
+    //     gates: gateItem.value.name,
+    //     sexos: sexoItem.value.name,
+    //     acessos: acessoItem.value.name
+    // }
     dialogoUserVisble.value = false
-    console.log(`Dialog visible: ${dialogoUserVisble}`)
-    console.log(dadoUserAdd)
+    console.log(formDataSave)
+    // console.log(dadoUserAdd)
     // dialogVisible = false
-    toast.add({ severity: 'success', summary: 'Confirmação', detail: 'Usuario salvo', life: 3000 });
+    try {
+    // Realizando a requisição POST para criar o usuário
+    const response = await axios.post("/api/users", formDataSave, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Exibindo uma notificação de sucesso se o usuário for criado com sucesso
+    // toast.add({
+    //   severity: "success",
+    //   summary: "Usuário Criado",
+    //   detail: `Usuário ${response.data.name} criado com sucesso!`,
+    //   life: 3000,
+    // });
+    toast.add({ severity: 'success', summary: 'Confirmação', detail: `Usuário ${response.data.name} criado com sucesso!`, life: 3000 });
+  } catch (error) {
+    // Exibindo erro se a criação do usuário falhar
+    console.error("Erro ao adicionar usuário:", error.response?.data || error);
+
+    // toast.add({
+    //   severity: "error",
+    //   summary: "Erro",
+    //   detail: error.response?.data?.message || "Erro ao criar o usuário.",
+    //   life: 3000,
+    // });
+    toast.add({ severity: 'error', summary: 'Erro', detail: error.response?.data?.message || "Erro ao criar o usuário.", life: 3000 });
+  }
+    
     //toast.add({ severity: 'Confirmação', summary: 'Info', detail: 'Salvo', life: 3000 });
 };
 
@@ -375,7 +468,7 @@ onMounted(()=>{
             <label for="name">Nome</label>
             <InputText
                 id="name"
-                v-model="nomeL"
+                v-model="formDataSave.name"
                 required
                 autofocus
                 class="camposTextos"
@@ -389,7 +482,7 @@ onMounted(()=>{
             <label for="email">Email</label>
             <InputText
             id="email"
-            v-model="emailL"
+            v-model="formDataSave.email"
             required
             autofocus
             class="camposTextos"
@@ -413,7 +506,7 @@ onMounted(()=>{
                 class="camposTextos"
             /> -->
             <!-- <InputNumber v-model="apelidoL" inputId="integeronly" fluid /> -->
-            <InputNumber v-model="apelidoL" inputId="withoutgrouping" :useGrouping="false" fluid />
+            <InputNumber v-model="formDataSave.mobile" inputId="withoutgrouping" :useGrouping="false" fluid required />
 
 
 
@@ -437,7 +530,7 @@ onMounted(()=>{
             <!-- Acesso -->
             <div class="formUserAdd">
                 <label for="acesso" class="labelDrop">Acesso</label>
-                <Select id="sexo" v-model="acesso" :options="rolesItems" optionLabel="name" placeholder="S. Nivel de acesso" class="w-full"></Select>
+                <Select id="sexo" v-model="formDataSave.roles" :options="rolesName" optionLabel="name" placeholder="S. Nivel de acesso" class="w-full"></Select>
             </div>
             </div>
 
@@ -445,7 +538,7 @@ onMounted(()=>{
             <div class="formUserAdd" style="margin-top: 15px; width: 100%">
             <div class="field formUserAddI" style="width: 100%; border: 0px solid black">
                 <label for="senha" class="my-5">Senha</label>
-                <Password id="senha" v-model="senhaL" placeholder="Senha" :toggleMask="true" class="mb-4 inputsCaixas camposTextos" fluid :feedback="false"></Password>
+                <Password id="senha" v-model="formDataSave.password" placeholder="Senha" :toggleMask="true" class="mb-4 inputsCaixas camposTextos" fluid :feedback="false"></Password>
                 
             </div>
             </div>

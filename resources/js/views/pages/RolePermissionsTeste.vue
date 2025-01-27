@@ -29,7 +29,14 @@ const fetchRoles = async () => {
     //     console.log(roles.value[items][item])
     //   }
     // }
-    // console.log(data.data)
+    filtroUsers.value = roles.value.filter((user)=>
+     user.guard_name.includes("web")
+    )
+    for(let item in roles.value){
+      console.log(item)
+    }
+    
+  console.log(filtroUsers.value)
   } catch (error) {
     console.error("Erro ao buscar roles:", error);
   }
@@ -51,20 +58,17 @@ const fetchPermissions = async () => {
     console.error("Erro ao buscar permissions:", error);
   }
 };
-
+const filtroUsers = ref()
 const fetchUsers = async () => {
   try {
     const response = await fetch("/api/users");
     const data = await response.json();
-    // permissions.value = Array.isArray(data) ? data : []; 
-    usersL.value = data.data.data
-    console.log(usersL.value)
 
-    // console.log(permissions)
-    // for(let items in permissions.value){
-    //   console.log(permissions.value[items])
-    // }
-    // console.log(permissions.value)
+    usersL.value = data.data.data
+
+    
+    
+
   } catch (error) {
     console.error("Erro ao buscar permissions:", error);
   }

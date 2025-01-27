@@ -64,18 +64,36 @@ class RolesController extends Controller
     /**
      * Display the specified resource.
      */
+    // public function show(string $id)
+    // {
+    //     //
+    //     $role = Role::findOrFail($id);
+    //     $rolepermissions = $role->permissions()->get();
+    //     $userroles = DB::table('model_has_roles')->where('role_id', $role->id)->get();
+    //     return response()->json([
+    //         'role' => $role,
+    //         'rolepermissions' => $rolepermissions,
+    //         'userroles' => $userroles
+    //     ], 200);
+    // }
+
     public function show(string $id)
-    {
-        //
-        $role = Role::findOrFail($id);
-        $rolepermissions = $role->permissions()->get();
-        $userroles = DB::table('model_has_roles')->where('role_id', $role->id)->get();
-        return response()->json([
-            'role' => $role,
-            'rolepermissions' => $rolepermissions,
-            'userroles' => $userroles
-        ], 200);
-    }
+{
+    // Buscar a role pelo ID
+    $role = Role::with('permissions')->findOrFail($id);
+
+    // Buscar os usuários associados a esta role
+    $userroles = User::whereHas('roles', function ($query) use ($role) {
+        $query->where('id', $role->id);
+    })->get();
+
+    return response()->json([
+        'role' => $role,
+        'permissions' => $role->permissions,
+        'users' => $userroles
+    ], 200);
+}
+
 
     /**
      * Show the form for editing the specified resource.

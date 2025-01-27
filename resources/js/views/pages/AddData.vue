@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <h2>Adicionar Usuário</h2>
-    <form @submit.prevent="addUser">
+    <form @submit.prevent="deleteUser">
       <div class="field">
         <label for="name">Nome</label>
         <InputText id="name" v-model="form.name" required />
@@ -140,12 +140,50 @@ const addUser = async () => {
 //     alert('Falha ao adicionar usuário.');
 //   }
 // };
+//
 
 
+//Dados
+const user = reactive({
+  id: 69,
+  name: "Domingos Doe",
+  email: "Doe@gmail.com",
+  mobile: "867522595",
+  roles: ["Manager"], 
+});
+// Atualizar usuário
+const updateUser = async () => {
+  console.log(user.id)
+  try {
+    await axios.put(`/api/users/${user.id}`, user);
+    toast.add({
+      severity: "success",
+      summary: "Sucesso",
+      detail: "Usuário atualizado com sucesso!",
+      life: 3000,
+    });
+    console.log("Adicionado")
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Erro",
+      detail: "Falha ao atualizar usuário.",
+      life: 3000,
+    });
+  }
+};
 
+//Apagar
+const deleteUser = async () => {
+  try {
+    const response = await axios.delete(`api/users/${61}`);
+    console.log('Usuário deletado com sucesso', response.status);
+  } catch (error) {
+    console.error('Erro ao deletar o usuário:', error.response.data);
+  }
+};
 
-
-
+// deleteUser(60); // Exemplo: Apagar o usuário com ID 1
 
 onMounted(fetchRoles);
 </script>

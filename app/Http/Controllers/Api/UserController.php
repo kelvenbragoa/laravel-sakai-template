@@ -133,24 +133,60 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, User $user)
+    // {
+    //     //
+    //     $data = $request->all();
+    //     $user->load('area');
+
+    //     $user->update($data);
+    //     if ($request->has('roles')) {
+    //         $user->syncRoles($data['roles']);
+    //     }
+    //     if ($request->has('permission')) {
+    //         $user->syncPermissions($data['permission']);
+    //     }
+
+    //     return response()->json([
+    //         'data' => $user
+    //     ]);
+    // }
+
     public function update(Request $request, User $user)
     {
-        //
-        $data = $request->all();
-        $user->load('area');
+        try {
+            // Validação
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+                'mobile' => 'nullable|string|max:15',
+                'roles' => 'nullable|array',
+                'roles.*' => 'string',
+            ]);
 
-        $user->update($data);
-        if ($request->has('roles')) {
-            $user->syncRoles($data['roles']);
-        }
-        if ($request->has('permission')) {
-            $user->syncPermissions($data['permission']);
-        }
+            // Atualizar o usuário
+            $user->update([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'mobile' => $validatedData['mobile'] ?? $user->mobile,
+            ]);
 
-        return response()->json([
-            'data' => $user
-        ]);
+            // Sincronizar roles, se fornecido
+            if (isset($validatedData['roles'])) {
+                $user->syncRoles($validatedData['roles']);
+            }
+
+            return response()->json([
+                'data' => $user
+            ], 200);
+        } catch (\Exception $e) {
+            // Retorna o erro detalhado para debugging
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.

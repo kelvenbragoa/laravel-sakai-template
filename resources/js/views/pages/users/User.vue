@@ -10,6 +10,26 @@ let dialogoUserVisble = ref(false)
 let dialogUserUpdateVisible = ref(false)
 let dialogRoleUpdateVisible = ref(false)
 const rolesName = ref([])
+let verificarA = ref([])
+const checked = ref(true);
+const checked2 = ref([false])
+const dadosUserDelete = ref(
+    {
+        name: "",
+        id: null
+    }
+)
+
+const filtroDados = ref("")
+
+const roles = ref()
+const rolesItems = ref([])
+const permissions = ref([])
+
+const permissionsItems = ([])
+
+const loading = ref(false);
+
 
 const formDataSave =  reactive(
     {
@@ -21,19 +41,7 @@ const formDataSave =  reactive(
         roles: [], 
     }
 )
-let verificarA = ref([])
-const checked = ref(true);
-const checked2 = ref([false])
 
-const filtroDados = ref("")
-
-const roles = ref()
-const rolesItems = ref([])
-const permissions = ref([])
-
-const permissionsItems = ([])
-
-const loading = ref(false);
 
 const fetchPermissions = async () =>{
     try{
@@ -200,64 +208,63 @@ const addUser = async () => {
 
 
 const salvarDadosShow = async () => {
-    //  let dadoUserAdd = {
-    //     nome: nomeL.value,
-    //     apelido: apelidoL.value,
-    //     email: emailL.value,
-    //     senha: senhaL.value,
-    //     gates: gateItem.value.name,
-    //     sexos: sexoItem.value.name,
-    //     acessos: acessoItem.value.name
-    // }
+    let dadosAddL = {
+        name: formDataSave.name,
+        email: formDataSave.email,
+        password: formDataSave.password,
+        mobile: String(formDataSave.mobile),
+        roles: [{name: formDataSave.roles.name}], 
+    }
     dialogoUserVisble.value = false
-    console.log(formDataSave)
-    // console.log(dadoUserAdd)
-    // dialogVisible = false
+    loading.value = true
     try {
-    // Realizando a requisição POST para criar o usuário
-    const response = await axios.post("/api/users", formDataSave, {
+    const response = await axios.post("/api/users", dadosAddL, {
       headers: {
         "Content-Type": "application/json",
       },
     });
-
-    // Exibindo uma notificação de sucesso se o usuário for criado com sucesso
-    // toast.add({
-    //   severity: "success",
-    //   summary: "Usuário Criado",
-    //   detail: `Usuário ${response.data.name} criado com sucesso!`,
-    //   life: 3000,
-    // });
     toast.add({ severity: 'success', summary: 'Confirmação', detail: `Usuário ${response.data.name} criado com sucesso!`, life: 3000 });
+    fetchUsers();
+    loading.value = false
   } catch (error) {
-    // Exibindo erro se a criação do usuário falhar
     console.error("Erro ao adicionar usuário:", error.response?.data || error);
-
-    // toast.add({
-    //   severity: "error",
-    //   summary: "Erro",
-    //   detail: error.response?.data?.message || "Erro ao criar o usuário.",
-    //   life: 3000,
-    // });
     toast.add({ severity: 'error', summary: 'Erro', detail: error.response?.data?.message || "Erro ao criar o usuário.", life: 3000 });
+    loading.value = false
   }
-    
-    //toast.add({ severity: 'Confirmação', summary: 'Info', detail: 'Salvo', life: 3000 });
 };
 
-const atualizarDadosShow = () => {
-     let dadoUserAdd = {
-        nome: nomeL.value,
-        apelido: apelidoL.value,
-        email: emailL.value,
-        senha: senhaL.value,
-        gates: gateItem.value.name,
-        sexos: sexoItem.value.name,
-        acessos: acessoItem.value.name
-    }
+const atualizarDadosShow = async () => {
+    console.log(dadosAtualizar)
     dialogUserUpdateVisible.value = false
-    // dialogVisible = false
+    loading.value = true
+    console.log(dadosAtualizar)
+    const dadoAtualizacao = {
+        id: dadosAtualizar.id,
+        name: dadosAtualizar.name,
+        email: dadosAtualizar.email,
+        mobile: String(dadosAtualizar.mobile),
+        roles: ["Manager"], 
+    }
+    try {
+    await axios.put(`/api/users/${dadoAtualizacao.id}`, dadoAtualizacao);
+    fetchUsers();
+    loading.value = false
+
     toast.add({ severity: 'success', summary: 'Confirmação', detail: 'Usuario atualizado', life: 3000 });
+    console.log("Adicionado")
+    
+  } catch (error) {
+    fetchUsers();
+    loading.value = false
+    toast.add({
+      severity: "error",
+      summary: "Erro",
+      detail: "Falha ao atualizar usuário.",
+      life: 3000,
+    });
+    
+  }
+    
     //toast.add({ severity: 'Confirmação', summary: 'Info', detail: 'Salvo', life: 3000 });
 };
 
@@ -277,6 +284,31 @@ function closeConfirmation() {
     toast.add({severity: "success", summary: "Confirmação", detail:"Usuário eliminado", life: 3000})
 }
 
+async function apaga() {
+    
+    displayConfirmation.value = false;
+    loading.value = true
+    try {
+        const response = await axios.delete(`api/users/${dadosUserDelete.value.id}`);
+        console.log('Usuário deletado com sucesso', response.status);
+         fetchUsers();
+        loading.value = false
+        toast.add({severity: "success", summary: "Confirmação", detail:`Usuário ${String(dadosUserDelete.value.name)} eliminado`, life: 3000})
+    } catch (error) {
+        loading.value = false
+        toast.add({severity: "error", summary: "Confirmação", detail:`Erro ao deletar o usuário`, life: 3000})
+        console.error('Erro ao deletar o usuário:', error.response.data);
+    }
+    
+}
+
+function apagaDados(dados){
+    displayConfirmation.value = true;
+    dadosUserDelete.value.name = dados.name
+    dadosUserDelete.value.id = dados.id
+    
+    console.log(dadosUserDelete)
+}
 const salvarPermissions = async ()=>{
     console.log("Dados salvos")
     dialogRoleUpdateVisible.value = false
@@ -286,16 +318,22 @@ const salvarPermissions = async ()=>{
 
 // dialogUserUpdateVisible = true
 
-const nomeUpdate = ref()
-const emailUpdate = ref()
-const mobileUpdate = ref()
+const dadosAtualizar = reactive({
+    id: null,
+    name: "",
+    email: "",
+    mobile: "",
+    roles: []
+})
 const atualizarDados = (dados)=>{
     dialogUserUpdateVisible.value = true
-    nomeUpdate.value =  dados.name
-    emailUpdate.value = dados.email
-    mobileUpdate.value = dados.mobile
+    dadosAtualizar.id = dados.id
+    dadosAtualizar.roles = ["Manager"]
+    dadosAtualizar.email = dados.email
+    dadosAtualizar.name = dados.name
+    dadosAtualizar.mobile = dados.mobile
     
-    console.log("mfkdsflm")
+    console.log(dadosAtualizar)
 }
 
 const disableMk = ()=>{
@@ -321,23 +359,6 @@ onMounted(()=>{
     <div class="card">
 
         <div class="font-semibold text-xl mb-4">Users</div>
-        <!-- Dados: {{filtroDados}} -->
-         <!-- <div class="card flex justify-center">
-            <Toast />
-            <Button label="Show" @click="show()" />
-        </div> -->
-
-        <!-- :paginator="true"
-            :rows="10"
-            dataKey="id"
-            :rowHover="true"
-            v-model:filters="filters1"
-            filterDisplay="menu"
-            :loading="loading1"
-            :filters="filters1"
-            :globalFilterFields="['name', 'country.name', 'representative.name', 'balance', 'status']"
-            showGridlines -->
-
         <DataTable
             :value="userFiltro"
             :paginator="true"
@@ -391,7 +412,7 @@ onMounted(()=>{
                                 @click="dialogRoleUpdateVisible = true"
                                 />
                             
-                            <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="padding: 5px 0px;background-color: transparent; color: #ff0000; border: 0px" @click="openConfirmation" />
+                            <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="padding: 5px 0px;background-color: transparent; color: #ff0000; border: 0px" @click="apagaDados(data)" />
                             
                         </div>
                     </div>
@@ -405,7 +426,7 @@ onMounted(()=>{
                    <div v-if="data.is_active==1" style="display: flex; align-items: center; justify-items: center; gap: 10px">
                         <i class="pi pi-times-circle text-red-500"></i>
                          <!-- <InputSwitch v-model="checked2" /> -->
-                         <InputSwitch v-model="verificarA[data.id]" />
+                         <!-- <InputSwitch v-model="verificarA[data.id]" /> -->
                          <!-- {{data.is_active}} -->
 
                    </div>
@@ -413,7 +434,7 @@ onMounted(()=>{
                    <div v-if="data.is_active==0" style="display: flex; align-items: center; justify-items: center; gap: 10px">
                     <i class="pi pi-check-circle text-green-500 "></i>
                         <!-- <InputSwitch v-model="checked" /> -->
-                        <InputSwitch  v-model="verificarA[data.id]"/>
+                        <!-- <InputSwitch  v-model="verificarA[data.id]"/> -->
                    </div>
 
                    
@@ -445,7 +466,7 @@ onMounted(()=>{
             </div>
             <template #footer>
                 <Button label="Não" icon="pi pi-times" @click="closeConfirmatio2n" text severity="secondary" />
-                <Button label="Sim" icon="pi pi-check" @click="closeConfirmation" severity="danger" outlined autofocus />
+                <Button label="Sim" icon="pi pi-check" @click="apaga" severity="danger" outlined autofocus />
             </template>
         </Dialog>
         <Dialog
@@ -559,7 +580,7 @@ onMounted(()=>{
            
             :draggable="false"
             :resizable="false"
-            style="width: 30vw; min-height: 60vh"
+            style="width: 30vw; min-height: 20vh"
             
             :footer="productDialogFooterForm"
         >
@@ -571,7 +592,7 @@ onMounted(()=>{
             <label for="name">Nome</label>
             <InputText
                 id="name"
-                v-model="nomeUpdate"
+                v-model="dadosAtualizar.name"
                 required
                 autofocus
                 class="camposTextos"
@@ -585,7 +606,7 @@ onMounted(()=>{
             <label for="email">Email</label>
             <InputText
             id="email"
-            v-model="emailUpdate"
+            v-model="dadosAtualizar.email"
             required
             autofocus
             class="camposTextos"
@@ -601,39 +622,10 @@ onMounted(()=>{
         <div class="formUserAdd">
             <div class="field formUserAddI">
             <label for="apelido">Telefone</label>
-            <InputNumber v-model="mobileUpdate" inputId="withoutgrouping" :useGrouping="false" fluid />
+            <InputNumber v-model="dadosAtualizar.mobile" inputId="withoutgrouping" :useGrouping="false" fluid />
             <!-- <InputNumber v-model="mobileUpdate" inputId="integeronly" fluid /> -->
             </div>
         </div>
-        <!-- Portão -->
-        <div class="formUserAdd">
-            <label for="portao" class="labelDrop">Portão</label>
-            <Select id="portao" v-model="gate" :options="gateItem" optionLabel="name" placeholder="Selecione o Portão" class="w-full"></Select>
-        </div>
-
-            <div class="camposAgrupadosFormulario">
-            <!-- Sexo -->
-            <div class="formUserAdd">
-                <label for="sexo" class="labelDrop">Sexo</label>
-                <Select id="sexo" v-model="sexo" :options="sexoItem" optionLabel="name" placeholder="Selecione o sexo" class="w-full"></Select>
-            
-            </div>
-
-            <!-- Acesso -->
-            <div class="formUserAdd">
-                <label for="acesso" class="labelDrop">Acesso</label>
-                <Select id="sexo" v-model="acesso" :options="rolesItems" optionLabel="name" placeholder="S. Nivel de acesso" class="w-full"></Select>
-            </div>
-            </div>
-
-            <!-- Senha -->
-            <div class="formUserAdd" style="margin-top: 15px; width: 100%">
-            <div class="field formUserAddI" style="width: 100%; border: 0px solid black">
-                <label for="senha" class="my-5">Senha</label>
-                <Password id="senha" v-model="senhaL" placeholder="Senha" :toggleMask="true" class="mb-4 inputsCaixas camposTextos" fluid :feedback="false"></Password>
-                
-            </div>
-            </div>
 
             <hr class="my-5">
              <div class="flex">

@@ -246,9 +246,11 @@ const generatePDF = (rowData) => {
       doc.setLineWidth(0.1);
       doc.line(20, 20, 190, 20);
       y += 10;
+      const l=false
 
       // Função para converter hexadecimal em RGB
       function hexToRgb(hex) {
+
         var bigint = parseInt(hex.replace("#", ""), 16);
         var r = (bigint >> 16) & 255;
         var g = (bigint >> 8) & 255;

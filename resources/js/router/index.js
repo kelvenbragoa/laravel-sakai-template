@@ -186,6 +186,11 @@ const router = createRouter({
             path: "/add",
             name: 'add',
             component: () => import('@/views/pages/AddData.vue')
+        },
+        {
+            path: "/jsonread",
+            name: 'jsonread',
+            component: () => import('@/views/pages/ScreenJson.vue')
         }
     ]
 });

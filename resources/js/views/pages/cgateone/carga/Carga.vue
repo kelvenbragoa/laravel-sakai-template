@@ -1,114 +1,58 @@
-<template>
-  <div class="card">
-    
-    <DataTable
-      v-model:filters="filters"
-      :value="data"
-      paginator
-      :rows="10"
-      dataKey="id"
-      filterDisplay="row"
-      :loading="loading"
-      :globalFilterFields="['cargo_type', 'document_number', 'driver_name', 'truck_license_plate_number', 'status']"
-    >
-    
-      <template #header>
-        
-        <div class="flex justify-between align-center">
-          <h2>
-            Gate selecionado: <strong>{{gateId}}</strong>
-          </h2>
-          <IconField>
-            <InputIcon>
-              <i class="pi pi-search" />
-            </InputIcon>
-            <InputText v-model="filters['global'].value" placeholder="Pesquise" />
-          </IconField>
-        </div>
-      </template>
-      <template #empty> Nenhum dado encontrado. </template>
-      <template #loading> Carregando os dados. Por favor, aguarde. </template>
-
-      <Column field="cargo_type" header="Tipo" style="min-width: 12rem">
-      
-        <template #body="{ data }">
-          {{ data.cargo_type }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Filtro por Tipo" />
-        </template>
-      </Column>
-
-      <Column field="document_number" header="Número de documento" style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ data.document_number }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Filtro por documento" />
-        </template>
-      </Column>
-
-      <Column field="driver_name" header="Condutor" style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ data.driver_name }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Filtro por condutor" />
-        </template>
-      </Column>
-
-      <Column field="truck_license_plate_number" header="Placa de caminhão" style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ data.truck_license_plate_number }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Filtro por placa" />
-        </template>
-      </Column>
-
-      <!-- <Column field="status" header="Status" style="min-width: 12rem">
-        <template #body="{ data }">
-          <Tag :value="data.status" :severity="getSeverity(data.status)" />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select Status" style="min-width: 12rem" :showClear="true">
-            <template #option="slotProps">
-              <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />
-            </template>
-          </Select>
-        </template>
-      </Column> -->
-
-      <Column header="Detalhes" style="min-width: 10rem">
-        <template #body="{ data }">
-          <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDF(data)" style=" border: 0px" />
-        </template>
-      </Column>
-
-      <Column field="created_at" header="Created At" style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ formatDate(data.created_at) }}
-        </template>
-      </Column>
-
-       <Column field="gate" header="Gate" style="min-width: 12rem">
-        
-      </Column>
-    </DataTable>
-  </div>
-</template>
-
 <script setup>
-import { ref, onMounted } from 'vue';
-import { FilterMatchMode } from '@primevue/core/api';
-import { getCarga } from '@/api'; 
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from "vue";
 import { jsPDF } from "jspdf";
-import "jspdf-autotable";
-import logo from '../../../../assets/images/logo.png'
-console.log(`logo: ${logo}`)
-// import * as autoTable from 'jspdf-autotable'
-// import * as jsPDF from 'jspdf' 
+import { useRoute } from 'vue-router';
+
+const data = ref([]);
+const totalRecords = ref(0);
+const first = ref(0);
+const rowsPerPage = ref(10);
+const pageNumber = ref(1);
+const loading = ref(false);
+// const filters = ref({ global: { value: null } }); // Inicialize os filtros
+const filters = ref("")
+
+//  [
+//     "Carga",
+//     "Criado",
+//     "Número do documento"
+//   ]
+
+const tabelaDados = ref(
+ {
+  cargo_type: "Carga",
+  created_at: "Criado",
+  document_number: "Número do documento",
+  document_number_cutout_photo: "Número do documento de recorte foto",
+  document_number_overwrite: "Número do documento(sobrescrever)",
+  driver_license_number: "Número da licença do motorista",
+  driver_license_number_cutout_photo: "Foto de recorte de número de carteira de motorista",
+  driver_license_number_overwrite: "Número da carteira de motorista sobrescrito",
+  driver_name: "Condutor",
+  driver_name_overwrite: "Nome do condutor subrescrito",
+  gate: "Portão",
+  id: "Id",
+  movement_type: "Tipo de movimento",
+  status: "Status",
+  trailer_1_internal_cargo_photo: "Foto de carga interna do reboque 1",
+  trailer_1_license_plate_number: "Número da placa do trailer 1",
+  trailer_1_license_plate_number_cutout_photo: "Foto do recorte do número da placa do trailer 1",
+  trailer_1_license_plate_number_overwrite: "Número da placa do trailer 1 sobrescrito",
+  trailer_2_internal_cargo_photo: "Foto de carga interna do trailer 2",
+  trailer_2_license_plate_number: "Número da placa do trailer 2",
+  trailer_2_license_plate_number_cutout_photo: "Foto do recorte do número da placa do trailer 2",
+  trailer_2_license_plate_number_overwrite: "Número da placa do trailer 2",
+  trailers_quantity: "Quantidade de trailer",
+  truck_license_plate_number: "Número da placa do caminhão",
+  truck_license_plate_number_cutout_photo: "Foto de recorte de placa de caminhão",
+  truck_license_plate_number_overwrite: "Número de placa de caminhão sobrescrito",
+  updated_at: "Atualizado em",
+  user_name: "Nome do usuário"
+
+ }
+)
+
+console.log(tabelaDados.value["cargo_type"])
 
 const route = useRoute();
 const userId = route.params.id;
@@ -123,73 +67,44 @@ if(Number(gateId.indexOf("Out")) > -1){
   gateId = gateId.replace("In", "")
   gateId = `Portão ${gateId} (Entrada)`
 }
-console.log(gateId)
 
-const data = ref([]);
-const filters = ref({
-  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  cargo_type: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-  document_number: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-  driver_name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-  truck_license_plate_number: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-  status: { value: null, matchMode: FilterMatchMode.EQUALS },
-});
-const statuses = ref(['Pending', 'Completed', 'In Progress', 'Cancelled']); 
-const loading = ref(true);
-
-
-const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-  const date = new Date(dateString);
-  return date.toLocaleDateString('pt-BR', options);
-};
-
-
-onMounted(async () => {
-  //  axios
-  //           .get("http://20.87.9.35/api/v1/transacoes/lista")
-  //           .then((res) => {
-  //                   console.log(res.data)
-  //           })
-  //           .catch((error) => {
-  //                   console.log(error);
-  //           });
+// Função para carregar os dados
+const dataFilter = ref()
+const loadData = async (page) => {
+  loading.value = true;
   try {
-    const result = await getCarga(1, 10, "", null); 
-    console.log("Resposta da API:", result);
-    if (result && result.data && Array.isArray(result.data)) {
-      data.value = result.data; 
-      for(let key in data.value){
-        if(data.value[key].transaction_gate == gateId){
-          console.log("Encontrado")
-        }
-        
+    const response = await fetch(`/data.json?page=${page}`);
+    if (response.ok) {
+      const result = await response.json();
+      dataFilter.value = result.data
+      console.log(dataFilter.value)
+      // console.log(filters.value)
+      if(filters.value.trim() === ""){
+        data.value = dataFilter.value
+        // console.log("Vazio")
+      }else{
+        // console.log("Preenchido")
+       data.value = dataFilter.value.filter((dados)=>
+        dados.status.toLowerCase().includes(filters.value.toLowerCase()) || 
+        dados.user_name.toLowerCase().includes(filters.value.toLowerCase()) ||
+        dados.document_number_overwrite .toLowerCase().includes(filters.value.toLowerCase())
+       )
       }
-    } else {
-      console.log("Estrutura inesperada", result);
-      data.value = []; 
+       
+      totalRecords.value = result.meta.total || result.meta.last_page * rowsPerPage.value;
     }
   } catch (error) {
-    console.error("Erro ao buscar transações:", error);
+    console.error("Erro ao carregar os dados:", error);
   } finally {
     loading.value = false;
   }
-});
+};
 
-
-const getSeverity = (status) => {
-  switch (status) {
-    case 'Pending':
-      return 'warn';
-    case 'Completed':
-      return 'success';
-    case 'In Progress':
-      return 'info';
-    case 'Cancelled':
-      return 'danger';
-    default:
-      return null;
-  }
+// Evento ao mudar a página
+const onPage = (event) => {
+  first.value = event.first;
+  pageNumber.value = Math.floor(first.value / rowsPerPage.value) + 1;
+  loadData(pageNumber.value);
 };
 
 const generatePDF = (rowData) => {
@@ -202,7 +117,7 @@ const generatePDF = (rowData) => {
   
   doc.setFontSize(10);
   doc.text(`Detalhes da Carga: ${rowData.document_number}`, 20, 13);
-  doc.addImage("https://www.cornelder.co.mz/" , 'JPEG', larguraPagina-60, 7, 40, 10);
+  doc.addImage("/logo.png" , 'JPEG', larguraPagina-60, 7, 40, 10);
       let y = 15;
       // Linha de separação
       doc.setLineWidth(0.1);
@@ -236,7 +151,7 @@ const generatePDF = (rowData) => {
             doc.setFillColor(color2[0], color2[1], color2[2]);
             doc.rect(20, y, 80, 10, "F"); // Borda da célula
             
-            doc.text(String(key).length>30?String(key).substring(0, 20)+"...":String(key), 25, y + 6);
+            doc.text(String(key).length>30?String(tabelaDados.value[key]).substring(0, 20)+"...":String(tabelaDados.value[key]), 25, y + 6);
             doc.setFillColor(color2[0], color2[1], color2[2]);
             doc.rect(100, y, (larguraPagina/2)-15, 10, "F"); // Borda da célula
             doc.text(String(rowData[key]).length>50?String(rowData[key]).substring(0, 20)+"...":String(rowData[key]), 105, y + 6);
@@ -244,7 +159,7 @@ const generatePDF = (rowData) => {
           }else{
             doc.setFillColor(color[0], color[1], color[2]);
             doc.rect(20, y, 80, 10, "F"); // Borda da célula
-            doc.text(String(key).length>30?String(key).substring(0, 20)+"...":String(key), 25, y + 6);
+            doc.text(String(key).length>30?String(tabelaDados.value[key]).substring(0, 20)+"...":String(tabelaDados.value[key]), 25, y + 6);
             doc.setFillColor(color[0], color[1], color[2]);
             doc.rect(100, y, (larguraPagina/2)-15, 10, "F"); // Borda da célula
             doc.text(String(rowData[key]).length>50?String(rowData[key]).substring(0, 20)+"...":String(rowData[key]), 105, y + 6);
@@ -277,10 +192,54 @@ const generatePDF = (rowData) => {
       doc.save(`doc_${rowData.driver_name}_${rowData.document_number_overwrite}_detalhes.pdf`);
   // console.log(rowData)
 };
+
+// Carrega os dados inicialmente
+onMounted(() => {
+  loadData(pageNumber.value);
+});
 </script>
+<template>
+  <DataTable
+    :value="data"
+    paginator
+    :rows="rowsPerPage"
+    :first="first"
+    :loading="loading"
+    :totalRecords="totalRecords"
+
+    dataKey="id"
+    filterDisplay="row"
+    @page="onPage"
+  >
+    <template #header>
+        
+        <div class="flex justify-between align-center">
+          <h2>
+            Gate selecionado: <strong>{{gateId}}</strong>
+          </h2>
+          <IconField>
+            <InputIcon>
+              <i class="pi pi-search" />
+            </InputIcon>
+            <InputText v-model="filters" @input="loadData(pageNumber)" placeholder="Pesquise" />
+          </IconField>
+        </div>
+      </template>
+      <template #empty> Nenhum dado encontrado. </template>
+      <template #loading> Carregando os dados. Por favor, aguarde. </template>
+    <Column field="cargo_type" header="Tipo" />
+    <Column field="document_number" header="Número do documento" />
+    <Column field="driver_name" header="Condutor" />
+    <Column field="truck_license_plate_number" header="Placa de caminhão" />
+    <Column header="Detalhes">
+      <template #body="{ data }">
+        <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDF(data)" />
+      </template>
+    </Column>
+  </DataTable>
+</template>
 
 <style scoped>
-
 table {
   width: 100%;
   border-collapse: collapse;
@@ -314,5 +273,3 @@ p {
   background-color: #046df7!important;
 }
 </style>
-
-

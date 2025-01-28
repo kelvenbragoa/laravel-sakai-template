@@ -1,14 +1,17 @@
 <template>
   <div class="card">
     <DataTable
-      v-model:filters="filters"
-      :value="data"
-      paginator
-      :rows="10"
-      dataKey="id"
-      filterDisplay="row"
-      :loading="loading"
-      :globalFilterFields="['cargo_type', 'document_number', 'driver_name', 'truck_license_plate_number', 'status']"
+        :value="transactions" 
+      
+      :filters="filters" 
+      :loading="loading" 
+      :rows="rowsPerPage"
+      :paginator="true" 
+      :total-records="totalRecords"
+      :first="((currentPage - 1) * rowsPerPage)"
+      @page="onPageChange"
+      :global-filter-fields="['transaction_gate', 'driver_name', 'truck_license_plate_number', 'status', 'type']"
+      table-style="min-width: 60rem"
     >
       <template #header>
         <div class="flex justify-between align-center">
@@ -26,10 +29,10 @@
       <template #empty> Nenhum dado encontrado. </template>
       <template #loading> Carregando os dados. Por favor, aguarde. </template>
       <!-- <Column field="appointment_nbr" header="Appointment Number" style="min-width: 12rem" /> -->
-       <Column field="driver_name" header="Driver Name" style="min-width: 12rem" />
-      <Column field="truck_license_plate_number" header="Truck License Plate" style="min-width: 12rem" />
+       <Column field="driver_name" header="Condutor" style="min-width: 12rem" />
+      <Column field="truck_license_plate_number" header="Placa de caminhão" style="min-width: 12rem" />
       <Column field="transaction_gate" header="Gate" style="min-width: 12rem"></Column>
-      <Column field="created_at" header="Created At" style="min-width: 12rem">
+      <Column field="created_at" header="Criado" style="min-width: 12rem">
         <template #body="{ data }">
           {{ formatDate(data.created_at) }}
         </template>
@@ -64,16 +67,126 @@ import { useRoute } from 'vue-router';
 import { jsPDF } from "jspdf";
 import json from "../../../../../../public/user.json"
 
+
+const totalRecords = ref(0);
+
+const pageNumber = ref(1);
+
+
+
 const users = ref([]);
+
+const tabelaDados = ref({
+  address: "Endereço",
+  age: "Idade",
+  email: "Email",
+  estado: "Estado",
+  gender: "Genero",
+  id: "Id",
+  monthlyFee: "Taxa mensal",
+  name:"Nome",
+  phone: "Telefone",
+  tier: "Nível",
+  time:"08:00"
+})
+
+const tabelaDados2 = ref({
+  appointment_nbr:"Nbr appointment",
+  appointment_number:"Número appointment",
+  comments: "Comentários",
+  container_number_1: "Contêiner número 1",
+  container_number_2: "Contêiner número 2",
+  container_number_3: "Contêiner número 3",
+  container_number_4: "Contêiner número 4",
+  container_photo_1: "Foto do contêiner 1",
+  container_photo_2: "Foto do contêiner 2",
+  container_photo_3: "Foto do contêiner 3",
+  container_photo_4: "Foto do contêiner 4",
+  container_seal_1: "Selo do recipiente 1",
+  container_seal_2: "Selo do recipiente 2",
+  container_seal_3: "Selo do recipiente 3",
+  container_seal_4: "Selo do recipiente 4",
+  container_seal_photo_1: "Foto do selo do contêiner 1",
+  container_seal_photo_2:"Foto do selo do contêiner 2",
+  container_seal_photo_3: "Foto do selo do contêiner 3",
+  container_seal_photo_4: "Foto do selo do contêiner 4",
+  created_at: "Criado em",
+  driver_license_number:"Número da carta de motorista",
+  driver_license_photo: "Foto da carta",
+  driver_name: "Condutor",
+  external_ref_nbr: "referência externa nbr",
+  id: "Id",
+  imdg: "Imdg",
+  logged_user: "Usuário",
+  movement_type: "Tipo de movimento",
+  status: "Estado",
+  trailer_1_license_plate_number: "Número de matrícula do trailer 1",
+  trailer_1_license_plate_photo: "Foto de matrícula do trailer 1",
+  trailer_2_license_plate_number: "Número de matrícula do trailer 2",
+  trailer_2_license_plate_photo: "Foto de matrícula do trailer 2",
+  transaction_gate: "Portão",
+  truck_license_plate_number: "Número da matrícula do caminhão",
+  truck_license_plate_photo: "Foto da matrícula do caminhão",
+  tv_key: "Tv key",
+  type: "Tipot",
+  updated_at: "Atualizado em"
+})
+
+
+// Referências reativas
+const transactions = ref([]); // Dados das transações
+const totalRecords2 = ref(0); // Total de registros para paginação
+
+const currentPage = ref(1); 
+const rowsPerPage = ref(7); 
+const filters2 = ref({
+  global: { value: '' }, // Filtro global
+});
+
+// Métodos
+const fetchTransactions = async (page = 1) => {
+  loading.value = true;
+  try {
+    const response = await axios.get(`http://20.87.9.35/api/v1/transacoes/lista`, {
+      params: {
+        page: page, // Página atual
+      },
+    });
+
+    // Configuração dos dados
+    const { data, current_page, total } = response.data.result;
+    transactions.value = data;
+    console.log("-------------------------------------------------------------")
+    console.log(transactions.value)
+    currentPage.value = current_page;
+    totalRecords.value = total;
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Troca de página
+const onPageChange = (event) => {
+  const newPage = event.page + 1; // PrimeVue usa index 0
+  fetchTransactions(newPage);
+};
+
+// Formatar data
+const formatDate2 = (date) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(date).toLocaleDateString(undefined, options);
+};
 
   const loadJson = async () => {
   try {
     const response = await fetch('/user.json'); 
     users.value = await response.json();
    // console.log(users.value)
-    for(let userL in users.value.users){
-      console.log(users.value.users[userL])
-    }
+    // for(let userL in users.value.users){
+    //   console.log(users.value.users[userL])
+    // }
   } catch (error) {
     console.error('Erro ao carregar o JSON:', error);
   }
@@ -81,6 +194,7 @@ const users = ref([]);
 
 onMounted(() => {
   loadJson();
+  fetchTransactions(currentPage.value)
 });
 
 
@@ -126,7 +240,7 @@ const generatePDF = (rowData) => {
   
   doc.setFontSize(10);
   doc.text(`Detalhes da transação: ${rowData.id}`, 20, 13);
-  doc.addImage("/images/logo.png" , 'JPEG', larguraPagina-60, 7, 40, 10);
+  doc.addImage("/logo.png" , 'JPEG', larguraPagina-60, 7, 40, 10);
       let y = 15;
       // Linha de separação
       doc.setLineWidth(0.1);
@@ -160,7 +274,7 @@ const generatePDF = (rowData) => {
             doc.setFillColor(color2[0], color2[1], color2[2]);
             doc.rect(20, y, 80, 10, "F"); // Borda da célula
             
-            doc.text(String(key).length>30?String(key).substring(0, 20)+"...":String(key), 25, y + 6);
+            doc.text(String(key).length>30?String(tabelaDados2.value[key]).substring(0, 20)+"...":String(tabelaDados2.value[key]), 25, y + 6);
             doc.setFillColor(color2[0], color2[1], color2[2]);
             doc.rect(100, y, (larguraPagina/2)-15, 10, "F"); // Borda da célula
             doc.text(String(rowData[key]).length>50?String(rowData[key]).substring(0, 20)+"...":String(rowData[key]), 105, y + 6);
@@ -168,7 +282,7 @@ const generatePDF = (rowData) => {
           }else{
             doc.setFillColor(color[0], color[1], color[2]);
             doc.rect(20, y, 80, 10, "F"); // Borda da célula
-            doc.text(String(key).length>30?String(key).substring(0, 20)+"...":String(key), 25, y + 6);
+            doc.text(String(key).length>30?String(tabelaDados2.value[key]).substring(0, 20)+"...":String(tabelaDados2.value[key]), 25, y + 6);
             doc.setFillColor(color[0], color[1], color[2]);
             doc.rect(100, y, (larguraPagina/2)-15, 10, "F"); // Borda da célula
             doc.text(String(rowData[key]).length>50?String(rowData[key]).substring(0, 20)+"...":String(rowData[key]), 105, y + 6);

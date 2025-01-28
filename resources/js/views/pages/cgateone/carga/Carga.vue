@@ -117,7 +117,8 @@ const generatePDF = (rowData) => {
   
   doc.setFontSize(10);
   doc.text(`Detalhes da Carga: ${rowData.document_number}`, 20, 13);
-  doc.addImage("/logo.png" , 'JPEG', larguraPagina-60, 7, 40, 10);
+  doc.addImage("/images/pB4j1n0xhumeKjfagw3sZqOjHLqusQcRFo4k4mD4.jpg" , 'JPEG', larguraPagina-60, 7, 40, 10);
+  //  doc.addImage("/logo.png" , 'JPEG', larguraPagina-60, 7, 40, 10);
       let y = 15;
       // Linha de separação
       doc.setLineWidth(0.1);

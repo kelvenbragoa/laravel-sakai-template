@@ -257,38 +257,38 @@ onMounted(() => {
     @page="onPage"
   >
     <template #header>
-      <div class="flex justify-between align-center">
+      <div class="flex justify-between align-center py-5">
         <h2>
           Gate selecionado: <strong>{{ gateId }}</strong>
         </h2>
         <div class="groupExel">
-          <Button @click="exportToExcel">Excel</Button>
-            <div class="calendaryFilter">
-              <DatePicker
-                v-model="startDate"
-                fluid
-                iconDisplay="input"
-                showTime
-                hourFormat="24"
-                placeholder="Data de Início"
-              />
-              <span></span>
-              <DatePicker
-                v-model="endDate"
-                fluid
-                iconDisplay="input"
-                class="dtPicker"
-                showTime
-                hourFormat="24"
-                placeholder="Data de Fim"
-              />
-              <span></span>
-              <Button
-                class="dtFilter"
-                icon="pi pi-filter"
-                @click="filterDate"
-              />
-            </div>
+          <Button
+            @click="exportToExcel"
+            label="Excel"
+            icon="pi pi-file-excel"
+          />
+          <div class="calendaryFilter">
+            <DatePicker
+              v-model="startDate"
+              fluid
+              iconDisplay="input"
+              showTime
+              hourFormat="24"
+              placeholder="Data de Início"
+            />
+            <span></span>
+            <DatePicker
+              v-model="endDate"
+              fluid
+              iconDisplay="input"
+              class="dtPicker"
+              showTime
+              hourFormat="24"
+              placeholder="Data de Fim"
+            />
+            <span></span>
+            <Button class="dtFilter" icon="pi pi-filter" @click="filterDate" />
+          </div>
           <IconField>
             <InputIcon>
               <i class="pi pi-search" />

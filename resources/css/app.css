@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.groupExel{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .groupExel button{
+    margin-right: 0px;
+    background-color: #5498f1;
+    border: 1px solid #5498f1;
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 5px;
+  }
+  
+  .groupExel button:hover{
+    background-color: #046df7!important;
+    border: 1px solid #046df7!important;
+  
+  }
+
+  .calendaryFilter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 10px;
+  }
+
+  .calendaryFilter span{
+    margin: 0px 2px;
+  }
+
+  .dtPicker{
+    display: flex!important;
+    align-items: center!important;
+  }
+
+  .dtFilter{
+    padding: 0px!important;
+    height: 30px!important;
+    width: 50px!important;
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
+  }

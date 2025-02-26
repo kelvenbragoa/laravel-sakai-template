@@ -8,6 +8,7 @@
     "devDependencies": {
         "@primevue/auto-import-resolver": "^4.2.4",
         "@rushstack/eslint-patch": "^1.8.0",
+        "@types/file-saver": "^2.0.7",
         "@vitejs/plugin-vue": "^5.2.1",
         "@vue/eslint-config-prettier": "^9.0.0",
         "autoprefixer": "^10.4.20",
@@ -27,11 +28,15 @@
     "dependencies": {
         "@primevue/themes": "^4.2.5",
         "chart.js": "^4.4.7",
+        "file-saver": "^2.0.5",
         "jspdf": "^2.5.2",
         "jspdf-autotable": "^3.8.4",
         "primeicons": "^7.0.0",
         "primevue": "^4.2.5",
         "vue": "^3.5.13",
-        "vue-router": "^4.5.0"
+        "vue-excel-export": "^0.1.3",
+        "vue-js-excel": "^1.0.3",
+        "vue-router": "^4.5.0",
+        "xlsx": "^0.18.5"
     }
 }

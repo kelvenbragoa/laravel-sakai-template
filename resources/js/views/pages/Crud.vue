@@ -4,6 +4,29 @@ import { FilterMatchMode } from '@primevue/core/api';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 
+// const users = ref([]);
+// const error = ref(null);
+
+// const fetchUsers = async () => {
+//   try {
+//     const response = await axios.get("https://jsonplaceholder.typicode.com/users");
+//     users.value = response.data;
+//   } catch (err) {
+//     error.value = "Erro ao buscar usuários";
+//   }
+// };
+
+// const fetchUsers = async () => {
+//   try {
+//     const response = await fetch("https://jsonplaceholder.typicode.com/users");
+//     if (!response.ok) throw new Error("Erro ao buscar usuários");
+//     users.value = await response.json();
+//   } catch (err) {
+//     error.value = err.message;
+//   }
+// };
+
+
 onMounted(() => {
     ProductService.getProducts().then((data) => (products.value = data));
 });

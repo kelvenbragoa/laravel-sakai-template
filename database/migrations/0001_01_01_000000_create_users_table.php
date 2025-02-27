@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('user_full_name');
             $table->string('user_name')->unique();
             $table->string('email')->nullable();
+            $table->string('company')->nullable();
             $table->unsignedBigInteger('is_active')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

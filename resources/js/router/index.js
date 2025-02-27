@@ -2,7 +2,7 @@ import AppLayout from '@/layout/AppLayout.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory('/cgate1x/'),
     routes: [
         {
             path: '/',
@@ -161,11 +161,6 @@ const router = createRouter({
             path: '/auth/error',
             name: 'error',
             component: () => import('@/views/pages/auth/Error.vue')
-        },
-        {
-            path: '/dados',
-            name: 'dados',
-            component: () => import('@/views/pages/Testes.vue')
         },
         {
             path: '/pdf',

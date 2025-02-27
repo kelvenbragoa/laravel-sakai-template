@@ -1,0 +1,1 @@
+import{_ as o,c as a,b as t,t as n,i as u,o as c}from"./app-SYzSYdOD.js";const l={setup(){return{userId:u().params.id}}};function p(s,e,d,r,i,_){return c(),a("div",null,[e[0]||(e[0]=t("h1",null,"Parametro",-1)),t("p",null,"ID: "+n(r.userId),1)])}const m=o(l,[["render",p]]);export{m as default};

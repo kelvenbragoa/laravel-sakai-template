@@ -1,8 +1,6 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
 import AppConfigurator from './AppConfigurator.vue';
-import logo from '../assets/images/logo.png'
-console.log(`logo: ${logo}`)
 
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 </script>
@@ -14,7 +12,7 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
             <router-link to="/" class="layout-topbar-logo">
                 <div class="flex items-center justify-center">
                     <!-- <Image src="`${logo}`" alt="Image" width="120" /> -->
-                     <img src="http://[::1]:5173/resources/js/assets/images/logo.png" alt="logo" style="width: 120px"/>
+                     <img src="/cgate1x/logo.png" alt="logo" style="width: 120px"/>
                 </div>
                
             </router-link>

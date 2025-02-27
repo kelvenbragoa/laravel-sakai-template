@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ContainerTransactionController;
 use App\Http\Controllers\Api\Mobile\MobileContainerTransactionController;
 use App\Http\Controllers\Api\PermissionsController;
 use App\Http\Controllers\Api\RolesController;
@@ -27,6 +28,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/users/{userId}/roles', [RolesController::class, 'addRoleToUser'])->name('users.addRoleUser');
     Route::post('/users/{userId}/permissions', [PermissionsController::class, 'storePermissionToUser'])->name('users.storePermissionUser');
     Route::get('/users/{userId}/permissions', [PermissionsController::class, 'addPermissionToUser'])->name('users.addPermissionUser');
+
+    Route::resource('containertransaction',ContainerTransactionController::class);
 
 
     Route::prefix('container')->group(function () {

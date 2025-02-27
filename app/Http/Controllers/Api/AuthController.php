@@ -20,6 +20,9 @@ class AuthController extends Controller
 
 
             $user = User::where('user_name', strtolower($loginUserData['user_name']))->with('gate')->first();
+            if($user){
+
+            
             $token = $user->createToken($user->user_name . '-AuthToken')->plainTextToken;
 
             $userData = $user->toArray();
@@ -36,6 +39,7 @@ class AuthController extends Controller
                 'user' => $userData,
                 'access_token' => $token,
             ],200);
+        }
            
 
         return response()->json([

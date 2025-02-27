@@ -16,9 +16,10 @@ class UserController extends Controller
         $searchQuery = request('query');
         $user = User::query()
             ->when(request('query'), function ($query, $searchQuery) {
-                $query->where('name', 'like', "%{$searchQuery}%");
+                $query->where('user_full_name', 'like', "%{$searchQuery}%")->orWhere('user_name', 'like', "%{$searchQuery}%");
             })
-            ->orderBy('name', 'asc')
+            ->with('gate')
+            ->orderBy('user_full_name', 'asc')
             ->paginate(50);
 
         return response()->json([
@@ -73,19 +74,20 @@ class UserController extends Controller
     {
         try {
             $registerUserData = $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|string|email|unique:users',
+                'user_full_name' => 'required|string',
+                'user_name' => 'required|string|unique:users',
+                'email' => 'nullable|string|email|unique:users',
                 'password' => 'required|min:8',
-                'mobile' => 'required',
                 'roles' => 'required|array',
                 'roles.*.name' => 'required|string',
             ]);
 
+
             $user = User::create([
-                'name' => $registerUserData['name'],
-                'email' => strtolower($registerUserData['email']),
+                'user_full_name' => $registerUserData['user_full_name'],
+                'user_name' => $registerUserData['user_name'],
+                'email' => $registerUserData['email'] ? strtolower($registerUserData['email']) : null,
                 'is_active' => 1,
-                'mobile' => $registerUserData['mobile'] ?? null,
                 'password' => Hash::make($registerUserData['password']),
             ]);
 
@@ -110,7 +112,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         //
-        $user = User::with(['permissions', 'roles'])->findOrFail($id);
+        $user = User::with(['permissions', 'roles','gate'])->findOrFail($id);
 
         return response()->json([
             'data' => $user
@@ -157,23 +159,33 @@ class UserController extends Controller
         try {
             // Validação
             $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-                'mobile' => 'nullable|string|max:15',
+                'user_full_name' => 'nullable|string|max:255',
+                'user_name' => 'nullable|max:255|unique:users,user_name,' . $user->id,
+                'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
+                'gate_id' => 'nullable',
+                'is_active' => 'nullable',
                 'roles' => 'nullable|array',
-                'roles.*' => 'string',
+                'roles.*.name' => 'required|string',
             ]);
 
             // Atualizar o usuário
             $user->update([
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'mobile' => $validatedData['mobile'] ?? $user->mobile,
+                'user_full_name' => $validatedData['user_full_name'] ?? $user->user_full_name,
+                'user_name' => $validatedData['user_name'] ?? $user->user_name,
+                'is_active' => $validatedData['is_active'] ?? $user->is_active,
+                'email' => $validatedData['email'] ?? $user->email,
+
             ]);
 
             // Sincronizar roles, se fornecido
             if (isset($validatedData['roles'])) {
                 $user->syncRoles($validatedData['roles']);
+            }
+            if (isset($validatedData['gate_id'])) {
+                $user->gate()->updateOrCreate(
+                    ['user_id' => $user->id], // Condição para verificar se já existe
+                    ['gate_id' => $validatedData['gate_id']] // Dados a serem atualizados ou criados
+                );
             }
 
             return response()->json([

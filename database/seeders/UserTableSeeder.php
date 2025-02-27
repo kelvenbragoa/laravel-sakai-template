@@ -47,9 +47,9 @@ class UserTableSeeder extends Seeder
 
         for ($i = 1; $i <= $numberOfUsers; $i++) {
             $user = User::create([
-                'name' => 'User ' . $i,
+                'user_full_name' => 'User ' . $i,
+                'user_name' => 'username' . $i,
                 'email' => 'user' . $i . '@test.com',
-                'mobile' => '81123456' . $i,
                 'is_active' => $i % 2,
                 'password' => Hash::make('password'),
                 'created_at' => now(),

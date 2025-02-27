@@ -79,12 +79,14 @@ class UserController extends Controller
                 'email' => 'nullable|string|email|unique:users',
                 'password' => 'required|min:8',
                 'roles' => 'required|array',
+                'company_id' => 'nullable|string',
                 'roles.*.name' => 'required|string',
             ]);
 
 
             $user = User::create([
                 'user_full_name' => $registerUserData['user_full_name'],
+                'company_id' => $registerUserData['company_id'] ?? null,
                 'user_name' => $registerUserData['user_name'],
                 'email' => $registerUserData['email'] ? strtolower($registerUserData['email']) : null,
                 'is_active' => 1,
@@ -163,6 +165,7 @@ class UserController extends Controller
                 'user_name' => 'nullable|max:255|unique:users,user_name,' . $user->id,
                 'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
                 'gate_id' => 'nullable',
+                'company_id' => 'nullable',
                 'is_active' => 'nullable',
                 'roles' => 'nullable|array',
                 'roles.*.name' => 'required|string',
@@ -174,6 +177,8 @@ class UserController extends Controller
                 'user_name' => $validatedData['user_name'] ?? $user->user_name,
                 'is_active' => $validatedData['is_active'] ?? $user->is_active,
                 'email' => $validatedData['email'] ?? $user->email,
+                'company_id' => $validatedData['company_id'] ?? $user->company_id,
+
 
             ]);
 

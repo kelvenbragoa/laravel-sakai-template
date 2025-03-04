@@ -161,6 +161,11 @@ const model = ref([
                         label: 'User',
                         icon: 'pi pi-user',
                         to: '/user'
+                    },
+                    {
+                        label: 'Empresas',
+                        icon: 'pi pi-building',
+                        to: '/company'
                     }
                 ]
             },

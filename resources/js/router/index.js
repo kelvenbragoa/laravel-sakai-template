@@ -133,6 +133,11 @@ const router = createRouter({
                     path: "/rolespermissions",
                     name: "rolespermissions",
                     component: () => import('@/views/pages/permitionroles/Permition.vue')
+                },
+                {
+                    path: "/company",
+                    name: "company",
+                    component: () => import('@/views/pages/company/Company.vue')
                 }
             ]
         },

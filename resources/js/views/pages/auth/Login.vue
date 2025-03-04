@@ -1,10 +1,39 @@
 <script setup>
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { ref } from 'vue';
-// import imgLogo from "@assets/images/logo.png"
+import { useRouter } from 'vue-router';
+import { baseUrls } from '../../../api/index'
+const router = useRouter()
 
-const email = ref('');
-const password = ref('');
+
+
+const token = ref("")
+const dadosUserAuth = ref(
+    {
+        user_name: "",
+        password: ""
+    }
+)   
+
+const autenticar = async () => {
+  try {
+    const response = await axios.post(baseUrls.auth, {
+      user_name: dadosUserAuth.value.user_name,
+      password: dadosUserAuth.value.password,
+    });
+
+    const { user, access_token } = response.data;
+    console.log(access_token)
+
+    localStorage.setItem('access_token', access_token);
+    localStorage.setItem('user', JSON.stringify(user));
+
+    router.push('/dashboard');  
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro');
+  }
+}
 const checked = ref(false);
 </script>
 
@@ -32,11 +61,11 @@ const checked = ref(false);
                     </div>
 
                     <div>
-                        <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Endereço eletrónico" class="w-full md:w-[30rem] mb-8 inputsCaixas" v-model="email" />
+                        <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">User</label>
+                        <InputText id="email1" type="text" placeholder="Usuário" class="w-full md:w-[30rem] mb-8 inputsCaixas" v-model="dadosUserAuth.user_name" />
 
                         <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Senha</label>
-                        <Password id="password1" v-model="password" placeholder="Senha" :toggleMask="true" class="mb-4 inputsCaixas" fluid :feedback="false"></Password>
+                        <Password id="password1" v-model="dadosUserAuth.password" placeholder="Senha" :toggleMask="true" class="mb-4 inputsCaixas" fluid :feedback="false"></Password>
 
                         <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                             <div class="flex items-center">
@@ -45,7 +74,9 @@ const checked = ref(false);
                             </div>
                             <span class="font-medium no-underline ml-2 text-right cursor-pointer corPrimaria">Esqueceste a senha?</span>
                         </div>
-                        <Button label="Entrar" class="w-full facebook-button hover" as="router-link" to="/dashboard"></Button>
+                        <Button label="Entrar" class="w-full facebook-button hover"  @click="autenticar"></Button>\
+                        <!-- as="router-link" -->
+                        <!-- to="/dashboard" -->
                     </div>
                 </div>
             </div>

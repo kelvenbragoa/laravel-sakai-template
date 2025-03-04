@@ -16,7 +16,7 @@ class GateTableSeeder extends Seeder
         //
         DB::table('gates')->insert([
             [
-                'name' => 'Portao 8',
+                'name' => 'Portao 8A',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -18,7 +18,7 @@ class UserController extends Controller
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('user_full_name', 'like', "%{$searchQuery}%")->orWhere('user_name', 'like', "%{$searchQuery}%");
             })
-            ->with('gate')
+            ->with(['permissions', 'roles','gate'])
             ->orderBy('user_full_name', 'asc')
             ->paginate(50);
 

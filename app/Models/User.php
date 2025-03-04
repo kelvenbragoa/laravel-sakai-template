@@ -54,4 +54,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserGate::class, 'user_id');
     }
+
+    public function company(){
+        return $this->hasOne(Company::class, 'id', 'company_id');
+    }
 }

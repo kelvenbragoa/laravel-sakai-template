@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ContainerTransactionController;
 use App\Http\Controllers\Api\Mobile\MobileContainerTransactionController;
 use App\Http\Controllers\Api\PermissionsController;
@@ -30,6 +31,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/users/{userId}/permissions', [PermissionsController::class, 'addPermissionToUser'])->name('users.addPermissionUser');
 
     Route::resource('containertransaction',ContainerTransactionController::class);
+    Route::resource('companies',CompanyController::class);
+
 
 
     Route::prefix('container')->group(function () {

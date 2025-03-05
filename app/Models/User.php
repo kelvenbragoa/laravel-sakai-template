@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function gate()
     {
-        return $this->hasOne(Gate::class, 'gate_id');
+        return $this->hasOne(UserGate::class, 'user_id');
     }
 
     public function company(){

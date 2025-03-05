@@ -12,27 +12,45 @@ const dadosUserAuth = ref({
 });
 
 const loading = ref(false);
+const errorL = ref();
 
 const autenticar = async () => {
-    loading.value = true
-  try {
-    const response = await axios.post(baseUrls.auth, {
-      user_name: dadosUserAuth.value.user_name,
-      password: dadosUserAuth.value.password,
-    });
+  console.log(`Texto: ${dadosUserAuth.value.user_name}`);
+  if (dadosUserAuth.value.user_name === "") {
+    errorL.value = `Preencha o campo de nome`;
+  } else if (dadosUserAuth.value.password === "") {
+    errorL.value = `Preencha o campo de senha`;
+  } else if (
+    dadosUserAuth.value.user_name === "" &&
+    dadosUserAuth.value.password === ""
+  ) {
+    errorL.value = `Preencha os campos user e senha`;
+  } else {
+    loading.value = true;
+    try {
+      const response = await axios.post(baseUrls.auth, {
+        user_name: dadosUserAuth.value.user_name,
+        password: dadosUserAuth.value.password,
+      });
 
-    const { user, access_token } = response.data;
-    console.log(access_token);
+      const { user, access_token } = response.data;
+      console.log(access_token);
 
-    localStorage.setItem("access_token", access_token);
-    localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-    router.push("/dashboard");
-    loading.value=false
-  } catch (error) {
-    console.error("Erro:", error);
-    alert("Erro");
-    loading.value=false
+      router.push("/dashboard");
+      loading.value = false;
+    } catch (error) {
+      console.error("Erro:", error);
+      // alert("Erro");
+      loading.value = false;
+      if (error.status == 401) {
+        errorL.value = `Credenciais invalidas ${error.status}`;
+      } else {
+        errorL.value = "Any Error";
+      }
+    }
   }
 };
 const checked = ref(false);
@@ -81,6 +99,10 @@ const checked = ref(false);
               <span class="text-muted-color font-medium"
                 >Preencha os campos</span
               >
+            </div>
+
+            <div class="erroMessage">
+              {{ errorL }}
             </div>
 
             <div>
@@ -194,15 +216,18 @@ body {
 .louderL {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.05);
   z-index: 999999;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-
+.erroMessage {
+  color: red;
+  font-weight: 500;
+}
 </style>

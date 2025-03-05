@@ -56,7 +56,8 @@ const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
     auth: `${baseURLCDMDev}/login`,
     transacoes: `${baseURLCDMDev}/containertransaction`,
     userList: `${baseURLCDMDev}/users`,
-    empresaAdd: `${baseURLCDMDev}/companies`
+    empresaAdd: `${baseURLCDMDev}/companies`,
+    gate: `${baseURLCDMDev}/gates`
     
   };
 

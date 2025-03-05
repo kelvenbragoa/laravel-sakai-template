@@ -28,6 +28,9 @@ const roles = ref();
 const rolesItems = ref([]);
 const permissions = ref([]);
 
+const gates = ref([])
+const gateFiltros = ref([])
+
 const permissionsItems = [];
 
 const loading = ref(false);
@@ -40,6 +43,16 @@ const formDataSave = reactive({
   password: "",
   roles: [],
 });
+
+const countries = ref([
+  { name: 'Moçambique', code: 'MZ' },
+  { name: 'Brasil', code: 'BR' },
+  { name: 'Portugal', code: 'PT' },
+]);
+
+// Definindo a pré-seleção (exemplo: Moçambique)
+const selectedCountry = ref(countries.value[0]);
+const roleSelected = ref({name: "Admin"})
 
 const getToken = () => {
   return localStorage.getItem("access_token");
@@ -135,16 +148,16 @@ const fetchRoles = async () => {
   }
 };
 
-watch(
-  rolesName,
-  (newRoles) => {
-    if (newRoles.length > 0) {
-      dadosAtualizar.roles =
-        newRoles.find((role) => role.name === "Admin") || null;
-    }
-  },
-  { immediate: true }
-);
+// watch(
+//   rolesName,
+//   (newRoles) => {
+//     if (newRoles.length > 0) {
+//       dadosAtualizar.roles =
+//         newRoles.find((role) => role.name === "Admin") || null;
+//     }
+//   },
+//   { immediate: true }
+// );
 
 const sexoItem = ref([
   { name: "Masculino", code: "M" },
@@ -328,14 +341,14 @@ const salvarDadosShow = async () => {
         //   nome = element.user_name
         //   console.log(element)
         // })
-        console.log(response.data.user_name);
+        // console.log(response.data.user_name);
 
         toast.add({
           severity: "success",
           summary: "Confirmação",
-          detail: `Usuário ${response.data.user_name} criado com sucesso!`,
+          detail: `Usuário criado com sucesso!`,
           life: 3000,
-        });
+        }); 
         // fetchUsers();
         buscarUsuarios();
         loading.value = false;
@@ -416,7 +429,7 @@ const atualizarDadosShow = async () => {
     user_full_name: dadosAtualizar.user_full_name,
     email: dadosAtualizar.email,
     is_active: dadosAtualizar.is_active.code,
-    gate_id: dadosAtualizar.gate_id.code,
+    gate_id: dadosAtualizar.gate_id.id,
     roles: [dadosAtualizar.roles],
   };
   console.log(dadoAtualizacao);
@@ -567,6 +580,7 @@ const atualizarDados = (dados) => {
   dialogUserUpdateVisible.value = true;
   dadosAtualizar.id = dados.id;
   // dadosAtualizar.roles = [{name: dados.roles[0].name}];
+  dadosAtualizar.roles = [{ name: "Admin" }];
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
 
@@ -614,12 +628,41 @@ const verificadorDeCampos = (dado) => {
   console.log("-------------------------------------------------");
 };
 
+
+const buscarGates = async () => {
+  const token = getToken();
+  console.log(`Token: ${token}`)
+  if (!token) {
+    alert('Token de autenticação não encontrado. Por favor, faça login.');
+    return;
+  }
+  try {
+    const response = await axios.get(
+      baseUrls.gate, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log("Response Gate")
+    gates.value = response.data.data
+
+    console.log(response.data.data)
+    
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
 onMounted(() => {
   //   fetchUsers();
   fetchRoles();
   fetchPermissions();
   buscarUsuarios();
   buscarEmpresas();
+  buscarGates()
 });
 </script>
 
@@ -630,6 +673,16 @@ onMounted(() => {
     </div>
   </div>
   <div class="card">
+    <!-- <div>
+      <h3>Selecione um país:</h3>
+      <Dropdown
+        v-model="selectedCountry"
+        :options="countries"
+        optionLabel="name"
+        placeholder="Selecione um país"
+      />
+      <p>País selecionado: {{ selectedCountry.name }}</p>
+    </div> -->
     <div class="font-semibold text-xl mb-4">Users</div>
     <DataTable :value="userFiltro" :paginator="true" :rows="10">
       <template #header>
@@ -662,7 +715,7 @@ onMounted(() => {
 
       <Column field="email" header="Email" style="min-width: 10rem"> </Column>
 
-      <Column field="user_name" header="username" style="min-width: 10rem">
+      <Column field="user_name" header="Username" style="min-width: 10rem">
       </Column>
 
       <Column field="company_id" header="Empresa" style="min-width: 10rem">
@@ -995,7 +1048,7 @@ onMounted(() => {
             <Select
               id="portao"
               v-model="dadosAtualizar.gate_id"
-              :options="gateItem"
+              :options="gates"
               optionLabel="name"
               placeholder="Portão"
               class="w-full"
@@ -1166,18 +1219,7 @@ onMounted(() => {
   border-radius: 5px;
 }
 
-.louderL {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  background-color: rgba(0, 0, 0, 0.192);
-  z-index: 999999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 </style>
 
 

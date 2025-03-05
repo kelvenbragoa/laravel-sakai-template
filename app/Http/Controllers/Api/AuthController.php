@@ -19,7 +19,7 @@ class AuthController extends Controller
         ]);
 
 
-            $user = User::where('user_name', strtolower($loginUserData['user_name']))->with('gate')->with('company')->first();
+            $user = User::where('user_name', strtolower($loginUserData['user_name']))->with('gate.gate_name')->with('company')->first();
             if($user){
 
             

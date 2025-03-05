@@ -178,7 +178,6 @@ class UserController extends Controller
                 'is_active' => $validatedData['is_active'] ?? $user->is_active,
                 'email' => $validatedData['email'] ?? $user->email,
                 'company_id' => $validatedData['company_id'] ?? $user->company_id,
-                'gate_id' => $validatedData['gate_id'] ?? $user->gate_id,
 
 
             ]);
@@ -187,12 +186,12 @@ class UserController extends Controller
             if (isset($validatedData['roles'])) {
                 $user->syncRoles($validatedData['roles']);
             }
-            // if (isset($validatedData['gate_id'])) {
-            //     $user->gate()->updateOrCreate(
-            //         ['user_id' => $user->id], // Condição para verificar se já existe
-            //         ['gate_id' => $validatedData['gate_id']] // Dados a serem atualizados ou criados
-            //     );
-            // }
+            if (isset($validatedData['gate_id'])) {
+                $user->gate()->updateOrCreate(
+                    ['user_id' => $user->id], // Condição para verificar se já existe
+                    ['gate_id' => $validatedData['gate_id']] // Dados a serem atualizados ou criados
+                );
+            }
 
             return response()->json([
                 'data' => $user

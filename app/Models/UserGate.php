@@ -21,7 +21,7 @@ class UserGate extends Model
 
     public function gate_name()
     {
-        return $this->hasMany(Gate::class, 'gate_id', 'id');
+        return $this->hasMany(Gate::class, 'id', 'gate_id');
     }
 
 

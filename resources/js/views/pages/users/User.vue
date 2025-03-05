@@ -2,7 +2,7 @@
 import { CustomerService } from "@/service/CustomerService";
 import { ProductService } from "@/service/ProductService";
 import { FilterMatchMode, FilterOperator } from "@primevue/core/api";
-import { onBeforeMount, onMounted, reactive, ref } from "vue";
+import { onBeforeMount, onMounted, reactive, ref, watch } from "vue";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../api/index";
@@ -125,16 +125,20 @@ const fetchRoles = async () => {
     });
 
     for (let items in rolesItems.value) {
-      // rolesName.value.push =
-      // console.log(rolesItems.value[items])
       rolesName.value.push({ name: rolesItems.value[items].name });
     }
-    console.log("Roles Names");
-    console.log(rolesName.value);
+    //console.log("Roles Names");
+   // console.log(rolesName.value);
   } catch (erro) {
     console.log(erro);
   }
 };
+
+watch(rolesName, (newRoles) => {
+  if (newRoles.length > 0) {
+    dadosAtualizar.roles = newRoles.find(role => role.name === "Admin") || null;
+  }
+}, { immediate: true });
 
 const sexoItem = ref([
   { name: "Masculino", code: "M" },
@@ -389,7 +393,7 @@ const buscarEmpresas = async () => {
 };
 
 const atualizarDadosShow = async () => {
-  console.log(dadosAtualizar);
+  console.log(  );
   dialogUserUpdateVisible.value = false;
   loading.value = true;
   console.log("Dados sendo atualizados");
@@ -520,23 +524,33 @@ const salvarPermissions = async () => {
 
 // dialogUserUpdateVisible = true
 
+// const dadosAtualizar = reactive({
+//   id: null,
+//   user_full_name: "",
+//   is_active: 0,
+//   email: "",
+//   gate_id: 0,
+//   roles: [{name: "Admin"}],
+// });
+
 const dadosAtualizar = reactive({
   id: null,
   user_full_name: "",
   is_active: 0,
   email: "",
   gate_id: 0,
-  roles: [],
+  roles: null
 });
 const atualizarDados = (dados) => {
   dialogUserUpdateVisible.value = true;
   dadosAtualizar.id = dados.id;
-  dadosAtualizar.roles = dados.roles.name;
+  // dadosAtualizar.roles = [{name: dados.roles[0].name}];
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
 
+
   console.log(`RoleDados:`);
-  console.log(dadosAtualizar);
+  console.log(dadosAtualizar.roles);
 
   userFiltro.value.forEach((element) => {
     // console.log(element.roles.value)

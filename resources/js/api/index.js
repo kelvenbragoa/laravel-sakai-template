@@ -49,3 +49,15 @@ export const getCarga = async (page, limit, search, status) => {
       throw error; 
     }
   };
+const baseURLCDMDev = "http://10.0.8.44:8010/api"
+const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
+
+  export const baseUrls = {
+    auth: `${baseURLCDMDev}/login`,
+    transacoes: `${baseURLCDMDev}/containertransaction`,
+    userList: `${baseURLCDMDev}/users`,
+    empresaAdd: `${baseURLCDMDev}/companies`
+    
+  };
+
+

@@ -28,8 +28,8 @@ const roles = ref();
 const rolesItems = ref([]);
 const permissions = ref([]);
 
-const gates = ref([])
-const gateFiltros = ref([])
+const gates = ref([]);
+const gateFiltros = ref([]);
 
 const permissionsItems = [];
 
@@ -45,14 +45,16 @@ const formDataSave = reactive({
 });
 
 const countries = ref([
-  { name: 'Moçambique', code: 'MZ' },
-  { name: 'Brasil', code: 'BR' },
-  { name: 'Portugal', code: 'PT' },
+  { name: "Moçambique", code: "MZ" },
+  { name: "Brasil", code: "BR" },
+  { name: "Portugal", code: "PT" },
 ]);
 
 // Definindo a pré-seleção (exemplo: Moçambique)
 const selectedCountry = ref(countries.value[0]);
-const roleSelected = ref({name: "Admin"})
+const roleSelected = ref({ name: "" });
+const gateSelected = ref();
+const ative_selected = ref({ name: "Inativo", code: "0" });
 
 const getToken = () => {
   return localStorage.getItem("access_token");
@@ -348,7 +350,7 @@ const salvarDadosShow = async () => {
           summary: "Confirmação",
           detail: `Usuário criado com sucesso!`,
           life: 3000,
-        }); 
+        });
         // fetchUsers();
         buscarUsuarios();
         loading.value = false;
@@ -428,11 +430,15 @@ const atualizarDadosShow = async () => {
     id: dadosAtualizar.id,
     user_full_name: dadosAtualizar.user_full_name,
     email: dadosAtualizar.email,
-    is_active: dadosAtualizar.is_active.code,
-    gate_id: dadosAtualizar.gate_id.id,
-    roles: [dadosAtualizar.roles],
+    is_active: Number(ative_selected.value.code),
+    gate_id: gateSelected.value.id,
+    roles: [{ name: roleSelected.value.name }],
   };
+
+  console.log("Dados atualizacao");
   console.log(dadoAtualizacao);
+  console.log(roleSelected);
+  console.log("-----------------------------");
   const token = getToken();
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
@@ -463,13 +469,6 @@ const atualizarDadosShow = async () => {
           life: 3000,
         });
         console.log("Adicionado");
-
-        dadosAtualizar.email = "";
-        dadosAtualizar.gate_id = 0;
-        dadosAtualizar.id = null;
-        dadosAtualizar.roles = [];
-        dadosAtualizar.user_full_name = "";
-        dadosAtualizar.is_active = 0;
       } catch (error) {
         // fetchUsers();
         buscarUsuarios();
@@ -482,6 +481,14 @@ const atualizarDadosShow = async () => {
         });
         console.error(error);
       }
+
+      dadosAtualizar.email = "";
+      dadosAtualizar.gate_id = 0;
+      dadosAtualizar.id = null;
+      dadosAtualizar.roles = [];
+      dadosAtualizar.user_full_name = "";
+      dadosAtualizar.is_active = 0;
+      roleSelected.value.name = "";
     }
   }
 
@@ -571,21 +578,46 @@ const salvarPermissions = async () => {
 const dadosAtualizar = reactive({
   id: null,
   user_full_name: "",
-  is_active: 0,
+  is_active: Number(ative_selected.value.code),
   email: "",
-  gate_id: 0,
-  roles: null,
+  gate_id: gateSelected.value,
+  roles: roleSelected.value,
 });
 const atualizarDados = (dados) => {
   dialogUserUpdateVisible.value = true;
   dadosAtualizar.id = dados.id;
   // dadosAtualizar.roles = [{name: dados.roles[0].name}];
-  dadosAtualizar.roles = [{ name: "Admin" }];
+
+  roleSelected.value.name = dados.roles[0].name;
+  dadosAtualizar.roles = roleSelected.value;
+
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
 
   console.log(`RoleDados:`);
   console.log(dadosAtualizar.roles);
+  // gateSelected
+  console.log("---------------------------------------------");
+  console.log(dados);
+  console.log(`Ative user: ${dados.is_active}`);
+  gates.value.forEach((gateUser) => {
+    if (gateUser.id == dados.gate[0].gate_id) {
+      gateSelected.value = gateUser;
+    }
+    console.log(gateUser.id);
+  });
+
+  if (dados.is_active == "0") {
+    ative_selected.value.name = "Inativo";
+    ative_selected.value.code = "0";
+  } else {
+    ative_selected.value.name = "Ativo";
+    ative_selected.value.code = "1";
+  }
+  dadosAtualizar.gate_id = gateSelected.value;
+  dadosAtualizar.is_active = Number(ative_selected.value.code);
+
+  console.log("---------------------------------------------");
 
   userFiltro.value.forEach((element) => {
     // console.log(element.roles.value)
@@ -611,44 +643,43 @@ const verificadorDeCampos = (dado) => {
   console.log(dado);
   errorL.value = "";
   for (const key in dado) {
-    if (key == "roles") {
-      console.log(`role: ${dado[key][0].name}`);
-      console.log(dado[key][0].name == undefined ? "Vazio" : "Preenchido");
-      if (dado[key][0].name == undefined) {
-        console.log("Role nao definido");
+    // if (key == "roles") {
+    //   console.log(`role: ${dado[key][0].name}`);
+    //   console.log(dado[key][0].name == undefined ? "Vazio" : "Preenchido");
+    //   if (dado[key][0].name == undefined) {
+    //     console.log("Role nao definido");
+    //     errorL.value = `Preencha todos os dados`;
+    //   }
+    // }
+    if (dado[key] == "" || dado[key] == undefined) {
+      if (key != "is_active") {
+        console.log(`Key: ${key}: sem dados`);
         errorL.value = `Preencha todos os dados`;
       }
-    }
-    if (dado[key] == "" || dado[key] == undefined) {
-      console.log("sem dados");
-      errorL.value = `Preencha todos os dados`;
     }
   }
 
   console.log("-------------------------------------------------");
 };
 
-
 const buscarGates = async () => {
   const token = getToken();
-  console.log(`Token: ${token}`)
+  console.log(`Token: ${token}`);
   if (!token) {
-    alert('Token de autenticação não encontrado. Por favor, faça login.');
+    alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
   }
   try {
-    const response = await axios.get(
-      baseUrls.gate, {
+    const response = await axios.get(baseUrls.gate, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log("Response Gate")
-    gates.value = response.data.data
+    console.log("Response Gate");
+    gates.value = response.data.data;
 
-    console.log(response.data.data)
-    
+    console.log(response.data.data);
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -662,7 +693,7 @@ onMounted(() => {
   fetchPermissions();
   buscarUsuarios();
   buscarEmpresas();
-  buscarGates()
+  buscarGates();
 });
 </script>
 
@@ -1047,7 +1078,7 @@ onMounted(() => {
             <label for="acesso">Portão</label>
             <Select
               id="portao"
-              v-model="dadosAtualizar.gate_id"
+              v-model="gateSelected"
               :options="gates"
               optionLabel="name"
               placeholder="Portão"
@@ -1057,12 +1088,26 @@ onMounted(() => {
         </div>
 
         <!-- Acesso -->
-        <div class="formUserAdd">
+        <!-- roleSelected -->
+        <!-- <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Acesso</label>
             <Select
               id="acesso"
               v-model="dadosAtualizar.roles"
+              :options="rolesName"
+              optionLabel="name"
+              placeholder="S. Nivel de acesso"
+              class="w-full"
+            ></Select>
+          </div>
+        </div> -->
+        <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="acesso">Acesso</label>
+            <Select
+              id="acesso"
+              v-model="roleSelected"
               :options="rolesName"
               optionLabel="name"
               placeholder="S. Nivel de acesso"
@@ -1076,7 +1121,7 @@ onMounted(() => {
           <label for="acesso">Status</label>
           <Select
             id="status"
-            v-model="dadosAtualizar.is_active"
+            v-model="ative_selected"
             :options="statusItems"
             optionLabel="name"
             placeholder="Status"
@@ -1218,8 +1263,6 @@ onMounted(() => {
   transition: all 0.3s ease;
   border-radius: 5px;
 }
-
-
 </style>
 
 

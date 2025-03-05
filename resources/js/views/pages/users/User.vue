@@ -16,6 +16,7 @@ const checked = ref(true);
 const checked2 = ref([false]);
 const empresas = ref([]);
 const empresa = ref([]);
+const errorL = ref();
 const dadosUserDelete = ref({
   name: "",
   id: null,
@@ -128,17 +129,22 @@ const fetchRoles = async () => {
       rolesName.value.push({ name: rolesItems.value[items].name });
     }
     //console.log("Roles Names");
-   // console.log(rolesName.value);
+    // console.log(rolesName.value);
   } catch (erro) {
     console.log(erro);
   }
 };
 
-watch(rolesName, (newRoles) => {
-  if (newRoles.length > 0) {
-    dadosAtualizar.roles = newRoles.find(role => role.name === "Admin") || null;
-  }
-}, { immediate: true });
+watch(
+  rolesName,
+  (newRoles) => {
+    if (newRoles.length > 0) {
+      dadosAtualizar.roles =
+        newRoles.find((role) => role.name === "Admin") || null;
+    }
+  },
+  { immediate: true }
+);
 
 const sexoItem = ref([
   { name: "Masculino", code: "M" },
@@ -152,7 +158,6 @@ const gateItem = ref([
   { name: "Gate 11A", code: 11 },
   { name: "Gate 8A", code: 8 },
   { name: "Gate 3", code: 3 },
-
 ]);
 
 const statusItems = ref([
@@ -297,8 +302,7 @@ const salvarDadosShow = async () => {
     password: formDataSave.password,
     roles: [{ name: formDataSave.roles.name }],
   };
-  dialogoUserVisble.value = false;
-  loading.value = true;
+
   const token = getToken();
   console.log(`Token: ${token}`);
   console.log("Usuario sendo criado");
@@ -306,47 +310,56 @@ const salvarDadosShow = async () => {
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
-  }
-  try {
-    const response = await axios.post(baseUrls.userList, dadosAddL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log("resposta do user adicionado");
-    // let nome = "null"
-    // response.data.forEach(element => {
-    //   nome = element.user_name
-    //   console.log(element)
-    // })
-    console.log(response.data.user_name);
+  } else {
+    verificadorDeCampos(dadosAddL);
+    if (errorL.value === "") {
+      dialogoUserVisble.value = false;
+      loading.value = true;
 
-    toast.add({
-      severity: "success",
-      summary: "Confirmação",
-      detail: `Usuário ${response.data.user_name} criado com sucesso!`,
-      life: 3000,
-    });
-    // fetchUsers();
-    buscarUsuarios();
-    loading.value = false;
+      try {
+        const response = await axios.post(baseUrls.userList, dadosAddL, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("resposta do user adicionado");
+        // let nome = "null"
+        // response.data.forEach(element => {
+        //   nome = element.user_name
+        //   console.log(element)
+        // })
+        console.log(response.data.user_name);
 
-formDataSave.name = ""
-formDataSave.user = ""
-formDataSave.email = ""
-formDataSave.password = ""
-formDataSave.company_id = "0"
-formDataSave.roles = []
+        toast.add({
+          severity: "success",
+          summary: "Confirmação",
+          detail: `Usuário ${response.data.user_name} criado com sucesso!`,
+          life: 3000,
+        });
+        // fetchUsers();
+        buscarUsuarios();
+        loading.value = false;
 
-  } catch (error) {
-    console.error("Erro ao adicionar usuário:", error.response?.data || error);
-    toast.add({
-      severity: "error",
-      summary: "Erro",
-      detail: error.response?.data?.message || "Erro ao criar o usuário.",
-      life: 3000,
-    });
-    loading.value = false;
+        formDataSave.name = "";
+        formDataSave.user = "";
+        formDataSave.email = "";
+        formDataSave.password = "";
+        formDataSave.company_id = "0";
+        formDataSave.roles = [];
+      } catch (error) {
+        console.error(
+          "Erro ao adicionar usuário:",
+          error.response?.data || error
+        );
+        toast.add({
+          severity: "error",
+          summary: "Erro",
+          detail: error.response?.data?.message || "Erro ao criar o usuário.",
+          life: 3000,
+        });
+        loading.value = false;
+      }
+    }
   }
 };
 
@@ -393,12 +406,10 @@ const buscarEmpresas = async () => {
 };
 
 const atualizarDadosShow = async () => {
-  console.log(  );
-  dialogUserUpdateVisible.value = false;
-  loading.value = true;
+  console.log();
+
   console.log("Dados sendo atualizados");
   console.log(dadosAtualizar);
-
 
   const dadoAtualizacao = {
     id: dadosAtualizar.id,
@@ -408,47 +419,57 @@ const atualizarDadosShow = async () => {
     gate_id: dadosAtualizar.gate_id.code,
     roles: [dadosAtualizar.roles],
   };
-  console.log(dadoAtualizacao)
+  console.log(dadoAtualizacao);
   const token = getToken();
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
-  }
-  try {
-    await axios.put(`${baseUrls.userList}/${dadoAtualizacao.id}`, dadoAtualizacao, {
-      headers: {
-         Authorization: `Bearer ${token}`,
-      }
-    });
-    // fetchUsers();
-    buscarUsuarios();
-    loading.value = false;
+  } else {
+    verificadorDeCampos(dadoAtualizacao);
+    if (errorL.value === "") {
+      dialogUserUpdateVisible.value = false;
+      loading.value = true;
+      try {
+        await axios.put(
+          `${baseUrls.userList}/${dadoAtualizacao.id}`,
+          dadoAtualizacao,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        // fetchUsers();
+        buscarUsuarios();
+        loading.value = false;
 
-    toast.add({
-      severity: "success",
-      summary: "Confirmação",
-      detail: "Usuario atualizado",
-      life: 3000,
-    });
-    console.log("Adicionado");
-    
-    dadosAtualizar.email = ""
-    dadosAtualizar.gate_id = 0
-    dadosAtualizar.id = null
-    dadosAtualizar.roles = []
-    dadosAtualizar.user_full_name = ""
-    dadosAtualizar.is_active = 0
-  } catch (error) {
-    // fetchUsers();
-    buscarUsuarios();
-    loading.value = false;
-    toast.add({
-      severity: "error",
-      summary: "Erro",
-      detail: "Falha ao atualizar usuário.",
-      life: 3000,
-    });
-    console.error(error)
+        toast.add({
+          severity: "success",
+          summary: "Confirmação",
+          detail: "Usuario atualizado",
+          life: 3000,
+        });
+        console.log("Adicionado");
+
+        dadosAtualizar.email = "";
+        dadosAtualizar.gate_id = 0;
+        dadosAtualizar.id = null;
+        dadosAtualizar.roles = [];
+        dadosAtualizar.user_full_name = "";
+        dadosAtualizar.is_active = 0;
+      } catch (error) {
+        // fetchUsers();
+        buscarUsuarios();
+        loading.value = false;
+        toast.add({
+          severity: "error",
+          summary: "Erro",
+          detail: "Falha ao atualizar usuário.",
+          life: 3000,
+        });
+        console.error(error);
+      }
+    }
   }
 
   //toast.add({ severity: 'Confirmação', summary: 'Info', detail: 'Salvo', life: 3000 });
@@ -483,8 +504,9 @@ async function apaga() {
   }
   try {
     const response = await axios.delete(
-      `${baseUrls.userList}/${dadosUserDelete.value.id}`, {
-        headers: {Authorization: `Bearer ${token}`},
+      `${baseUrls.userList}/${dadosUserDelete.value.id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
     console.log("Usuário deletado com sucesso", response.status);
@@ -539,7 +561,7 @@ const dadosAtualizar = reactive({
   is_active: 0,
   email: "",
   gate_id: 0,
-  roles: null
+  roles: null,
 });
 const atualizarDados = (dados) => {
   dialogUserUpdateVisible.value = true;
@@ -547,7 +569,6 @@ const atualizarDados = (dados) => {
   // dadosAtualizar.roles = [{name: dados.roles[0].name}];
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
-
 
   console.log(`RoleDados:`);
   console.log(dadosAtualizar.roles);
@@ -569,6 +590,28 @@ const atualizarDados = (dados) => {
 const disableMk = () => {
   dialogUserUpdateVisible.value = false;
   console.log("Cancelar");
+};
+
+const verificadorDeCampos = (dado) => {
+  console.log("Verificador de campos vazios");
+  console.log(dado);
+  errorL.value = "";
+  for (const key in dado) {
+    if (key == "roles") {
+      console.log(`role: ${dado[key][0].name}`);
+      console.log(dado[key][0].name == undefined ? "Vazio" : "Preenchido");
+      if (dado[key][0].name == undefined) {
+        console.log("Role nao definido");
+        errorL.value = `Preencha todos os dados`;
+      }
+    }
+    if (dado[key] == "" || dado[key] == undefined) {
+      console.log("sem dados");
+      errorL.value = `Preencha todos os dados`;
+    }
+  }
+
+  console.log("-------------------------------------------------");
 };
 
 onMounted(() => {
@@ -652,7 +695,7 @@ onMounted(() => {
               @click="atualizarDados(data)"
             />
             <div>
-              <Button
+              <!-- <Button
                 label=""
                 icon="pi pi-key"
                 class="p-button-success btnPermission"
@@ -663,7 +706,7 @@ onMounted(() => {
                   border: 0px;
                 "
                 @click="dialogRoleUpdateVisible = true"
-              />
+              /> -->
 
               <Button
                 label=""
@@ -776,6 +819,9 @@ onMounted(() => {
       style="width: 30vw; min-height: 60vh"
       :footer="productDialogFooterForm"
     >
+      <div class="erroMessage">
+        {{ errorL }}
+      </div>
       <hr />
       <div class="camposAgrupadosFormulario my-5">
         <!-- Nome nome -->
@@ -906,6 +952,9 @@ onMounted(() => {
       style="width: 30vw; min-height: 20vh"
       :footer="productDialogFooterForm"
     >
+      <div class="erroMessage">
+        {{ errorL }}
+      </div>
       <hr />
       <div class="camposAgrupadosFormulario my-5">
         <!-- Nome -->
@@ -982,7 +1031,6 @@ onMounted(() => {
           ></Select>
         </div>
       </div>
-
 
       <hr class="my-5" />
       <div class="flex">

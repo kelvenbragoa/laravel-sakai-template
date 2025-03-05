@@ -226,8 +226,5 @@ body {
   justify-content: center;
 }
 
-.erroMessage {
-  color: red;
-  font-weight: 500;
-}
+
 </style>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ContainerTransactionController;
+use App\Http\Controllers\Api\GateController;
 use App\Http\Controllers\Api\Mobile\MobileContainerTransactionController;
 use App\Http\Controllers\Api\PermissionsController;
 use App\Http\Controllers\Api\RolesController;
@@ -32,6 +33,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::resource('containertransaction',ContainerTransactionController::class);
     Route::resource('companies',CompanyController::class);
+    Route::resource('gates',GateController::class);
+
 
 
 

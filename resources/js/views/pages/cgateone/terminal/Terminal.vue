@@ -128,6 +128,8 @@ import { jsPDF } from "jspdf";
 import json from "../../../../../../public/user.json";
 import * as XLSX from "xlsx";
 import { useToast } from "primevue/usetoast";
+import { baseUrls } from "../../../../api";
+
 const toast = useToast();
 
 const startDate = ref(null);
@@ -282,6 +284,35 @@ const fetchTransactions = async (page = 1) => {
   }
 };
 
+const getToken = () => {
+  return localStorage.getItem('access_token');
+};
+
+const buscarTransccoes = async () => {
+  const token = getToken();
+  console.log(`Token: ${token}`)
+  if (!token) {
+    alert('Token de autenticação não encontrado. Por favor, faça login.');
+    return;
+  }
+  try {
+    const response = await axios.get(
+      baseUrls.transacoes, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Reponse")
+
+    console.log(response.data.data)
+    // exportToExcel()
+  } catch (error) {
+    console.error("Erro ao carregar dados fkdsjf,:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
 const exportToExcel = () => {
   const worksheet = XLSX.utils.json_to_sheet(transactions.value);
   const workbook = XLSX.utils.book_new();
@@ -317,6 +348,7 @@ const loadJson = async () => {
 onMounted(() => {
   loadJson();
   fetchTransactions(currentPage.value);
+  buscarTransccoes();
 });
 
 const route = useRoute();

@@ -18,4 +18,6 @@ class UserGate extends Model
         ->logOnly(['*']);
         // Chain fluent methods for configuration options
     }
+
+
 }

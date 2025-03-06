@@ -16,6 +16,7 @@ const checked = ref(true);
 const checked2 = ref([false]);
 const empresas = ref([]);
 const empresa = ref([]);
+const empresaName = ref([])
 const errorL = ref();
 const dadosUserDelete = ref({
   name: "",
@@ -412,7 +413,13 @@ const buscarEmpresas = async () => {
       console.log(element.name);
       empresa.value.push({ id: element.id, name: element.name });
     });
-    console.log(empresa.value);
+    
+    empresas.value.forEach((element, key) => {
+      console.log(element.name);
+      empresaName.value.push(element.name);
+    });
+    console.log("Empresa name")
+    console.log(empresaName.value);
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -602,7 +609,7 @@ const atualizarDados = (dados) => {
   console.log(`Ative user: ${dados.is_active}`);
   gates.value.forEach((gateUser) => {
     if (gateUser.id == dados.gate[0].gate_id) {
-      gateSelected.value = gateUser;
+      gateSelected.value = gateUser
     }
     console.log(gateUser.id);
   });
@@ -750,6 +757,10 @@ onMounted(() => {
       </Column>
 
       <Column field="company_id" header="Empresa" style="min-width: 10rem">
+       <template #body="{ data }">
+          {{empresaName[(data.company_id -1)]}}
+        </template>
+      
       </Column>
 
       <Column
@@ -820,7 +831,7 @@ onMounted(() => {
           <!-- <div> {{verificarA[data.id]}} </div> -->
 
           <div
-            v-if="data.is_active == 1"
+            v-if="data.is_active == `0`"
             style="
               display: flex;
               align-items: center;
@@ -835,7 +846,7 @@ onMounted(() => {
           </div>
 
           <div
-            v-if="data.is_active == 0"
+            v-else
             style="
               display: flex;
               align-items: center;

@@ -1,18 +1,41 @@
 <script setup>
 import { useToast } from "primevue";
 import { onMounted, reactive, ref } from "vue";
-import { baseUrls } from "../../../api/index"
+import { baseUrls } from "../../../api/index";
 
 const toast = useToast();
 const filtroDados = ref("");
+let dialogUserUpdateVisible = ref(false);
+const dadosAtualizar = reactive({
+  id: null,
+  name: "",
+  mobile: "",
+  email: "",
+  address: "",
+});
 
+const errorL = ref();
 const getToken = () => {
   return localStorage.getItem("access_token");
 };
 
-const number = ref(0)
-const empresas = ref([])
-const empresasFiltro = ref([])
+const displayConfirmation = ref(false);
+function openConfirmation() {
+  displayConfirmation.value = true;
+}
+
+function closeConfirmatio2n() {
+  displayConfirmation.value = false;
+}
+
+const dadosCompanyDelete = ref({
+  name: "",
+  id: null,
+});
+
+const number = ref(0);
+const empresas = ref([]);
+const empresasFiltro = ref([]);
 
 const empresaAdd = reactive({
   name: "",
@@ -24,74 +47,86 @@ const empresaAdd = reactive({
 console.log(getToken());
 
 const dialogoUserVisble = ref(false);
-const loading =  ref(false)
+const loading = ref(false);
 
 const salvarEmpresa = async () => {
-    const token = getToken();
+  const token = getToken();
 
   console.log("salvarEmpresa");
   console.log(empresaAdd);
-  console.log("Token")
-  console.log(token)
+  console.log("Token");
+  console.log(token);
+  if (!token) {
+    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    return;
+  } else {
+    verificadorDeCampos(empresaAdd);
+    if (errorL.value === "") {
+      console.log("Cheio");
+      loading.value = true
+      try {
+        const response = await axios.post(baseUrls.empresaAdd, empresaAdd, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        toast.add({
+          severity: "success",
+          summary: "Confirmação",
+          detail: `Empresa ${response.data.name} criado com sucesso!`,
+          life: 3000,
+        });
+        // fetchUsers();
+         buscarEmpresas();
+        dialogoUserVisble.value = false;
+        loading.value = false;
+      } catch (error) {
+        console.error(
+          "Erro ao adicionar empresa:",
+          error.response?.data || error
+        );
+        toast.add({
+          severity: "error",
+          summary: "Erro",
+          detail: error.response?.data?.message || "Erro ao criar o empresa.",
+          life: 3000,
+        });
+        loading.value = false;
+        dialogoUserVisble.value = false;
+      }
+    }
+  }
+};
+
+const buscarEmpresas = async () => {
+  loading.value = true
+  const token = getToken();
+  console.log(`Token: ${token}`);
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
   }
   try {
-    const response = await axios.post(baseUrls.empresaAdd, empresaAdd, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    toast.add({
-      severity: "success",
-      summary: "Confirmação",
-      detail: `Empresa ${response.data.name} criado com sucesso!`,
-      life: 3000,
-    });
-    // fetchUsers();
-    // buscarUsuarios();
-    dialogoUserVisble.value = false
-    loading.value = false;
-  } catch (error) {
-    console.error("Erro ao adicionar empresa:", error.response?.data || error);
-    toast.add({
-      severity: "error",
-      summary: "Erro",
-      detail: error.response?.data?.message || "Erro ao criar o empresa.",
-      life: 3000,
-    });
-    loading.value = false;
-    dialogoUserVisble.value = false
-  }
-};
-
-const buscarEmpresas = async () => {
-  const token = getToken();
-  console.log(`Token: ${token}`)
-  if (!token) {
-    alert('Token de autenticação não encontrado. Por favor, faça login.');
-    return;
-  }
-  try {
-    const response = await axios.get(
-      baseUrls.empresaAdd, {
+    const response = await axios.get(baseUrls.empresaAdd, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log("Response Empresas")
-    
-    empresas.value = response.data.data.data
-    console.log(empresas.value)
-    
+    console.log("Response Empresas");
+
+    empresas.value = response.data.data.data;
+    console.log(empresas.value);
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
     loading.value = false;
   }
 };
+
+// dadosAtualizar.roles = [{name: dados.roles[0].name}];
+
+console.log("---------------------------------------------");
 
 const filtroChange = () => {
   loading.value = true;
@@ -102,22 +137,159 @@ const filtroChange = () => {
   } else {
     console.log("Preenchido");
     console.log(filtroDados.value.toLowerCase());
-    empresasFiltro.value = empresas.value.filter(
-      (company) => 
-        company.mobile.toLowerCase().includes(filtroDados.value.toLowerCase()) 
-
-    )
-    console.log("USer filtro")
-    console.log(empresasFiltro.value)
+    empresasFiltro.value = empresas.value.filter((company) =>
+      company.mobile.toLowerCase().includes(filtroDados.value.toLowerCase())
+    );
+    console.log("USer filtro");
+    console.log(empresasFiltro.value);
     loading.value = false;
   }
 };
 
-onMounted(() => {
+async function apaga() {
+  displayConfirmation.value = false;
+  loading.value = true;
+  const token = getToken();
+  if (!token) {
+    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    return;
+  }
+  try {
+    const response = await axios.delete(
+      `${baseUrls.empresaAdd}/${dadosCompanyDelete.value.id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log("Empresa deletado com sucesso", response.status);
+    // fetchUsers();
     buscarEmpresas();
-    
+    loading.value = false;
+    toast.add({
+      severity: "success",
+      summary: "Confirmação",
+      detail: `Empresa ${String(dadosCompanyDelete.value.name)} eliminado`,
+      life: 3000,
+    });
+  } catch (error) {
+    loading.value = false;
+    toast.add({
+      severity: "error",
+      summary: "Confirmação",
+      detail: `Erro ao deletar a empresa`,
+      life: 3000,
+    });
+    console.error("Erro ao deletar o empresas:", error.response.data);
+  }
 }
-)
+
+function apagaDados(dados) {
+  displayConfirmation.value = true;
+  dadosCompanyDelete.value.name = dados.name;
+  dadosCompanyDelete.value.id = dados.id;
+
+  console.log(dadosCompanyDelete);
+}
+
+const atualizarDados = (dados) => {
+  dialogUserUpdateVisible.value = true;
+  dadosAtualizar.address = dados.address;
+  dadosAtualizar.email = dados.email;
+  dadosAtualizar.mobile = dados.mobile;
+  dadosAtualizar.name = dados.name;
+  dadosAtualizar.id = dados.id;
+  console.log(dados);
+};
+
+const atualizarDadosShow = async () => {
+  console.log();
+
+  console.log("Dados sendo atualizados");
+  console.log(dadosAtualizar);
+
+  const dadoAtualizacao = {
+    id: dadosAtualizar.id,
+    name: dadosAtualizar.name,
+    email: dadosAtualizar.email,
+    mobile: dadosAtualizar.mobile,
+    address: dadosAtualizar.address,
+  };
+
+  console.log("Dados atualizacao");
+  console.log(dadoAtualizacao);
+  console.log("-----------------------------");
+  const token = getToken();
+  if (!token) {
+    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    return;
+  } else {
+    verificadorDeCampos(dadoAtualizacao);
+    // errorL.value = "";
+    if (errorL.value === "") {
+      dialogUserUpdateVisible.value = false;
+      loading.value = true;
+      try {
+        await axios.put(
+          `${baseUrls.empresaAdd}/${dadoAtualizacao.id}`,
+          dadoAtualizacao,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        // fetchUsers();
+        buscarEmpresas();
+        loading.value = false;
+
+        toast.add({
+          severity: "success",
+          summary: "Confirmação",
+          detail: "Empresa atualizado",
+          life: 3000,
+        });
+        console.log("Adicionado");
+      } catch (error) {
+        // fetchUsers();
+        buscarEmpresas();
+        loading.value = false;
+        toast.add({
+          severity: "error",
+          summary: "Erro",
+          detail: "Falha ao atualizar empresa.",
+          life: 3000,
+        });
+        console.error(error);
+      }
+
+      dadosAtualizar.name = "";
+      dadosAtualizar.mobile = "";
+      dadosAtualizar.email = "";
+      dadosAtualizar.address = "";
+      dadoAtualizacao.id = null;
+    }
+  }
+
+  //toast.add({ severity: 'Confirmação', summary: 'Info', detail: 'Salvo', life: 3000 });
+};
+
+const verificadorDeCampos = (dado) => {
+  console.log("Verificador de campos vazios");
+  console.log(dado);
+  errorL.value = "";
+  for (const key in dado) {
+    if (dado[key] == "" || dado[key] == undefined) {
+      console.log(`Key: ${key}: sem dados`);
+      errorL.value = `Preencha todos os dados`;
+    }
+  }
+
+  console.log("-------------------------------------------------");
+};
+
+onMounted(() => {
+  buscarEmpresas();
+});
 </script>
 
 <template>
@@ -189,8 +361,7 @@ onMounted(() => {
               @click="atualizarDados(data)"
             />
             <div>
-
-              <Button
+              <!-- <Button
                 label=""
                 class="btnEstilizaDel"
                 icon="pi pi-trash"
@@ -202,7 +373,7 @@ onMounted(() => {
                   border: 0px;
                 "
                 @click="apagaDados(data)"
-              />
+              /> -->
             </div>
           </div>
         </template>
@@ -249,6 +420,9 @@ onMounted(() => {
       style="width: 30vw; min-height: 40vh"
       :footer="productDialogFooterForm"
     >
+      <div class="erroMessage">
+        {{ errorL }}
+      </div>
       <hr />
       <div class="camposAgrupadosFormulario my-5">
         <!-- Nome -->
@@ -334,6 +508,9 @@ onMounted(() => {
       style="width: 30vw; min-height: 20vh"
       :footer="productDialogFooterForm"
     >
+      <div class="erroMessage">
+        {{ errorL }}
+      </div>
       <hr />
       <div class="camposAgrupadosFormulario my-5">
         <!-- Nome -->
@@ -353,50 +530,47 @@ onMounted(() => {
         <!-- Email -->
         <div class="formUserAdd">
           <div class="field formUserAddI">
-            <label for="email">Email</label>
+            <label for="name">Email</label>
             <InputText
-              id="email"
+              id="name"
               v-model="dadosAtualizar.email"
               required
               autofocus
               class="camposTextos"
+              type="email"
             />
           </div>
         </div>
       </div>
 
       <div class="camposAgrupadosFormulario my-5">
-        <!-- Numero -->
+        <!-- Nome -->
 
         <div class="formUserAdd">
           <div class="field formUserAddI">
-            <label for="apelido">Telefone</label>
-            <InputNumber
-              v-model="number"
-              inputId="withoutgrouping"
-              :useGrouping="false"
-              fluid
+            <label for="email">Endereço</label>
+            <InputText
+              id="email"
+              v-model="dadosAtualizar.address"
+              required
+              autofocus
+              class="camposTextos"
             />
-            <!-- <InputNumber v-model="mobileUpdate" inputId="integeronly" fluid /> -->
           </div>
         </div>
-
-        <!-- Email -->
+        <!-- COntato -->
         <div class="formUserAdd">
           <div class="field formUserAddI">
-            <label for="acesso">Acesso</label>
-            <Select
-              id="sexo"
-              v-model="empresaAdd.name"
-              :options="rolesName"
-              optionLabel="name"
-              placeholder="S. Nivel de acesso"
-              class="w-full"
-            ></Select>
+            <label for="name">Contato</label>
+            <InputMask
+              id="basic"
+              v-model="dadosAtualizar.mobile"
+              mask="99-999-9999"
+              placeholder="99-999-9999"
+            />
           </div>
         </div>
       </div>
-
       <hr class="my-5" />
       <div class="flex">
         <button class="p-button p-component cores" @click="atualizarDadosShow">
@@ -404,11 +578,10 @@ onMounted(() => {
         </button>
         <button
           class="p-button p-component p-button-secondary mx-2"
-          @click="disableMk"
+          @click="dialogUserUpdateVisible = false"
         >
           Cancelar
         </button>
-        <!-- <button @click="sayHello">Clique Aqui</button> -->
       </div>
     </Dialog>
 
@@ -534,7 +707,7 @@ onMounted(() => {
 .louderL {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   background-color: rgba(0, 0, 0, 0.192);

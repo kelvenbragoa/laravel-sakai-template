@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Hash;
 //                 'email' => 'user' . $i . '@test.com',
 //                 'mobile' => '81123456' . $i,
 //                 'is_active' => $i % 2, // Alternate between 0 and 1 for demo
-//                 'password' => Hash::make('password'),
+//                 'password' => Hash::make('Cornelder1'),
 //                 'created_at' => now(),
 //                 'updated_at' => now(),
 //             ];
@@ -51,7 +51,7 @@ class UserTableSeeder extends Seeder
                 'user_name' => 'username' . $i,
                 'email' => 'user' . $i . '@test.com',
                 'is_active' => $i % 2,
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -66,7 +66,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Ivan Goncalves',
                 'user_name' => 'ivan.goncalves@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'ivan.goncalves@cornelder.co.mz',
                 'created_by' => 'ivan.goncalves@cornelder.co.mz',
@@ -77,7 +77,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Administrator',
                 'user_name' => 'admin',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'admin@cornelder.co.mz',
                 'created_by' => null,
@@ -88,7 +88,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Tecnico',
                 'user_name' => 'Tecnico',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'tecnico@cornelder.co.mz',
                 'created_by' => null,
@@ -99,7 +99,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Adelia Guigo',
                 'user_name' => 'ago',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'adelia.guigo@cornelder.co.mz',
                 'created_by' => null,
@@ -110,7 +110,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Fernando  Ajape',
                 'user_name' => 'fae',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'fernando.ajape@cornelder.co.mz',
                 'created_by' => null,
@@ -121,7 +121,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Joaquim  Sabado',
                 'user_name' => 'jso',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'joaquim.sabado@cornelder.co.mz',
                 'created_by' => null,
@@ -132,7 +132,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Ozorio  Inacio',
                 'user_name' => 'oio',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'ozorio.inacio@cornelder.co.mz',
                 'created_by' => null,
@@ -143,7 +143,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Nazir Botao',
                 'user_name' => 'nbo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'nazir.botao@cornelder.co.mz',
                 'created_by' => null,
@@ -154,7 +154,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Valentim  Tomas',
                 'user_name' => 'vte',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'valentim.tomas@cornelder.co.mz',
                 'created_by' => null,
@@ -165,7 +165,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Simao  Tivane',
                 'user_name' => 'ste',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'simao.tivane@cornelder.co.mz',
                 'created_by' => null,
@@ -176,7 +176,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Brito  Miguel',
                 'user_name' => 'bml',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'brito.miguel@cornelder.co.mz',
                 'created_by' => null,
@@ -187,7 +187,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Felisberto Mahamba',
                 'user_name' => 'fma',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'felisberto.mahamba@cornelder.co.mz',
                 'created_by' => null,
@@ -198,7 +198,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Franque  Vasco',
                 'user_name' => 'fvo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'franque.vasco@cornelder.co.mz',
                 'created_by' => null,
@@ -209,7 +209,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Nancy  Majamanda',
                 'user_name' => 'nma',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'nancy.majamanda@cornelder.co.mz',
                 'created_by' => null,
@@ -220,7 +220,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Lucas  Bechica',
                 'user_name' => 'lba',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'lucas.bechica@cornelder.co.mz',
                 'created_by' => null,
@@ -231,7 +231,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Victor Alfai',
                 'user_name' => 'vai',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'victor.alfai@cornelder.co.mz',
                 'created_by' => null,
@@ -242,7 +242,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Zeca  Tobias',
                 'user_name' => 'zts',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'zeca.tobias@cornelder.co.mz',
                 'created_by' => null,
@@ -253,7 +253,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Augusto  Tony',
                 'user_name' => 'aty',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'augusto.tony@cornelder.co.mz',
                 'created_by' => null,
@@ -264,7 +264,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Castigo Magumisse',
                 'user_name' => 'cme',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'castigo.magumisse@cornelder.co.mz',
                 'created_by' => null,
@@ -275,7 +275,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Celestino  Mualule',
                 'user_name' => 'cml',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'celestino.mualule@cornelder.co.mz',
                 'created_by' => null,
@@ -286,7 +286,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Ernesto Ernesto',
                 'user_name' => 'eeo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'ernesto.ernesto@cornelder.co.mz',
                 'created_by' => null,
@@ -297,7 +297,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Isabel Vilanculos',
                 'user_name' => 'ivs',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'isabel.vilanculos@cornelder.co.mz',
                 'created_by' => null,
@@ -308,7 +308,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Jelito Vasco',
                 'user_name' => 'jvo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'jelito.vasco@cornelder.co.mz',
                 'created_by' => null,
@@ -319,7 +319,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Pedro Manuel',
                 'user_name' => 'pml',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'pedro.manuel@cornelder.co.mz',
                 'created_by' => null,
@@ -330,7 +330,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'test',
                 'user_name' => 'test',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'test@cornelder.co.mz',
                 'created_by' => null,
@@ -341,7 +341,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Jose Comissario',
                 'user_name' => 'jco',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'jose.comissario@cornelder.co.mz',
                 'created_by' => null,
@@ -352,7 +352,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Ilidio Bochana',
                 'user_name' => 'ilidio.bochana@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'ilidio.bochana@cornelder.co.mz',
                 'created_by' => null,
@@ -363,7 +363,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Jonas Alfixa',
                 'user_name' => 'jax',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'jonas.alfixa@cornelder.co.mz',
                 'created_by' => null,
@@ -374,7 +374,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Domingos Sitol',
                 'user_name' => 'sdl',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'domingos.sitol@cornelder.co.mz',
                 'created_by' => null,
@@ -385,7 +385,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Fundisse Manuel',
                 'user_name' => 'fml',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'fundisse.manuel@cornelder.co.mz',
                 'created_by' => null,
@@ -396,7 +396,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Joaquim Guitar',
                 'user_name' => 'jgr',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'joaquim.guitar@cornelder.co.mz',
                 'created_by' => null,
@@ -407,7 +407,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Alberto Zie ',
                 'user_name' => 'aze',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'alberto.zie@cornelder.co.mz ',
                 'created_by' => null,
@@ -418,7 +418,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Lucas Alberto',
                 'user_name' => 'lao',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'lucas.alberto@cornelder.co.mz',
                 'created_by' => null,
@@ -429,7 +429,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Sabado Roque',
                 'user_name' => 'sre',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'sabado.roque@cornelder.co.mz',
                 'created_by' => null,
@@ -440,7 +440,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Sérgio Ambrósio',
                 'user_name' => 'sao',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'sergio.ambrosio@cornelder.co.mz',
                 'created_by' => null,
@@ -451,7 +451,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Joaquim Bene',
                 'user_name' => 'jbe',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'joaquim.bene@cornelder.co.mz',
                 'created_by' => null,
@@ -462,7 +462,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Inácio Dauce',
                 'user_name' => 'ine',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'inacio.dauce@cornelder.co.mz',
                 'created_by' => null,
@@ -473,7 +473,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Lucas manuel',
                 'user_name' => 'lml',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'lucas.manuel@cornelder.co.mz',
                 'created_by' => null,
@@ -484,7 +484,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Carmona Magona',
                 'user_name' => 'cma',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'carmona.magona@cornelder.co.mz',
                 'created_by' => null,
@@ -495,7 +495,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'José Maria',
                 'user_name' => 'jma',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'jose.maria@cornelder.co.mz',
                 'created_by' => null,
@@ -506,7 +506,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Fernando Chiraramire',
                 'user_name' => 'fce',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'fernando.chiraramire@cornelder.co.mz',
                 'created_by' => null,
@@ -517,7 +517,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Pedro António',
                 'user_name' => 'pao',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'pedro.antonio@cornelder.co.mz',
                 'created_by' => null,
@@ -528,7 +528,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Lucas Machava',
                 'user_name' => 'lma',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'lucas.machava@cornelder.co.mz',
                 'created_by' => null,
@@ -539,7 +539,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Geraldo Jardim',
                 'user_name' => 'gjm',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'geraldo.jardim@cornelder.co.mz',
                 'created_by' => null,
@@ -550,7 +550,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Izilda Jose',
                 'user_name' => 'ije',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'izilda.jose@cornelder.co.mz',
                 'created_by' => null,
@@ -561,7 +561,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Carlos Dique',
                 'user_name' => 'cde',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'carlos.dique@cornelder.co.mz',
                 'created_by' => null,
@@ -572,7 +572,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Canisio Magrasse',
                 'user_name' => 'cms',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'canisio.magrasse@cornelder.co.mz',
                 'created_by' => null,
@@ -583,7 +583,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Zito Elias',
                 'user_name' => 'zes',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'zito.elias@cornelder.co.mz',
                 'created_by' => null,
@@ -594,7 +594,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Fabião Mugai',
                 'user_name' => 'fmi',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'fabiao.mugai@cornelder.co.mz',
                 'created_by' => null,
@@ -605,7 +605,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Balbina Sebasti',
                 'user_name' => 'bso',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'balbina.sebasti@cornelder.co.mz',
                 'created_by' => null,
@@ -616,7 +616,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Helenio Tomo',
                 'user_name' => 'hto',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'helenio.tomo@cornelder.co.mz',
                 'created_by' => null,
@@ -627,7 +627,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Florencia Olesse',
                 'user_name' => 'foe',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'florencia.olesse@cornelder.co.mz',
                 'created_by' => null,
@@ -638,7 +638,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Paulo Andessene',
                 'user_name' => 'pae',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'paulo.andessene@cornelder.co.mz',
                 'created_by' => null,
@@ -649,7 +649,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Leandro Nhoazane',
                 'user_name' => 'lne',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'leandro.nhoazane@cornelder.co.mz',
                 'created_by' => null,
@@ -660,7 +660,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Teresa Amadeu',
                 'user_name' => 'tau',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'teresa.amadeu@cornelder.co.mz',
                 'created_by' => null,
@@ -671,7 +671,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'José Gimo',
                 'user_name' => 'jgo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'jose.gimo@cornelder.co.mz',
                 'created_by' => null,
@@ -682,7 +682,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Victor Augusto',
                 'user_name' => 'vao',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'victor.augusto@cornelder.co.mz',
                 'created_by' => null,
@@ -693,7 +693,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Taura Pery',
                 'user_name' => 'tpy',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'taura.pery@cornelder.co.mz',
                 'created_by' => null,
@@ -704,7 +704,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Victor Milina',
                 'user_name' => 'vma',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'victor.milina@cornelder.co.mz',
                 'created_by' => null,
@@ -715,7 +715,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Rumbidzai Lucas',
                 'user_name' => 'rls',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'rumbidzai.lucas@cornelder.co.mz',
                 'created_by' => null,
@@ -726,7 +726,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Eduardo Niclosse',
                 'user_name' => 'eduardo.miclosse@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'eduardo.miclosse@cornelder.co.mz',
                 'created_by' => null,
@@ -737,7 +737,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Nelo Jeque',
                 'user_name' => 'nlj',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'nelo.jeque@cornelder.co.mz',
                 'created_by' => null,
@@ -748,7 +748,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Gilda Sitoe',
                 'user_name' => 'gilda.sitoe@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'gilda.sitoe@cornelder.co.mz',
                 'created_by' => null,
@@ -759,7 +759,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Tendai Gumbo',
                 'user_name' => 'tendai.gumbo@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'tendai.gumbo@cornelder.co.mz',
                 'created_by' => null,
@@ -770,7 +770,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Augusto Jiquete',
                 'user_name' => 'augusto.jiquete@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'augusto.jiquete@cornelder.co.mz',
                 'created_by' => null,
@@ -781,7 +781,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Victor Roque',
                 'user_name' => 'victor.roque@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'victor.roque@cornelder.co.mz',
                 'created_by' => null,
@@ -792,7 +792,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Victor Roque',
                 'user_name' => 'vre',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'Victor.Roque@cornelder.co.mz',
                 'created_by' => null,
@@ -803,7 +803,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Nelo Kripton Jeque',
                 'user_name' => 'Nelo.Jeque@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'Nelo.Jeque@cornelder.co.mz',
                 'created_by' => null,
@@ -814,7 +814,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Rosa Maria Manane',
                 'user_name' => 'Rosa.Manane@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'Rosa.Manane@cornelder.co.mz',
                 'created_by' => null,
@@ -825,7 +825,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Helder Abreu',
                 'user_name' => 'Helder.Abreu@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'Helder.Abreu@cornelder.co.mz',
                 'created_by' => null,
@@ -836,7 +836,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Luisa Fossate',
                 'user_name' => 'Luisa.Fossate@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'Luisa.Fossate@cornelder.co.mz',
                 'created_by' => null,
@@ -847,7 +847,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Pedro Antonio',
                 'user_name' => 'Pedro.Antonio@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'Pedro.Antonio@cornelder.co.mz',
                 'created_by' => null,
@@ -858,7 +858,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Guilherme Castro',
                 'user_name' => 'Guilherme.Castro@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'guileherme.castro@cornelder.co.mz',
                 'created_by' => null,
@@ -869,7 +869,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Artur Muguiviza',
                 'user_name' => 'artur.muguiviza@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'artur.muiguiviza@cornelder.co.mz',
                 'created_by' => null,
@@ -880,7 +880,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'Gomes Marcelino',
                 'user_name' => 'gomesmarcelino@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'gomesmarcelino@cornelder.co.mz',
                 'created_by' => null,
@@ -891,7 +891,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'CUSSARA MAMBONGO',
                 'user_name' => 'cussara.mambongo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'cussara.mambongo@cgate.co.mz',
                 'created_by' => null,
@@ -902,7 +902,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'CRISTINA DAVIVRO',
                 'user_name' => 'cristina.davivro',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'cristina.davivro@cgate.co.mz',
                 'created_by' => null,
@@ -913,7 +913,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'JOAQUIM JOÃO',
                 'user_name' => 'joaquim.joao',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'joaquim.joao@cgate.co.mz',
                 'created_by' => null,
@@ -924,7 +924,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'JOÃO ALBINO',
                 'user_name' => 'joao.albino',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'joao.albino@cgate.co.mz',
                 'created_by' => null,
@@ -935,7 +935,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'MARCELO PAULO',
                 'user_name' => 'marcelo.paulo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'marcelo.paulo@cgate.co.mz',
                 'created_by' => null,
@@ -946,7 +946,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'WILSON COMPANHIA',
                 'user_name' => 'wilson.companhia',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'wilson.companhia@cgate.co.mz',
                 'created_by' => null,
@@ -957,7 +957,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'ELISABETH MANUEL',
                 'user_name' => 'elisabeth.manuel',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'elisabeth.manuel@cgate.co.mz',
                 'created_by' => null,
@@ -968,7 +968,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'FERNANDO MUBONE',
                 'user_name' => 'fernando.mubone',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'fernando.mubone@cgate.co.mz',
                 'created_by' => null,
@@ -979,7 +979,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'JOÃO BELTRÃO',
                 'user_name' => 'joao.beltrao',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'joao.beltrao@cgate.co.mz',
                 'created_by' => null,
@@ -990,7 +990,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'PEDRO POLENE',
                 'user_name' => 'pedro.polene',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'pedro.polene@cgate.co.mz',
                 'created_by' => null,
@@ -1001,7 +1001,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'RICARDO CAMPAUNDE',
                 'user_name' => 'ricardo.capaunde',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'ricardo.capaunde@cgate.co.mz',
                 'created_by' => null,
@@ -1012,7 +1012,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'ZACARIAS BITCHO',
                 'user_name' => 'zacarias.bitcho',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'zacarias.bitcho@cgate.co.mz',
                 'created_by' => null,
@@ -1023,7 +1023,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'AMISSE AMADE',
                 'user_name' => 'amisse.amade',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'amisse.amade@cgate.co.mz',
                 'created_by' => null,
@@ -1034,7 +1034,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'CHICO JOAQUIM',
                 'user_name' => 'chico.joaquim',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'chico.joaquim@cgate.co.mz',
                 'created_by' => null,
@@ -1045,7 +1045,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'LATIFO MABALA',
                 'user_name' => 'latifo.mabala',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'latifo.mabala@cgate.co.mz',
                 'created_by' => null,
@@ -1056,7 +1056,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'SÉRGIO BONA',
                 'user_name' => 'sergio.bona',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'sergio.bona@cgate.co.mz',
                 'created_by' => null,
@@ -1067,7 +1067,7 @@ class UserTableSeeder extends Seeder
             [
                 'user_full_name' => 'INOQUE COLAÇO',
                 'user_name' => 'inoque.colaco',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'inoque.colaco@cgate.co.mz',
                 'created_by' => null,
@@ -1079,7 +1079,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'ARLINDO LOURENÇO',
                 'user_name' => 'arlindo.lourenco',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'arlindo.lourenco@cgate.co.mz',
                 'created_by' => null,
@@ -1091,7 +1091,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'ARTUR WIRE GUIDIONE',
                 'user_name' => 'artur.guidione',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'artur.guidione@cgate.co.mz',
                 'created_by' => null,
@@ -1103,7 +1103,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'HERMEN PINTO',
                 'user_name' => 'hermen.pinto',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'hermen.pinto@cgate.co.mz',
                 'created_by' => null,
@@ -1115,7 +1115,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'JAIME LUIS MEQUE',
                 'user_name' => 'jaime.meque',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'jaime.meque@cgate.co.mz',
                 'created_by' => null,
@@ -1127,7 +1127,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'LEONINO BAPTISTA',
                 'user_name' => 'leonimo.baptista',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'leonimo.baptista@cgate.co.mz',
                 'created_by' => null,
@@ -1139,7 +1139,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'MUCOLE AFONSO',
                 'user_name' => 'mucole.afonso',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'mucole.afonso@cgate.co.mz',
                 'created_by' => null,
@@ -1151,7 +1151,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'ROSA JOSÉ MUTENDA',
                 'user_name' => 'rosa.mutemba',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'rosa.mutemba@cgate.co.mz',
                 'created_by' => null,
@@ -1163,7 +1163,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'DOMINGOS DIAS',
                 'user_name' => 'domingos.dias',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'domingos.dias@cgate.co.mz',
                 'created_by' => null,
@@ -1175,7 +1175,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'BOAVNDA CHIMICA',
                 'user_name' => 'boavinda.chimica',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'boavinda.chimica@cgate.co.mz',
                 'created_by' => null,
@@ -1187,7 +1187,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'FERNANDO MAGUMISSE',
                 'user_name' => 'fernando.maguimisse',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'fernando.maguimisse@cgate.co.mz',
                 'created_by' => null,
@@ -1199,7 +1199,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'SOZINHO GINGA',
                 'user_name' => 'sozinho.ginga',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'sozinho.ginga@cgate.co.mz',
                 'created_by' => null,
@@ -1211,7 +1211,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'ISABEL VILANCULOS',
                 'user_name' => 'isabel.vilanculos',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'isabel.vilanculos@cgate.co.mz',
                 'created_by' => null,
@@ -1223,7 +1223,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'FILIPE CARVALHO ',
                 'user_name' => 'filipe.carvalho',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'filipe.carvalho@cgate.co.mz',
                 'created_by' => null,
@@ -1235,7 +1235,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'ARNALDO HENRIQUES',
                 'user_name' => 'arnaldo.henriques',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'arnaldo.henriques@cgate.co.mz',
                 'created_by' => null,
@@ -1247,7 +1247,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'JAIME MARTINHO FERNANDO',
                 'user_name' => 'jaime.fernando',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'jaime.fernando@cgate.co.mz',
                 'created_by' => null,
@@ -1259,7 +1259,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'MANUEL FRANCISCO JONE',
                 'user_name' => 'manuel.jone',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'manuel.jone@cgate.co.mz',
                 'created_by' => null,
@@ -1271,7 +1271,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'DÁRIO JOSÉ TAREMBA',
                 'user_name' => 'dario.taremba',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'dario.taremba@cgate.co.mz',
                 'created_by' => null,
@@ -1283,7 +1283,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'PEDRO JOAQUIM LUIS',
                 'user_name' => 'pedro.luis',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'pedro.luis@cgate.co.mz',
                 'created_by' => null,
@@ -1295,7 +1295,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'QUINCY MAJAMANDA',
                 'user_name' => 'quincy.majamanda',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'quincy.majamanda@cgate.co.mz',
                 'created_by' => null,
@@ -1307,7 +1307,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'Joao Mupungue',
                 'user_name' => 'joao.mupungue',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'joao.mupungue@cgate.co.mz',
                 'created_by' => null,
@@ -1319,7 +1319,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'Adamo Adamo',
                 'user_name' => 'adamo.adamo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'adamo.adamo@cgate.co.mz',
                 'created_by' => null,
@@ -1331,7 +1331,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'Domingos Jaime',
                 'user_name' => 'domingos.jaime',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'domingos.jaime@cgate.co.mz',
                 'created_by' => null,
@@ -1343,7 +1343,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'Fiel Salimo',
                 'user_name' => 'fiel.salimo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'fiel.salimo@cgate.co.mz',
                 'created_by' => null,
@@ -1355,7 +1355,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'Domingos Arone',
                 'user_name' => 'domingos.arone',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'domingos.arone@cgate.co.mz',
                 'created_by' => null,
@@ -1367,7 +1367,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'Paulo Castigo',
                 'user_name' => 'paulo.castigo',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'paulo.castigo@cgate.co.mz',
                 'created_by' => null,
@@ -1379,7 +1379,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'Jose João',
                 'user_name' => 'jose.joao',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'jose.joão@cgate.co.mz',
                 'created_by' => null,
@@ -1391,7 +1391,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'userfullname',
                 'user_name' => 'Contractor',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'cnt@cornelder.co.mz',
                 'created_by' => null,
@@ -1403,7 +1403,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'userfullname',
                 'user_name' => 'Contractor1',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'cnt1@cornelder.co.mz',
                 'created_by' => null,
@@ -1415,7 +1415,7 @@ class UserTableSeeder extends Seeder
 
                 'user_full_name' => 'userfullname',
                 'user_name' => 'access.control@cornelder.co.mz',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Cornelder1'),
                 'company_id'=>1,
                 'email' => 'access.control@cornelder.co.mz',
                 'created_by' => null,

@@ -66,15 +66,21 @@
       <template #empty> Nenhum dado encontrado. </template>
       <template #loading> Carregando os dados. Por favor, aguarde. </template>
       <!-- <Column field="appointment_nbr" header="Appointment Number" style="min-width: 12rem" /> -->
-      <Column field="driver_name" header="Condutor" style="min-width: 12rem" />
+
+      <Column field="first_last_name" header="Condutor" style="min-width: 12rem" />
       <Column
-        field="truck_license_plate_number"
+        field="main_plate"
         header="Placa de caminhão"
         style="min-width: 12rem"
       />
       <Column
-        field="transaction_gate"
+        field="gate"
         header="Gate"
+        style="min-width: 12rem"
+      ></Column>
+      <Column
+        field="movement"
+        header="Tipo de movimento"
         style="min-width: 12rem"
       ></Column>
       <Column field="created_at" header="Criado" style="min-width: 12rem">
@@ -82,8 +88,8 @@
           {{ formatDate(data.created_at) }}
         </template>
       </Column>
-      <Column field="status" header="Status" style="min-width: 12rem">
-        <template #body="{ data }">
+      <Column field="created_by" header="Criado por" style="min-width: 12rem">
+        <!-- <template #body="{ data }">
           <Tag :value="data.status" :severity="getSeverity(data.status)" />
         </template>
         <template #filter="{ filterModel, filterCallback }">
@@ -102,7 +108,7 @@
               />
             </template>
           </Select>
-        </template>
+        </template> -->
       </Column>
       <Column header="Detalhes" style="min-width: 10rem">
         <template #body="{ data }">
@@ -129,6 +135,15 @@ import json from "../../../../../../public/user.json";
 import * as XLSX from "xlsx";
 import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../../api";
+const userFiltro = ref([])
+/*
+Campos
+Placa de caminhão == main_plate
+Gate == gate
+Tipo de movimento == movement
+Nome == first_last_name
+criado por == created_by
+*/
 
 const toast = useToast();
 
@@ -158,49 +173,107 @@ const tabelaDados = ref({
 
 const dataAtual = new Date();
 
-function filterDate() {
-  if (startDate.value && endDate.value) {
+const formatDates = (date) => {
+  if (!date) return "";
+  
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  const seconds = String(d.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+
+const filterDate = async () => {
+  const token = getToken();
+  if (!token) {
+    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    return;
+  } else {
+    if (!startDate.value || !endDate.value) {
+      toast.add({
+        severity: "error",
+        summary: "Erro",
+        detail: "Preencha os campos",
+        life: 3000,
+      });
+      return;
+    }
+    
+
     const start = new Date(startDate.value);
     const end = new Date(endDate.value);
     const today = new Date();
-
     today.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+    start.setHours(0, 0, 0, 0);
 
     if (end > today) {
       dateError.value = true;
-      console.log("A data de fim não pode ser maior que a data de hoje.");
       toast.add({
         severity: "error",
         summary: "Erro",
         detail: "A data não pode ser maior que a data de hoje.",
         life: 3000,
       });
-    } else if (start.getTime() === end.getTime()) {
+      return;
+    }
+
+    if (start.getTime() === end.getTime()) {
       dateError.value = false;
       console.log("Filtros aplicados, datas iguais.");
     } else if (start > end) {
       dateError.value = true;
-      console.log("A data de início não pode ser maior que a data de fim.");
       toast.add({
         severity: "error",
         summary: "Erro",
         detail: "A data de início não pode ser maior que a data de fim.",
         life: 3000,
       });
-
-    } else {
-      dateError.value = false;
-      console.log("Filtros aplicados");
+      return;
     }
-  }else{
-     toast.add({
+
+    const startFormatted = formatDates(startDate.value);
+    const endFormatted = formatDates(endDate.value);
+
+    console.log("Data inicial:", startFormatted);
+    console.log("Data final:", endFormatted);
+
+    try {
+      const response = await axios.get(
+        `${baseUrls.transacoes}`,
+
+        {
+          params: {
+            startdatetime: startFormatted,
+            enddatetime: endFormatted,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("TOken: ", token)
+
+      userFiltro.value = response.data.data;
+      transactions.value = response.data.data.data
+      console.log("Dados filtrados com sucesso:", response.data.data.data);
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+      toast.add({
         severity: "error",
         summary: "Erro",
-        detail: "Preencha os campos",
+        detail: "Não foi possível buscar os dados.",
         life: 3000,
       });
+    }
   }
-}
+};
 
 const tabelaDados2 = ref({
   appointment_nbr: "Nbr appointment",
@@ -285,26 +358,26 @@ const fetchTransactions = async (page = 1) => {
 };
 
 const getToken = () => {
-  return localStorage.getItem('access_token');
+  return localStorage.getItem("access_token");
 };
 
 const buscarTransccoes = async () => {
   const token = getToken();
-  console.log(`Token: ${token}`)
+  console.log(`Token: ${token}`);
   if (!token) {
-    alert('Token de autenticação não encontrado. Por favor, faça login.');
+    alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
   }
   try {
-    const response = await axios.get(
-      baseUrls.transacoes, {
+    const response = await axios.get(baseUrls.transacoes, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("Reponse")
+    console.log("Reponse");
 
-    console.log(response.data.data)
+    console.log(response.data.data);
+    transactions.value = response.data.data.data;
     // exportToExcel()
   } catch (error) {
     console.error("Erro ao carregar dados fkdsjf,:", error);
@@ -323,7 +396,7 @@ const exportToExcel = () => {
 // Troca de página
 const onPageChange = (event) => {
   const newPage = event.page + 1; // PrimeVue usa index 0
-  fetchTransactions(newPage);
+  // fetchTransactions(newPage);
 };
 
 // Formatar data
@@ -347,7 +420,7 @@ const loadJson = async () => {
 
 onMounted(() => {
   loadJson();
-  fetchTransactions(currentPage.value);
+  // fetchTransactions(currentPage.value);
   buscarTransccoes();
 });
 

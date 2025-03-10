@@ -166,6 +166,11 @@ const model = ref([
                         label: 'Empresas',
                         icon: 'pi pi-building',
                         to: '/company'
+                    },
+                    {
+                        label: 'Gates',
+                        icon: 'pi pi-window-maximize',
+                        to: '/gate'
                     }
                 ]
             },

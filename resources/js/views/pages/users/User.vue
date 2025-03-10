@@ -137,26 +137,63 @@ const fetchPermissions = async () => {
   }
 };
 
+// const fetchRoles = async () => {
+//   try {
+//     const response = await fetch(`${baseUrls.baseURl}`);
+//     const data = await response.json();
+//     console.log("Roles");
+//     console.log(data.data.data[1].guard_name);
+//     console.log("---------------------------------------------");
+//     rolesItems.value = data.data.data.filter((roles) => {
+//       // console.log(roles.guard_name.includes('web'))
+//       return roles.guard_name.includes("web");
+//       //  user.name.toLowerCase().includes(filtroDados.value.toLowerCase())
+//     });
+
+//     for (let items in rolesItems.value) {
+//       rolesName.value.push({ name: rolesItems.value[items].name });
+//     }
+//     //console.log("Roles Names");
+//     // console.log(rolesName.value);
+//   } catch (erro) {
+//     console.log(erro);
+//   }
+
+// };
+
+
+import axios from "axios";
+
 const fetchRoles = async () => {
   try {
-    const response = await fetch("/api/roles");
-    const data = await response.json();
-    console.log("Roles");
-    console.log(data.data.data[1].guard_name);
-    console.log("---------------------------------------------");
-    rolesItems.value = data.data.data.filter((roles) => {
-      // console.log(roles.guard_name.includes('web'))
-      return roles.guard_name.includes("web");
-      //  user.name.toLowerCase().includes(filtroDados.value.toLowerCase())
+    const token = getToken();
+    
+    if (!token) {
+      console.error("Token de autenticação não encontrado.");
+      return;
+    }
+
+    const response = await axios.get(`${baseUrls.baseURl}/roles`, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+        "Content-Type": "application/json",
+      },
     });
 
-    for (let items in rolesItems.value) {
-      rolesName.value.push({ name: rolesItems.value[items].name });
-    }
-    //console.log("Roles Names");
-    // console.log(rolesName.value);
-  } catch (erro) {
-    console.log(erro);
+    console.log("Roles");
+    console.log(response.data.data.data[1].guard_name);
+    console.log("---------------------------------------------");
+
+    rolesItems.value = response.data.data.data.filter((roles) =>
+      roles.guard_name.includes("web")
+    );
+
+    console.log(rolesItems.value)
+
+    rolesName.value = rolesItems.value.map((role) => ({ name: role.name }));
+
+  } catch (error) {
+    console.error("Erro ao buscar roles:", error);
   }
 };
 
@@ -742,7 +779,6 @@ onMounted(() => {
       :paginator="true"
       :rows="10"
       :totalRecords="totalRecords"
-      :rowsPerPageOptions="[10, 20, 30, 50]"
       @page="onPageChange"
     >
       <!-- <DataTable

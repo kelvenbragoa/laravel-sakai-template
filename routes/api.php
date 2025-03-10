@@ -45,7 +45,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/details_transaction/{id}', [MobileContainerTransactionController::class, 'show'])->name('api.v1.c_gate.container.details_transaction');
         Route::post('/update_transaction/{id}', [MobileContainerTransactionController::class, 'update'])->name('api.v1.c_gate.container.update_transaction');
         Route::post('/upload-image', [MobileContainerTransactionController::class, 'uploadimage'])->name('api.v1.c_gate.container.uploadimage');
-
     });
 
 

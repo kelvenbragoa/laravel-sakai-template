@@ -305,6 +305,7 @@ const buscarTransccoes = async () => {
     console.log("Reponse")
 
     console.log(response.data.data)
+    transactions.value = response.data.data.data;
     // exportToExcel()
   } catch (error) {
     console.error("Erro ao carregar dados fkdsjf,:", error);
@@ -323,7 +324,7 @@ const exportToExcel = () => {
 // Troca de página
 const onPageChange = (event) => {
   const newPage = event.page + 1; // PrimeVue usa index 0
-  fetchTransactions(newPage);
+  // fetchTransactions(newPage);
 };
 
 // Formatar data
@@ -347,7 +348,7 @@ const loadJson = async () => {
 
 onMounted(() => {
   loadJson();
-  fetchTransactions(currentPage.value);
+  // fetchTransactions(currentPage.value);
   buscarTransccoes();
 });
 

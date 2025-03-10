@@ -16,17 +16,26 @@ const checked = ref(true);
 const checked2 = ref([false]);
 const empresas = ref([]);
 const empresa = ref([]);
+const empresaName = ref([]);
+const empresaMap = {};
+
 const errorL = ref();
+const rowsPerPage = ref(10);
+const totalRecords = ref(0);
 const dadosUserDelete = ref({
   name: "",
   id: null,
 });
-
+const first = ref(0);
+const pagesCurrent = ref(2);
 const filtroDados = ref("");
 
 const roles = ref();
 const rolesItems = ref([]);
 const permissions = ref([]);
+
+const gates = ref([]);
+const gateFiltros = ref([]);
 
 const permissionsItems = [];
 
@@ -41,11 +50,31 @@ const formDataSave = reactive({
   roles: [],
 });
 
+const countries = ref([
+  { name: "Moçambique", code: "MZ" },
+  { name: "Brasil", code: "BR" },
+  { name: "Portugal", code: "PT" },
+]);
+
+// Definindo a pré-seleção (exemplo: Moçambique)
+const selectedCountry = ref(countries.value[0]);
+const roleSelected = ref({ name: "" });
+const gateSelected = ref({
+  id: 70,
+      user_id: "120",
+      gate_id: "1",
+      created_by: null,
+      updated_by: null,
+      created_at: "2025-03-04T07:01:43.383000Z",
+      updated_at: "2025-03-04T07:01:43.383000Z",
+});
+const ative_selected = ref({ name: "Inativo", code: "0" });
+
 const getToken = () => {
   return localStorage.getItem("access_token");
 };
 
-const buscarUsuarios = async () => {
+const buscarUsuarios = async (pages) => {
   const token = getToken();
   console.log(`Token: ${token}`);
   if (!token) {
@@ -53,38 +82,25 @@ const buscarUsuarios = async () => {
     return;
   }
   try {
-    const response = await axios.get(baseUrls.userList, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      `${baseUrls.userList}?page=${pagesCurrent}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    console.log("Response user");
-    console.log(response.data.data.data);
-
-    // const data = await response.json();
-    // console.log("Reponse users")
-
+    // console.log("Response user");
+    // console.log(response.data.data.data);
     usersL.value = response.data.data.data;
-    // console.log(usersL.value);
+
     userFiltro.value = response.data.data.data;
-    // // verificarA.value.push = usersL.value.
-
-    // // console.log(permissions)
-    // for (let items in usersL.value) {
-    //   // verificarA.value.push = pe
-    //   //   console.log(usersL.value[items]["is_active"])
-    //   verificarA.value.push(
-    //     usersL.value[items]["is_active"] == 1 ? true : false
-    //   );
-    // }
-
-    // console.log("---------------------------------------------------");
-    // console.log(verificarA.value);
-    // console.log("Tamanho");
-    // console.log(verificarA.value.length);
-    // console.log(data.data.data.length);
-    // exportToExcel()
+    totalRecords.value = response.data.data.total;
+    console.log("Pages: ", pagesCurrent.value);
+    // totalRecords.value =
+    //     result.meta.total || result.meta.last_page * rowsPerPage.value;
+    console.log("Total records: ", totalRecords.value);
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -92,16 +108,25 @@ const buscarUsuarios = async () => {
   }
 };
 
+const onPageChange = (event) => {
+  // first.value = event.first
+
+  // pagesCurrent.value = Math.floor(first.value / rowsPerPage.value);
+  pagesCurrent.value = event.page;
+  buscarUsuarios(pagesCurrent.value);
+};
+// const onPage = (event) => {
+//   first.value = event.first;
+//   pageNumber.value = Math.floor(first.value / rowsPerPage.value) + 1;
+//   loadData(pageNumber.value);
+// };
+
 const fetchPermissions = async () => {
   try {
     loading.value = true;
     const res = await fetch("/api/permissions");
     const dados = await res.json();
-    // permissionsItems.value = dados.data.data
-    console.log("-------------------------------------");
-    console.log("Permissions");
     for (let k in dados.data.data) {
-      console.log("Key: " + dados.data.data[k].name);
       permissionsItems.push(dados.data.data[k].name);
       // permissionsItems.value.add(dados.data.data[k].name)
     }
@@ -135,16 +160,16 @@ const fetchRoles = async () => {
   }
 };
 
-watch(
-  rolesName,
-  (newRoles) => {
-    if (newRoles.length > 0) {
-      dadosAtualizar.roles =
-        newRoles.find((role) => role.name === "Admin") || null;
-    }
-  },
-  { immediate: true }
-);
+// watch(
+//   rolesName,
+//   (newRoles) => {
+//     if (newRoles.length > 0) {
+//       dadosAtualizar.roles =
+//         newRoles.find((role) => role.name === "Admin") || null;
+//     }
+//   },
+//   { immediate: true }
+// );
 
 const sexoItem = ref([
   { name: "Masculino", code: "M" },
@@ -328,16 +353,16 @@ const salvarDadosShow = async () => {
         //   nome = element.user_name
         //   console.log(element)
         // })
-        console.log(response.data.user_name);
+        // console.log(response.data.user_name);
 
         toast.add({
           severity: "success",
           summary: "Confirmação",
-          detail: `Usuário ${response.data.user_name} criado com sucesso!`,
+          detail: `Usuário criado com sucesso!`,
           life: 3000,
         });
         // fetchUsers();
-        buscarUsuarios();
+        buscarUsuarios(pagesCurrent);
         loading.value = false;
 
         formDataSave.name = "";
@@ -380,24 +405,25 @@ const buscarEmpresas = async () => {
     console.log("Response Empresas");
 
     empresas.value = response.data.data.data;
-    // empresa.value = empresas.value.filter(
-    //   (nome)=>
-    //     nome.name
-
-    // )
-
-    // empresa.value = e
-    // console.log("FIltro empresas")
-    // console.log(empresa.value)
-    // for (const item in empresas.value) {
-    //   console.log(empresas[0])
-    // }
 
     empresas.value.forEach((element, key) => {
-      console.log(element.name);
+      // console.log(element.name);
       empresa.value.push({ id: element.id, name: element.name });
     });
-    console.log(empresa.value);
+
+    empresas.value
+      .sort((a, b) => a.id - b.id)
+      .forEach((element) => {
+        // console.log(element.name);
+        empresaName.value.push(element.name);
+      });
+
+    empresas.value.forEach((element) => {
+      empresaMap[element.id] = element.name;
+    });
+
+    console.log("Empresa name");
+    console.log(empresaMap);
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -415,11 +441,15 @@ const atualizarDadosShow = async () => {
     id: dadosAtualizar.id,
     user_full_name: dadosAtualizar.user_full_name,
     email: dadosAtualizar.email,
-    is_active: dadosAtualizar.is_active.code,
-    gate_id: dadosAtualizar.gate_id.code,
-    roles: [dadosAtualizar.roles],
+    is_active: Number(ative_selected.value.code),
+    gate_id: gateSelected.value.id,
+    roles: [{ name: roleSelected.value.name }],
   };
+
+  console.log("Dados atualizacao");
   console.log(dadoAtualizacao);
+  console.log(roleSelected);
+  console.log("-----------------------------");
   const token = getToken();
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
@@ -440,7 +470,7 @@ const atualizarDadosShow = async () => {
           }
         );
         // fetchUsers();
-        buscarUsuarios();
+        buscarUsuarios(pagesCurrent);
         loading.value = false;
 
         toast.add({
@@ -450,16 +480,9 @@ const atualizarDadosShow = async () => {
           life: 3000,
         });
         console.log("Adicionado");
-
-        dadosAtualizar.email = "";
-        dadosAtualizar.gate_id = 0;
-        dadosAtualizar.id = null;
-        dadosAtualizar.roles = [];
-        dadosAtualizar.user_full_name = "";
-        dadosAtualizar.is_active = 0;
       } catch (error) {
         // fetchUsers();
-        buscarUsuarios();
+        buscarUsuarios(pagesCurrent);
         loading.value = false;
         toast.add({
           severity: "error",
@@ -469,6 +492,14 @@ const atualizarDadosShow = async () => {
         });
         console.error(error);
       }
+
+      dadosAtualizar.email = "";
+      dadosAtualizar.gate_id = 0;
+      dadosAtualizar.id = null;
+      dadosAtualizar.roles = [];
+      dadosAtualizar.user_full_name = "";
+      dadosAtualizar.is_active = 0;
+      roleSelected.value.name = "";
     }
   }
 
@@ -511,7 +542,7 @@ async function apaga() {
     );
     console.log("Usuário deletado com sucesso", response.status);
     // fetchUsers();
-    buscarUsuarios();
+    buscarUsuarios(pagesCurrent);
     loading.value = false;
     toast.add({
       severity: "success",
@@ -558,20 +589,70 @@ const salvarPermissions = async () => {
 const dadosAtualizar = reactive({
   id: null,
   user_full_name: "",
-  is_active: 0,
+  is_active: Number(ative_selected.value.code),
   email: "",
-  gate_id: 0,
-  roles: null,
+  gate_id: gateSelected.value,
+  roles: roleSelected.value,
 });
 const atualizarDados = (dados) => {
+  console.log("Atualizar");
+  console.log("--------------------------------------------");
+  console.log(dados);
+  console.log("--------------------------------------------");
   dialogUserUpdateVisible.value = true;
   dadosAtualizar.id = dados.id;
-  // dadosAtualizar.roles = [{name: dados.roles[0].name}];
+  // // dadosAtualizar.roles = [{name: dados.roles[0].name}];
+
+  roleSelected.value.name = dados.roles[0].name;
+  dadosAtualizar.roles = roleSelected.value;
+
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
 
-  console.log(`RoleDados:`);
-  console.log(dadosAtualizar.roles);
+  // console.log(`RoleDados:`);
+  // console.log(dadosAtualizar.roles);
+  // // gateSelected
+  // console.log("---------------------------------------------");
+  // console.log(dados);
+  // console.log(`Ative user: ${dados.is_active}`);
+  gates.value.forEach((gateUser) => {
+    console.log("O campo existe?");
+    // console.log(gateUser.id)
+
+    console.log("Tamanho: " + dados.gate.length);
+
+    if (dados.gate.length >= 1) {
+      if (gateUser.id == dados.gate[0].gate_id) {
+        gateSelected.value = gateUser;
+      }
+    }
+  });
+  console.log("Pre selecionado: ");
+  if (gateSelected.value == undefined) {
+    gateSelected.value = {
+      id: 70,
+      user_id: "120",
+      gate_id: "1",
+      created_by: null,
+      updated_by: null,
+      created_at: "2025-03-04T07:01:43.383000Z",
+      updated_at: "2025-03-04T07:01:43.383000Z",
+    };
+    console.log("Indefinido o portao");
+  }
+  console.log(gateSelected.value);
+
+  if (dados.is_active == "0") {
+    ative_selected.value.name = "Inativo";
+    ative_selected.value.code = "0";
+  } else {
+    ative_selected.value.name = "Ativo";
+    ative_selected.value.code = "1";
+  }
+  dadosAtualizar.gate_id = gateSelected.value;
+  dadosAtualizar.is_active = Number(ative_selected.value.code);
+
+  console.log("---------------------------------------------");
 
   userFiltro.value.forEach((element) => {
     // console.log(element.roles.value)
@@ -597,29 +678,54 @@ const verificadorDeCampos = (dado) => {
   console.log(dado);
   errorL.value = "";
   for (const key in dado) {
-    if (key == "roles") {
-      console.log(`role: ${dado[key][0].name}`);
-      console.log(dado[key][0].name == undefined ? "Vazio" : "Preenchido");
-      if (dado[key][0].name == undefined) {
-        console.log("Role nao definido");
+    if (dado[key] == "" || dado[key] == undefined) {
+      if (key != "is_active") {
+        console.log(`Key: ${key}: sem dados`);
         errorL.value = `Preencha todos os dados`;
       }
-    }
-    if (dado[key] == "" || dado[key] == undefined) {
-      console.log("sem dados");
-      errorL.value = `Preencha todos os dados`;
     }
   }
 
   console.log("-------------------------------------------------");
 };
 
+const buscarGates = async () => {
+  const token = getToken();
+  console.log(`Token: ${token}`);
+  if (!token) {
+    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    return;
+  }
+  try {
+    const response = await axios.get(baseUrls.gate, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log("Response Gate");
+    gates.value = response.data.data;
+
+    console.log(response.data.data);
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const nextPage = () => {
+  pagesCurrent.value++;
+  buscarUsuarios(pagesCurrent);
+};
+
 onMounted(() => {
   //   fetchUsers();
   fetchRoles();
   fetchPermissions();
-  buscarUsuarios();
+  buscarUsuarios(pagesCurrent);
   buscarEmpresas();
+  buscarGates();
 });
 </script>
 
@@ -631,7 +737,29 @@ onMounted(() => {
   </div>
   <div class="card">
     <div class="font-semibold text-xl mb-4">Users</div>
-    <DataTable :value="userFiltro" :paginator="true" :rows="10">
+    <DataTable
+      :value="userFiltro"
+      :paginator="true"
+      :rows="10"
+      :totalRecords="totalRecords"
+      :rowsPerPageOptions="[10, 20, 30, 50]"
+      @page="onPageChange"
+    >
+      <!-- <DataTable
+  :value="userFiltro"
+  paginator
+  :rows="rowsPerPage"
+  :first="first"
+  :loading="loading"
+  dataKey="id"
+    filterDisplay="row"
+
+  :totalRecords="totalRecords"
+  lazy
+  @page="onPageChange"
+  
+> -->
+
       <template #header>
         <div class="flex justify-between">
           <IconField class="searchText">
@@ -656,16 +784,36 @@ onMounted(() => {
       </template>
       <template #empty> Vazio. </template>
 
-      <Column field="id" header="Id" style="min-width: 10rem"> </Column>
-      <Column field="user_full_name" header="Nome" style="min-width: 12rem">
+      <Column field="id" header="Id" style="min-width: 10rem" sortable>
+      </Column>
+      <Column
+        field="user_full_name"
+        header="Nome"
+        style="min-width: 12rem"
+        sortable
+      >
       </Column>
 
-      <Column field="email" header="Email" style="min-width: 10rem"> </Column>
-
-      <Column field="user_name" header="username" style="min-width: 10rem">
+      <Column field="email" header="Email" style="min-width: 10rem" sortable>
       </Column>
 
-      <Column field="company_id" header="Empresa" style="min-width: 10rem">
+      <Column
+        field="user_name"
+        header="Username"
+        style="min-width: 10rem"
+        sortable
+      >
+      </Column>
+
+      <Column
+        field="company_id"
+        header="Empresa"
+        style="min-width: 10rem"
+        sortable=""
+      >
+        <template #body="{ data }">
+          {{ empresaMap[data.company_id] || data.company_id }}
+        </template>
       </Column>
 
       <Column
@@ -695,19 +843,6 @@ onMounted(() => {
               @click="atualizarDados(data)"
             />
             <div>
-              <!-- <Button
-                label=""
-                icon="pi pi-key"
-                class="p-button-success btnPermission"
-                style="
-                  padding: 5px 0px;
-                  background-color: transparent;
-                  color: #000000;
-                  border: 0px;
-                "
-                @click="dialogRoleUpdateVisible = true"
-              /> -->
-
               <Button
                 label=""
                 class="btnEstilizaDel"
@@ -731,12 +866,11 @@ onMounted(() => {
         dataType="boolean"
         bodyClass="text-center"
         style="min-width: 8rem"
+        sortable
       >
         <template #body="{ data }">
-          <!-- <div> {{verificarA[data.id]}} </div> -->
-
           <div
-            v-if="data.is_active == 1"
+            v-if="data.is_active == `0`"
             style="
               display: flex;
               align-items: center;
@@ -745,13 +879,10 @@ onMounted(() => {
             "
           >
             <i class="pi pi-times-circle text-red-500"></i>
-            <!-- <InputSwitch v-model="checked2" /> -->
-            <!-- <InputSwitch v-model="verificarA[data.id]" /> -->
-            <!-- {{data.is_active}} -->
           </div>
 
           <div
-            v-if="data.is_active == 0"
+            v-else
             style="
               display: flex;
               align-items: center;
@@ -760,23 +891,9 @@ onMounted(() => {
             "
           >
             <i class="pi pi-check-circle text-green-500"></i>
-            <!-- <InputSwitch v-model="checked" /> -->
-            <!-- <InputSwitch  v-model="verificarA[data.id]"/> -->
           </div>
         </template>
       </Column>
-
-      <!-- <Column header="Permissões">
-            <template #body="{data}">
-                <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style=" border: 0px; background-color: transparent; color: #1558b0; display: none" />
-                <div style="display: flex; gap: 10px">
-                    <Button label="Criar" rounded />
-                    <Button label="Apagar" severity="success" rounded />
-                    <Button label="Atualizar" severity="info" rounded />
-                </div>
-
-            </template>
-            </Column> -->
     </DataTable>
   </div>
 
@@ -882,21 +999,6 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- Numero -->
-
-      <!-- Portão -->
-      <!-- <div class="formUserAdd">
-        <label for="portao" class="labelDrop">Portão</label>
-        <Select
-          id="portao"
-          v-model="gate"
-          :options="gateItem"
-          optionLabel="name"
-          placeholder="Selecione o Portão"
-          class="w-full"
-        ></Select>
-      </div> -->
-
       <div class="formUserAdd">
         <label for="empresa">Empresa</label>
         <Select
@@ -994,8 +1096,8 @@ onMounted(() => {
             <label for="acesso">Portão</label>
             <Select
               id="portao"
-              v-model="dadosAtualizar.gate_id"
-              :options="gateItem"
+              v-model="gateSelected"
+              :options="gates"
               optionLabel="name"
               placeholder="Portão"
               class="w-full"
@@ -1004,12 +1106,26 @@ onMounted(() => {
         </div>
 
         <!-- Acesso -->
-        <div class="formUserAdd">
+        <!-- roleSelected -->
+        <!-- <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Acesso</label>
             <Select
               id="acesso"
               v-model="dadosAtualizar.roles"
+              :options="rolesName"
+              optionLabel="name"
+              placeholder="S. Nivel de acesso"
+              class="w-full"
+            ></Select>
+          </div>
+        </div> -->
+        <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="acesso">Acesso</label>
+            <Select
+              id="acesso"
+              v-model="roleSelected"
               :options="rolesName"
               optionLabel="name"
               placeholder="S. Nivel de acesso"
@@ -1023,7 +1139,7 @@ onMounted(() => {
           <label for="acesso">Status</label>
           <Select
             id="status"
-            v-model="dadosAtualizar.is_active"
+            v-model="ative_selected"
             :options="statusItems"
             optionLabel="name"
             placeholder="Status"
@@ -1164,19 +1280,6 @@ onMounted(() => {
   color: #555555 !important;
   transition: all 0.3s ease;
   border-radius: 5px;
-}
-
-.louderL {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  background-color: rgba(0, 0, 0, 0.192);
-  z-index: 999999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 </style>
 

@@ -1,23 +1,14 @@
 <template>
+
   <div class="card">
-    <DataTable
-      :value="transactions"
-      :filters="filters"
-      :loading="loading"
-      :rows="rowsPerPage"
-      :paginator="true"
-      :total-records="totalRecords"
-      :first="(currentPage - 1) * rowsPerPage"
-      @page="onPageChange"
-      :global-filter-fields="[
+    <DataTable :value="transactions" :filters="filters" :loading="loading" :rows="rowsPerPage" :paginator="true"
+      :total-records="totalRecords" :first="(currentPage - 1) * rowsPerPage" @page="onPageChange" :global-filter-fields="[
         'transaction_gate',
         'driver_name',
         'truck_license_plate_number',
         'status',
         'type',
-      ]"
-      table-style="min-width: 60rem"
-    >
+      ]" table-style="min-width: 60rem">
       <template #header>
         <div class="flex justify-between align-center">
           <h2>
@@ -26,39 +17,19 @@
           <div class="groupExel">
             <Button @click="exportToExcel">Excel</Button>
             <div class="calendaryFilter">
-              <DatePicker
-                v-model="startDate"
-                fluid
-                iconDisplay="input"
-                showTime
-                hourFormat="24"
-                placeholder="Data de Início"
-              />
+              <DatePicker v-model="startDate" fluid iconDisplay="input" showTime hourFormat="24"
+                placeholder="Data de Início" />
               <span></span>
-              <DatePicker
-                v-model="endDate"
-                fluid
-                iconDisplay="input"
-                class="dtPicker"
-                showTime
-                hourFormat="24"
-                placeholder="Data de Fim"
-              />
+              <DatePicker v-model="endDate" fluid iconDisplay="input" class="dtPicker" showTime hourFormat="24"
+                placeholder="Data de Fim" />
               <span></span>
-              <Button
-                class="dtFilter"
-                icon="pi pi-filter"
-                @click="filterDate"
-              />
+              <Button class="dtFilter" icon="pi pi-filter" @click="filterDate" />
             </div>
             <IconField>
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
-              <InputText
-                v-model="filters['global'].value"
-                placeholder="Pesquisa"
-              />
+              <InputText v-model="filters['global'].value" placeholder="Pesquisa" />
             </IconField>
           </div>
         </div>
@@ -68,21 +39,9 @@
       <!-- <Column field="appointment_nbr" header="Appointment Number" style="min-width: 12rem" /> -->
 
       <Column field="first_last_name" header="Condutor" style="min-width: 12rem" />
-      <Column
-        field="main_plate"
-        header="Placa de caminhão"
-        style="min-width: 12rem"
-      />
-      <Column
-        field="gate"
-        header="Gate"
-        style="min-width: 12rem"
-      ></Column>
-      <Column
-        field="movement"
-        header="Tipo de movimento"
-        style="min-width: 12rem"
-      ></Column>
+      <Column field="main_plate" header="Placa de caminhão" style="min-width: 12rem" />
+      <Column field="gate" header="Gate" style="min-width: 12rem"></Column>
+      <Column field="movement" header="Tipo de movimento" style="min-width: 12rem"></Column>
       <Column field="created_at" header="Criado" style="min-width: 12rem">
         <template #body="{ data }">
           {{ formatDate(data.created_at) }}
@@ -100,6 +59,7 @@
             placeholder="Status"
             style="min-width: 12rem"
             :showClear="true"
+            
           >
             <template #option="slotProps">
               <Tag
@@ -112,21 +72,268 @@
       </Column>
       <Column header="Detalhes" style="min-width: 10rem">
         <template #body="{ data }">
-          <Button
-            class="btnEstiliza"
-            label="PDF"
-            icon="pi pi-file-pdf"
-            @click="generatePDF(data)"
-            style="border: 0px"
-          />
+          <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
+            style="border: 0px" />
         </template>
       </Column>
     </DataTable>
   </div>
+
+  <div id="pdf-content">
+    <div class="detalhesLogo">
+      <div class="detalhesName">
+        <span>
+          Detalhes da transação:
+        </span>
+        <span>
+          <span>{{ dadosRelatorio.id == null ? emptyField : dadosRelatorio.id }}</span>
+        </span>
+      </div>
+      <div class="logoCornelderRelatorio">
+        <!-- <img src="/public/logo.png" alt=""> -->
+        <div class="imageLogoPdf"></div>
+      </div>
+    </div>
+    <div class="lineDiv"></div>
+    <div class="columTable">
+      <div class="lineRow">
+        <span>Id</span>
+        <span>{{ dadosRelatorio.id == null ? emptyField : dadosRelatorio.id }}</span>
+      </div>
+      <div class="lineRow">
+        <span>gate</span>
+        <span>{{ dadosRelatorio.gate == null ? emptyField : dadosRelatorio.gate }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Nome</span>
+        <span>{{ dadosRelatorio.first_last_name == null ? emptyField : dadosRelatorio.first_last_name }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Criado por </span>
+        <span>{{ dadosRelatorio.created_by == null ? emptyField : dadosRelatorio.created_by }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Tipo de movimento</span>
+        <span>{{ dadosRelatorio.movement == null ? emptyField : dadosRelatorio.movement }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Verificação</span>
+        <span>{{ dadosRelatorio.checklist == null ? emptyField : dadosRelatorio.checklist }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Quant. Containers</span>
+        <span>{{ dadosRelatorio.containers == null ? emptyField : dadosRelatorio.containers }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Quant. trailers </span>
+        <span>{{ dadosRelatorio.trailers == null ? emptyField : dadosRelatorio.trailers }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Número da carteira de motorista</span>
+        <span>{{ dadosRelatorio.driver_license_number == null ? emptyField : dadosRelatorio.driver_license_number }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Placa</span>
+        <span>{{ dadosRelatorio.main_plate == "" ? emptyField : dadosRelatorio.main_plate }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Atrelado 1</span>
+        <span>{{ dadosRelatorio.trailer_1_license_plate_number ==
+          null ? emptyField : dadosRelatorio.trailer_1_license_plate_number}}</span>
+      </div>
+      <div class="lineRow">
+        <span>Atrelado 2</span>
+        <span>{{ dadosRelatorio.trailer_2_license_plate_number ==
+          null ? emptyField : dadosRelatorio.trailer_2_license_plate_number}}</span>
+      </div>
+      <div class="lineRow">
+        <span>Num. Container</span>
+        <span>{{ dadosRelatorio.container_number_1 == null ? emptyField : dadosRelatorio.container_number_1 }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Num. Container 2</span>
+        <span>{{ dadosRelatorio.container_number_2 == null ? emptyField : dadosRelatorio.container_number_2 }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Num. Container 3</span>
+        <span>{{ dadosRelatorio.container_number_3 == null ? emptyField : dadosRelatorio.container_number_3 }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Selo do contêiner 2</span>
+        <span>{{ dadosRelatorio.container_seal_number_2 ==
+          null ? emptyField : dadosRelatorio.container_seal_number_2}}</span>
+      </div>
+      <div class="lineRow">
+        <span>Lista Verificação </span>
+        <span>{{ dadosRelatorio.checklist_check == null ? emptyField : dadosRelatorio.checklist_check }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Nota de entrega verificação </span>
+        <span>{{ dadosRelatorio.delivery_note_check == null ? emptyField : dadosRelatorio.delivery_note_check }}</span>
+      </div>
+      <div class="lineRow">
+        <span>verificação de carteira de motorista </span>
+        <span>{{ dadosRelatorio.driver_license_check == null ? emptyField : dadosRelatorio.driver_license_check }}</span>
+      </div>
+      
+    </div>
+    <div class="footerLd">
+      <div class="lineDiv"></div>
+      <div class="containerFooter">
+        <div class="processadoPorCgate">
+          <span>Processado por:</span>
+          <span>
+            C-gate
+          </span>
+        </div>
+        <div class="processadoPorCgate">
+          <span>{{dataLk}}</span>
+        </div>
+
+        <div class="processadoPorCgate">
+          <span>1/2</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="imagensRelatorio">
+      <div class="columTable">
+      <div class="lineRow">
+        <span>notes </span>
+        <span>{{ dadosRelatorio.notes == null ? emptyField : dadosRelatorio.notes }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Atualização </span>
+        <span>{{ dadosRelatorio.updated_by == null ? emptyField : dadosRelatorio.updated_by }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Atualizado em </span>
+        <span>{{ dadosRelatorio.updated_at == null ? emptyField : dadosRelatorio.updated_at }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Criado em </span>
+        <span>{{ dadosRelatorio.created_at == null ? emptyField : dadosRelatorio.created_at }}</span>
+      </div>
+    </div>
+      <table>
+        <thead>
+          <th>
+            Matrícula do caminhão
+          </th>
+          <th>
+            Matrícula do atrelado 1
+          </th>
+
+        </thead>
+        <tr>
+          
+          <td :style="backgroundImage = `url(${dadosRelatorio.main_plate_cutout_photo})`"></td>
+          <td :style="backgroundImage = `url(${dadosRelatorio.trailer_1_license_plate_cutout_photo})`">
+          </td>
+
+        </tr>
+      </table>
+
+      <table>
+        <thead>
+          <th>
+            Fotografia do contêiner 
+          </th>
+
+          <th>
+            Fotografia da carta de condução
+          </th>
+
+
+        </thead>
+        <tr>
+          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_1_cutout_photo})`"></td>
+          <td :style="backgroundImage = `url(${dadosRelatorio.driver_license_cutout_photo})`"></td>
+
+        </tr>
+      </table>
+
+      <table>
+        <thead>
+          <th>
+            Fotografia do contêiner 3
+          </th>
+          <th>
+            Fotografia do contêiner 2
+          </th>
+
+
+        </thead>
+        <tr>
+          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_3_cutout_photo})`"></td>
+          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_2_cutout_photo})`"></td>
+
+        </tr>
+      </table>
+
+      <table>
+        <thead>
+          <th>
+            Fotografia de selo 2
+          </th>
+          <th>
+            Fotografia de selo 3
+          </th>
+
+
+        </thead>
+        <tr>
+          <td :style="backgroundImage = `url(${dadosRelatorio.seal_2_cutout_photo})`"></td>
+          <td :style="backgroundImage = `url(${dadosRelatorio.seal_3_cutout_photo})`"></td>
+
+
+        </tr>
+      </table>
+      <table>
+        <thead>
+
+          <th>
+            Fotografia de selo 1
+          </th>
+          <th>
+            Fotografia de atrelado 2
+          </th>
+
+
+
+        </thead>
+        <tr>
+          <td :style="backgroundImage = `url(${dadosRelatorio.seal_1_cutout_photo})`"></td>
+          <td :style="backgroundImage = `url(${dadosRelatorio.trailer_2_license_plate_cutout_photo})`"></td>
+
+        </tr>
+      </table>
+      <div class="footerLd">
+        <div class="lineDiv"></div>
+        <div class="containerFooter">
+          <div class="processadoPorCgate">
+            <span>Processado por:</span>
+            <span>
+              C-gate
+            </span>
+          </div>
+          <div class="processadoPorCgate">
+            <span>{{dataLk}}</span>
+          </div>
+
+          <div class="processadoPorCgate">
+            <span>2/2</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { FilterMatchMode } from "@primevue/core/api";
 import { getCarga, getTransactions } from "@/api";
 import { useRoute } from "vue-router";
@@ -135,15 +342,36 @@ import json from "../../../../../../public/user.json";
 import * as XLSX from "xlsx";
 import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../../api";
+import html2canvas from 'html2canvas';
+import { nextTick } from 'vue';
+const isActive = ref(true)
 const userFiltro = ref([])
-/*
-Campos
-Placa de caminhão == main_plate
-Gate == gate
-Tipo de movimento == movement
-Nome == first_last_name
-criado por == created_by
-*/
+const dadosRelatorio = ref({
+  id: null,
+  gate: null,
+  first_last_name: null,
+  created_by: null,
+  movement: null,
+  checklist: null,
+  containers: null,
+  trailers: null,
+  driver_license_number: null,
+  main_plate: null,
+  trailer_1_license_plate_number: null,
+  trailer_2_license_plate_number: null,
+  container_number_1: null,
+  container_number_2: null,
+  container_number_3: null,
+  container_seal_number_2: null,
+  checklist_check: null,
+  delivery_note_check: null,
+  driver_license_check: null,
+  notes: null,
+  updated_by: null,
+  updated_at: null,
+})
+
+
 
 const toast = useToast();
 
@@ -175,7 +403,7 @@ const dataAtual = new Date();
 
 const formatDates = (date) => {
   if (!date) return "";
-  
+
   const d = new Date(date);
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, "0");
@@ -203,7 +431,7 @@ const filterDate = async () => {
       });
       return;
     }
-    
+
 
     const start = new Date(startDate.value);
     const end = new Date(endDate.value);
@@ -360,10 +588,15 @@ const fetchTransactions = async (page = 1) => {
 const getToken = () => {
   return localStorage.getItem("access_token");
 };
+function removerGate(texto) {
+    return texto.replace(/^Gate\s*/, '');
+}
 
 const buscarTransccoes = async () => {
+  console.log("Requisacao feita")
   const token = getToken();
   console.log(`Token: ${token}`);
+  console.log(`Portao: ${removerGate(gateId.value)}`)
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
@@ -373,6 +606,10 @@ const buscarTransccoes = async () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      // params: {
+      //   gate: removerGate(gateId.value)
+      // }
+      
     });
     console.log("Reponse");
 
@@ -421,20 +658,28 @@ const loadJson = async () => {
 onMounted(() => {
   loadJson();
   // fetchTransactions(currentPage.value);
+  tratamentoDoId()
   buscarTransccoes();
+  
 });
 
 const route = useRoute();
 const userId = route.params.id;
 // console.log(userId)
-let gateId = userId;
-if (Number(gateId.indexOf("Out")) > -1) {
-  gateId = gateId.replace("Out", "");
-  gateId = `Gate ${gateId}`;
+const gateId = ref(userId);
+
+const tratamentoDoId = ()=>{
+  if (Number(gateId.value.indexOf("Out")) > -1) {
+  gateId.value = gateId.value.replace("Out", "");
+  gateId.value = `Gate ${gateId.value}`;
 } else {
-  gateId = gateId.replace("In", "");
-  gateId = `Gate ${gateId}`;
+  gateId.value = gateId.value.replace("In", "");
+  gateId.value = `Gate ${gateId.value}`;
 }
+}
+
+console.log(`Gate: ${gateId.value}`)
+console.log(route.params.id)
 
 const data = ref([]);
 const filters = ref({
@@ -580,28 +825,85 @@ const generatePDF = (rowData) => {
   // console.log(rowData)
 };
 
-onMounted(async () => {
-  try {
-    const result = await getTransactions(1, 10, "", null);
-    console.log("Resposta da API:", result);
-    if (result && result.data && Array.isArray(result.data)) {
-      data.value = result.data;
-      // console.log(data.value)
-      for (let key in data.value) {
-        if (data.value[key].transaction_gate == gateId) {
-          console.log("Encontrado");
-        }
-      }
-    } else {
-      console.log("Estrutura inesperada", result);
-      data.value = [];
-    }
-  } catch (error) {
-    console.error("Erro ao buscar transações:", error);
-  } finally {
-    loading.value = false;
+const generatePDFCanva = async (rowData) => {
+  console.log(rowData)
+  dadosRelatorio.value = { ...rowData }
+  console.log(dadosRelatorio.value)
+
+  await nextTick();
+  isActive.value = false
+  generatePDFs();
+
+}
+
+const generatePDFs = async () => {
+  const pdf = new jsPDF("p", "mm", "a4");
+  const pdfWidth = 210;
+  const pdfHeight = 297;
+  const margin = 10;
+  const contentElement = document.getElementById("pdf-content");
+  const imagensElement = document.querySelector(".imagensRelatorio");
+
+  if (!contentElement || contentElement.style.display === "none") {
+    console.log("O conteúdo não está visível ou não existe.");
+    return; 
   }
-});
+
+  // corpo
+  const contentCanvas = await html2canvas(contentElement, { useCORS: true, scale: 2 });
+  const contentImgData = contentCanvas.toDataURL("image/jpeg", 1.0);
+
+  let contentHeight = (contentCanvas.height * (pdfWidth - 2 * margin)) / contentCanvas.width;
+  pdf.addImage(contentImgData, "JPEG", margin, margin, pdfWidth - 2 * margin, contentHeight);
+
+  //pagina 1
+  pdf.addPage();
+
+  // tabela
+  const imagensCanvas = await html2canvas(imagensElement, { useCORS: true, scale: 2 });
+  const imagensImgData = imagensCanvas.toDataURL("image/jpeg", 1.0);
+  let imagensHeight = (imagensCanvas.height * (pdfWidth - 2 * margin)) / imagensCanvas.width;
+
+  pdf.addImage(imagensImgData, "JPEG", margin, margin, pdfWidth - 2 * margin, imagensHeight);
+
+  pdf.save("transacoes_relatorio.pdf");
+};
+
+let dateToday = new Date()
+const dataLk = ref(formatDate(String(dateToday)))
+
+console.log(`Data: ${formatDate(String(dateToday))}`)
+const emptyField = ref("Vazio")
+
+// onMounted(async () => {
+//   try {
+//     const result = await getTransactions(1, 10, "", null);
+//     console.log("Resposta da API:", result);
+//     if (result && result.data && Array.isArray(result.data)) {
+//       data.value = result.data;
+//       // console.log(data.value)
+//       for (let key in data.value) {
+//         if (data.value[key].transaction_gate == gateId) {
+//           console.log("Encontrado");
+//         }
+//       }
+//     } else {
+//       console.log("Estrutura inesperada", result);
+//       data.value = [];
+//     }
+//   } catch (error) {
+//     console.error("Erro ao buscar transações:", error);
+//   } finally {
+//     loading.value = false;
+//   }
+// });
+
+watch(() => route.params.id, (newId) => {
+  gateId.value = newId
+  tratamentoDoId()
+  buscarTransccoes()
+  
+})
 
 const getSeverity = (status) => {
   switch (status) {

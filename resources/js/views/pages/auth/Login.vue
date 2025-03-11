@@ -57,53 +57,9 @@ const checked = ref(false);
 </script>
 
 <template>
-<<<<<<< HEAD
-    <FloatingConfigurator />
-    
-    <div class="dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden" style="background-color: #f9f9f9; border: 0px solid black;">
-        
-        <div class="flex flex-col items-center justify-center">
-            
-            <div style="border-radius: 56px; padding: 0.3rem;" class="blue-gradient">
-                <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px; border: 0px solid red; background-color: #ffffff;">
-                    <div class="text-center mb-8">
-                        <!-- <img src="@/images/login.png" alt="Descrição da imagem" class="my-image" /> -->
-                        <!-- <img :src="require('@/assets/images/login.png')" alt="Descrição da imagem" /> -->
-                        <div class="flex items-center justify-center w-full">
-                            <!-- <Image src="@/assets/images/logo.png" alt="Image" width="200" /> -->
-                             <img src="/cgate1x/logo.png" alt="logo" style="width: 200px"/>
-                        </div>
-                        <div class="m-20">      
-
-                        </div>
-                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Bem vindo de volta!</div>
-                        <span class="text-muted-color font-medium">Preencha os campos</span>
-                    </div>
-
-                    <div>
-                        <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Endereço eletrónico" class="w-full md:w-[30rem] mb-8 inputsCaixas" v-model="email" />
-
-                        <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Senha</label>
-                        <Password id="password1" v-model="password" placeholder="Senha" :toggleMask="true" class="mb-4 inputsCaixas" fluid :feedback="false"></Password>
-
-                        <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                            <div class="flex items-center">
-                                <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                                <label for="rememberme1">Lembrar</label>
-                            </div>
-                            <span class="font-medium no-underline ml-2 text-right cursor-pointer corPrimaria">Esqueceste a senha?</span>
-                        </div>
-                        <Button label="Entrar" class="w-full facebook-button hover" as="router-link" to="/dashboard"></Button>
-                    </div>
-                </div>
-            </div>
-        </div>
-=======
   <div v-if="loading" class="loader-overlay">
     <div class="louderL">
       <ProgressSpinner />
->>>>>>> frontend
     </div>
   </div>
   <div v-else>

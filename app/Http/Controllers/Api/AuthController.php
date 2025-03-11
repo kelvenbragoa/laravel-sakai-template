@@ -56,15 +56,12 @@ class AuthController extends Controller
             ->with(['gate', 'company'])
             ->first();
 
-<<<<<<< HEAD
             $user = User::where('user_name', strtolower($loginUserData['user_name']))->with('gate.gate_name')->with('company')->first();
             if($user){
 
             
-=======
         if ($user && Hash::check($loginUserData['password'], $user->password)) {
             // Criar token
->>>>>>> main
             $token = $user->createToken($user->user_name . '-AuthToken')->plainTextToken;
 
             // Obter dados do usuário
@@ -85,6 +82,7 @@ class AuthController extends Controller
             'message' => 'Usuário ou senha incorretos'
         ], 401);
     }
+}
 
     public function updatepassword(Request $request)
     {

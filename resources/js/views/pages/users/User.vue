@@ -18,9 +18,10 @@ const empresas = ref([]);
 const empresa = ref([]);
 const empresaName = ref([]);
 const empresaMap = {};
+const dadoSearch = ref("")
 
 const errorL = ref();
-const rowsPerPage = ref(10);
+const rowsPerPage = ref(50);
 const totalRecords = ref(0);
 const dadosUserDelete = ref({
   name: "",
@@ -74,20 +75,24 @@ const getToken = () => {
   return localStorage.getItem("access_token");
 };
 
-const buscarUsuarios = async (pages) => {
+const buscarUsuarios = async (page = 1) => {
   const token = getToken();
-  console.log(`Token: ${token}`);
+  console.log(`Token: ${page}`);
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
   }
   try {
     const response = await axios.get(
-      `${baseUrls.userList}?page=${pagesCurrent}`,
+      `${baseUrls.userList}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        params: {
+          page: page,
+          query: dadoSearch.value
+        }
       }
     );
 
@@ -96,6 +101,8 @@ const buscarUsuarios = async (pages) => {
     usersL.value = response.data.data.data;
 
     userFiltro.value = response.data.data.data;
+    console.log("Response user")
+    console.log(userFiltro.value)
     totalRecords.value = response.data.data.total;
     console.log("Pages: ", pagesCurrent.value);
     // totalRecords.value =
@@ -109,12 +116,11 @@ const buscarUsuarios = async (pages) => {
 };
 
 const onPageChange = (event) => {
-  // first.value = event.first
-
-  // pagesCurrent.value = Math.floor(first.value / rowsPerPage.value);
-  pagesCurrent.value = event.page;
-  buscarUsuarios(pagesCurrent.value);
-};
+    first.value = event.first
+    const newPage = Math.floor(event.first / rowsPerPage.value) + 1
+    console.log(`event.first: ${event.first}`)
+    buscarUsuarios(newPage)
+  }
 // const onPage = (event) => {
 //   first.value = event.first;
 //   pageNumber.value = Math.floor(first.value / rowsPerPage.value) + 1;
@@ -282,26 +288,28 @@ const filtroChange = () => {
   } else {
     console.log("Preenchido");
     console.log(filtroDados.value.toLowerCase());
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarUsuarios()
     // userFiltro.value = usersL.value.filter(
     //   (user) =>
     //     user.name.toLowerCase().includes(filtroDados.value.toLowerCase()) ||
     //     user.email.toLowerCase().includes(filtroDados.value.toLocaleLowerCase())
     // );
-    userFiltro.value = usersL.value.filter(
-      (user) =>
-        user.user_name
-          .toLowerCase()
-          .includes(filtroDados.value.toLowerCase()) ||
-        user.email.toLowerCase().includes(filtroDados.value.toLowerCase()) ||
-        user.user_full_name
-          .toLowerCase()
-          .includes(filtroDados.value.toLowerCase()) ||
-        user.is_active.toLowerCase().includes(filtroDados.value.toLowerCase())
-    );
-    console.log("USer filtro");
-    console.log(userFiltro.value);
-    loading.value = false;
-    console.log(userFiltro.value);
+    // userFiltro.value = usersL.value.filter(
+    //   (user) =>
+    //     user.user_name
+    //       .toLowerCase()
+    //       .includes(filtroDados.value.toLowerCase()) ||
+    //     user.email.toLowerCase().includes(filtroDados.value.toLowerCase()) ||
+    //     user.user_full_name
+    //       .toLowerCase()
+    //       .includes(filtroDados.value.toLowerCase()) ||
+    //     user.is_active.toLowerCase().includes(filtroDados.value.toLowerCase())
+    // );
+    // console.log("USer filtro");
+    // console.log(userFiltro.value);
+    // loading.value = false;
+    // console.log(userFiltro.value);
   }
 };
 
@@ -399,7 +407,7 @@ const salvarDadosShow = async () => {
           life: 3000,
         });
         // fetchUsers();
-        buscarUsuarios(pagesCurrent);
+        buscarUsuarios();
         loading.value = false;
 
         formDataSave.name = "";
@@ -507,7 +515,7 @@ const atualizarDadosShow = async () => {
           }
         );
         // fetchUsers();
-        buscarUsuarios(pagesCurrent);
+        buscarUsuarios();
         loading.value = false;
 
         toast.add({
@@ -519,7 +527,7 @@ const atualizarDadosShow = async () => {
         console.log("Adicionado");
       } catch (error) {
         // fetchUsers();
-        buscarUsuarios(pagesCurrent);
+        buscarUsuarios();
         loading.value = false;
         toast.add({
           severity: "error",
@@ -579,7 +587,7 @@ async function apaga() {
     );
     console.log("Usuário deletado com sucesso", response.status);
     // fetchUsers();
-    buscarUsuarios(pagesCurrent);
+    buscarUsuarios();
     loading.value = false;
     toast.add({
       severity: "success",
@@ -751,16 +759,16 @@ const buscarGates = async () => {
   }
 };
 
-const nextPage = () => {
-  pagesCurrent.value++;
-  buscarUsuarios(pagesCurrent);
-};
+// const nextPage = () => {
+//   pagesCurrent.value++;
+//   buscarUsuarios(pagesCurrent);
+// };
 
 onMounted(() => {
   //   fetchUsers();
   fetchRoles();
   fetchPermissions();
-  buscarUsuarios(pagesCurrent);
+  buscarUsuarios();
   buscarEmpresas();
   buscarGates();
 });
@@ -774,13 +782,15 @@ onMounted(() => {
   </div>
   <div class="card">
     <div class="font-semibold text-xl mb-4">Users</div>
-    <DataTable
+    <DataTable :value="userFiltro" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy
+                 :first="first" @page="onPageChange">
+    <!-- <DataTable
       :value="userFiltro"
       :paginator="true"
       :rows="10"
       :totalRecords="totalRecords"
       @page="onPageChange"
-    >
+    > -->
       <!-- <DataTable
   :value="userFiltro"
   paginator

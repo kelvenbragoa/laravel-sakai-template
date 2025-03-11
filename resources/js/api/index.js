@@ -53,12 +53,12 @@ const baseURLCDMDev = "http://10.0.8.44:8010/api"
 const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
 
   export const baseUrls = {
-    auth: `${baseURLCDMProd}/login`,
-    transacoes: `${baseURLCDMProd}/containertransaction`,
-    userList: `${baseURLCDMProd}/users`,
-    empresaAdd: `${baseURLCDMProd}/companies`,
-    gate: `${baseURLCDMProd}/gates`,
-    baseURl: baseURLCDMProd
+    auth: `${baseURLCDMDev}/login`,
+    transacoes: `${baseURLCDMDev}/containertransaction`,
+    userList: `${baseURLCDMDev}/users`,
+    empresaAdd: `${baseURLCDMDev}/companies`,
+    gate: `${baseURLCDMDev}/gates`,
+    baseURl: baseURLCDMDev
     
   };
 

@@ -84,11 +84,12 @@ const checked = ref(false);
               <!-- <img :src="require('@/assets/images/login.png')" alt="Descrição da imagem" /> -->
               <div class="flex items-center justify-center w-full">
                 <!-- <Image src="@/assets/images/logo.png" alt="Image" width="200" /> -->
-                <img
+                <!-- <img
                   src="http://[::1]:5173/resources/js/assets/images/logo.png"
                   alt="logo"
                   style="width: 200px"
-                />
+                /> -->
+                <div class="imageLogoLogin"></div>
               </div>
               <div class="m-20"></div>
               <div

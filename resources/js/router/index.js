@@ -31,7 +31,8 @@ const router = createRouter({
                 {
                     path: '/terminalone/:id',
                     name: 'terminalone',
-                    component: () => import('@/views/pages/cgateone/terminal/Terminal.vue')
+                    component: () => import('@/views/pages/cgateone/terminal/Terminal.vue'),
+                    props: true,
                 },
                 {
                     path: '/uikit/formlayout',
@@ -128,6 +129,11 @@ const router = createRouter({
                     path: '/user',
                     name: 'user',
                     component: () => import('@/views/pages/users/User.vue')
+                },
+                {
+                    path: '/users',
+                    name: 'users',
+                    component: () => import('@/views/pages/users/Users.vue')
                 },
                 {
                     path: "/rolespermissions",

@@ -12,7 +12,8 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
             <router-link to="/" class="layout-topbar-logo">
                 <div class="flex items-center justify-center">
                     <!-- <Image src="`${logo}`" alt="Image" width="120" /> -->
-                     <img src="/cgate1x/logo.png" alt="logo" style="width: 120px"/>
+                     <!-- <img src="/cgate1x/logo.png" alt="logo" style="width: 120px"/> -->
+                     <div class="imageLogoTopBar"></div>
                 </div>
                
             </router-link>

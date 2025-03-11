@@ -18,6 +18,7 @@ const model = ref([
                 icon: 'pi pi-globe',
                 items: [
 
+                //C-gate 1.1
                     {
                         label: 'C-Gate 1.1',
                         icon: 'pi pi-globe',
@@ -29,26 +30,26 @@ const model = ref([
                                     {
                                         label: 'Portão 4',
                                         icon: 'pi pi-window-maximize',
-                                        to: '/terminalone/4'
+                                        to: '/terminaloneone/4'
                                     },
                                     {
                                         label: 'Portão 5',
                                         icon: 'pi pi-window-maximize',
-                                        to: '/terminalone/5'
+                                        to: '/terminaloneone/5'
                                     },
                                     {
                                         label: 'Portão 6',
                                         icon: 'pi pi-window-maximize',
-                                        to: '/terminalone/6'
+                                        to: '/terminaloneone/6'
                                     },
                                     {
                                         label: 'Portão 8A',
                                         icon: 'pi pi-window-maximize',
-                                        to: '/terminalone/8A'
+                                        to: '/terminaloneone/8A'
                                     }, {
                                         label: 'Portão 11A',
                                         icon: 'pi pi-window-maximize',
-                                        to: '/terminalone/11AIn'
+                                        to: '/terminaloneone/11AIn'
                                     }
                                 ]
                             },
@@ -59,28 +60,30 @@ const model = ref([
                                     {
                                         label: 'Portão 1',
                                         icon: 'pi pi-window-maximize',
-                                        to: '/cargaone/1Out'
+                                        to: '/cargaoneone/1Out'
                                     },
                                     {
                                         label: 'Portão 2',
                                         icon: 'pi pi-window-maximize',
-                                        to: '/cargaone/2Out'
+                                        to: '/cargaoneone/2Out'
                                     },
                                     {
                                         label: 'Portão 3',
                                         icon: 'pi pi-window-maximize',
-                                        to: '/cargaone/3In'
+                                        to: '/cargaoneone/3In'
                                     },
                                     {
                                         label: 'Portão 16',
                                         icon: 'pi pi-window-maximize',
-                                        to: '/carga-geral/16In'
+                                        to: '/cargaoneone/16In'
                                     }
                                 ]
                             },
 
                         ]
                     },
+
+                    //C-gate 1.2
 
                     {
                         label: 'C-Gate 1.2',

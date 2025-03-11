@@ -227,7 +227,7 @@
         </thead>
         <tr>
           
-          <td :style="{ backgroundImage: 'url(' + dadosRelatorio.main_plate_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.main_plate_cutout_photo})`">
            
             <div class="imgNone" v-if="dadosRelatorio.main_plate_cutout_photo == null">
                 <p>
@@ -240,7 +240,7 @@
             </div>
 
           </td>
-          <td :style="{ backgroundImage: 'url(' + dadosRelatorio.trailer_1_license_plate_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.trailer_1_license_plate_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.trailer_1_license_plate_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -268,7 +268,7 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_number_1_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_1_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.container_number_1_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -279,7 +279,7 @@
               
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + dadosRelatorio.driver_license_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.driver_license_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.driver_license_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -306,7 +306,7 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_number_3_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_3_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.container_number_3_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -317,7 +317,7 @@
               
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_number_2_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_2_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.container_number_2_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -344,7 +344,7 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + dadosRelatorio.seal_2_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.seal_2_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.seal_2_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -355,7 +355,7 @@
               
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + dadosRelatorio.seal_3_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.seal_3_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.seal_3_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -384,7 +384,7 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + dadosRelatorio.seal_1_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.seal_1_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.seal_1_cutout_photo == null">
                 <p>
                   Sem imagem

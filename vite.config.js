@@ -4,11 +4,13 @@ import vue from '@vitejs/plugin-vue';
 import { PrimeVueResolver } from '@primevue/auto-import-resolver';
 import Components from 'unplugin-vue-components/vite';
 import { fileURLToPath, URL } from 'node:url';
-
-
 import path from "path"
 
 export default defineConfig({
+    base: '/cgate1x/',
+    server: {
+        origin: 'https://cdmapi.cornelder.co.mz', // URL correta do servidor
+    },
     optimizeDeps: {
         noDiscovery: true
     },
@@ -20,7 +22,7 @@ export default defineConfig({
         vue({
             template: {
                 transformAssetUrls: {
-                    base: null,
+                    base: '/cgate1x/',
                     includeAbsolute: false,
                 },
             },

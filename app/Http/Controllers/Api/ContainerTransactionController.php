@@ -13,6 +13,8 @@ class ContainerTransactionController extends Controller
     {
         //
         $searchQuery = request('query');
+        $gateQuery = request('gate');
+
         $transaction = ContainerTransaction::query()
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('driver_license_number', 'like', "%{$searchQuery}%")
@@ -26,10 +28,9 @@ class ContainerTransactionController extends Controller
                 ->orWhere('container_number_2', 'like', "%{$searchQuery}%")
                 ->orWhere('container_seal_number_2', 'like', "%{$searchQuery}%")
                 ->orWhere('container_number_3', 'like', "%{$searchQuery}%")
-                ->orWhere('container_seal_number_3', 'like', "%{$searchQuery}%")
-                ;
+                ->orWhere('container_seal_number_3', 'like', "%{$searchQuery}%");
             })
-            ->when(request('startdatetime') && request('enddatetime'), function ($query) {
+             ->when(request('startdatetime') && request('enddatetime'), function ($query) {
                     //general DB ENEGNINE
                     // $startDateTimeSearch = request('startdatetime');
                     // $endDateTimeSearch = request('enddatetime');
@@ -39,6 +40,9 @@ class ContainerTransactionController extends Controller
                     $endDateTimeSearch = Carbon::parse(request('enddatetime'))->format('Y-m-d H:i:s');
         
                     $query->whereBetween('created_at', [$startDateTimeSearch, $endDateTimeSearch]);
+            })
+            ->when(request('gate'), function ($query, $gateQuery) {
+                $query->where('gate','like', $gateQuery);
             })
             ->orderBy('created_at', 'desc')
             ->paginate(50);

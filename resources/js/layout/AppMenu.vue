@@ -46,14 +46,9 @@ const model = ref([
                                         icon: 'pi pi-window-maximize',
                                         to: '/terminalone/8A'
                                     }, {
-                                        label: 'Portão 11A - Entrada',
+                                        label: 'Portão 11A',
                                         icon: 'pi pi-window-maximize',
                                         to: '/terminalone/11AIn'
-                                    },
-                                    {
-                                        label: 'Portão 11A - Saida',
-                                        icon: 'pi pi-window-maximize',
-                                        to: '/terminalone/11AOut'
                                     }
                                 ]
                             },
@@ -114,16 +109,13 @@ const model = ref([
                                         label: 'Portão 8A',
                                         icon: 'pi pi-window-maximize',
                                         to: '/terminalone/8A'
-                                    }, {
-                                        label: 'Portão 11A - Entrada',
+                                    },
+                                    {
+                                        label: 'Portão 11A',
                                         icon: 'pi pi-window-maximize',
                                         to: '/terminalone/11AIn'
                                     },
-                                    {
-                                        label: 'Portão 11A - Saida',
-                                        icon: 'pi pi-window-maximize',
-                                        to: '/terminalone/11AOut'
-                                    }
+                                    
                                 ]
                             },
                             {

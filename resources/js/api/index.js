@@ -51,6 +51,7 @@ export const getCarga = async (page, limit, search, status) => {
   };
 const baseURLCDMDev = "http://10.0.8.44:8010/api"
 const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
+const storageImg =  "https://cdmapi.cornelder.co.mz/cgate1x"
 
   export const baseUrls = {
     auth: `${baseURLCDMDev}/login`,
@@ -59,7 +60,7 @@ const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
     empresaAdd: `${baseURLCDMDev}/companies`,
     gate: `${baseURLCDMDev}/gates`,
     baseURl: baseURLCDMDev,
-
+    storageUrl: storageImg
   };
 
 

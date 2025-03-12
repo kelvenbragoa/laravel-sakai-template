@@ -182,11 +182,11 @@ td {
 }
 
 #pdf-content td {
-  height: 100px;
+  height: 110px;
   position: relative;
 
   background-position: center;
-  background-size: cover;
+  background-size: 100%;
   background-repeat: no-repeat;
 }
 

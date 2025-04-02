@@ -155,7 +155,7 @@ const user = reactive({
 const updateUser = async () => {
   console.log(user.id)
   try {
-    await axios.put(`/api/users/${user.id}`, user);
+    await axios.post(`/api/users/${user.id}`, user);
     toast.add({
       severity: "success",
       summary: "Sucesso",
@@ -176,7 +176,7 @@ const updateUser = async () => {
 //Apagar
 const deleteUser = async () => {
   try {
-    const response = await axios.delete(`api/users/${61}`);
+    const response = await axios.post(`api/users/${61}`);
     console.log('Usuário deletado com sucesso', response.status);
   } catch (error) {
     console.error('Erro ao deletar o usuário:', error.response.data);

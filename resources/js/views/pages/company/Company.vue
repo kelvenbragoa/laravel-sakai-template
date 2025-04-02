@@ -155,7 +155,7 @@ async function apaga() {
     return;
   }
   try {
-    const response = await axios.delete(
+    const response = await axios.post(
       `${baseUrls.empresaAdd}/${dadosCompanyDelete.value.id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -229,7 +229,7 @@ const atualizarDadosShow = async () => {
       dialogUserUpdateVisible.value = false;
       loading.value = true;
       try {
-        await axios.put(
+        await axios.post(
           `${baseUrls.empresaAdd}/${dadoAtualizacao.id}`,
           dadoAtualizacao,
           {

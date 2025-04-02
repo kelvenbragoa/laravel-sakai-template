@@ -121,7 +121,7 @@ const checked = ref(false);
                   <span class="font-medium no-underline ml-2 text-right cursor-pointer corPrimaria">Esqueceste a
                     senha?</span>
                 </div>
-                <Button label="Entrar" class="w-full facebook-button hover" @click="autenticar"></Button>\
+                <Button label="Entrar" class="w-full facebook-button hover" @click="autenticar"></Button>
                 <!-- as="router-link" -->
                 <!-- to="/dashboard" -->
               </div>

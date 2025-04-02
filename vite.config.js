@@ -7,10 +7,7 @@ import { fileURLToPath, URL } from 'node:url';
 import path from "path"
 
 export default defineConfig({
-    // base: '/cgate1x/',
-    // server: {
-    //     origin: 'https://cdmapi.cornelder.co.mz', // URL correta do servidor
-    // },
+    base: '/cgate1x/', // Define o caminho base corretamente
     optimizeDeps: {
         noDiscovery: true
     },
@@ -34,8 +31,6 @@ export default defineConfig({
     resolve: {
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js',
-            // "@/": path.join(__dirname, "/resources/ts/src/"),
-            // "@/": path.join(__dirname, "/resources/js/"),
             "~": path.join(__dirname, "/node_modules/"),
             '@': fileURLToPath(new URL('./resources/js/', import.meta.url))
         },

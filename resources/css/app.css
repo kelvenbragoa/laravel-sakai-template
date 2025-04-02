@@ -159,20 +159,34 @@
 #pdf-content th,
 td {
   padding: 10px;
-  text-align: left;
+  text-align: center;
   border: 1px solid #ddd;
+  
 
+}
+
+#pdf-content tr td{
+  position: relative;
+}
+
+.imgNone p{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px!important;
+  font-weight: 550;
+  color: #222;
 }
 .footerLd{
   margin-top: 0px;
 }
 
 #pdf-content td {
-  height: 100px;
+  height: 110px;
   position: relative;
 
   background-position: center;
-  background-size: cover;
+  background-size: 100%;
   background-repeat: no-repeat;
 }
 

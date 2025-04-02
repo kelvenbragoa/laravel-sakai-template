@@ -7,10 +7,10 @@ import { fileURLToPath, URL } from 'node:url';
 import path from "path"
 
 export default defineConfig({
-    base: '/cgate1x/',
-    server: {
-        origin: 'https://cdmapi.cornelder.co.mz', // URL correta do servidor
-    },
+    // base: '/cgate1x/',
+    // server: {
+    //     origin: 'https://cdmapi.cornelder.co.mz', // URL correta do servidor
+    // },
     optimizeDeps: {
         noDiscovery: true
     },

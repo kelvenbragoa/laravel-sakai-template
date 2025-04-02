@@ -3,7 +3,8 @@
 <template>
     <div class="layout-footer">
         <div class="flex items-center justify-center">
-            <Image src="/cgate1x/resources/js/assets/images/logo.png" alt="Image" width="100" />
+            <!-- <Image src="/cgate1x/resources/js/assets/images/logo.png" alt="Image" width="100" /> -->
+             <div class="imageLogoPdf"></div>
         </div>
         <span class="mx-1">
             Por

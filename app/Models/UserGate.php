@@ -19,9 +19,9 @@ class UserGate extends Model
         // Chain fluent methods for configuration options
     }
 
-    public function gate_name()
-    {
-        return $this->hasOne(Gate::class, 'id');
+
+    public function gate_name(){
+        return $this->hasOne('App\Models\Gate', 'id', 'gate_id');
     }
 
 

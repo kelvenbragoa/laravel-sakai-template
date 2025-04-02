@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserGate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -169,6 +170,7 @@ class UserController extends Controller
                 'is_active' => 'nullable',
                 'roles' => 'nullable|array',
                 'roles.*.name' => 'required|string',
+                'gates' => 'array',
             ]);
 
             // Atualizar o usuário
@@ -178,19 +180,27 @@ class UserController extends Controller
                 'is_active' => $validatedData['is_active'] ?? $user->is_active,
                 'email' => $validatedData['email'] ?? $user->email,
                 'company_id' => $validatedData['company_id'] ?? $user->company_id,
-
-
             ]);
 
             // Sincronizar roles, se fornecido
             if (isset($validatedData['roles'])) {
                 $user->syncRoles($validatedData['roles']);
             }
-            if (isset($validatedData['gate_id'])) {
-                $user->gate()->updateOrCreate(
-                    ['user_id' => $user->id], // Condição para verificar se já existe
-                    ['gate_id' => $validatedData['gate_id']] // Dados a serem atualizados ou criados
-                );
+            if (isset($validatedData['gates'])) {
+                // dd($validatedData['gates']);
+                $user->gate()->delete();
+                foreach($validatedData["gates"] as $gate){
+                    
+                    UserGate::create([
+                        'user_id' => $user->id,
+                        'gate_id' => $gate['gate_id'],
+                    ]);
+                    // $user->gate()->updateOrCreate(
+                    //     ['user_id' => $user->id], // Condição para verificar se já existe
+                    //     ['gate_id' => $gate['gate_id']] // Dados a serem atualizados ou criados
+                    // );
+                }
+                
             }
 
             return response()->json([

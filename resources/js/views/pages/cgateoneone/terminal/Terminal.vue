@@ -227,24 +227,20 @@
         </thead>
         <tr>
           
-          <td :style="{ backgroundImage: 'url(' +baseUrls.storageUrl+''+dadosRelatorio.main_plate_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.main_plate_cutout_photo})`">
            
             <div class="imgNone" v-if="dadosRelatorio.main_plate_cutout_photo == null">
                 <p>
                   Sem imagem
                 </p>
             </div>
-            
 
             <div class="imgNone" v-else>
               
             </div>
 
           </td>
-          <td :style="{ backgroundImage: `url(${baseUrls.storageUrl}${dadosRelatorio.trailer_1_license_plate_cutout_photo})` }">
-
-
-
+          <td :style="backgroundImage = `url(${dadosRelatorio.trailer_1_license_plate_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.trailer_1_license_plate_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -272,7 +268,7 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.container_number_1_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_1_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.container_number_1_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -283,7 +279,7 @@
               
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.driver_license_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.driver_license_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.driver_license_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -310,7 +306,7 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.container_number_3_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_3_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.container_number_3_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -321,7 +317,7 @@
               
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.container_number_2_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_2_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.container_number_2_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -348,7 +344,7 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.seal_2_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.seal_2_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.seal_2_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -359,7 +355,7 @@
               
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.seal_3_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.seal_3_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.seal_3_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -388,7 +384,7 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.seal_1_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.seal_1_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.seal_1_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -399,7 +395,7 @@
               
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.trailer_2_license_plate_cutout_photo + ')' }">
+          <td :style="backgroundImage = `url(${dadosRelatorio.trailer_2_license_plate_cutout_photo})`">
             <div class="imgNone" v-if="dadosRelatorio.trailer_2_license_plate_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -933,7 +929,6 @@ const generatePDF = (rowData) => {
 const generatePDFCanva = async (rowData) => {
   console.log(rowData)
   dadosRelatorio.value = { ...rowData }
-  console.log("Dados Relatorio")
   console.log(dadosRelatorio.value)
 
   await nextTick();
@@ -943,7 +938,6 @@ const generatePDFCanva = async (rowData) => {
 }
 
 const generatePDFs = async () => {
-  console.log("Sendo executado")
   const pdf = new jsPDF("p", "mm", "a4");
   const pdfWidth = 210;
   const pdfHeight = 297;
@@ -957,9 +951,7 @@ const generatePDFs = async () => {
   }
 
   // corpo
-  const contentCanvas = await html2canvas(contentElement, {useCORS: true,
-  allowTaint: true,
-  scale: 2 });
+  const contentCanvas = await html2canvas(contentElement, { useCORS: true, scale: 2 });
   const contentImgData = contentCanvas.toDataURL("image/jpeg", 1.0);
 
   let contentHeight = (contentCanvas.height * (pdfWidth - 2 * margin)) / contentCanvas.width;
@@ -969,9 +961,7 @@ const generatePDFs = async () => {
   pdf.addPage();
 
   // tabela
-  const imagensCanvas = await html2canvas(imagensElement, { useCORS: true,
-  allowTaint: true,
-  scale: 2 });
+  const imagensCanvas = await html2canvas(imagensElement, { useCORS: true, scale: 2 });
   const imagensImgData = imagensCanvas.toDataURL("image/jpeg", 1.0);
   let imagensHeight = (imagensCanvas.height * (pdfWidth - 2 * margin)) / imagensCanvas.width;
 

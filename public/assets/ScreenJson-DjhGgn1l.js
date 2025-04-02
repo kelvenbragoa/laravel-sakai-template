@@ -1,1 +1,0 @@
-import{r,f as s}from"./app-SYzSYdOD.js";const a=r([]),e=r(0),n=async()=>{try{const o=await fetch(`/data.json?page=${e}`);a.value=await o.json(),console.log(a.value)}catch(o){console.error("Erro ao carregar o JSON:",o)}};s(n());const c={};export{c as default};

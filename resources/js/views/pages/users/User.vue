@@ -42,6 +42,8 @@ const permissionsItems = [];
 
 const loading = ref(false);
 
+const breakLoopGate = ref(false)
+
 const formDataSave = reactive({
   name: "",
   user: "",
@@ -57,18 +59,23 @@ const countries = ref([
   { name: "Portugal", code: "PT" },
 ]);
 
+const gateIdArray = ref([])
+
 // Definindo a pré-seleção (exemplo: Moçambique)
 const selectedCountry = ref(countries.value[0]);
 const roleSelected = ref({ name: "" });
-const gateSelected = ref({
-  id: 70,
-      user_id: "120",
-      gate_id: "1",
-      created_by: null,
-      updated_by: null,
-      created_at: "2025-03-04T07:01:43.383000Z",
-      updated_at: "2025-03-04T07:01:43.383000Z",
-});
+// const gateSelected = ref({
+//   id: 70,
+//   user_id: "120",
+//   gate_id: "1",
+//   created_by: null,
+//   updated_by: null,
+//   created_at: "2025-03-04T07:01:43.383000Z",
+//   updated_at: "2025-03-04T07:01:43.383000Z",
+// });
+
+const gateSelected = ref([])
+const gatePreSelecteds = ref([])
 const ative_selected = ref({ name: "Inativo", code: "0" });
 
 const getToken = () => {
@@ -77,7 +84,7 @@ const getToken = () => {
 
 const buscarUsuarios = async (page = 1) => {
   const token = getToken();
-  console.log(`Token: ${page}`);
+
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
@@ -96,18 +103,12 @@ const buscarUsuarios = async (page = 1) => {
       }
     );
 
-    // console.log("Response user");
-    // console.log(response.data.data.data);
     usersL.value = response.data.data.data;
 
     userFiltro.value = response.data.data.data;
-    console.log("Response user")
-    console.log(userFiltro.value)
+
     totalRecords.value = response.data.data.total;
-    console.log("Pages: ", pagesCurrent.value);
-    // totalRecords.value =
-    //     result.meta.total || result.meta.last_page * rowsPerPage.value;
-    console.log("Total records: ", totalRecords.value);
+
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -116,16 +117,11 @@ const buscarUsuarios = async (page = 1) => {
 };
 
 const onPageChange = (event) => {
-    first.value = event.first
-    const newPage = Math.floor(event.first / rowsPerPage.value) + 1
-    console.log(`event.first: ${event.first}`)
-    buscarUsuarios(newPage)
-  }
-// const onPage = (event) => {
-//   first.value = event.first;
-//   pageNumber.value = Math.floor(first.value / rowsPerPage.value) + 1;
-//   loadData(pageNumber.value);
-// };
+  first.value = event.first
+  const newPage = Math.floor(event.first / rowsPerPage.value) + 1
+
+  buscarUsuarios(newPage)
+}
 
 const fetchPermissions = async () => {
   try {
@@ -136,36 +132,12 @@ const fetchPermissions = async () => {
       permissionsItems.push(dados.data.data[k].name);
       // permissionsItems.value.add(dados.data.data[k].name)
     }
-    console.log(permissionsItems);
+
     loading.value = false;
   } catch (error) {
     console.log(error);
   }
 };
-
-// const fetchRoles = async () => {
-//   try {
-//     const response = await fetch(`${baseUrls.baseURl}`);
-//     const data = await response.json();
-//     console.log("Roles");
-//     console.log(data.data.data[1].guard_name);
-//     console.log("---------------------------------------------");
-//     rolesItems.value = data.data.data.filter((roles) => {
-//       // console.log(roles.guard_name.includes('web'))
-//       return roles.guard_name.includes("web");
-//       //  user.name.toLowerCase().includes(filtroDados.value.toLowerCase())
-//     });
-
-//     for (let items in rolesItems.value) {
-//       rolesName.value.push({ name: rolesItems.value[items].name });
-//     }
-//     //console.log("Roles Names");
-//     // console.log(rolesName.value);
-//   } catch (erro) {
-//     console.log(erro);
-//   }
-
-// };
 
 
 import axios from "axios";
@@ -173,7 +145,7 @@ import axios from "axios";
 const fetchRoles = async () => {
   try {
     const token = getToken();
-    
+
     if (!token) {
       console.error("Token de autenticação não encontrado.");
       return;
@@ -181,20 +153,16 @@ const fetchRoles = async () => {
 
     const response = await axios.get(`${baseUrls.baseURl}/roles`, {
       headers: {
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
 
-    console.log("Roles");
-    console.log(response.data.data.data[1].guard_name);
-    console.log("---------------------------------------------");
 
     rolesItems.value = response.data.data.data.filter((roles) =>
       roles.guard_name.includes("web")
     );
 
-    console.log(rolesItems.value)
 
     rolesName.value = rolesItems.value.map((role) => ({ name: role.name }));
 
@@ -253,27 +221,13 @@ const fetchUsers = async () => {
   try {
     const response = await fetch("/api/users");
     const data = await response.json();
-    // permissions.value = Array.isArray(data) ? data : [];
     usersL.value = data.data.data;
-    console.log(usersL.value);
     userFiltro.value = data.data.data;
-    // verificarA.value.push = usersL.value.
-
-    // console.log(permissions)
     for (let items in usersL.value) {
-      // verificarA.value.push = pe
-      //   console.log(usersL.value[items]["is_active"])
       verificarA.value.push(
         usersL.value[items]["is_active"] == 1 ? true : false
       );
     }
-
-    console.log("---------------------------------------------------");
-    console.log(verificarA.value);
-    console.log("Tamanho");
-    console.log(verificarA.value.length);
-    console.log(data.data.data.length);
-    // console.log(permissions.value)
   } catch (error) {
     console.error("Erro ao buscar Users:", error);
   }
@@ -282,56 +236,33 @@ const fetchUsers = async () => {
 const filtroChange = () => {
   loading.value = true;
   if (filtroDados.value.trim() === "") {
-    console.log("Vazio");
     userFiltro.value = [...usersL.value];
     loading.value = false;
   } else {
-    console.log("Preenchido");
-    console.log(filtroDados.value.toLowerCase());
     dadoSearch.value = filtroDados.value.toLowerCase()
     buscarUsuarios()
-    // userFiltro.value = usersL.value.filter(
-    //   (user) =>
-    //     user.name.toLowerCase().includes(filtroDados.value.toLowerCase()) ||
-    //     user.email.toLowerCase().includes(filtroDados.value.toLocaleLowerCase())
-    // );
-    // userFiltro.value = usersL.value.filter(
-    //   (user) =>
-    //     user.user_name
-    //       .toLowerCase()
-    //       .includes(filtroDados.value.toLowerCase()) ||
-    //     user.email.toLowerCase().includes(filtroDados.value.toLowerCase()) ||
-    //     user.user_full_name
-    //       .toLowerCase()
-    //       .includes(filtroDados.value.toLowerCase()) ||
-    //     user.is_active.toLowerCase().includes(filtroDados.value.toLowerCase())
-    // );
-    // console.log("USer filtro");
-    // console.log(userFiltro.value);
-    // loading.value = false;
-    // console.log(userFiltro.value);
   }
 };
 
 const addUser = async () => {
-  // Definindo os dados do payload com informações do usuário e suas permissões
+
   const payload = {
     name: "Domingos Doe",
     email: "teste34sea@gmail.com",
     password: "12345678",
     mobile: "987654321",
-    roles: [{ name: "Manager" }], // Atribuindo o ID da role ao invés de apenas o nome
+    roles: [{ name: "Manager" }],
   };
 
   try {
-    // Realizando a requisição POST para criar o usuário
+
     const response = await axios.post("/api/users", payload, {
       headers: {
         "Content-Type": "application/json",
       },
     });
 
-    // Exibindo uma notificação de sucesso se o usuário for criado com sucesso
+
     toast.add({
       severity: "success",
       summary: "Usuário Criado",
@@ -339,7 +270,7 @@ const addUser = async () => {
       life: 3000,
     });
   } catch (error) {
-    // Exibindo erro se a criação do usuário falhar
+
     console.error("Erro ao adicionar usuário:", error.response?.data || error);
 
     toast.add({
@@ -374,9 +305,7 @@ const salvarDadosShow = async () => {
   };
 
   const token = getToken();
-  console.log(`Token: ${token}`);
-  console.log("Usuario sendo criado");
-  console.log(dadosAddL);
+
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
@@ -392,13 +321,6 @@ const salvarDadosShow = async () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("resposta do user adicionado");
-        // let nome = "null"
-        // response.data.forEach(element => {
-        //   nome = element.user_name
-        //   console.log(element)
-        // })
-        // console.log(response.data.user_name);
 
         toast.add({
           severity: "success",
@@ -435,7 +357,7 @@ const salvarDadosShow = async () => {
 
 const buscarEmpresas = async () => {
   const token = getToken();
-  console.log(`Token: ${token}`);
+
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
@@ -447,19 +369,18 @@ const buscarEmpresas = async () => {
       },
     });
 
-    console.log("Response Empresas");
 
     empresas.value = response.data.data.data;
 
     empresas.value.forEach((element, key) => {
-      // console.log(element.name);
+
       empresa.value.push({ id: element.id, name: element.name });
     });
 
     empresas.value
       .sort((a, b) => a.id - b.id)
       .forEach((element) => {
-        // console.log(element.name);
+
         empresaName.value.push(element.name);
       });
 
@@ -467,8 +388,6 @@ const buscarEmpresas = async () => {
       empresaMap[element.id] = element.name;
     });
 
-    console.log("Empresa name");
-    console.log(empresaMap);
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -477,24 +396,31 @@ const buscarEmpresas = async () => {
 };
 
 const atualizarDadosShow = async () => {
-  console.log();
+  gateIdArray.value = []
+  gatePreSelecteds.value = []
 
-  console.log("Dados sendo atualizados");
-  console.log(dadosAtualizar);
+  console.log("Atualizar Gate")
+  console.log(gateSelected.value)
+
+  gateSelected.value.forEach(dados => {
+
+    gateIdArray.value.push({ "gate_id": dados.id })
+  })
+
+
 
   const dadoAtualizacao = {
     id: dadosAtualizar.id,
     user_full_name: dadosAtualizar.user_full_name,
     email: dadosAtualizar.email,
     is_active: Number(ative_selected.value.code),
-    gate_id: gateSelected.value.id,
+    gates: gateIdArray.value,
     roles: [{ name: roleSelected.value.name }],
   };
 
-  console.log("Dados atualizacao");
-  console.log(dadoAtualizacao);
-  console.log(roleSelected);
-  console.log("-----------------------------");
+
+
+
   const token = getToken();
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
@@ -524,7 +450,7 @@ const atualizarDadosShow = async () => {
           detail: "Usuario atualizado",
           life: 3000,
         });
-        console.log("Adicionado");
+
       } catch (error) {
         // fetchUsers();
         buscarUsuarios();
@@ -545,6 +471,7 @@ const atualizarDadosShow = async () => {
       dadosAtualizar.user_full_name = "";
       dadosAtualizar.is_active = 0;
       roleSelected.value.name = "";
+      gateSelected.value = []
     }
   }
 
@@ -585,7 +512,7 @@ async function apaga() {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log("Usuário deletado com sucesso", response.status);
+
     // fetchUsers();
     buscarUsuarios();
     loading.value = false;
@@ -611,39 +538,30 @@ function apagaDados(dados) {
   displayConfirmation.value = true;
   dadosUserDelete.value.name = dados.name;
   dadosUserDelete.value.id = dados.id;
-
-  console.log(dadosUserDelete);
 }
 const salvarPermissions = async () => {
-  console.log("Dados salvos");
   dialogRoleUpdateVisible.value = false;
-  console.log(permissions.value);
 };
 
-// dialogUserUpdateVisible = true
-
-// const dadosAtualizar = reactive({
-//   id: null,
-//   user_full_name: "",
-//   is_active: 0,
-//   email: "",
-//   gate_id: 0,
-//   roles: [{name: "Admin"}],
-// });
 
 const dadosAtualizar = reactive({
   id: null,
   user_full_name: "",
   is_active: Number(ative_selected.value.code),
   email: "",
-  gate_id: gateSelected.value,
   roles: roleSelected.value,
 });
+
+//mk
+
+console.log(gateSelected.value)
 const atualizarDados = (dados) => {
-  console.log("Atualizar");
-  console.log("--------------------------------------------");
-  console.log(dados);
-  console.log("--------------------------------------------");
+
+  gateSelected.value = []
+  gateIdArray.value = []
+  gatePreSelecteds.value = []
+
+
   dialogUserUpdateVisible.value = true;
   dadosAtualizar.id = dados.id;
   // // dadosAtualizar.roles = [{name: dados.roles[0].name}];
@@ -654,38 +572,98 @@ const atualizarDados = (dados) => {
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
 
-  // console.log(`RoleDados:`);
-  // console.log(dadosAtualizar.roles);
-  // // gateSelected
-  // console.log("---------------------------------------------");
-  // console.log(dados);
-  // console.log(`Ative user: ${dados.is_active}`);
+  dados.gate.forEach(item => {
+    gatePreSelecteds.value.push(item)
+    // gateSelected.value.push(item)
+  })
+  console.log("---------------------")
   gates.value.forEach((gateUser) => {
-    console.log("O campo existe?");
-    // console.log(gateUser.id)
 
-    console.log("Tamanho: " + dados.gate.length);
+    gatePreSelecteds.value.forEach((element) => {
 
-    if (dados.gate.length >= 1) {
-      if (gateUser.id == dados.gate[0].gate_id) {
-        gateSelected.value = gateUser;
+      if (gateUser.id == element.gate_id) {
+        gateSelected.value.push(gateUser)
+        console.log("Iguais")
+
       }
-    }
-  });
+    })
+
+  })
+  console.log("---------------------")
+
+  console.log(`gatePreSelecteds:`)
+  console.log(gatePreSelecteds.value.length)
+
+  // gates.value.forEach((gateUser) => {
+
+  //   if (dados.gate.length >= 1) {
+
+  //     dados.gate.forEach(gatesUser => {
+
+  //       if (gateUser.id == gatesUser.gate_id) {
+
+  //         if (gateSelected.value.length > 0) {
+
+  //           gateSelected.value.forEach(preSelected => {
+  //             console.log("Num items")
+  //             console.log(gateSelected.value.length)
+  //             console.log(preSelected)
+
+  //             if (gatesUser.gate_id != preSelected.id) {
+  //               // console.log(`gatePreSelecteds: ${gateSelected.value.length}`)
+  //               // console.log("Items")
+  //               console.log(gatePreSelecteds.value)
+
+  //                 gatePreSelecteds.value.forEach(item=>{
+  //                   // console.log("Items")
+  //                   // console.log(item)
+  //                   // if(removeGatePreSelected(item.gate_id, preSelected.id)){
+  //                   //   console.log("Ids diferentes")
+  //                   //   console.log(`item.gate_id: ${item.gate_id}`)
+  //                   //   console.log(`preSelected.id: ${preSelected.id}`)
+  //                   //   gateSelected.value.push(gateUser)
+  //                   // }else{
+  //                   //   console.log("Ids Iguais")
+  //                   //   console.log(`item.gate_id: ${item.gate_id}`)
+  //                   //   console.log(`preSelected.id: ${preSelected.id}`)
+  //                   // }
+  //                 })
+
+
+  //             }
+
+  //           })
+  //         } else {
+  //           gateSelected.value.push(gateUser)
+  //         }
+  //       }
+
+
+  //     })
+
+  //   }
+  // });
   console.log("Pre selecionado: ");
   if (gateSelected.value == undefined) {
-    gateSelected.value = {
-      id: 70,
-      user_id: "120",
-      gate_id: "1",
-      created_by: null,
-      updated_by: null,
-      created_at: "2025-03-04T07:01:43.383000Z",
-      updated_at: "2025-03-04T07:01:43.383000Z",
-    };
+    gateSelected.value = [
+      {
+        id: 70,
+        user_id: "120",
+        gate_id: "1",
+        created_by: null,
+        updated_by: null,
+        created_at: "2025-03-04T07:01:43.383000Z",
+        updated_at: "2025-03-04T07:01:43.383000Z",
+      }
+    ]
     console.log("Indefinido o portao");
   }
+  // console.log(gateSelected.value);
+
+  console.log("Gate selected");
+  console.log("--------------------------------------------");
   console.log(gateSelected.value);
+  console.log("--------------------------------------------");
 
   if (dados.is_active == "0") {
     ative_selected.value.name = "Inativo";
@@ -713,9 +691,19 @@ const atualizarDados = (dados) => {
   });
 };
 
+const removeGatePreSelected = (idPre, idCurrent) => {
+  if (idPre == idCurrent) {
+    return false
+  }
+
+  return true
+}
+
+
 const disableMk = () => {
   dialogUserUpdateVisible.value = false;
   console.log("Cancelar");
+  gateSelected.value = []
 };
 
 const verificadorDeCampos = (dado) => {
@@ -733,6 +721,17 @@ const verificadorDeCampos = (dado) => {
 
   console.log("-------------------------------------------------");
 };
+
+
+
+const categories = ref([
+  { name: "Tecnologia", code: "T" },
+  { name: "Saúde", code: "S" },
+  { name: "Educação", code: "E" },
+  { name: "Esportes", code: "SP" }
+]);
+
+const selectedCategories = ref([]);
 
 const buscarGates = async () => {
   const token = getToken();
@@ -759,6 +758,7 @@ const buscarGates = async () => {
   }
 };
 
+
 // const nextPage = () => {
 //   pagesCurrent.value++;
 //   buscarUsuarios(pagesCurrent);
@@ -782,29 +782,8 @@ onMounted(() => {
   </div>
   <div class="card">
     <div class="font-semibold text-xl mb-4">Users</div>
-    <DataTable :value="userFiltro" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy
-                 :first="first" @page="onPageChange">
-    <!-- <DataTable
-      :value="userFiltro"
-      :paginator="true"
-      :rows="10"
-      :totalRecords="totalRecords"
-      @page="onPageChange"
-    > -->
-      <!-- <DataTable
-  :value="userFiltro"
-  paginator
-  :rows="rowsPerPage"
-  :first="first"
-  :loading="loading"
-  dataKey="id"
-    filterDisplay="row"
-
-  :totalRecords="totalRecords"
-  lazy
-  @page="onPageChange"
-  
-> -->
+    <DataTable :value="userFiltro" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy :first="first"
+      @page="onPageChange">
 
       <template #header>
         <div class="flex justify-between">
@@ -812,19 +791,10 @@ onMounted(() => {
             <InputIcon>
               <i class="pi pi-search" />
             </InputIcon>
-            <InputText
-              v-model="filtroDados"
-              @input="filtroChange"
-              placeholder="Pesquisar"
-            />
+            <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
           </IconField>
           <div class="btnsL">
-            <Button
-              label="Novo"
-              icon="pi pi-plus"
-              class="cores"
-              @click="dialogoUserVisble = true"
-            />
+            <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogoUserVisble = true" />
           </div>
         </div>
       </template>
@@ -832,110 +802,61 @@ onMounted(() => {
 
       <Column field="id" header="Id" style="min-width: 10rem" sortable>
       </Column>
-      <Column
-        field="user_full_name"
-        header="Nome"
-        style="min-width: 12rem"
-        sortable
-      >
+      <Column field="user_full_name" header="Nome" style="min-width: 12rem" sortable>
       </Column>
 
       <Column field="email" header="Email" style="min-width: 10rem" sortable>
       </Column>
 
-      <Column
-        field="user_name"
-        header="Username"
-        style="min-width: 10rem"
-        sortable
-      >
+      <Column field="user_name" header="Username" style="min-width: 10rem" sortable>
       </Column>
 
-      <Column
-        field="company_id"
-        header="Empresa"
-        style="min-width: 10rem"
-        sortable=""
-      >
+      <Column field="company_id" header="Empresa" style="min-width: 10rem" sortable="">
         <template #body="{ data }">
           {{ empresaMap[data.company_id] || data.company_id }}
         </template>
       </Column>
 
-      <Column
-        header="Ações"
-        :showFilterMatchModes="false"
-        style="min-width: 12rem"
-      >
+      <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
         <template #body="{ data }">
           <div style="display: flex; gap: 0px">
-            <Button
-              class="btnEstiliza"
-              label=""
-              icon="pi pi-refresh"
-              @click="generatePDF(data)"
-              style="
+            <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style="
                 border: 0px;
                 background-color: transparent;
                 color: #1558b0;
                 display: none;
-              "
-            />
-            <Button
-              class="btnEstiliza"
-              label=""
-              icon="pi  pi-pencil"
-              style="border: 0px; background-color: transparent; color: #1558b0"
-              @click="atualizarDados(data)"
-            />
+              " />
+            <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="atualizarDados(data)" />
             <div>
-              <Button
-                label=""
-                class="btnEstilizaDel"
-                icon="pi pi-trash"
-                severity="danger"
-                style="
+              <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="
                   padding: 5px 0px;
                   background-color: transparent;
                   color: #ff0000;
                   border: 0px;
-                "
-                @click="apagaDados(data)"
-              />
+                " @click="apagaDados(data)" />
             </div>
           </div>
         </template>
       </Column>
-      <Column
-        field="is_active"
-        header="Ativo"
-        dataType="boolean"
-        bodyClass="text-center"
-        style="min-width: 8rem"
-        sortable
-      >
+      <Column field="is_active" header="Ativo" dataType="boolean" bodyClass="text-center" style="min-width: 8rem"
+        sortable>
         <template #body="{ data }">
-          <div
-            v-if="data.is_active == `0`"
-            style="
+          <div v-if="data.is_active == `0`" style="
               display: flex;
               align-items: center;
               justify-items: center;
               gap: 10px;
-            "
-          >
+            ">
             <i class="pi pi-times-circle text-red-500"></i>
           </div>
 
-          <div
-            v-else
-            style="
+          <div v-else style="
               display: flex;
               align-items: center;
               justify-items: center;
               gap: 10px;
-            "
-          >
+            ">
             <i class="pi pi-check-circle text-green-500"></i>
           </div>
         </template>
@@ -944,44 +865,18 @@ onMounted(() => {
   </div>
 
   <div class="p-fluid">
-    <Dialog
-      header="Confirmação"
-      v-model:visible="displayConfirmation"
-      :style="{ width: '350px' }"
-      :modal="true"
-    >
+    <Dialog header="Confirmação" v-model:visible="displayConfirmation" :style="{ width: '350px' }" :modal="true">
       <div class="flex items-center justify-center">
         <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem" />
         <span>Tens a certeza que queres eliminar?</span>
       </div>
       <template #footer>
-        <Button
-          label="Não"
-          icon="pi pi-times"
-          @click="closeConfirmatio2n"
-          text
-          severity="secondary"
-        />
-        <Button
-          label="Sim"
-          icon="pi pi-check"
-          @click="apaga"
-          severity="danger"
-          outlined
-          autofocus
-        />
+        <Button label="Não" icon="pi pi-times" @click="closeConfirmatio2n" text severity="secondary" />
+        <Button label="Sim" icon="pi pi-check" @click="apaga" severity="danger" outlined autofocus />
       </template>
     </Dialog>
-    <Dialog
-      header="Novo user"
-      v-model:visible="dialogoUserVisble"
-      :closable="true"
-      :modal="true"
-      :draggable="false"
-      :resizable="false"
-      style="width: 30vw; min-height: 60vh"
-      :footer="productDialogFooterForm"
-    >
+    <Dialog header="Novo user" v-model:visible="dialogoUserVisble" :closable="true" :modal="true" :draggable="false"
+      :resizable="false" style="width: 30vw; min-height: 60vh" :footer="productDialogFooterForm">
       <div class="erroMessage">
         {{ errorL }}
       </div>
@@ -991,13 +886,7 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="name">User</label>
-            <InputText
-              id="name"
-              v-model="formDataSave.user"
-              required
-              autofocus
-              class="camposTextos"
-            />
+            <InputText id="name" v-model="formDataSave.user" required autofocus class="camposTextos" />
           </div>
         </div>
 
@@ -1005,13 +894,7 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="name">Nome completo</label>
-            <InputText
-              id="name"
-              v-model="formDataSave.name"
-              required
-              autofocus
-              class="camposTextos"
-            />
+            <InputText id="name" v-model="formDataSave.name" required autofocus class="camposTextos" />
           </div>
         </div>
       </div>
@@ -1022,57 +905,29 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="email">Email</label>
-            <InputText
-              id="email"
-              v-model="formDataSave.email"
-              required
-              autofocus
-              class="camposTextos"
-            />
+            <InputText id="email" v-model="formDataSave.email" required autofocus class="camposTextos" />
           </div>
         </div>
         <!-- Acesso -->
         <div class="formUserAdd">
           <label for="acesso">Acesso</label>
-          <Select
-            id="acesso"
-            v-model="formDataSave.roles"
-            :options="rolesName"
-            optionLabel="name"
-            placeholder="S. Nivel de acesso"
-            class="w-full"
-          ></Select>
+          <Select id="acesso" v-model="formDataSave.roles" :options="rolesName" optionLabel="name"
+            placeholder="S. Nivel de acesso" class="w-full"></Select>
         </div>
       </div>
 
       <div class="formUserAdd">
         <label for="empresa">Empresa</label>
-        <Select
-          id="empresa"
-          v-model="formDataSave.company_id"
-          :options="empresa"
-          optionLabel="name"
-          placeholder="Empresas"
-          class="w-full"
-        ></Select>
+        <Select id="empresa" v-model="formDataSave.company_id" :options="empresa" optionLabel="name"
+          placeholder="Empresas" class="w-full"></Select>
       </div>
 
       <!-- Senha -->
       <div class="formUserAdd" style="margin-top: 15px; width: 100%">
-        <div
-          class="field formUserAddI"
-          style="width: 100%; border: 0px solid black"
-        >
+        <div class="field formUserAddI" style="width: 100%; border: 0px solid black">
           <label for="senha" class="my-5">Senha</label>
-          <Password
-            id="senha"
-            v-model="formDataSave.password"
-            placeholder="Senha"
-            :toggleMask="true"
-            class="mb-4 inputsCaixas camposTextos"
-            fluid
-            :feedback="false"
-          ></Password>
+          <Password id="senha" v-model="formDataSave.password" placeholder="Senha" :toggleMask="true"
+            class="mb-4 inputsCaixas camposTextos" fluid :feedback="false"></Password>
         </div>
       </div>
 
@@ -1081,25 +936,14 @@ onMounted(() => {
         <button class="p-button p-component cores" @click="salvarDadosShow">
           Salvar
         </button>
-        <button
-          class="p-button p-component p-button-secondary mx-2"
-          @click="dialogoUserVisble = false"
-        >
+        <button class="p-button p-component p-button-secondary mx-2" @click="dialogoUserVisble = false">
           Cancelar
         </button>
       </div>
     </Dialog>
 
-    <Dialog
-      header="Atualizar user"
-      v-model:visible="dialogUserUpdateVisible"
-      :closable="true"
-      :modal="true"
-      :draggable="false"
-      :resizable="false"
-      style="width: 30vw; min-height: 20vh"
-      :footer="productDialogFooterForm"
-    >
+    <Dialog header="Atualizar user" v-model:visible="dialogUserUpdateVisible" :closable="true" :modal="true"
+      :draggable="false" :resizable="false" style="width: 30vw; min-height: 20vh" :footer="productDialogFooterForm">
       <div class="erroMessage">
         {{ errorL }}
       </div>
@@ -1109,13 +953,7 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="name">Nome</label>
-            <InputText
-              id="name"
-              v-model="dadosAtualizar.user_full_name"
-              required
-              autofocus
-              class="camposTextos"
-            />
+            <InputText id="name" v-model="dadosAtualizar.user_full_name" required autofocus class="camposTextos" />
           </div>
         </div>
 
@@ -1123,13 +961,7 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="email">Email</label>
-            <InputText
-              id="email"
-              v-model="dadosAtualizar.email"
-              required
-              autofocus
-              class="camposTextos"
-            />
+            <InputText id="email" v-model="dadosAtualizar.email" required autofocus class="camposTextos" />
           </div>
         </div>
       </div>
@@ -1140,57 +972,27 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Portão</label>
-            <Select
-              id="portao"
-              v-model="gateSelected"
-              :options="gates"
-              optionLabel="name"
-              placeholder="Portão"
-              class="w-full"
-            ></Select>
+            <MultiSelect v-model="gateSelected" :options="gates" optionLabel="name" placeholder="Portões" display="chip"
+              class="w-full" />
+
           </div>
+
         </div>
 
-        <!-- Acesso -->
-        <!-- roleSelected -->
-        <!-- <div class="formUserAdd">
-          <div class="field formUserAddI">
-            <label for="acesso">Acesso</label>
-            <Select
-              id="acesso"
-              v-model="dadosAtualizar.roles"
-              :options="rolesName"
-              optionLabel="name"
-              placeholder="S. Nivel de acesso"
-              class="w-full"
-            ></Select>
-          </div>
-        </div> -->
+
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Acesso</label>
-            <Select
-              id="acesso"
-              v-model="roleSelected"
-              :options="rolesName"
-              optionLabel="name"
-              placeholder="S. Nivel de acesso"
-              class="w-full"
-            ></Select>
+            <Select id="acesso" v-model="roleSelected" :options="rolesName" optionLabel="name"
+              placeholder="S. Nivel de acesso" class="w-full"></Select>
           </div>
         </div>
       </div>
       <div class="formUserAdd">
         <div class="field formUserAddI">
           <label for="acesso">Status</label>
-          <Select
-            id="status"
-            v-model="ative_selected"
-            :options="statusItems"
-            optionLabel="name"
-            placeholder="Status"
-            class="w-full"
-          ></Select>
+          <Select id="status" v-model="ative_selected" :options="statusItems" optionLabel="name" placeholder="Status"
+            class="w-full"></Select>
         </div>
       </div>
 
@@ -1199,50 +1001,29 @@ onMounted(() => {
         <button class="p-button p-component cores" @click="atualizarDadosShow">
           Atualizar
         </button>
-        <button
-          class="p-button p-component p-button-secondary mx-2"
-          @click="disableMk"
-        >
+        <button class="p-button p-component p-button-secondary mx-2" @click="disableMk">
           Cancelar
         </button>
         <!-- <button @click="sayHello">Clique Aqui</button> -->
       </div>
     </Dialog>
 
-    <Dialog
-      header="Adicionar permissions"
-      v-model:visible="dialogRoleUpdateVisible"
-      :closable="true"
-      :modal="true"
-      :draggable="false"
-      :resizable="false"
-      style="width: 30vw; min-height: 5vh"
-      :footer="productDialogFooterForm"
-    >
+    <Dialog header="Adicionar permissions" v-model:visible="dialogRoleUpdateVisible" :closable="true" :modal="true"
+      :draggable="false" :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
       <!-- optionLabel="name" -->
       <hr />
       <!-- <Select id="permis" v-model="permissions" :options="permissionsItems"  placeholder="S. Nivel de acesso" class="w-full" style="margin-top: 15px;"></Select> -->
 
-      <MultiSelect
-        name="permissions"
-        v-model="permissions"
-        :options="permissionsItems"
-        filter
-        placeholder="Selecione permissões"
-        :maxSelectedLabels="3"
-        class="w-full md:w-80"
-        style="margin-top: 15px; width: 100%"
-      />
+      <MultiSelect name="permissions" v-model="permissions" :options="permissionsItems" filter
+        placeholder="Selecione permissões" :maxSelectedLabels="3" class="w-full md:w-80"
+        style="margin-top: 15px; width: 100%" />
       <!-- <Message v-if="$form.city?.invalid" severity="error" size="small" variant="simple">{{ $form.city.error?.message }}</Message> -->
       <hr class="my-5" />
       <div class="flex">
         <button class="p-button p-component cores" @click="salvarPermissions">
           Salvar
         </button>
-        <button
-          class="p-button p-component p-button-secondary mx-2"
-          @click="dialogRoleUpdateVisible = false"
-        >
+        <button class="p-button p-component p-button-secondary mx-2" @click="dialogRoleUpdateVisible = false">
           Cancelar
         </button>
       </div>
@@ -1260,6 +1041,7 @@ onMounted(() => {
 :deep(.p-datatable-scrollable .p-frozen-column) {
   font-weight: bold;
 }
+
 .cores {
   background-color: #1558b0;
   border: 1px solid #1558b0;
@@ -1269,10 +1051,12 @@ onMounted(() => {
   background-color: #1558b0cf !important;
   border: 1px solid #1558b088 !important;
 }
+
 .camposAgrupadosFormulario {
   display: flex;
   justify-content: space-between;
 }
+
 .camposAgrupadosFormulario .formUserAdd {
   width: calc((100% / 2) - 5px);
 }
@@ -1286,6 +1070,7 @@ onMounted(() => {
 .camposTextos:focus {
   border: #1558b0 1px solid !important;
 }
+
 .btnExports:last-child {
   color: #4271d4;
   background-color: #ffffff;
@@ -1301,6 +1086,7 @@ onMounted(() => {
   border: 0px !important;
   outline: 0px !important;
 }
+
 .p-inputtext {
   width: 100% !important;
 }
@@ -1328,5 +1114,3 @@ onMounted(() => {
   border-radius: 5px;
 }
 </style>
-
-

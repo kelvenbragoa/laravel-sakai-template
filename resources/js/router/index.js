@@ -18,11 +18,9 @@ const router = createRouter({
                     name: 'dashboard',
                     component: () => import('@/views/pages/Dashboard.vue')
                 },
-                {
-                    path: '/teste/:id',
-                    name: 'teste',
-                    component: () => import('@/views/pages/Teste.vue')
-                },
+
+
+                //C-gate 1.2
                 {
                     path: '/cargaone/:id',
                     name: 'cargaone',
@@ -34,6 +32,20 @@ const router = createRouter({
                     component: () => import('@/views/pages/cgateone/terminal/Terminal.vue'),
                     props: true,
                 },
+
+                //C-gate 1.1
+                {
+                    path: '/cargaoneone/:id',
+                    name: 'cargaoneone',
+                    component: () => import('@/views/pages/cgateoneone/carga/Carga.vue')
+                },
+                {
+                    path: '/terminaloneone/:id',
+                    name: 'terminaloneone',
+                    component: () => import('@/views/pages/cgateoneone/terminal/Terminal.vue'),
+                    props: true,
+                },
+                //------
                 {
                     path: '/uikit/formlayout',
                     name: 'formlayout',
@@ -187,11 +199,6 @@ const router = createRouter({
             path: '/dadoteste',
             name: 'dadoteste',
             component: () => import('@/views/pages/DadosUser.vue')
-        },
-        {
-            path: "/roper",
-            name: 'roper',
-            component: () => import('@/views/pages/RolePermissionsTeste.vue')
         },
         {
             path: "/add",

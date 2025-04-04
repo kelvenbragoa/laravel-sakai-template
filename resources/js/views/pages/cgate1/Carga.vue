@@ -32,7 +32,7 @@ const fetchData = async () => {
     .get("http://20.87.9.35/api/v1/transacoes/lista")
     .then((res) => {
       cargaData.value = res.data   || []; 
-            console.log(res.data)
+          
     })
     .catch((error) => {
             console.log(error);

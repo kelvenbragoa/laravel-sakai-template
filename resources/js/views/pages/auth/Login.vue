@@ -15,7 +15,6 @@ const loading = ref(false);
 const errorL = ref();
 
 const autenticar = async () => {
-  console.log(`Texto: ${dadosUserAuth.value.user_name}`);
   if (dadosUserAuth.value.user_name === "") {
     errorL.value = `Preencha o campo de nome`;
   } else if (dadosUserAuth.value.password === "") {
@@ -34,7 +33,6 @@ const autenticar = async () => {
       });
 
       const { user, access_token } = response.data;
-      console.log(access_token);
 
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("user", JSON.stringify(user));

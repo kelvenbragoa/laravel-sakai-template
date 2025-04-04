@@ -554,7 +554,6 @@ const filterDate = async () => {
 
     if (start.getTime() === end.getTime()) {
       dateError.value = false;
-      console.log("Filtros aplicados, datas iguais.");
     } else if (start > end) {
       dateError.value = true;
       toast.add({
@@ -568,9 +567,6 @@ const filterDate = async () => {
 
     const startFormatted = formatDates(startDate.value);
     const endFormatted = formatDates(endDate.value);
-
-    console.log("Data inicial:", startFormatted);
-    console.log("Data final:", endFormatted);
 
     try {
       const response = await axios.get(
@@ -587,11 +583,9 @@ const filterDate = async () => {
           },
         }
       );
-      console.log("TOken: ", token)
 
       userFiltro.value = response.data.data;
       transactions.value = response.data.data.data
-      console.log("Dados filtrados com sucesso:", response.data.data.data);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
       toast.add({
@@ -671,11 +665,6 @@ const fetchTransactions = async (page = 1) => {
 
     const { data, current_page, total } = response.data.result;
     transactions.value = data;
-    console.log(
-      "-------------------------------------------------------------"
-    );
-    console.log("Transações");
-    console.log(transactions.value);
     currentPage.value = current_page;
     totalRecords.value = total;
     // exportToExcel()
@@ -694,10 +683,7 @@ function removerGate(texto) {
 }
 
 const buscarTransccoes = async () => {
-  console.log("Requisacao feita")
   const token = getToken();
-  console.log(`Token: ${token}`);
-  console.log(`Portao: ${removerGate(gateId.value)}`)
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
@@ -712,9 +698,6 @@ const buscarTransccoes = async () => {
       // }
       
     });
-    console.log("Reponse");
-
-    console.log(response.data.data);
     transactions.value = response.data.data.data;
     // exportToExcel()
   } catch (error) {
@@ -747,10 +730,6 @@ const loadJson = async () => {
   try {
     const response = await fetch("/user.json");
     users.value = await response.json();
-    // console.log(users.value)
-    // for(let userL in users.value.users){
-    //   console.log(users.value.users[userL])
-    // }
   } catch (error) {
     console.error("Erro ao carregar o JSON:", error);
   }
@@ -766,7 +745,6 @@ onMounted(() => {
 
 const route = useRoute();
 const userId = route.params.id;
-// console.log(userId)
 const gateId = ref(userId);
 
 const tratamentoDoId = ()=>{
@@ -778,9 +756,6 @@ const tratamentoDoId = ()=>{
   gateId.value = `Gate ${gateId.value}`;
 }
 }
-
-console.log(`Gate: ${gateId.value}`)
-console.log(route.params.id)
 
 const data = ref([]);
 const filters = ref({
@@ -923,14 +898,10 @@ const generatePDF = (rowData) => {
   doc.text("1/1", larguraPagina - 25, alturaPagina - 10);
 
   doc.save(`doc_${rowData.id}_${rowData.driver_name}_detalhes.pdf`);
-  // console.log(rowData)
 };
 
 const generatePDFCanva = async (rowData) => {
-  console.log(rowData)
   dadosRelatorio.value = { ...rowData }
-  console.log(dadosRelatorio.value)
-
   await nextTick();
   isActive.value = false
   generatePDFs();
@@ -946,7 +917,6 @@ const generatePDFs = async () => {
   const imagensElement = document.querySelector(".imagensRelatorio");
 
   if (!contentElement || contentElement.style.display === "none") {
-    console.log("O conteúdo não está visível ou não existe.");
     return; 
   }
 
@@ -973,32 +943,7 @@ const generatePDFs = async () => {
 let dateToday = new Date()
 const dataLk = ref(formatDate(String(dateToday)))
 
-console.log(`Data: ${formatDate(String(dateToday))}`)
 const emptyField = ref("Vazio")
-
-// onMounted(async () => {
-//   try {
-//     const result = await getTransactions(1, 10, "", null);
-//     console.log("Resposta da API:", result);
-//     if (result && result.data && Array.isArray(result.data)) {
-//       data.value = result.data;
-//       // console.log(data.value)
-//       for (let key in data.value) {
-//         if (data.value[key].transaction_gate == gateId) {
-//           console.log("Encontrado");
-//         }
-//       }
-//     } else {
-//       console.log("Estrutura inesperada", result);
-//       data.value = [];
-//     }
-//   } catch (error) {
-//     console.error("Erro ao buscar transações:", error);
-//   } finally {
-//     loading.value = false;
-//   }
-// });
-
 watch(() => route.params.id, (newId) => {
   gateId.value = newId
   tratamentoDoId()

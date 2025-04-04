@@ -16,14 +16,10 @@ const gateFiltros = ref([])
 
 
 
-console.log(getToken());
-
-
 const loading =  ref(false)
 
 const buscarGates = async () => {
   const token = getToken();
-  console.log(`Token: ${token}`)
   if (!token) {
     alert('Token de autenticação não encontrado. Por favor, faça login.');
     return;
@@ -35,11 +31,7 @@ const buscarGates = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log("Response Gate")
     gates.value = response.data.data
-
-    console.log(response.data.data)
     
   } catch (error) {
     console.error("Erro ao carregar dados:", error);

@@ -11,7 +11,6 @@ import url from "../../../../public/user.json"
         const response = await fetch(`/data.json?page=${numberPage}`);
 
        users.value = await response.json();
-        console.log(users.value)
         } catch (error) {
         console.error('Erro ao carregar o JSON:', error);
         }

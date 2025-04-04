@@ -399,9 +399,6 @@ const atualizarDadosShow = async () => {
   gateIdArray.value = []
   gatePreSelecteds.value = []
 
-  console.log("Atualizar Gate")
-  console.log(gateSelected.value)
-
   gateSelected.value.forEach(dados => {
 
     gateIdArray.value.push({ "gate_id": dados.id })
@@ -551,10 +548,6 @@ const dadosAtualizar = reactive({
   email: "",
   roles: roleSelected.value,
 });
-
-//mk
-
-console.log(gateSelected.value)
 const atualizarDados = (dados) => {
 
   gateSelected.value = []
@@ -576,74 +569,16 @@ const atualizarDados = (dados) => {
     gatePreSelecteds.value.push(item)
     // gateSelected.value.push(item)
   })
-  console.log("---------------------")
   gates.value.forEach((gateUser) => {
 
     gatePreSelecteds.value.forEach((element) => {
 
       if (gateUser.id == element.gate_id) {
         gateSelected.value.push(gateUser)
-        console.log("Iguais")
-
       }
     })
 
   })
-  console.log("---------------------")
-
-  console.log(`gatePreSelecteds:`)
-  console.log(gatePreSelecteds.value.length)
-
-  // gates.value.forEach((gateUser) => {
-
-  //   if (dados.gate.length >= 1) {
-
-  //     dados.gate.forEach(gatesUser => {
-
-  //       if (gateUser.id == gatesUser.gate_id) {
-
-  //         if (gateSelected.value.length > 0) {
-
-  //           gateSelected.value.forEach(preSelected => {
-  //             console.log("Num items")
-  //             console.log(gateSelected.value.length)
-  //             console.log(preSelected)
-
-  //             if (gatesUser.gate_id != preSelected.id) {
-  //               // console.log(`gatePreSelecteds: ${gateSelected.value.length}`)
-  //               // console.log("Items")
-  //               console.log(gatePreSelecteds.value)
-
-  //                 gatePreSelecteds.value.forEach(item=>{
-  //                   // console.log("Items")
-  //                   // console.log(item)
-  //                   // if(removeGatePreSelected(item.gate_id, preSelected.id)){
-  //                   //   console.log("Ids diferentes")
-  //                   //   console.log(`item.gate_id: ${item.gate_id}`)
-  //                   //   console.log(`preSelected.id: ${preSelected.id}`)
-  //                   //   gateSelected.value.push(gateUser)
-  //                   // }else{
-  //                   //   console.log("Ids Iguais")
-  //                   //   console.log(`item.gate_id: ${item.gate_id}`)
-  //                   //   console.log(`preSelected.id: ${preSelected.id}`)
-  //                   // }
-  //                 })
-
-
-  //             }
-
-  //           })
-  //         } else {
-  //           gateSelected.value.push(gateUser)
-  //         }
-  //       }
-
-
-  //     })
-
-  //   }
-  // });
-  console.log("Pre selecionado: ");
   if (gateSelected.value == undefined) {
     gateSelected.value = [
       {
@@ -656,14 +591,7 @@ const atualizarDados = (dados) => {
         updated_at: "2025-03-04T07:01:43.383000Z",
       }
     ]
-    console.log("Indefinido o portao");
   }
-  // console.log(gateSelected.value);
-
-  console.log("Gate selected");
-  console.log("--------------------------------------------");
-  console.log(gateSelected.value);
-  console.log("--------------------------------------------");
 
   if (dados.is_active == "0") {
     ative_selected.value.name = "Inativo";
@@ -674,18 +602,10 @@ const atualizarDados = (dados) => {
   }
   dadosAtualizar.gate_id = gateSelected.value;
   dadosAtualizar.is_active = Number(ative_selected.value.code);
-
-  console.log("---------------------------------------------");
-
   userFiltro.value.forEach((element) => {
-    // console.log(element.roles.value)
-
     if (dados.id == element.id) {
-      console.log("User correct");
-
       element.roles.forEach((item) => {
         dadosAtualizar.roles = item.name;
-        console.log(formDataSave.roles);
       });
     }
   });
@@ -702,24 +622,18 @@ const removeGatePreSelected = (idPre, idCurrent) => {
 
 const disableMk = () => {
   dialogUserUpdateVisible.value = false;
-  console.log("Cancelar");
   gateSelected.value = []
 };
 
 const verificadorDeCampos = (dado) => {
-  console.log("Verificador de campos vazios");
-  console.log(dado);
   errorL.value = "";
   for (const key in dado) {
     if (dado[key] == "" || dado[key] == undefined) {
       if (key != "is_active") {
-        console.log(`Key: ${key}: sem dados`);
         errorL.value = `Preencha todos os dados`;
       }
     }
   }
-
-  console.log("-------------------------------------------------");
 };
 
 
@@ -735,7 +649,6 @@ const selectedCategories = ref([]);
 
 const buscarGates = async () => {
   const token = getToken();
-  console.log(`Token: ${token}`);
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
@@ -746,11 +659,7 @@ const buscarGates = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log("Response Gate");
     gates.value = response.data.data;
-
-    console.log(response.data.data);
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {

@@ -114,33 +114,6 @@ const addUser = async () => {
   }
 };
 
-// const addUser = async () => {
-//   // Dados de exemplo para o usuário
-//   const user = {
-//     name: 'João Silva',
-//     email: 'joao.silyfdvadscddsas@example.com',
-//     password: 'senha123',
-//     mobile: '999999999',
-//     roles: [{ name: 'Admin' }],
-//   };
-
-//   try {
-//     const response = await axios.post('/api/users', user, {
-//       headers: {
-//         'Content-Type': 'application/json'
-//       }
-//     });
-
-//     console.log('Usuário adicionado', response.data);
-//     // Mensagem de sucesso (console.log para testar)
-//     alert('Usuário adicionado com sucesso!');
-//   } catch (error) {
-//     console.error('Erro ao adicionar usuário:', error);
-//     // Mensagem de erro (console.log para testar)
-//     alert('Falha ao adicionar usuário.');
-//   }
-// };
-//
 
 
 //Dados
@@ -153,7 +126,7 @@ const user = reactive({
 });
 // Atualizar usuário
 const updateUser = async () => {
-  console.log(user.id)
+
   try {
     await axios.post(`/api/users/${user.id}`, user);
     toast.add({
@@ -162,7 +135,6 @@ const updateUser = async () => {
       detail: "Usuário atualizado com sucesso!",
       life: 3000,
     });
-    console.log("Adicionado")
   } catch (error) {
     toast.add({
       severity: "error",
@@ -177,7 +149,6 @@ const updateUser = async () => {
 const deleteUser = async () => {
   try {
     const response = await axios.post(`api/users/${61}`);
-    console.log('Usuário deletado com sucesso', response.status);
   } catch (error) {
     console.error('Erro ao deletar o usuário:', error.response.data);
   }

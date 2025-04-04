@@ -25,7 +25,6 @@ const rowsPerPage = 10
 
 const fetchPosts = async (page = 1) => {
   const token = getToken();
-  console.log(`Token: ${page}`);
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;

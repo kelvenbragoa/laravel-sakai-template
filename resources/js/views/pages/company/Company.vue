@@ -44,25 +44,17 @@ const empresaAdd = reactive({
   address: "",
 });
 
-console.log(getToken());
-
 const dialogoUserVisble = ref(false);
 const loading = ref(false);
 
 const salvarEmpresa = async () => {
   const token = getToken();
-
-  console.log("salvarEmpresa");
-  console.log(empresaAdd);
-  console.log("Token");
-  console.log(token);
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
   } else {
     verificadorDeCampos(empresaAdd);
     if (errorL.value === "") {
-      console.log("Cheio");
       loading.value = true
       try {
         const response = await axios.post(baseUrls.empresaAdd, empresaAdd, {
@@ -101,7 +93,6 @@ const salvarEmpresa = async () => {
 const buscarEmpresas = async () => {
   loading.value = true
   const token = getToken();
-  console.log(`Token: ${token}`);
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
     return;
@@ -112,11 +103,7 @@ const buscarEmpresas = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log("Response Empresas");
-
     empresas.value = response.data.data.data;
-    console.log(empresas.value);
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -124,24 +111,16 @@ const buscarEmpresas = async () => {
   }
 };
 
-// dadosAtualizar.roles = [{name: dados.roles[0].name}];
-
-console.log("---------------------------------------------");
 
 const filtroChange = () => {
   loading.value = true;
   if (filtroDados.value.trim() === "") {
-    console.log("Vazio");
     empresasFiltro.value = [...usersL.value];
     loading.value = false;
   } else {
-    console.log("Preenchido");
-    console.log(filtroDados.value.toLowerCase());
     empresasFiltro.value = empresas.value.filter((company) =>
       company.mobile.toLowerCase().includes(filtroDados.value.toLowerCase())
     );
-    console.log("USer filtro");
-    console.log(empresasFiltro.value);
     loading.value = false;
   }
 };
@@ -161,8 +140,6 @@ async function apaga() {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log("Empresa deletado com sucesso", response.status);
-    // fetchUsers();
     buscarEmpresas();
     loading.value = false;
     toast.add({
@@ -187,8 +164,6 @@ function apagaDados(dados) {
   displayConfirmation.value = true;
   dadosCompanyDelete.value.name = dados.name;
   dadosCompanyDelete.value.id = dados.id;
-
-  console.log(dadosCompanyDelete);
 }
 
 const atualizarDados = (dados) => {
@@ -198,14 +173,9 @@ const atualizarDados = (dados) => {
   dadosAtualizar.mobile = dados.mobile;
   dadosAtualizar.name = dados.name;
   dadosAtualizar.id = dados.id;
-  console.log(dados);
 };
 
 const atualizarDadosShow = async () => {
-  console.log();
-
-  console.log("Dados sendo atualizados");
-  console.log(dadosAtualizar);
 
   const dadoAtualizacao = {
     id: dadosAtualizar.id,
@@ -215,9 +185,6 @@ const atualizarDadosShow = async () => {
     address: dadosAtualizar.address,
   };
 
-  console.log("Dados atualizacao");
-  console.log(dadoAtualizacao);
-  console.log("-----------------------------");
   const token = getToken();
   if (!token) {
     alert("Token de autenticação não encontrado. Por favor, faça login.");
@@ -248,7 +215,6 @@ const atualizarDadosShow = async () => {
           detail: "Empresa atualizado",
           life: 3000,
         });
-        console.log("Adicionado");
       } catch (error) {
         // fetchUsers();
         buscarEmpresas();
@@ -274,17 +240,12 @@ const atualizarDadosShow = async () => {
 };
 
 const verificadorDeCampos = (dado) => {
-  console.log("Verificador de campos vazios");
-  console.log(dado);
   errorL.value = "";
   for (const key in dado) {
     if (dado[key] == "" || dado[key] == undefined) {
-      console.log(`Key: ${key}: sem dados`);
       errorL.value = `Preencha todos os dados`;
     }
   }
-
-  console.log("-------------------------------------------------");
 };
 
 onMounted(() => {

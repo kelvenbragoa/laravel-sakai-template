@@ -2,6 +2,9 @@
 import { useToast } from "primevue";
 import { onMounted, reactive, ref } from "vue";
 import { baseUrls } from "../../../api/index"
+import { checkAccess } from "../../../utils/accesRoute";
+
+checkAccess()
 
 const toast = useToast();
 const filtroDados = ref("");

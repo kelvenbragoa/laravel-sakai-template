@@ -6,7 +6,9 @@ import { onBeforeMount, onMounted, reactive, ref, watch } from "vue";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../api/index";
+import { useRouter } from "vue-router";
 
+checkAccess()
 let dialogoUserVisble = ref(false);
 let dialogUserUpdateVisible = ref(false);
 let dialogRoleUpdateVisible = ref(false);
@@ -50,7 +52,7 @@ const formDataSave = reactive({
   email: "",
   company_id: "0",
   password: "",
-  roles: [],
+  roles: "",
 });
 
 const countries = ref([
@@ -63,7 +65,7 @@ const gateIdArray = ref([])
 
 // Definindo a pré-seleção (exemplo: Moçambique)
 const selectedCountry = ref(countries.value[0]);
-const roleSelected = ref({ name: "" });
+const roleSelected = ref([]);
 // const gateSelected = ref({
 //   id: 70,
 //   user_id: "120",
@@ -141,6 +143,7 @@ const fetchPermissions = async () => {
 
 
 import axios from "axios";
+import { checkAccess } from "../../../utils/accesRoute";
 
 const fetchRoles = async () => {
   try {
@@ -295,14 +298,21 @@ const addUser = async () => {
 // }
 
 const salvarDadosShow = async () => {
+  let arrayRols = []
+  formDataSave.roles.forEach((elements)=>{
+    arrayRols.push(elements['name'])
+    // console.log(elements['name'])
+  })
   let dadosAddL = {
     user_full_name: formDataSave.name,
     user_name: formDataSave.user,
     email: formDataSave.email,
     company_id: String(formDataSave.company_id.id),
     password: formDataSave.password,
-    roles: [{ name: formDataSave.roles.name }],
+    roles: formDataSave.roles,
   };
+
+  console.log(dadosAddL)
 
   const token = getToken();
 
@@ -412,8 +422,10 @@ const atualizarDadosShow = async () => {
     email: dadosAtualizar.email,
     is_active: Number(ative_selected.value.code),
     gates: gateIdArray.value,
-    roles: [{ name: roleSelected.value.name }],
+    roles: roleSelected.value,
   };
+
+  console.log(dadoAtualizacao)
 
 
 
@@ -558,10 +570,18 @@ const atualizarDados = (dados) => {
   dialogUserUpdateVisible.value = true;
   dadosAtualizar.id = dados.id;
   // // dadosAtualizar.roles = [{name: dados.roles[0].name}];
+  let arrayRols = []
+  dados.roles.forEach((elements)=>{
+    arrayRols.push({name: elements['name']})
+    // console.log(elements['name'])
+  })
 
-  roleSelected.value.name = dados.roles[0].name;
+  roleSelected.value = arrayRols
+
+  console.log(roleSelected.value)
+  
   dadosAtualizar.roles = roleSelected.value;
-
+  // console.log(dadosAtualizar.roles)
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
 
@@ -819,9 +839,13 @@ onMounted(() => {
         </div>
         <!-- Acesso -->
         <div class="formUserAdd">
-          <label for="acesso">Acesso</label>
-          <Select id="acesso" v-model="formDataSave.roles" :options="rolesName" optionLabel="name"
-            placeholder="S. Nivel de acesso" class="w-full"></Select>
+          <div class="field formUserAddI">
+            <label for="acesso">Acesso</label>
+            <MultiSelect v-model="formDataSave.roles" :options="rolesName" optionLabel="name" placeholder="Portões" display="chip"
+              class="w-full" />
+
+          </div>
+
         </div>
       </div>
 
@@ -888,14 +912,24 @@ onMounted(() => {
 
         </div>
 
-
         <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="acesso">Acesso</label>
+            <MultiSelect v-model="roleSelected" :options="rolesName" optionLabel="name" placeholder="Portões" display="chip"
+              class="w-full" />
+
+          </div>
+
+        </div>
+
+
+        <!-- <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Acesso</label>
             <Select id="acesso" v-model="roleSelected" :options="rolesName" optionLabel="name"
               placeholder="S. Nivel de acesso" class="w-full"></Select>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="formUserAdd">
         <div class="field formUserAddI">

@@ -2,6 +2,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { DataTable, Column, Button, Dialog, MultiSelect } from "primevue";
+import { checkAccess } from "../../../utils/accesRoute";
+
+
+checkAccess()
 
 const roles = ref([]); 
 

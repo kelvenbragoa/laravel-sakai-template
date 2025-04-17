@@ -11,6 +11,8 @@ const dadosUserAuth = ref({
   password: "",
 });
 
+
+
 const loading = ref(false);
 const errorL = ref();
 
@@ -35,7 +37,9 @@ const autenticar = async () => {
       const { user, access_token } = response.data;
 
       localStorage.setItem("access_token", access_token);
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("cgate_user", JSON.stringify(user));
+      localStorage.setItem("cgate_logged_click", true)
+      // console.log(user)
 
       router.push("/dashboard");
       loading.value = false;

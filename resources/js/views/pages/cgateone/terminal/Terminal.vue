@@ -699,13 +699,18 @@ const buscarTransccoes = async () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      // params: {
-      //   gate: removerGate(gateId.value)
-      // }
+      params: {
+        gate: removerGate(gateId.value)
+      }
       
     });
 
+    console.log(removerGate(gateId.value))
+
     transactions.value = response.data.data.data;
+
+
+    // });
     // exportToExcel()
   } catch (error) {
     console.error("Erro ao carregar dados fkdsjf,:", error);

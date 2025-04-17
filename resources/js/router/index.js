@@ -1,6 +1,8 @@
 import AppLayout from '@/layout/AppLayout.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
+
+
 const router = createRouter({
     history: createWebHistory('/cgate1x/'),
     routes: [
@@ -26,11 +28,13 @@ const router = createRouter({
                     name: 'cargaone',
                     component: () => import('@/views/pages/cgateone/carga/Carga.vue')
                 },
+               
                 {
                     path: '/terminalone/:id',
                     name: 'terminalone',
                     component: () => import('@/views/pages/cgateone/terminal/Terminal.vue'),
-                    props: true,
+                    props: true
+                    
                 },
 
                 //C-gate 1.1
@@ -44,6 +48,13 @@ const router = createRouter({
                     name: 'terminaloneone',
                     component: () => import('@/views/pages/cgateoneone/terminal/Terminal.vue'),
                     props: true,
+                    beforeEnter: (to, from, next) => {
+                        if(!teste){
+                            next('unauthorized')
+                        }else{
+                            next()
+                        }
+                      }
                 },
                 //------
                 {

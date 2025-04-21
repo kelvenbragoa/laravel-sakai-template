@@ -24,6 +24,7 @@ const dadoSearch = ref("")
 
 const errorL = ref();
 const rowsPerPage = ref(50);
+
 const totalRecords = ref(0);
 const dadosUserDelete = ref({
   name: "",
@@ -88,7 +89,7 @@ const buscarUsuarios = async (page = 1) => {
   const token = getToken();
 
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {
@@ -143,7 +144,7 @@ const fetchPermissions = async () => {
 
 
 import axios from "axios";
-import { checkAccess } from "../../../utils/accesRoute";
+import { backLog, checkAccess } from "../../../utils/accesRoute";
 
 const fetchRoles = async () => {
   try {
@@ -317,7 +318,7 @@ const salvarDadosShow = async () => {
   const token = getToken();
 
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   } else {
     verificadorDeCampos(dadosAddL);
@@ -369,7 +370,7 @@ const buscarEmpresas = async () => {
   const token = getToken();
 
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {
@@ -432,7 +433,7 @@ const atualizarDadosShow = async () => {
 
   const token = getToken();
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   } else {
     verificadorDeCampos(dadoAtualizacao);
@@ -511,7 +512,7 @@ async function apaga() {
   loading.value = true;
   const token = getToken();
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {
@@ -670,7 +671,7 @@ const selectedCategories = ref([]);
 const buscarGates = async () => {
   const token = getToken();
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {

@@ -13,17 +13,22 @@ export const acessRouters = ref({
 })
 
 export const getUserData = () => {
-    return JSON.parse(localStorage.getItem("cgate_user"))
+    if (JSON.parse(localStorage.getItem("cgate_user"))) {
+        return JSON.parse(localStorage.getItem("cgate_user"))
+    }
+    return false
 }
 
 export const verifyUser = () => {
     const user = getUserData()
-    if (user && Array.isArray(user.roles)) {
-        user.roles.forEach((e) => {
-            if (e.name === "Super Admin") {
-                acessRouters.value.adminAcesseSuperAdmin = true
-            }
-        })
+    if (user != false) {
+        if (user && Array.isArray(user.roles)) {
+            user.roles.forEach((e) => {
+                if (e.name === "Super Admin") {
+                    acessRouters.value.adminAcesseSuperAdmin = true
+                }
+            })
+        }
     }
 }
 
@@ -65,11 +70,15 @@ export const checkAccess = () => {
     if (!acessRouters.value.adminAcesseSuperAdmin) {
         router.push("/dashboard")
     }
-}   
+}
 
 
-export const checkAccessPermissions = ()=>{
+export const checkAccessPermissions = () => {
     verifyPermissions()
-    
 
+
+}
+
+export const backLog = () =>{
+    useRouter().push("/")
 }

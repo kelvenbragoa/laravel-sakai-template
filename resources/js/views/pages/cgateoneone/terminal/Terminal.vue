@@ -445,6 +445,7 @@ import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
+import { backLog } from "../../../../utils/accesRoute";
 const isActive = ref(true)
 const userFiltro = ref([])
 const dadosRelatorio = ref({
@@ -520,7 +521,7 @@ const formatDates = (date) => {
 const filterDate = async () => {
   const token = getToken();
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   } else {
     if (!startDate.value || !endDate.value) {
@@ -685,7 +686,7 @@ function removerGate(texto) {
 const buscarTransccoes = async () => {
   const token = getToken();
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {

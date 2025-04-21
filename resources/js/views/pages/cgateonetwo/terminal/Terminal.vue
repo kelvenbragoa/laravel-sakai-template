@@ -728,10 +728,10 @@ const exportToExcel = () => {
   XLSX.writeFile(workbook, "transacoes.xlsx");
 };
 
-// Troca de página
+
 const onPageChange = (event) => {
-  const newPage = event.page + 1; // PrimeVue usa index 0
-  // fetchTransactions(newPage);
+  const newPage = event.page + 1;
+
 };
 
 // Formatar data
@@ -822,9 +822,9 @@ const generatePDF = (rowData) => {
     return [r, g, b];
   }
 
-  // Definindo a cor de fundo com hexadecimal
-  let color = hexToRgb("#f5f5f5"); // Hexadecimal convertido para RGB
-  let color2 = hexToRgb("#ffffff"); // Hexadecimal convertido para RGB
+
+  let color = hexToRgb("#f5f5f5"); 
+  let color2 = hexToRgb("#ffffff"); 
 
   let corChange = false;
   // /images/logo.png

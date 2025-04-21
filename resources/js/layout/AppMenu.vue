@@ -3,11 +3,19 @@ import { h, onMounted, ref } from 'vue';
 
 import AppMenuItem from './AppMenuItem.vue';
 import { elements } from 'chart.js';
+import { useRouter } from 'vue-router';
+import { backLog } from '../utils/accesRoute';
 
 const getUserData = () => {
-    return JSON.parse(localStorage.getItem("cgate_user"))
+    if (JSON.parse(localStorage.getItem("cgate_user"))) {
+        return JSON.parse(localStorage.getItem("cgate_user"))
+    }
+    return false
 }
-
+console.log(getUserData())
+if (!getUserData()) {
+    backLog()
+}
 
 
 const acessRouters = ref(
@@ -96,27 +104,27 @@ const cgate1dot1TerminalMenu = () => {
                 {
                     label: 'Portão 4',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/4'
+                    to: '/terminaloneone/4'
                 },
                 {
                     label: 'Portão 5',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/5'
+                    to: '/terminaloneone/5'
                 },
                 {
                     label: 'Portão 6',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/6'
+                    to: '/terminaloneone/6'
                 },
                 {
                     label: 'Portão 8A',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/8A'
+                    to: '/terminaloneone/8A'
                 },
                 {
                     label: 'Portão 11A',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/11AIn'
+                    to: '/terminaloneone/11AIn'
                 },
 
             ]
@@ -164,27 +172,27 @@ const cgate1dot2TerminalMenu = () => {
                 {
                     label: 'Portão 4',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/4'
+                    to: '/terminalonetwo/4'
                 },
                 {
                     label: 'Portão 5',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/5'
+                    to: '/terminalonetwo/5'
                 },
                 {
                     label: 'Portão 6',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/6'
+                    to: '/terminalonetwo/6'
                 },
                 {
                     label: 'Portão 8A',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/8A'
+                    to: '/terminalonetwo/8A'
                 },
                 {
                     label: 'Portão 11A',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/11AIn'
+                    to: '/terminalonetwo/11AIn'
                 },
 
             ]
@@ -201,22 +209,22 @@ const cgate1dot2CargaGeralMenu = () => {
                 {
                     label: 'Portão 1',
                     icon: 'pi pi-window-maximize',
-                    to: '/cargaone/1Out'
+                    to: '/cargaonetwo/1Out'
                 },
                 {
                     label: 'Portão 2',
                     icon: 'pi pi-window-maximize',
-                    to: '/cargaone/2Out'
+                    to: '/cargaonetwo/2Out'
                 },
                 {
                     label: 'Portão 3',
                     icon: 'pi pi-window-maximize',
-                    to: '/cargaone/3In'
+                    to: '/cargaonetwo/3In'
                 },
                 {
                     label: 'Portão 16',
                     icon: 'pi pi-window-maximize',
-                    to: '/carga-geral/16In'
+                    to: '/cargaonetwo/16In'
                 }
             ]
         }
@@ -232,27 +240,27 @@ const cgate2dot1TerminalMenu = () => {
                 {
                     label: 'Portão 4',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/4'
+                    to: '/terminalotwo/4'
                 },
                 {
                     label: 'Portão 5',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/5'
+                    to: '/terminalotwo/5'
                 },
                 {
                     label: 'Portão 6',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/6'
+                    to: '/terminalotwo/6'
                 },
                 {
                     label: 'Portão 8A',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/8A'
+                    to: '/terminalotwo/8A'
                 },
                 {
                     label: 'Portão 11A',
                     icon: 'pi pi-window-maximize',
-                    to: '/terminalone/11AIn'
+                    to: '/terminalotwo/11AIn'
                 },
 
             ]
@@ -269,22 +277,22 @@ const cgate2dot1CargaGeralMenu = () => {
                 {
                     label: 'Portão 1',
                     icon: 'pi pi-window-maximize',
-                    to: '/cargaone/1Out'
+                    to: '/cargaotwo/1Out'
                 },
                 {
                     label: 'Portão 2',
                     icon: 'pi pi-window-maximize',
-                    to: '/cargaone/2Out'
+                    to: '/cargaotwo/2Out'
                 },
                 {
                     label: 'Portão 3',
                     icon: 'pi pi-window-maximize',
-                    to: '/cargaone/3In'
+                    to: '/cargaotwo/3In'
                 },
                 {
                     label: 'Portão 16',
                     icon: 'pi pi-window-maximize',
-                    to: '/carga-geral/16In'
+                    to: '/cargaotwo/16In'
                 }
             ]
         }
@@ -545,30 +553,34 @@ const menusVisiveis = ["terminal", "carga"]
 
 
 const buildMenu = () => {
+    if (!getUserData()) {
+        backLog()
+    } else {
 
-    const menuBase = ref([])
-    const cgatePages = ref()
+        const menuBase = ref([])
+        const cgatePages = ref()
 
-    for (let items in baseMenu.value) {
-        if (items == "users") {
-            // model.value = baseMenu.value[items]
-            menuBase.value.push(baseMenu.value[items])
-        } else if (items == "home") {
-            menuBase.value.push(baseMenu.value[items])
-        } else if (items == "cgate") {
-            cgatePages.value = baseMenu.value[items]
+        for (let items in baseMenu.value) {
+            if (items == "users") {
+                // model.value = baseMenu.value[items]
+                menuBase.value.push(baseMenu.value[items])
+            } else if (items == "home") {
+                menuBase.value.push(baseMenu.value[items])
+            } else if (items == "cgate") {
+                cgatePages.value = baseMenu.value[items]
+            }
+
+        }
+        cgatePages.value['items'] = cgateMenuPages(viewsMenu.value)
+
+        menuBase.value.push(cgatePages.value)
+        if (acessRouters.value.adminAcesseSuperAdmin) {
+            menuBase.value.push(userMenu())
         }
 
-    }
-    cgatePages.value['items'] = cgateMenuPages(viewsMenu.value)
-    
-    menuBase.value.push(cgatePages.value)
-    if (acessRouters.value.adminAcesseSuperAdmin) {
-        menuBase.value.push(userMenu())
-    }
-    
 
-    model.value = menuBase.value
+        model.value = menuBase.value
+    }
 
 
     // {
@@ -818,6 +830,9 @@ const buildMenu = () => {
 }
 
 onMounted(() => {
+    if (!getUserData()) {
+        backLog()
+    }
     buildMenu()
 })
 </script>

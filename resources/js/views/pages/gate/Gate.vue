@@ -2,7 +2,7 @@
 import { useToast } from "primevue";
 import { onMounted, reactive, ref } from "vue";
 import { baseUrls } from "../../../api/index"
-import { checkAccess } from "../../../utils/accesRoute";
+import { backLog, checkAccess } from "../../../utils/accesRoute";
 
 checkAccess()
 
@@ -24,7 +24,7 @@ const loading =  ref(false)
 const buscarGates = async () => {
   const token = getToken();
   if (!token) {
-    alert('Token de autenticação não encontrado. Por favor, faça login.');
+    backLog()
     return;
   }
   try {

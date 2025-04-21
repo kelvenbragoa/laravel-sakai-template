@@ -1,8 +1,18 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
 import AppConfigurator from './AppConfigurator.vue';
+import { useRouter } from 'vue-router';
 
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
+const router = useRouter()
+
+function logoutfun() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('cgate_user');
+
+
+    router.push('/')
+}
 </script>
 
 <template>
@@ -23,9 +33,14 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
             </button>
 
             
+
+            
         </div>
 
         <div class="layout-topbar-actions">
+             <button class="layout-menu-button layout-topbar-action mx-10" @click="logoutfun">
+                <i class="pi pi-power-off"></i>
+            </button>
             <div class="layout-config-menu">
                 <button type="button" class="layout-topbar-action" @click="toggleDarkMode">
                     <i :class="['pi', { 'pi-moon': isDarkTheme, 'pi-sun': !isDarkTheme }]"></i>
@@ -48,6 +63,7 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
             >
                 <i class="pi pi-ellipsis-v"></i>
             </button>
+            
 
             <!-- <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">

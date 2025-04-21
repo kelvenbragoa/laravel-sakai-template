@@ -24,13 +24,14 @@ const router = createRouter({
 
                 //C-gate 1.2
                 {
-                    path: '/cargaone/:id',
+                    path: '/cargaonetwo/:id',
                     name: 'cargaone',
-                    component: () => import('@/views/pages/cgateone/carga/Carga.vue')
+                    component: () => import('@/views/pages/cgateone/carga/Carga.vue'),
+                    props: true
                 },
                
                 {
-                    path: '/terminalone/:id',
+                    path: '/terminalonetwo/:id',
                     name: 'terminalone',
                     component: () => import('@/views/pages/cgateone/terminal/Terminal.vue'),
                     props: true
@@ -41,20 +42,28 @@ const router = createRouter({
                 {
                     path: '/cargaoneone/:id',
                     name: 'cargaoneone',
-                    component: () => import('@/views/pages/cgateoneone/carga/Carga.vue')
+                    component: () => import('@/views/pages/cgateone/carga/Carga.vue'),
+                    props: true
                 },
                 {
                     path: '/terminaloneone/:id',
                     name: 'terminaloneone',
-                    component: () => import('@/views/pages/cgateoneone/terminal/Terminal.vue'),
-                    props: true,
-                    beforeEnter: (to, from, next) => {
-                        if(!teste){
-                            next('unauthorized')
-                        }else{
-                            next()
-                        }
-                      }
+                    component: () => import('@/views/pages/cgateone/terminal/Terminal.vue'),
+                    props: true
+                },
+                //------
+
+                 //C-gate 2.0
+                 {
+                    path: '/cargaotwo/:id',
+                    name: 'cargaotwo',
+                    component: () => import('@/views/pages/cgatetwo/carga/Carga.vue')
+                },
+                {
+                    path: '/terminalotwo/:id',
+                    name: 'terminalotwo',
+                    component: () => import('@/views/pages/cgatetwo/terminal/Terminal.vue'),
+                    
                 },
                 //------
                 {

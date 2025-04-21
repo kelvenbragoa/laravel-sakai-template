@@ -1,14 +1,17 @@
 <template>
 
   <div class="card">
-    <DataTable :value="transactions" :filters="filters" :loading="loading" :rows="rowsPerPage" :paginator="true"
+    <!-- <DataTable :value="transactions" :loading="loading" :rows="rowsPerPage" :paginator="true"
       :total-records="totalRecords" :first="(currentPage - 1) * rowsPerPage" @page="onPageChange" :global-filter-fields="[
         'transaction_gate',
         'driver_name',
         'truck_license_plate_number',
         'status',
         'type',
-      ]" table-style="min-width: 60rem">
+      ]" table-style="min-width: 60rem"> -->
+
+      <DataTable :value="transactionsFilter" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy :first="first"
+      @page="onPageChange">
       <template #header>
         <div class="flex justify-between align-center">
           <h2>
@@ -29,7 +32,7 @@
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
-              <InputText v-model="filters['global'].value" placeholder="Pesquisa" />
+              <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
             </IconField>
           </div>
         </div>
@@ -38,10 +41,10 @@
       <template #loading> Carregando os dados. Por favor, aguarde. </template>
       <!-- <Column field="appointment_nbr" header="Appointment Number" style="min-width: 12rem" /> -->
 
-      <Column field="first_last_name" header="Condutor" style="min-width: 12rem" />
-      <Column field="main_plate" header="Placa de caminhão" style="min-width: 12rem" />
-      <Column field="gate" header="Gate" style="min-width: 12rem"></Column>
-      <Column field="movement" header="Tipo de movimento" style="min-width: 12rem"></Column>
+      <Column field="driver_name" header="Condutor" style="min-width: 12rem" />
+      <Column field="truck_license_plate_number" header="Placa de caminhão" style="min-width: 12rem" />
+      <Column field="transaction_gate" header="Gate" style="min-width: 12rem"></Column>
+      <Column field="movement_type" header="Tipo de movimento" style="min-width: 12rem"></Column>
       <Column field="created_at" header="Criado" style="min-width: 12rem">
         <template #body="{ data }">
           {{ formatDate(data.created_at) }}
@@ -450,9 +453,9 @@ import { baseUrls } from "../../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
 import { backLog } from "../../../../utils/accesRoute";
-console.log("Transacoes")
 const isActive = ref(true)
 const userFiltro = ref([])
+const first = ref(0);
 const dadosRelatorio = ref({
   id: null,
   gate: null,
@@ -507,7 +510,8 @@ const tabelaDados = ref({
 });
 
 const dataAtual = new Date();
-
+const filtroDados = ref("");
+const dadoSearch = ref("")
 const formatDates = (date) => {
   if (!date) return "";
 
@@ -576,7 +580,7 @@ const filterDate = async () => {
 
     try {
       const response = await axios.get(
-        `${baseUrls.transacoes}`,
+        `${baseUrls.transacoesCgate2dotzero}`,
 
         {
           params: {
@@ -592,7 +596,9 @@ const filterDate = async () => {
 
 
       userFiltro.value = response.data.data;
-      transactions.value = response.data.data.data
+      transactions.value = response.data.result.data
+      transactionsFilter.value = transactions.value
+      console.log("")
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
       toast.add({
@@ -649,38 +655,15 @@ const tabelaDados2 = ref({
 
 // Referências reativas
 const transactions = ref([]); // Dados das transações
+const transactionsFilter = ref([])
 const totalRecords2 = ref(0); // Total de registros para paginação
 
 const currentPage = ref(1);
-const rowsPerPage = ref(7);
+const rowsPerPage = ref(15);
 const filters2 = ref({
-  global: { value: "" }, // Filtro global
+  global: { value: "" }, 
 });
 
-// Métodos
-const fetchTransactions = async (page = 1) => {
-  loading.value = true;
-  try {
-    const response = await axios.get(
-      `http://20.87.9.35/api/v1/transacoes/lista`,
-      {
-        params: {
-          page: page,
-        },
-      }
-    );
-
-    const { data, current_page, total } = response.data.result;
-    transactions.value = data;
-    currentPage.value = current_page;
-    totalRecords.value = total;
-    // exportToExcel()
-  } catch (error) {
-    console.error("Erro ao carregar dados:", error);
-  } finally {
-    loading.value = false;
-  }
-};
 
 const getToken = () => {
   return localStorage.getItem("access_token");
@@ -689,7 +672,9 @@ function removerGate(texto) {
     return texto.replace(/^Gate\s*/, '');
 }
 
-const buscarTransccoes = async () => {
+
+
+const buscarTransccoes = async (page = 1) => {
 
   const token = getToken();
   if (!token) {
@@ -697,19 +682,22 @@ const buscarTransccoes = async () => {
     return;
   }
   try {
-    const response = await axios.get(baseUrls.transacoes, {
+    const response = await axios.get(baseUrls.transacoesCgate2dotzero, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        gate: removerGate(gateId.value)
+        gate: removerGate(gateId.value),
+        page: page,
+        query: dadoSearch.value
       }
       
     });
 
-    console.log(removerGate(gateId.value))
 
-    transactions.value = response.data.data.data;
+    transactions.value = response.data.result.data;
+    transactionsFilter.value = transactions.value
+    totalRecords.value = response.data.result.total
 
 
     // });
@@ -728,11 +716,12 @@ const exportToExcel = () => {
   XLSX.writeFile(workbook, "transacoes.xlsx");
 };
 
-// Troca de página
 const onPageChange = (event) => {
-  const newPage = event.page + 1; // PrimeVue usa index 0
-  // fetchTransactions(newPage);
-};
+  first.value = event.first
+  const newPage = Math.floor(event.first / rowsPerPage.value) + 1
+  buscarTransccoes(newPage)
+
+}
 
 // Formatar data
 const formatDate2 = (date) => {
@@ -746,6 +735,22 @@ const loadJson = async () => {
     users.value = await response.json();
   } catch (error) {
     console.error("Erro ao carregar o JSON:", error);
+  }
+};
+
+const filtroChange = () => {
+  loading.value = true;
+  if (filtroDados.value.trim() === "") {
+    // userFiltro.value = [...usersL.value];
+    transactionsFilter.value = [...transactions.value]
+
+    
+
+    loading.value = false;
+  } else {
+    console.log(`Search: ${filtroDados.value}`)
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarTransccoes()
   }
 };
 

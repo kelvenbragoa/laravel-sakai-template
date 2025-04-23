@@ -42,38 +42,13 @@
       <Column field="main_plate" header="Placa de caminhão" style="min-width: 12rem" />
       <Column field="gate" header="Gate" style="min-width: 12rem"></Column>
       <Column field="movement" header="Tipo de movimento" style="min-width: 12rem"></Column>
-      <Column field="created_at" header="Criado" style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ formatDate(data.created_at) }}
-        </template>
-      </Column>
-      <Column field="created_by" header="Criado por" style="min-width: 12rem">
-        <!-- <template #body="{ data }">
-          <Tag :value="data.status" :severity="getSeverity(data.status)" />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <Select
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="statuses"
-            placeholder="Status"
-            style="min-width: 12rem"
-            :showClear="true"
-            
-          >
-            <template #option="slotProps">
-              <Tag
-                :value="slotProps.option"
-                :severity="getSeverity(slotProps.option)"
-              />
-            </template>
-          </Select>
-        </template> -->
-      </Column>
+
       <Column header="Detalhes" style="min-width: 10rem">
         <template #body="{ data }">
           <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
             style="border: 0px" />
+
+
         </template>
       </Column>
     </DataTable>
@@ -435,6 +410,19 @@
     </div>
 
   </div>
+
+  <Dialog header="Detalhes" v-model:visible="dialogRoleUpdateVisible" :closable="true" :modal="true"
+      :draggable="false" :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
+
+      <div class="flex">
+        <button class="p-button p-component cores" @click="salvarPermissions">
+          Pdf
+        </button>
+        <button class="p-button p-component p-button-secondary mx-2" @click="dialogRoleUpdateVisible = false">
+          Sair
+        </button>
+      </div>
+    </Dialog>
 </template>
 
 <script setup>
@@ -450,9 +438,10 @@ import { baseUrls } from "../../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
 import { backLog } from "../../../../utils/accesRoute";
-console.log("Transacoes")
+console.log("Transacoes - terminal 2")
 const isActive = ref(true)
 const userFiltro = ref([])
+let dialogRoleUpdateVisible = ref(false);
 const dadosRelatorio = ref({
   id: null,
   gate: null,
@@ -507,6 +496,10 @@ const tabelaDados = ref({
 });
 
 const dataAtual = new Date();
+
+const detailsCancelar = async () => {
+  dialogRoleUpdateVisible.value = false;
+};
 
 const formatDates = (date) => {
   if (!date) return "";

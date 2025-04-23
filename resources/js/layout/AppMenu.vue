@@ -279,11 +279,11 @@ const cgate2dot1CargaGeralMenu = () => {
                     icon: 'pi pi-window-maximize',
                     to: '/cargaotwo/1Out'
                 },
-                {
-                    label: 'Portão 2',
-                    icon: 'pi pi-window-maximize',
-                    to: '/cargaotwo/2Out'
-                },
+                // {
+                //     label: 'Portão 2',
+                //     icon: 'pi pi-window-maximize',
+                //     to: '/cargaotwo/2Out'
+                // },
                 {
                     label: 'Portão 3',
                     icon: 'pi pi-window-maximize',
@@ -311,7 +311,7 @@ const cgateMenuPages1dot1 = (name) => {
     else {
         return ([
             cgate1dot1TerminalMenu(),
-            cgate1dot1CargaGeralMenu()
+            // cgate1dot1CargaGeralMenu()
         ])
     }
 
@@ -327,7 +327,7 @@ const cgateMenuPages1dot2 = (name) => {
         return ([
 
             cgate1dot2TerminalMenu(),
-            cgate1dot2CargaGeralMenu()
+            // cgate1dot2CargaGeralMenu()
 
         ])
     }

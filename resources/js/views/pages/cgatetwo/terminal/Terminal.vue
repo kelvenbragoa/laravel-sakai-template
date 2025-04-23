@@ -10,8 +10,8 @@
         'type',
       ]" table-style="min-width: 60rem"> -->
 
-      <DataTable :value="transactionsFilter" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy :first="first"
-      @page="onPageChange">
+    <DataTable :value="transactionsFilter" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy
+      :first="first" @page="onPageChange">
       <template #header>
         <div class="flex justify-between align-center">
           <h2>
@@ -45,38 +45,13 @@
       <Column field="truck_license_plate_number" header="Placa de caminhão" style="min-width: 12rem" />
       <Column field="transaction_gate" header="Gate" style="min-width: 12rem"></Column>
       <Column field="movement_type" header="Tipo de movimento" style="min-width: 12rem"></Column>
-      <Column field="created_at" header="Criado" style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ formatDate(data.created_at) }}
-        </template>
-      </Column>
-      <Column field="created_by" header="Criado por" style="min-width: 12rem">
-        <!-- <template #body="{ data }">
-          <Tag :value="data.status" :severity="getSeverity(data.status)" />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <Select
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="statuses"
-            placeholder="Status"
-            style="min-width: 12rem"
-            :showClear="true"
-            
-          >
-            <template #option="slotProps">
-              <Tag
-                :value="slotProps.option"
-                :severity="getSeverity(slotProps.option)"
-              />
-            </template>
-          </Select>
-        </template> -->
-      </Column>
       <Column header="Detalhes" style="min-width: 10rem">
         <template #body="{ data }">
-          <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
+          <Button class="btnEstiliza2" label="VER" icon="pi pi-eye" @click="generatePDFCanva(data)"
             style="border: 0px" />
+
+            <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
+            style="border: 0px; margin-left: 5px;" />
         </template>
       </Column>
     </DataTable>
@@ -105,49 +80,64 @@
       </div>
       <div class="lineRow">
         <span>gate</span>
-        <span>{{ dadosRelatorio.gate == null ? emptyField : dadosRelatorio.gate }}</span>
+        <span>{{ dadosRelatorio.transaction_gate == null ? emptyField : dadosRelatorio.transaction_gate }}</span>
       </div>
       <div class="lineRow">
         <span>Nome</span>
-        <span>{{ dadosRelatorio.first_last_name == null ? emptyField : dadosRelatorio.first_last_name }}</span>
+        <span>{{ dadosRelatorio.driver_name == null ? emptyField : dadosRelatorio.driver_name }}</span>
       </div>
       <div class="lineRow">
-        <span>Criado por </span>
-        <span>{{ dadosRelatorio.created_by == null ? emptyField : dadosRelatorio.created_by }}</span>
+        <span>Placa do caminhão </span>
+        <span>{{ dadosRelatorio.truck_license_plate_number == null ? emptyField : dadosRelatorio.truck_license_plate_number }}</span>
       </div>
       <div class="lineRow">
         <span>Tipo de movimento</span>
-        <span>{{ dadosRelatorio.movement == null ? emptyField : dadosRelatorio.movement }}</span>
+        <span>{{ dadosRelatorio.movement_type == null ? emptyField : dadosRelatorio.movement_type }}</span>
       </div>
       <div class="lineRow">
-        <span>Verificação</span>
-        <span>{{ dadosRelatorio.checklist == null ? emptyField : dadosRelatorio.checklist }}</span>
+        <span>Appointment</span>
+        <span>{{ dadosRelatorio.appointment_number == null ? emptyField : dadosRelatorio.appointment_number }}</span>
       </div>
       <div class="lineRow">
-        <span>Quant. Containers</span>
-        <span>{{ dadosRelatorio.containers == null ? emptyField : dadosRelatorio.containers }}</span>
+        <span>Selo 1</span>
+        <span>{{ dadosRelatorio.container_seal_1 == null ? emptyField : dadosRelatorio.container_seal_1 }}</span>
       </div>
       <div class="lineRow">
-        <span>Quant. trailers </span>
-        <span>{{ dadosRelatorio.trailers == null ? emptyField : dadosRelatorio.trailers }}</span>
+        <span>Selo 2</span>
+        <span>{{ dadosRelatorio.container_seal_2 == null ? emptyField : dadosRelatorio.container_seal_2 }}</span>
+      </div>
+
+      <div class="lineRow">
+        <span>Selo 3</span>
+        <span>{{ dadosRelatorio.container_seal_3 == null ? emptyField : dadosRelatorio.container_seal_3 }}</span>
+      </div>
+
+      <div class="lineRow">
+        <span>Selo 4</span>
+        <span>{{ dadosRelatorio.container_seal_4 == null ? emptyField : dadosRelatorio.container_seal_4 }}</span>
+      </div>
+      <div class="lineRow">
+        <span>Status</span>
+        <span>{{ dadosRelatorio.status == null ? emptyField : dadosRelatorio.status }}</span>
       </div>
       <div class="lineRow">
         <span>Número da carteira de motorista</span>
-        <span>{{ dadosRelatorio.driver_license_number == null ? emptyField : dadosRelatorio.driver_license_number }}</span>
+        <span>{{ dadosRelatorio.driver_license_number == null ? emptyField : dadosRelatorio.driver_license_number
+          }}</span>
       </div>
       <div class="lineRow">
         <span>Placa</span>
-        <span>{{ dadosRelatorio.main_plate == "" ? emptyField : dadosRelatorio.main_plate }}</span>
+        <span>{{ dadosRelatorio.type == "" ? emptyField : dadosRelatorio.type }}</span>
       </div>
       <div class="lineRow">
         <span>Atrelado 1</span>
         <span>{{ dadosRelatorio.trailer_1_license_plate_number ==
-          null ? emptyField : dadosRelatorio.trailer_1_license_plate_number}}</span>
+          null ? emptyField : dadosRelatorio.trailer_1_license_plate_number }}</span>
       </div>
       <div class="lineRow">
         <span>Atrelado 2</span>
         <span>{{ dadosRelatorio.trailer_2_license_plate_number ==
-          null ? emptyField : dadosRelatorio.trailer_2_license_plate_number}}</span>
+          null ? emptyField : dadosRelatorio.trailer_2_license_plate_number }}</span>
       </div>
       <div class="lineRow">
         <span>Num. Container</span>
@@ -162,9 +152,13 @@
         <span>{{ dadosRelatorio.container_number_3 == null ? emptyField : dadosRelatorio.container_number_3 }}</span>
       </div>
       <div class="lineRow">
+        <span>Num. Container 4</span>
+        <span>{{ dadosRelatorio.container_number_4 == null ? emptyField : dadosRelatorio.container_number_4 }}</span>
+      </div>
+      <div class="lineRow">
         <span>Selo do contêiner 2</span>
         <span>{{ dadosRelatorio.container_seal_number_2 ==
-          null ? emptyField : dadosRelatorio.container_seal_number_2}}</span>
+          null ? emptyField : dadosRelatorio.container_seal_number_2 }}</span>
       </div>
       <div class="lineRow">
         <span>Lista Verificação </span>
@@ -176,9 +170,10 @@
       </div>
       <div class="lineRow">
         <span>verificação de carteira de motorista </span>
-        <span>{{ dadosRelatorio.driver_license_check == null ? emptyField : dadosRelatorio.driver_license_check }}</span>
+        <span>{{ dadosRelatorio.driver_license_check == null ? emptyField : dadosRelatorio.driver_license_check
+          }}</span>
       </div>
-      
+
     </div>
     <div class="footerLd">
       <div class="lineDiv"></div>
@@ -190,7 +185,7 @@
           </span>
         </div>
         <div class="processadoPorCgate">
-          <span>{{dataLk}}</span>
+          <span>{{ dataLk }}</span>
         </div>
 
         <div class="processadoPorCgate">
@@ -201,61 +196,62 @@
     </div>
     <div class="imagensRelatorio">
       <div class="columTable">
-      <div class="lineRow">
-        <span>notes </span>
-        <span>{{ dadosRelatorio.notes == null ? emptyField : dadosRelatorio.notes }}</span>
+        <div class="lineRow">
+          <span>notes </span>
+          <span>{{ dadosRelatorio.notes == null ? emptyField : dadosRelatorio.notes }}</span>
+        </div>
+        <div class="lineRow">
+          <span>Atualização </span>
+          <span>{{ dadosRelatorio.updated_by == null ? emptyField : dadosRelatorio.updated_by }}</span>
+        </div>
+        <div class="lineRow">
+          <span>Atualizado em </span>
+          <span>{{ dadosRelatorio.updated_at == null ? emptyField : dadosRelatorio.updated_at }}</span>
+        </div>
+        <div class="lineRow">
+          <span>Criado em </span>
+          <span>{{ dadosRelatorio.created_at == null ? emptyField : dadosRelatorio.created_at }}</span>
+        </div>
       </div>
-      <div class="lineRow">
-        <span>Atualização </span>
-        <span>{{ dadosRelatorio.updated_by == null ? emptyField : dadosRelatorio.updated_by }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Atualizado em </span>
-        <span>{{ dadosRelatorio.updated_at == null ? emptyField : dadosRelatorio.updated_at }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Criado em </span>
-        <span>{{ dadosRelatorio.created_at == null ? emptyField : dadosRelatorio.created_at }}</span>
-      </div>
-    </div>
       <table>
         <thead>
           <th>
-            Matrícula do caminhão
+            Foto da carta
           </th>
           <th>
-            Matrícula do atrelado 1
+            Foto da matrícula do caminhão
           </th>
 
         </thead>
         <tr>
-          
-          <td :style="{ backgroundImage: 'url(' +baseUrls.storageUrl+''+dadosRelatorio.main_plate_cutout_photo + ')' }">
-           
-            <div class="imgNone" v-if="dadosRelatorio.main_plate_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+
+          <td :style="{ backgroundImage: 'url('+ dadosRelatorio.driver_license_photo + ')' }">
+
+            <div class="imgNone" v-if="dadosRelatorio.driver_license_photo == null">
+              <p>
+                Sem imagem
+              </p>
             </div>
-            
+
 
             <div class="imgNone" v-else>
-              
+
             </div>
 
           </td>
-          <td :style="{ backgroundImage: `url(${baseUrls.storageUrl}${dadosRelatorio.trailer_1_license_plate_cutout_photo})` }">
+          <td
+            :style="{ backgroundImage: `url(${dadosRelatorio.truck_license_plate_photo})` }">
 
 
 
-            <div class="imgNone" v-if="dadosRelatorio.trailer_1_license_plate_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+            <div class="imgNone" v-if="dadosRelatorio.truck_license_plate_photo == null">
+              <p>
+                Sem imagem
+              </p>
             </div>
 
             <div class="imgNone" v-else>
-              
+
             </div>
           </td>
 
@@ -265,7 +261,7 @@
       <table>
         <thead>
           <th>
-            Fotografia do contêiner 
+            Fotografia do contêiner
           </th>
 
           <th>
@@ -275,26 +271,28 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.container_number_1_cutout_photo + ')' }">
+          <td
+            :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.container_number_1_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.container_number_1_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+              <p>
+                Sem imagem
+              </p>
             </div>
 
             <div class="imgNone" v-else>
-              
+
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.driver_license_cutout_photo + ')' }">
+          <td
+            :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.driver_license_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.driver_license_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+              <p>
+                Sem imagem
+              </p>
             </div>
 
             <div class="imgNone" v-else>
-              
+
             </div>
           </td>
 
@@ -313,26 +311,28 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.container_number_3_cutout_photo + ')' }">
+          <td
+            :style="{ backgroundImage: `url(${dadosRelatorio.container_number_3_cutout_photo})` }">
             <div class="imgNone" v-if="dadosRelatorio.container_number_3_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+              <p>
+                Sem imagem
+              </p>
             </div>
 
             <div class="imgNone" v-else>
-              
+
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.container_number_2_cutout_photo + ')' }">
+          <td
+            :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.container_number_2_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.container_number_2_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+              <p>
+                Sem imagem
+              </p>
             </div>
 
             <div class="imgNone" v-else>
-              
+
             </div>
           </td>
 
@@ -351,26 +351,26 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.seal_2_cutout_photo + ')' }">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.seal_2_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.seal_2_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+              <p>
+                Sem imagem
+              </p>
             </div>
 
             <div class="imgNone" v-else>
-              
+
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.seal_3_cutout_photo + ')' }">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.seal_3_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.seal_3_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+              <p>
+                Sem imagem
+              </p>
             </div>
 
             <div class="imgNone" v-else>
-              
+
             </div>
           </td>
 
@@ -391,26 +391,27 @@
 
         </thead>
         <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.seal_1_cutout_photo + ')' }">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.seal_1_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.seal_1_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+              <p>
+                Sem imagem
+              </p>
             </div>
 
             <div class="imgNone" v-else>
-              
+
             </div>
           </td>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.trailer_2_license_plate_cutout_photo + ')' }">
+          <td
+            :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.trailer_2_license_plate_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.trailer_2_license_plate_cutout_photo == null">
-                <p>
-                  Sem imagem
-                </p>
+              <p>
+                Sem imagem
+              </p>
             </div>
 
             <div class="imgNone" v-else>
-              
+
             </div>
           </td>
 
@@ -426,7 +427,7 @@
             </span>
           </div>
           <div class="processadoPorCgate">
-            <span>{{dataLk}}</span>
+            <span>{{ dataLk }}</span>
           </div>
 
           <div class="processadoPorCgate">
@@ -458,27 +459,45 @@ const userFiltro = ref([])
 const first = ref(0);
 const dadosRelatorio = ref({
   id: null,
-  gate: null,
-  first_last_name: null,
-  created_by: null,
-  movement: null,
-  checklist: null,
-  containers: null,
-  trailers: null,
+  transaction_gate: null,
+  driver_name: null,
   driver_license_number: null,
-  main_plate: null,
+  truck_license_plate_number: null,
   trailer_1_license_plate_number: null,
   trailer_2_license_plate_number: null,
+  appointment_number: null,
   container_number_1: null,
   container_number_2: null,
   container_number_3: null,
-  container_seal_number_2: null,
-  checklist_check: null,
-  delivery_note_check: null,
-  driver_license_check: null,
-  notes: null,
-  updated_by: null,
-  updated_at: null,
+  container_number_4: null,
+  container_seal_1: null,
+  container_seal_2: null,
+  container_seal_3: null,
+  container_seal_4: null,
+  movement_type: null,
+  logged_user: null,
+  status: null,
+  type: null,
+  driver_license_photo: null,
+  truck_license_plate_photo: null,
+  trailer_1_license_plate_photo: null,
+  trailer_2_license_plate_photo: null,
+  container_photo_1: null,
+  container_photo_2: null,
+  container_photo_3: null,
+  container_photo_4: null,
+  container_seal_photo_1: null,
+  container_seal_photo_2: null,
+  container_seal_photo_3: null,
+  container_seal_photo_4: null,
+  tv_key: null,
+  appointment_nbr: null,
+  imdg: null,
+  external_ref_nbr: null,
+  driver_id: null,
+  comments: null,
+  created_at: null,
+  updated_at: null
 })
 
 
@@ -661,7 +680,7 @@ const totalRecords2 = ref(0); // Total de registros para paginação
 const currentPage = ref(1);
 const rowsPerPage = ref(15);
 const filters2 = ref({
-  global: { value: "" }, 
+  global: { value: "" },
 });
 
 
@@ -669,7 +688,7 @@ const getToken = () => {
   return localStorage.getItem("access_token");
 };
 function removerGate(texto) {
-    return texto.replace(/^Gate\s*/, '');
+  return texto.replace(/^Gate\s*/, '');
 }
 
 
@@ -691,7 +710,7 @@ const buscarTransccoes = async (page = 1) => {
         page: page,
         query: dadoSearch.value
       }
-      
+
     });
 
 
@@ -744,7 +763,7 @@ const filtroChange = () => {
     // userFiltro.value = [...usersL.value];
     transactionsFilter.value = [...transactions.value]
 
-    
+
 
     loading.value = false;
   } else {
@@ -759,21 +778,21 @@ onMounted(() => {
   // fetchTransactions(currentPage.value);
   tratamentoDoId()
   buscarTransccoes();
-  
+
 });
 
 const route = useRoute();
 const userId = route.params.id;
 const gateId = ref(userId);
 
-const tratamentoDoId = ()=>{
+const tratamentoDoId = () => {
   if (Number(gateId.value.indexOf("Out")) > -1) {
-  gateId.value = gateId.value.replace("Out", "");
-  gateId.value = `Gate ${gateId.value}`;
-} else {
-  gateId.value = gateId.value.replace("In", "");
-  gateId.value = `Gate ${gateId.value}`;
-}
+    gateId.value = gateId.value.replace("Out", "");
+    gateId.value = `Gate ${gateId.value}`;
+  } else {
+    gateId.value = gateId.value.replace("In", "");
+    gateId.value = `Gate ${gateId.value}`;
+  }
 }
 
 const data = ref([]);
@@ -937,13 +956,15 @@ const generatePDFs = async () => {
   const imagensElement = document.querySelector(".imagensRelatorio");
 
   if (!contentElement || contentElement.style.display === "none") {
-    return; 
+    return;
   }
 
   // corpo
-  const contentCanvas = await html2canvas(contentElement, {useCORS: true,
-  allowTaint: true,
-  scale: 2 });
+  const contentCanvas = await html2canvas(contentElement, {
+    useCORS: true,
+    allowTaint: true,
+    scale: 2
+  });
   const contentImgData = contentCanvas.toDataURL("image/jpeg", 1.0);
 
   let contentHeight = (contentCanvas.height * (pdfWidth - 2 * margin)) / contentCanvas.width;
@@ -953,9 +974,11 @@ const generatePDFs = async () => {
   pdf.addPage();
 
   // tabela
-  const imagensCanvas = await html2canvas(imagensElement, { useCORS: true,
-  allowTaint: true,
-  scale: 2 });
+  const imagensCanvas = await html2canvas(imagensElement, {
+    useCORS: true,
+    allowTaint: true,
+    scale: 2
+  });
   const imagensImgData = imagensCanvas.toDataURL("image/jpeg", 1.0);
   let imagensHeight = (imagensCanvas.height * (pdfWidth - 2 * margin)) / imagensCanvas.width;
 
@@ -973,7 +996,7 @@ watch(() => route.params.id, (newId) => {
   gateId.value = newId
   tratamentoDoId()
   buscarTransccoes()
-  
+
 })
 
 const getSeverity = (status) => {
@@ -1020,9 +1043,20 @@ p {
 
 .btnEstiliza {
   background-color: #5498f1;
+  border: 1px solid #5498f1;
+}
+.btnEstiliza2 {
+  background-color: #fff;
+  border: 1px solid #5498f1!important;
+  color: #5498f1;
 }
 
 .btnEstiliza:hover {
   background-color: #046df7 !important;
+}
+
+.btnEstiliza2:hover {
+  background-color: #5498f1 !important;
+  color: #fff;
 }
 </style>

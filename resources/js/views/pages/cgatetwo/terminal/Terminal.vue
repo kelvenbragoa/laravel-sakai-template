@@ -10,8 +10,13 @@
         'type',
       ]" table-style="min-width: 60rem"> -->
 
-    <DataTable :value="transactionsFilter" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy
-      :first="first" @page="onPageChange">
+    <DataTable :value="transactionsFilter" paginator :rows="rowsPerPage" :totalRecords="totalRecords"
+      lazy :first="first" @page="onPageChange">
+      <div v-if="loading" class="loader-overlay">
+        <div class="louderL">
+          <ProgressSpinner />
+        </div>
+      </div>
       <template #header>
         <div class="flex justify-between align-center">
           <h2>
@@ -38,7 +43,7 @@
         </div>
       </template>
       <template #empty> Nenhum dado encontrado. </template>
-      <template #loading> Carregando os dados. Por favor, aguarde. </template>
+      <!-- <template #loading> Carregando os dados. Por favor, aguarde. </template> -->
       <!-- <Column field="appointment_nbr" header="Appointment Number" style="min-width: 12rem" /> -->
 
       <Column field="driver_name" header="Condutor" style="min-width: 12rem" />
@@ -47,398 +52,519 @@
       <Column field="movement_type" header="Tipo de movimento" style="min-width: 12rem"></Column>
       <Column header="Detalhes" style="min-width: 10rem">
         <template #body="{ data }">
-          <Button class="btnEstiliza2" label="VER" icon="pi pi-eye" @click="generatePDFCanva(data)"
-            style="border: 0px" />
+          <Button class="btnEstiliza" label="VER" icon="pi pi-eye" @click="detailsOpen(data)" style="border: 0px" />
 
-            <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
-            style="border: 0px; margin-left: 5px;" />
+          <!-- <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
+            style="border: 0px; margin-left: 5px;" /> -->
         </template>
       </Column>
     </DataTable>
   </div>
 
-  <div id="pdf-content">
-    <div class="detalhesLogo">
-      <div class="detalhesName">
-        <span>
-          Detalhes da transação:
-        </span>
-        <span>
-          <span>{{ dadosRelatorio.id == null ? emptyField : dadosRelatorio.id }}</span>
-        </span>
-      </div>
-      <div class="logoCornelderRelatorio">
-        <!-- <img src="/public/logo.png" alt=""> -->
-        <div class="imageLogoPdf"></div>
-      </div>
-    </div>
-    <div class="lineDiv"></div>
-    <div class="columTable">
-      <div class="lineRow">
-        <span>Id</span>
-        <span>{{ dadosRelatorio.id == null ? emptyField : dadosRelatorio.id }}</span>
-      </div>
-      <div class="lineRow">
-        <span>gate</span>
-        <span>{{ dadosRelatorio.transaction_gate == null ? emptyField : dadosRelatorio.transaction_gate }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Nome</span>
-        <span>{{ dadosRelatorio.driver_name == null ? emptyField : dadosRelatorio.driver_name }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Placa do caminhão </span>
-        <span>{{ dadosRelatorio.truck_license_plate_number == null ? emptyField : dadosRelatorio.truck_license_plate_number }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Tipo de movimento</span>
-        <span>{{ dadosRelatorio.movement_type == null ? emptyField : dadosRelatorio.movement_type }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Appointment</span>
-        <span>{{ dadosRelatorio.appointment_number == null ? emptyField : dadosRelatorio.appointment_number }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Selo 1</span>
-        <span>{{ dadosRelatorio.container_seal_1 == null ? emptyField : dadosRelatorio.container_seal_1 }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Selo 2</span>
-        <span>{{ dadosRelatorio.container_seal_2 == null ? emptyField : dadosRelatorio.container_seal_2 }}</span>
-      </div>
-
-      <div class="lineRow">
-        <span>Selo 3</span>
-        <span>{{ dadosRelatorio.container_seal_3 == null ? emptyField : dadosRelatorio.container_seal_3 }}</span>
-      </div>
-
-      <div class="lineRow">
-        <span>Selo 4</span>
-        <span>{{ dadosRelatorio.container_seal_4 == null ? emptyField : dadosRelatorio.container_seal_4 }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Status</span>
-        <span>{{ dadosRelatorio.status == null ? emptyField : dadosRelatorio.status }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Número da carteira de motorista</span>
-        <span>{{ dadosRelatorio.driver_license_number == null ? emptyField : dadosRelatorio.driver_license_number
-          }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Placa</span>
-        <span>{{ dadosRelatorio.type == "" ? emptyField : dadosRelatorio.type }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Atrelado 1</span>
-        <span>{{ dadosRelatorio.trailer_1_license_plate_number ==
-          null ? emptyField : dadosRelatorio.trailer_1_license_plate_number }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Atrelado 2</span>
-        <span>{{ dadosRelatorio.trailer_2_license_plate_number ==
-          null ? emptyField : dadosRelatorio.trailer_2_license_plate_number }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Num. Container</span>
-        <span>{{ dadosRelatorio.container_number_1 == null ? emptyField : dadosRelatorio.container_number_1 }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Num. Container 2</span>
-        <span>{{ dadosRelatorio.container_number_2 == null ? emptyField : dadosRelatorio.container_number_2 }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Num. Container 3</span>
-        <span>{{ dadosRelatorio.container_number_3 == null ? emptyField : dadosRelatorio.container_number_3 }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Num. Container 4</span>
-        <span>{{ dadosRelatorio.container_number_4 == null ? emptyField : dadosRelatorio.container_number_4 }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Selo do contêiner 2</span>
-        <span>{{ dadosRelatorio.container_seal_number_2 ==
-          null ? emptyField : dadosRelatorio.container_seal_number_2 }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Lista Verificação </span>
-        <span>{{ dadosRelatorio.checklist_check == null ? emptyField : dadosRelatorio.checklist_check }}</span>
-      </div>
-      <div class="lineRow">
-        <span>Nota de entrega verificação </span>
-        <span>{{ dadosRelatorio.delivery_note_check == null ? emptyField : dadosRelatorio.delivery_note_check }}</span>
-      </div>
-      <div class="lineRow">
-        <span>verificação de carteira de motorista </span>
-        <span>{{ dadosRelatorio.driver_license_check == null ? emptyField : dadosRelatorio.driver_license_check
-          }}</span>
-      </div>
-
-    </div>
-    <div class="footerLd">
-      <div class="lineDiv"></div>
-      <div class="containerFooter">
-        <div class="processadoPorCgate">
-          <span>Processado por:</span>
-          <span>
-            C-gate
-          </span>
-        </div>
-        <div class="processadoPorCgate">
-          <span>{{ dataLk }}</span>
-        </div>
-
-        <div class="processadoPorCgate">
-          <span>1/2</span>
-        </div>
-      </div>
-
-    </div>
-    <div class="imagensRelatorio">
-      <div class="columTable">
-        <div class="lineRow">
-          <span>notes </span>
-          <span>{{ dadosRelatorio.notes == null ? emptyField : dadosRelatorio.notes }}</span>
-        </div>
-        <div class="lineRow">
-          <span>Atualização </span>
-          <span>{{ dadosRelatorio.updated_by == null ? emptyField : dadosRelatorio.updated_by }}</span>
-        </div>
-        <div class="lineRow">
-          <span>Atualizado em </span>
-          <span>{{ dadosRelatorio.updated_at == null ? emptyField : dadosRelatorio.updated_at }}</span>
-        </div>
-        <div class="lineRow">
-          <span>Criado em </span>
-          <span>{{ dadosRelatorio.created_at == null ? emptyField : dadosRelatorio.created_at }}</span>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <th>
-            Foto da carta
-          </th>
-          <th>
-            Foto da matrícula do caminhão
-          </th>
-
-        </thead>
-        <tr>
-
-          <td :style="{ backgroundImage: 'url('+ dadosRelatorio.driver_license_photo + ')' }">
-
-            <div class="imgNone" v-if="dadosRelatorio.driver_license_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
 
 
-            <div class="imgNone" v-else>
-
-            </div>
-
-          </td>
-          <td
-            :style="{ backgroundImage: `url(${dadosRelatorio.truck_license_plate_photo})` }">
-
-
-
-            <div class="imgNone" v-if="dadosRelatorio.truck_license_plate_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
-
-            <div class="imgNone" v-else>
-
-            </div>
-          </td>
-
-        </tr>
-      </table>
-
-      <table>
-        <thead>
-          <th>
-            Fotografia do contêiner
-          </th>
-
-          <th>
-            Fotografia da carta de condução
-          </th>
-
-
-        </thead>
-        <tr>
-          <td
-            :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.container_number_1_cutout_photo + ')' }">
-            <div class="imgNone" v-if="dadosRelatorio.container_number_1_cutout_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
-
-            <div class="imgNone" v-else>
-
-            </div>
-          </td>
-          <td
-            :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.driver_license_cutout_photo + ')' }">
-            <div class="imgNone" v-if="dadosRelatorio.driver_license_cutout_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
-
-            <div class="imgNone" v-else>
-
-            </div>
-          </td>
-
-        </tr>
-      </table>
-
-      <table>
-        <thead>
-          <th>
-            Fotografia do contêiner 3
-          </th>
-          <th>
-            Fotografia do contêiner 2
-          </th>
-
-
-        </thead>
-        <tr>
-          <td
-            :style="{ backgroundImage: `url(${dadosRelatorio.container_number_3_cutout_photo})` }">
-            <div class="imgNone" v-if="dadosRelatorio.container_number_3_cutout_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
-
-            <div class="imgNone" v-else>
-
-            </div>
-          </td>
-          <td
-            :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.container_number_2_cutout_photo + ')' }">
-            <div class="imgNone" v-if="dadosRelatorio.container_number_2_cutout_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
-
-            <div class="imgNone" v-else>
-
-            </div>
-          </td>
-
-        </tr>
-      </table>
-
-      <table>
-        <thead>
-          <th>
-            Fotografia de selo 2
-          </th>
-          <th>
-            Fotografia de selo 3
-          </th>
-
-
-        </thead>
-        <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.seal_2_cutout_photo + ')' }">
-            <div class="imgNone" v-if="dadosRelatorio.seal_2_cutout_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
-
-            <div class="imgNone" v-else>
-
-            </div>
-          </td>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.seal_3_cutout_photo + ')' }">
-            <div class="imgNone" v-if="dadosRelatorio.seal_3_cutout_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
-
-            <div class="imgNone" v-else>
-
-            </div>
-          </td>
-
-
-        </tr>
-      </table>
-      <table>
-        <thead>
-
-          <th>
-            Fotografia de selo 1
-          </th>
-          <th>
-            Fotografia de atrelado 2
-          </th>
-
-
-
-        </thead>
-        <tr>
-          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.seal_1_cutout_photo + ')' }">
-            <div class="imgNone" v-if="dadosRelatorio.seal_1_cutout_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
-
-            <div class="imgNone" v-else>
-
-            </div>
-          </td>
-          <td
-            :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.trailer_2_license_plate_cutout_photo + ')' }">
-            <div class="imgNone" v-if="dadosRelatorio.trailer_2_license_plate_cutout_photo == null">
-              <p>
-                Sem imagem
-              </p>
-            </div>
-
-            <div class="imgNone" v-else>
-
-            </div>
-          </td>
-
-        </tr>
-      </table>
-      <div class="footerLd">
-        <div class="lineDiv"></div>
-        <div class="containerFooter">
-          <div class="processadoPorCgate">
-            <span>Processado por:</span>
+  <Dialog header="Detalhes" v-model:visible="dialogRoleUpdateVisible" :closable="true" :modal="true" :draggable="false"
+    :resizable="false" style="width:  250mm; min-height: 90vh" :footer="productDialogFooterForm">
+    <div class="containerDetailsDialog">
+      <div id="pdf-content">
+        <div class="detalhesLogo">
+          <div class="detalhesName">
             <span>
-              C-gate
+              Detalhes da transação:
+            </span>
+            <span>
+              <span>{{ dadosRelatorio.id == null ? emptyField : dadosRelatorio.id }}</span>
             </span>
           </div>
-          <div class="processadoPorCgate">
-            <span>{{ dataLk }}</span>
+          <div class="logoCornelderRelatorio">
+            <!-- <img src="/public/logo.png" alt=""> -->
+            <div class="imageLogoPdf"></div>
+          </div>
+        </div>
+        <div class="lineDiv"></div>
+        <div class="columTable">
+          <div class="lineRow">
+            <span>Id</span>
+            <span>{{ dadosRelatorio.id == null ? emptyField : dadosRelatorio.id }}</span>
+          </div>
+          <div class="lineRow">
+            <span>gate</span>
+            <span>{{ dadosRelatorio.transaction_gate == null ? emptyField : dadosRelatorio.transaction_gate }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Nome</span>
+            <span>{{ dadosRelatorio.driver_name == null ? emptyField : dadosRelatorio.driver_name }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Placa do caminhão </span>
+            <span>{{ dadosRelatorio.truck_license_plate_number == null ? emptyField :
+              dadosRelatorio.truck_license_plate_number }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Tipo de movimento</span>
+            <span>{{ dadosRelatorio.movement_type == null ? emptyField : dadosRelatorio.movement_type }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Appointment</span>
+            <span>{{ dadosRelatorio.appointment_number == null ? emptyField : dadosRelatorio.appointment_number
+            }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Selo 1</span>
+            <span>{{ dadosRelatorio.container_seal_1 == null ? emptyField : dadosRelatorio.container_seal_1 }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Selo 2</span>
+            <span>{{ dadosRelatorio.container_seal_2 == null ? emptyField : dadosRelatorio.container_seal_2 }}</span>
           </div>
 
-          <div class="processadoPorCgate">
-            <span>2/2</span>
+          <div class="lineRow">
+            <span>Selo 3</span>
+            <span>{{ dadosRelatorio.container_seal_3 == null ? emptyField : dadosRelatorio.container_seal_3 }}</span>
+          </div>
+
+          <div class="lineRow">
+            <span>Selo 4</span>
+            <span>{{ dadosRelatorio.container_seal_4 == null ? emptyField : dadosRelatorio.container_seal_4 }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Status</span>
+            <span>{{ dadosRelatorio.status == null ? emptyField : dadosRelatorio.status }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Número da carteira de motorista</span>
+            <span>{{ dadosRelatorio.driver_license_number == null ? emptyField : dadosRelatorio.driver_license_number
+            }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Tipo</span>
+            <span>{{ dadosRelatorio.type == "" ? emptyField : dadosRelatorio.type }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Atrelado 1</span>
+            <span>{{ dadosRelatorio.trailer_1_license_plate_number ==
+              null ? emptyField : dadosRelatorio.trailer_1_license_plate_number }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Atrelado 2</span>
+            <span>{{ dadosRelatorio.trailer_2_license_plate_number ==
+              null ? emptyField : dadosRelatorio.trailer_2_license_plate_number }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Num. Container</span>
+            <span>{{ dadosRelatorio.container_number_1 == null ? emptyField : dadosRelatorio.container_number_1
+            }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Num. Container 2</span>
+            <span>{{ dadosRelatorio.container_number_2 == null ? emptyField : dadosRelatorio.container_number_2
+            }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Num. Container 3</span>
+            <span>{{ dadosRelatorio.container_number_3 == null ? emptyField : dadosRelatorio.container_number_3
+            }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Num. Container 4</span>
+            <span>{{ dadosRelatorio.container_number_4 == null ? emptyField : dadosRelatorio.container_number_4
+            }}</span>
+          </div>
+
+
+        </div>
+        <div class="footerLd">
+          <div class="lineDiv"></div>
+          <div class="containerFooter">
+            <div class="processadoPorCgate">
+              <span>Processado por:</span>
+              <span>
+                C-gate
+              </span>
+            </div>
+            <div class="processadoPorCgate">
+              <span>{{ dataLk }}</span>
+            </div>
+
+            <div class="processadoPorCgate">
+              <span>1/3</span>
+            </div>
+          </div>
+
+        </div>
+        <div class="imagensRelatorio">
+          <div class="columTable">
+            <div class="lineRow">
+              <span>Tv key</span>
+              <span>{{ dadosRelatorio.tv_key ==
+                null ? emptyField : dadosRelatorio.tv_key }}</span>
+            </div>
+            <div class="lineRow">
+              <span>appointment nbr </span>
+              <span>{{ dadosRelatorio.appointment_nbr == null ? emptyField : dadosRelatorio.appointment_nbr }}</span>
+            </div>
+            <div class="lineRow">
+              <span>Imdg </span>
+              <span>{{ dadosRelatorio.imdg == null ? emptyField : dadosRelatorio.imdg
+              }}</span>
+            </div>
+            <div class="lineRow">
+              <span>núm. de ref. ext </span>
+              <span>{{ dadosRelatorio.external_ref_nbr == null ? emptyField : dadosRelatorio.external_ref_nbr
+              }}</span>
+            </div>
+          </div>
+          <div class="columTable">
+            <div class="lineRow">
+              <span>comentários </span>
+              <span>{{ dadosRelatorio.comments == null ? emptyField : dadosRelatorio.comments }}</span>
+            </div>
+            <div class="lineRow">
+              <span>Id do condutor </span>
+              <span>{{ dadosRelatorio.driver_id == null ? emptyField : dadosRelatorio.driver_id }}</span>
+            </div>
+            <div class="lineRow">
+              <span>Atualizado em </span>
+              <span>{{ dadosRelatorio.updated_at == null ? emptyField : dadosRelatorio.updated_at }}</span>
+            </div>
+            <div class="lineRow">
+              <span>Criado em </span>
+              <span>{{ dadosRelatorio.created_at == null ? emptyField : dadosRelatorio.created_at }}</span>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <th>
+                Foto da carta
+              </th>
+              <th>
+                Foto da matrícula do caminhão
+              </th>
+
+            </thead>
+            <tr>
+
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.driver_license_photo + ')' }">
+
+                <div class="imgNone" v-if="dadosRelatorio.driver_license_photo == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+
+                <div class="imgNone" v-else>
+
+                </div>
+
+              </td>
+              <td :style="{ backgroundImage: `url(${dadosRelatorio.truck_license_plate_photo})` }">
+
+
+
+                <div class="imgNone" v-if="dadosRelatorio.truck_license_plate_photo == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+
+            </tr>
+          </table>
+
+          <table>
+            <thead>
+              <th>
+                Foto da placa do reboque 1
+              </th>
+
+              <th>
+                Foto da placa do reboque 1
+              </th>
+
+
+            </thead>
+            <tr>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.trailer_1_license_plate_photo + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.trailer_1_license_plate_photo == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.trailer_2_license_plate_photo + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.trailer_2_license_plate_photo == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+
+            </tr>
+          </table>
+
+          <table>
+            <thead>
+              <th>
+                Foto do contêiner 1
+              </th>
+              <th>
+                Foto do contêiner 2
+              </th>
+
+
+            </thead>
+            <tr>
+              <td :style="{ backgroundImage: `url(${dadosRelatorio.foto_do_contêiner_1})` }">
+                <div class="imgNone" v-if="dadosRelatorio.foto_do_contêiner_1 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_photo_2 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.container_photo_2 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+
+            </tr>
+          </table>
+
+
+
+          <div class="footerLd">
+            <div class="lineDiv"></div>
+            <div class="containerFooter">
+              <div class="processadoPorCgate">
+                <span>Processado por:</span>
+                <span>
+                  C-gate
+                </span>
+              </div>
+              <div class="processadoPorCgate">
+                <span>{{ dataLk }}</span>
+              </div>
+
+              <div class="processadoPorCgate">
+                <span>2/3</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="imagensRelatorio2">
+          <table>
+            <thead>
+              <th>
+                Foto do contêiner 3
+              </th>
+              <th>
+                Foto do contêiner 4
+              </th>
+
+
+            </thead>
+            <tr>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_photo_3 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.container_photo_3 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_photo_4 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.container_photo_4 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+
+
+            </tr>
+          </table>
+          <table>
+            <thead>
+
+              <th>
+                foto do selo do contêiner 1
+              </th>
+              <th>
+                foto do selo do contêiner 2
+              </th>
+
+
+
+            </thead>
+            <tr>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.foto_do_selo_do_contêiner_1 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.foto_do_selo_do_contêiner_1 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_seal_photo_2 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.container_seal_photo_2 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+
+            </tr>
+          </table>
+          <table>
+            <thead>
+
+              <th>
+                foto do selo do contêiner 1
+              </th>
+              <th>
+                foto do selo do contêiner 2
+              </th>
+
+
+
+            </thead>
+            <tr>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.foto_do_selo_do_contêiner_1 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.foto_do_selo_do_contêiner_1 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_seal_photo_2 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.container_seal_photo_2 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+
+            </tr>
+          </table>
+
+          <table>
+            <thead>
+
+              <th>
+                foto do selo do contêiner 3
+              </th>
+              <th>
+                foto do selo do contêiner 4
+              </th>
+
+
+
+            </thead>
+            <tr>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_seal_photo_3 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.container_seal_photo_3 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+              <td :style="{ backgroundImage: 'url(' + dadosRelatorio.container_seal_photo_4 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.container_seal_photo_4 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+
+            </tr>
+          </table>
+          <div class="footerLd">
+            <div class="lineDiv"></div>
+            <div class="containerFooter">
+              <div class="processadoPorCgate">
+                <span>Processado por:</span>
+                <span>
+                  C-gate
+                </span>
+              </div>
+              <div class="processadoPorCgate">
+                <span>{{ dataLk }}</span>
+              </div>
+
+              <div class="processadoPorCgate">
+                <span>3/3</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
       </div>
     </div>
-
-  </div>
+    <div class="flex">
+      <button class="p-button p-component cores" @click="generatePDFCanva(dadosRelatorio)">
+        Pdf
+      </button>
+      <button class="p-button p-component p-button-secondary mx-2" @click="dialogRoleUpdateVisible = false">
+        SAIR
+      </button>
+    </div>
+  </Dialog>
 </template>
 
 <script setup>
@@ -454,6 +580,7 @@ import { baseUrls } from "../../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
 import { backLog } from "../../../../utils/accesRoute";
+const dialogRoleUpdateVisible = ref(false);
 const isActive = ref(true)
 const userFiltro = ref([])
 const first = ref(0);
@@ -507,6 +634,12 @@ const toast = useToast();
 const startDate = ref(null);
 const dateError = ref(false);
 const endDate = ref(null);
+
+const detailsOpen = (data) => {
+  dialogRoleUpdateVisible.value = true;
+  dadosRelatorio.value = data
+  console.log(dadosRelatorio.value)
+};
 
 const totalRecords = ref(0);
 
@@ -939,11 +1072,16 @@ const generatePDF = (rowData) => {
 };
 
 const generatePDFCanva = async (rowData) => {
+  loading.value = true
+  console.log(rowData)
   dadosRelatorio.value = { ...rowData }
 
   await nextTick();
   isActive.value = false
+  
+  
   generatePDFs();
+  
 
 }
 
@@ -954,6 +1092,7 @@ const generatePDFs = async () => {
   const margin = 10;
   const contentElement = document.getElementById("pdf-content");
   const imagensElement = document.querySelector(".imagensRelatorio");
+  const imagensElement2 = document.querySelector(".imagensRelatorio2");
 
   if (!contentElement || contentElement.style.display === "none") {
     return;
@@ -984,7 +1123,22 @@ const generatePDFs = async () => {
 
   pdf.addImage(imagensImgData, "JPEG", margin, margin, pdfWidth - 2 * margin, imagensHeight);
 
+  //pagina 3
+  pdf.addPage();
+
+  // tabela
+  const imagensCanvas2 = await html2canvas(imagensElement2, {
+    useCORS: true,
+    allowTaint: true,
+    scale: 2
+  });
+  const imagensImgData2 = imagensCanvas2.toDataURL("image/jpeg", 1.0);
+  let imagensHeight2 = (imagensCanvas2.height * (pdfWidth - 2 * margin)) / imagensCanvas2.width;
+
+  pdf.addImage(imagensImgData2, "JPEG", margin, margin, pdfWidth - 2 * margin, imagensHeight2);
+
   pdf.save("transacoes_relatorio.pdf");
+  loading.value = false
 };
 
 let dateToday = new Date()
@@ -1045,9 +1199,10 @@ p {
   background-color: #5498f1;
   border: 1px solid #5498f1;
 }
+
 .btnEstiliza2 {
   background-color: #fff;
-  border: 1px solid #5498f1!important;
+  border: 1px solid #5498f1 !important;
   color: #5498f1;
 }
 
@@ -1058,5 +1213,11 @@ p {
 .btnEstiliza2:hover {
   background-color: #5498f1 !important;
   color: #fff;
+}
+
+.cores {
+  background-color: #1558b0;
+  border: 1px solid #1558b0;
+  text-transform: uppercase;
 }
 </style>

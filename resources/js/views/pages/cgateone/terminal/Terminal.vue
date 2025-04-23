@@ -79,7 +79,7 @@
     </DataTable>
   </div>
 
-  <div id="pdf-content">
+  <div id="pdf-content" class="pdf-content-cgate1">
     <div class="detalhesLogo">
       <div class="detalhesName">
         <span>

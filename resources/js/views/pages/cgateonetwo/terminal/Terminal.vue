@@ -54,7 +54,7 @@
     </DataTable>
   </div>
 
-  <div id="pdf-content">
+  <div id="pdf-content" class="pdf-content-cgate1">
     <div class="detalhesLogo">
       <div class="detalhesName">
         <span>
@@ -411,18 +411,7 @@
 
   </div>
 
-  <Dialog header="Detalhes" v-model:visible="dialogRoleUpdateVisible" :closable="true" :modal="true"
-      :draggable="false" :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
-
-      <div class="flex">
-        <button class="p-button p-component cores" @click="salvarPermissions">
-          Pdf
-        </button>
-        <button class="p-button p-component p-button-secondary mx-2" @click="dialogRoleUpdateVisible = false">
-          Sair
-        </button>
-      </div>
-    </Dialog>
+  
 </template>
 
 <script setup>
@@ -438,10 +427,9 @@ import { baseUrls } from "../../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
 import { backLog } from "../../../../utils/accesRoute";
-console.log("Transacoes - terminal 2")
 const isActive = ref(true)
 const userFiltro = ref([])
-let dialogRoleUpdateVisible = ref(false);
+
 const dadosRelatorio = ref({
   id: null,
   gate: null,
@@ -497,9 +485,8 @@ const tabelaDados = ref({
 
 const dataAtual = new Date();
 
-const detailsCancelar = async () => {
-  dialogRoleUpdateVisible.value = false;
-};
+
+
 
 const formatDates = (date) => {
   if (!date) return "";

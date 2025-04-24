@@ -2,6 +2,9 @@
 import { useToast } from "primevue";
 import { onMounted, reactive, ref } from "vue";
 import { baseUrls } from "../../../api/index"
+import { backLog, checkAccess } from "../../../utils/accesRoute";
+
+checkAccess()
 
 const toast = useToast();
 const filtroDados = ref("");
@@ -16,16 +19,12 @@ const gateFiltros = ref([])
 
 
 
-console.log(getToken());
-
-
 const loading =  ref(false)
 
 const buscarGates = async () => {
   const token = getToken();
-  console.log(`Token: ${token}`)
   if (!token) {
-    alert('Token de autenticação não encontrado. Por favor, faça login.');
+    backLog()
     return;
   }
   try {
@@ -35,11 +34,7 @@ const buscarGates = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log("Response Gate")
     gates.value = response.data.data
-
-    console.log(response.data.data)
     
   } catch (error) {
     console.error("Erro ao carregar dados:", error);

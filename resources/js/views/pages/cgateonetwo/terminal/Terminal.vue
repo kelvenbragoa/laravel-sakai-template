@@ -42,44 +42,19 @@
       <Column field="main_plate" header="Placa de caminhão" style="min-width: 12rem" />
       <Column field="gate" header="Gate" style="min-width: 12rem"></Column>
       <Column field="movement" header="Tipo de movimento" style="min-width: 12rem"></Column>
-      <Column field="created_at" header="Criado" style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ formatDate(data.created_at) }}
-        </template>
-      </Column>
-      <Column field="created_by" header="Criado por" style="min-width: 12rem">
-        <!-- <template #body="{ data }">
-          <Tag :value="data.status" :severity="getSeverity(data.status)" />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <Select
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="statuses"
-            placeholder="Status"
-            style="min-width: 12rem"
-            :showClear="true"
-            
-          >
-            <template #option="slotProps">
-              <Tag
-                :value="slotProps.option"
-                :severity="getSeverity(slotProps.option)"
-              />
-            </template>
-          </Select>
-        </template> -->
-      </Column>
+
       <Column header="Detalhes" style="min-width: 10rem">
         <template #body="{ data }">
           <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
             style="border: 0px" />
+
+
         </template>
       </Column>
     </DataTable>
   </div>
 
-  <div id="pdf-content">
+  <div id="pdf-content" class="pdf-content-cgate1">
     <div class="detalhesLogo">
       <div class="detalhesName">
         <span>
@@ -227,20 +202,24 @@
         </thead>
         <tr>
           
-          <td :style="backgroundImage = `url(${dadosRelatorio.main_plate_cutout_photo})`">
+          <td :style="{ backgroundImage: 'url(' +baseUrls.storageUrl+''+dadosRelatorio.main_plate_cutout_photo + ')' }">
            
             <div class="imgNone" v-if="dadosRelatorio.main_plate_cutout_photo == null">
                 <p>
                   Sem imagem
                 </p>
             </div>
+            
 
             <div class="imgNone" v-else>
               
             </div>
 
           </td>
-          <td :style="backgroundImage = `url(${dadosRelatorio.trailer_1_license_plate_cutout_photo})`">
+          <td :style="{ backgroundImage: `url(${baseUrls.storageUrl}${dadosRelatorio.trailer_1_license_plate_cutout_photo})` }">
+
+
+
             <div class="imgNone" v-if="dadosRelatorio.trailer_1_license_plate_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -268,7 +247,7 @@
 
         </thead>
         <tr>
-          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_1_cutout_photo})`">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.container_number_1_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.container_number_1_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -279,7 +258,7 @@
               
             </div>
           </td>
-          <td :style="backgroundImage = `url(${dadosRelatorio.driver_license_cutout_photo})`">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.driver_license_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.driver_license_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -306,7 +285,7 @@
 
         </thead>
         <tr>
-          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_3_cutout_photo})`">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.container_number_3_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.container_number_3_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -317,7 +296,7 @@
               
             </div>
           </td>
-          <td :style="backgroundImage = `url(${dadosRelatorio.container_number_2_cutout_photo})`">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.container_number_2_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.container_number_2_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -344,7 +323,7 @@
 
         </thead>
         <tr>
-          <td :style="backgroundImage = `url(${dadosRelatorio.seal_2_cutout_photo})`">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.seal_2_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.seal_2_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -355,7 +334,7 @@
               
             </div>
           </td>
-          <td :style="backgroundImage = `url(${dadosRelatorio.seal_3_cutout_photo})`">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.seal_3_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.seal_3_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -384,7 +363,7 @@
 
         </thead>
         <tr>
-          <td :style="backgroundImage = `url(${dadosRelatorio.seal_1_cutout_photo})`">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.seal_1_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.seal_1_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -395,7 +374,7 @@
               
             </div>
           </td>
-          <td :style="backgroundImage = `url(${dadosRelatorio.trailer_2_license_plate_cutout_photo})`">
+          <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl+''+dadosRelatorio.trailer_2_license_plate_cutout_photo + ')' }">
             <div class="imgNone" v-if="dadosRelatorio.trailer_2_license_plate_cutout_photo == null">
                 <p>
                   Sem imagem
@@ -431,6 +410,8 @@
     </div>
 
   </div>
+
+  
 </template>
 
 <script setup>
@@ -448,6 +429,7 @@ import { nextTick } from 'vue';
 import { backLog } from "../../../../utils/accesRoute";
 const isActive = ref(true)
 const userFiltro = ref([])
+
 const dadosRelatorio = ref({
   id: null,
   gate: null,
@@ -502,6 +484,9 @@ const tabelaDados = ref({
 });
 
 const dataAtual = new Date();
+
+
+
 
 const formatDates = (date) => {
   if (!date) return "";
@@ -584,6 +569,7 @@ const filterDate = async () => {
           },
         }
       );
+
 
       userFiltro.value = response.data.data;
       transactions.value = response.data.data.data
@@ -684,6 +670,7 @@ function removerGate(texto) {
 }
 
 const buscarTransccoes = async () => {
+
   const token = getToken();
   if (!token) {
     backLog()
@@ -694,12 +681,18 @@ const buscarTransccoes = async () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      // params: {
-      //   gate: removerGate(gateId.value)
-      // }
+      params: {
+        gate: removerGate(gateId.value)
+      }
       
     });
+
+    console.log(removerGate(gateId.value))
+
     transactions.value = response.data.data.data;
+
+
+    // });
     // exportToExcel()
   } catch (error) {
     console.error("Erro ao carregar dados fkdsjf,:", error);
@@ -715,10 +708,10 @@ const exportToExcel = () => {
   XLSX.writeFile(workbook, "transacoes.xlsx");
 };
 
-// Troca de página
+
 const onPageChange = (event) => {
-  const newPage = event.page + 1; // PrimeVue usa index 0
-  // fetchTransactions(newPage);
+  const newPage = event.page + 1;
+
 };
 
 // Formatar data
@@ -809,9 +802,9 @@ const generatePDF = (rowData) => {
     return [r, g, b];
   }
 
-  // Definindo a cor de fundo com hexadecimal
-  let color = hexToRgb("#f5f5f5"); // Hexadecimal convertido para RGB
-  let color2 = hexToRgb("#ffffff"); // Hexadecimal convertido para RGB
+
+  let color = hexToRgb("#f5f5f5"); 
+  let color2 = hexToRgb("#ffffff"); 
 
   let corChange = false;
   // /images/logo.png
@@ -903,6 +896,7 @@ const generatePDF = (rowData) => {
 
 const generatePDFCanva = async (rowData) => {
   dadosRelatorio.value = { ...rowData }
+
   await nextTick();
   isActive.value = false
   generatePDFs();
@@ -922,7 +916,9 @@ const generatePDFs = async () => {
   }
 
   // corpo
-  const contentCanvas = await html2canvas(contentElement, { useCORS: true, scale: 2 });
+  const contentCanvas = await html2canvas(contentElement, {useCORS: true,
+  allowTaint: true,
+  scale: 2 });
   const contentImgData = contentCanvas.toDataURL("image/jpeg", 1.0);
 
   let contentHeight = (contentCanvas.height * (pdfWidth - 2 * margin)) / contentCanvas.width;
@@ -932,7 +928,9 @@ const generatePDFs = async () => {
   pdf.addPage();
 
   // tabela
-  const imagensCanvas = await html2canvas(imagensElement, { useCORS: true, scale: 2 });
+  const imagensCanvas = await html2canvas(imagensElement, { useCORS: true,
+  allowTaint: true,
+  scale: 2 });
   const imagensImgData = imagensCanvas.toDataURL("image/jpeg", 1.0);
   let imagensHeight = (imagensCanvas.height * (pdfWidth - 2 * margin)) / imagensCanvas.width;
 
@@ -943,8 +941,9 @@ const generatePDFs = async () => {
 
 let dateToday = new Date()
 const dataLk = ref(formatDate(String(dateToday)))
-
 const emptyField = ref("Vazio")
+
+
 watch(() => route.params.id, (newId) => {
   gateId.value = newId
   tratamentoDoId()

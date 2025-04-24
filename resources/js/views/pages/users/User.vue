@@ -6,7 +6,9 @@ import { onBeforeMount, onMounted, reactive, ref, watch } from "vue";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../api/index";
+import { useRouter } from "vue-router";
 
+checkAccess()
 let dialogoUserVisble = ref(false);
 let dialogUserUpdateVisible = ref(false);
 let dialogRoleUpdateVisible = ref(false);
@@ -22,6 +24,7 @@ const dadoSearch = ref("")
 
 const errorL = ref();
 const rowsPerPage = ref(50);
+
 const totalRecords = ref(0);
 const dadosUserDelete = ref({
   name: "",
@@ -50,7 +53,7 @@ const formDataSave = reactive({
   email: "",
   company_id: "0",
   password: "",
-  roles: [],
+  roles: "",
 });
 
 const countries = ref([
@@ -63,7 +66,7 @@ const gateIdArray = ref([])
 
 // Definindo a pré-seleção (exemplo: Moçambique)
 const selectedCountry = ref(countries.value[0]);
-const roleSelected = ref({ name: "" });
+const roleSelected = ref([]);
 // const gateSelected = ref({
 //   id: 70,
 //   user_id: "120",
@@ -86,7 +89,7 @@ const buscarUsuarios = async (page = 1) => {
   const token = getToken();
 
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {
@@ -141,6 +144,7 @@ const fetchPermissions = async () => {
 
 
 import axios from "axios";
+import { backLog, checkAccess } from "../../../utils/accesRoute";
 
 const fetchRoles = async () => {
   try {
@@ -295,19 +299,26 @@ const addUser = async () => {
 // }
 
 const salvarDadosShow = async () => {
+  let arrayRols = []
+  formDataSave.roles.forEach((elements)=>{
+    arrayRols.push(elements['name'])
+    // console.log(elements['name'])
+  })
   let dadosAddL = {
     user_full_name: formDataSave.name,
     user_name: formDataSave.user,
     email: formDataSave.email,
     company_id: String(formDataSave.company_id.id),
     password: formDataSave.password,
-    roles: [{ name: formDataSave.roles.name }],
+    roles: formDataSave.roles,
   };
+
+  console.log(dadosAddL)
 
   const token = getToken();
 
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   } else {
     verificadorDeCampos(dadosAddL);
@@ -359,7 +370,7 @@ const buscarEmpresas = async () => {
   const token = getToken();
 
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {
@@ -399,9 +410,6 @@ const atualizarDadosShow = async () => {
   gateIdArray.value = []
   gatePreSelecteds.value = []
 
-  console.log("Atualizar Gate")
-  console.log(gateSelected.value)
-
   gateSelected.value.forEach(dados => {
 
     gateIdArray.value.push({ "gate_id": dados.id })
@@ -415,15 +423,17 @@ const atualizarDadosShow = async () => {
     email: dadosAtualizar.email,
     is_active: Number(ative_selected.value.code),
     gates: gateIdArray.value,
-    roles: [{ name: roleSelected.value.name }],
+    roles: roleSelected.value,
   };
+
+  console.log(dadoAtualizacao)
 
 
 
 
   const token = getToken();
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   } else {
     verificadorDeCampos(dadoAtualizacao);
@@ -431,7 +441,7 @@ const atualizarDadosShow = async () => {
       dialogUserUpdateVisible.value = false;
       loading.value = true;
       try {
-        await axios.put(
+        await axios.post(
           `${baseUrls.userList}/${dadoAtualizacao.id}`,
           dadoAtualizacao,
           {
@@ -502,11 +512,11 @@ async function apaga() {
   loading.value = true;
   const token = getToken();
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {
-    const response = await axios.delete(
+    const response = await axios.post(
       `${baseUrls.userList}/${dadosUserDelete.value.id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -551,10 +561,6 @@ const dadosAtualizar = reactive({
   email: "",
   roles: roleSelected.value,
 });
-
-//mk
-
-console.log(gateSelected.value)
 const atualizarDados = (dados) => {
 
   gateSelected.value = []
@@ -565,10 +571,18 @@ const atualizarDados = (dados) => {
   dialogUserUpdateVisible.value = true;
   dadosAtualizar.id = dados.id;
   // // dadosAtualizar.roles = [{name: dados.roles[0].name}];
+  let arrayRols = []
+  dados.roles.forEach((elements)=>{
+    arrayRols.push({name: elements['name']})
+    // console.log(elements['name'])
+  })
 
-  roleSelected.value.name = dados.roles[0].name;
+  roleSelected.value = arrayRols
+
+  console.log(roleSelected.value)
+  
   dadosAtualizar.roles = roleSelected.value;
-
+  // console.log(dadosAtualizar.roles)
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
 
@@ -576,74 +590,16 @@ const atualizarDados = (dados) => {
     gatePreSelecteds.value.push(item)
     // gateSelected.value.push(item)
   })
-  console.log("---------------------")
   gates.value.forEach((gateUser) => {
 
     gatePreSelecteds.value.forEach((element) => {
 
       if (gateUser.id == element.gate_id) {
         gateSelected.value.push(gateUser)
-        console.log("Iguais")
-
       }
     })
 
   })
-  console.log("---------------------")
-
-  console.log(`gatePreSelecteds:`)
-  console.log(gatePreSelecteds.value.length)
-
-  // gates.value.forEach((gateUser) => {
-
-  //   if (dados.gate.length >= 1) {
-
-  //     dados.gate.forEach(gatesUser => {
-
-  //       if (gateUser.id == gatesUser.gate_id) {
-
-  //         if (gateSelected.value.length > 0) {
-
-  //           gateSelected.value.forEach(preSelected => {
-  //             console.log("Num items")
-  //             console.log(gateSelected.value.length)
-  //             console.log(preSelected)
-
-  //             if (gatesUser.gate_id != preSelected.id) {
-  //               // console.log(`gatePreSelecteds: ${gateSelected.value.length}`)
-  //               // console.log("Items")
-  //               console.log(gatePreSelecteds.value)
-
-  //                 gatePreSelecteds.value.forEach(item=>{
-  //                   // console.log("Items")
-  //                   // console.log(item)
-  //                   // if(removeGatePreSelected(item.gate_id, preSelected.id)){
-  //                   //   console.log("Ids diferentes")
-  //                   //   console.log(`item.gate_id: ${item.gate_id}`)
-  //                   //   console.log(`preSelected.id: ${preSelected.id}`)
-  //                   //   gateSelected.value.push(gateUser)
-  //                   // }else{
-  //                   //   console.log("Ids Iguais")
-  //                   //   console.log(`item.gate_id: ${item.gate_id}`)
-  //                   //   console.log(`preSelected.id: ${preSelected.id}`)
-  //                   // }
-  //                 })
-
-
-  //             }
-
-  //           })
-  //         } else {
-  //           gateSelected.value.push(gateUser)
-  //         }
-  //       }
-
-
-  //     })
-
-  //   }
-  // });
-  console.log("Pre selecionado: ");
   if (gateSelected.value == undefined) {
     gateSelected.value = [
       {
@@ -656,14 +612,7 @@ const atualizarDados = (dados) => {
         updated_at: "2025-03-04T07:01:43.383000Z",
       }
     ]
-    console.log("Indefinido o portao");
   }
-  // console.log(gateSelected.value);
-
-  console.log("Gate selected");
-  console.log("--------------------------------------------");
-  console.log(gateSelected.value);
-  console.log("--------------------------------------------");
 
   if (dados.is_active == "0") {
     ative_selected.value.name = "Inativo";
@@ -674,18 +623,10 @@ const atualizarDados = (dados) => {
   }
   dadosAtualizar.gate_id = gateSelected.value;
   dadosAtualizar.is_active = Number(ative_selected.value.code);
-
-  console.log("---------------------------------------------");
-
   userFiltro.value.forEach((element) => {
-    // console.log(element.roles.value)
-
     if (dados.id == element.id) {
-      console.log("User correct");
-
       element.roles.forEach((item) => {
         dadosAtualizar.roles = item.name;
-        console.log(formDataSave.roles);
       });
     }
   });
@@ -702,24 +643,18 @@ const removeGatePreSelected = (idPre, idCurrent) => {
 
 const disableMk = () => {
   dialogUserUpdateVisible.value = false;
-  console.log("Cancelar");
   gateSelected.value = []
 };
 
 const verificadorDeCampos = (dado) => {
-  console.log("Verificador de campos vazios");
-  console.log(dado);
   errorL.value = "";
   for (const key in dado) {
     if (dado[key] == "" || dado[key] == undefined) {
       if (key != "is_active") {
-        console.log(`Key: ${key}: sem dados`);
         errorL.value = `Preencha todos os dados`;
       }
     }
   }
-
-  console.log("-------------------------------------------------");
 };
 
 
@@ -735,9 +670,8 @@ const selectedCategories = ref([]);
 
 const buscarGates = async () => {
   const token = getToken();
-  console.log(`Token: ${token}`);
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {
@@ -746,11 +680,7 @@ const buscarGates = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log("Response Gate");
     gates.value = response.data.data;
-
-    console.log(response.data.data);
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -910,9 +840,13 @@ onMounted(() => {
         </div>
         <!-- Acesso -->
         <div class="formUserAdd">
-          <label for="acesso">Acesso</label>
-          <Select id="acesso" v-model="formDataSave.roles" :options="rolesName" optionLabel="name"
-            placeholder="S. Nivel de acesso" class="w-full"></Select>
+          <div class="field formUserAddI">
+            <label for="acesso">Acesso</label>
+            <MultiSelect v-model="formDataSave.roles" :options="rolesName" optionLabel="name" placeholder="Portões" display="chip"
+              class="w-full" />
+
+          </div>
+
         </div>
       </div>
 
@@ -979,14 +913,24 @@ onMounted(() => {
 
         </div>
 
-
         <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="acesso">Acesso</label>
+            <MultiSelect v-model="roleSelected" :options="rolesName" optionLabel="name" placeholder="Portões" display="chip"
+              class="w-full" />
+
+          </div>
+
+        </div>
+
+
+        <!-- <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Acesso</label>
             <Select id="acesso" v-model="roleSelected" :options="rolesName" optionLabel="name"
               placeholder="S. Nivel de acesso" class="w-full"></Select>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="formUserAdd">
         <div class="field formUserAddI">

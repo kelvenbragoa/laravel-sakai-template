@@ -57,18 +57,14 @@ const tabelaDados = ref({
   user_name: "Nome do usuário",
 });
 
-console.log(tabelaDados.value["cargo_type"]);
 
 const route = useRoute();
 const userId = route.params.id;
-// console.log(userId)
 let gateId = userId;
 if (Number(gateId.indexOf("Out")) > -1) {
-  console.log("tem saida");
   gateId = gateId.replace("Out", "");
   gateId = `Portão ${gateId} (Saida)`;
 } else {
-  console.log("tem entrada");
   gateId = gateId.replace("In", "");
   gateId = `Portão ${gateId} (Entrada)`;
 }
@@ -82,13 +78,9 @@ const loadData = async (page) => {
     if (response.ok) {
       const result = await response.json();
       dataFilter.value = result.data;
-      console.log(dataFilter.value);
-      // console.log(filters.value)
       if (filters.value.trim() === "") {
         data.value = dataFilter.value;
-        // console.log("Vazio")
       } else {
-        // console.log("Preenchido")
         data.value = dataFilter.value.filter(
           (dados) =>
             dados.status.toLowerCase().includes(filters.value.toLowerCase()) ||
@@ -236,7 +228,6 @@ const generatePDF = (rowData) => {
   doc.save(
     `doc_${rowData.driver_name}_${rowData.document_number_overwrite}_detalhes.pdf`
   );
-  // console.log(rowData)
 };
 
 // Carrega os dados inicialmente

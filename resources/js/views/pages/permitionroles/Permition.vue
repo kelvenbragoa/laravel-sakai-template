@@ -2,6 +2,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { DataTable, Column, Button, Dialog, MultiSelect } from "primevue";
+import { checkAccess } from "../../../utils/accesRoute";
+
+
+checkAccess()
 
 const roles = ref([]); 
 
@@ -20,16 +24,7 @@ const fetchRoles = async () => {
   try {
     const response = await fetch("/api/roles");
     const data = await response.json();
-    // roles.value = Array.isArray(data) ? data : []; 
     roles.value = data.data.data
-    // for(let items in data.data.data){
-    //   // console.log(roles.value[items])
-    //   for(let item in roles.value[items]){
-
-    //     console.log(roles.value[items][item])
-    //   }
-    // }
-     console.log(data.data)
   } catch (error) {
     console.error("Erro ao buscar roles:", error);
   }
@@ -40,13 +35,7 @@ const fetchPermissions = async () => {
   try {
     const response = await fetch("/api/permissions");
     const data = await response.json();
-    // permissions.value = Array.isArray(data) ? data : []; 
     permissions.value = data.data.data
-    // console.log(permissions)
-    // for(let items in permissions.value){
-    //   console.log(permissions.value[items])
-    // }
-    console.log(permissions.value)
   } catch (error) {
     console.error("Erro ao buscar permissions:", error);
   }
@@ -56,15 +45,7 @@ const fetchUsers = async () => {
   try {
     const response = await fetch("/api/users");
     const data = await response.json();
-    // permissions.value = Array.isArray(data) ? data : []; 
     usersL.value = data.data.data
-    console.log(usersL.value)
-
-    // console.log(permissions)
-    // for(let items in permissions.value){
-    //   console.log(permissions.value[items])
-    // }
-    // console.log(permissions.value)
   } catch (error) {
     console.error("Erro ao buscar permissions:", error);
   }
@@ -155,10 +136,8 @@ const addRole = async () => {
 
     if (response.ok) {
       const result = response.formData
-
-      console.log(result)
-      showAddDialog.value = false; // Fecha o dialog
-      fetchRoles(); // Atualiza a lista de roles
+      showAddDialog.value = false; 
+      fetchRoles(); 
       newRoleData.value = { name: "" }; // Reseta os dados
     } else {
       console.error("Erro ao adicionar nova role.");

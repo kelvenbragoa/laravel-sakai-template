@@ -52,7 +52,6 @@ const userInput = ref('');
 
 // Função chamada ao clicar no botão
 const printInput = () => {
-  console.log(userInput.value);
 };
 
 // Inicializando a função de confirmação
@@ -66,11 +65,10 @@ const showConfirm = () => {
     icon: 'pi pi-exclamation-triangle',
     accept: () => {
       // Ação quando o usuário clica em "Sim"
-      console.log('Ação confirmada!');
     },
     reject: () => {
       // Ação quando o usuário clica em "Não"
-      console.log('Ação cancelada!');
+
     }
   });
 
@@ -83,10 +81,7 @@ const toast = useToast();
 
 // Função para simular o salvamento de dados e mostrar a mensagem de sucesso
 const saveData = () => {
-  // Simula a ação de salvar
-  console.log('Dados salvos!');
 
-  // Exibe a mensagem de sucesso usando o Toast
   toast.add({
     severity: 'success',  // Tipo da mensagem (pode ser success, info, warn, error)
     summary: 'Salvo!',    // Título da mensagem
@@ -101,7 +96,7 @@ axios
     "https://cdmapi.cornelder.co.mz/cgate/api/v1/c_gate/general_cargo/list_transactions"
   )
   .then((res) => {
-    console.log(res.data);
+
   })
   .catch((error) => {
     console.log(error);

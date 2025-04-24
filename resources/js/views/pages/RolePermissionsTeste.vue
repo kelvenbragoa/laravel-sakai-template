@@ -20,23 +20,10 @@ const fetchRoles = async () => {
   try {
     const response = await fetch("/api/roles");
     const data = await response.json();
-    // roles.value = Array.isArray(data) ? data : []; 
     roles.value = data.data.data
-    // for(let items in data.data.data){
-    //   // console.log(roles.value[items])
-    //   for(let item in roles.value[items]){
-
-    //     console.log(roles.value[items][item])
-    //   }
-    // }
     filtroUsers.value = roles.value.filter((user)=>
      user.guard_name.includes("web")
     )
-    for(let item in roles.value){
-      console.log(item)
-    }
-    
-  console.log(filtroUsers.value)
   } catch (error) {
     console.error("Erro ao buscar roles:", error);
   }
@@ -47,13 +34,7 @@ const fetchPermissions = async () => {
   try {
     const response = await fetch("/api/permissions");
     const data = await response.json();
-    // permissions.value = Array.isArray(data) ? data : []; 
     permissions.value = data.data.data
-    // console.log(permissions)
-    // for(let items in permissions.value){
-    //   console.log(permissions.value[items])
-    // }
-    // console.log(permissions.value)
   } catch (error) {
     console.error("Erro ao buscar permissions:", error);
   }
@@ -159,11 +140,9 @@ const addRole = async () => {
 
     if (response.ok) {
       const result = response.formData
-
-      console.log(result)
-      showAddDialog.value = false; // Fecha o dialog
-      fetchRoles(); // Atualiza a lista de roles
-      newRoleData.value = { name: "" }; // Reseta os dados
+      showAddDialog.value = false; 
+      fetchRoles(); 
+      newRoleData.value = { name: "" }; 
     } else {
       console.error("Erro ao adicionar nova role.");
     }

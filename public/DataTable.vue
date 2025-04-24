@@ -88,7 +88,6 @@ const fetchPosts = async (page = 0) => {
     );
     posts.value = response.data;
     totalRecords.value = 100; 
-    console.log(posts.value); 
   } catch (error) {
     console.error('Error fetching posts:', error);
   }

@@ -13,6 +13,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { backLog } from '../../../utils/accesRoute';
 
 const getToken = () => {
   return localStorage.getItem("access_token");
@@ -25,9 +26,8 @@ const rowsPerPage = 10
 
 const fetchPosts = async (page = 1) => {
   const token = getToken();
-  console.log(`Token: ${page}`);
   if (!token) {
-    alert("Token de autenticação não encontrado. Por favor, faça login.");
+    backLog()
     return;
   }
   try {

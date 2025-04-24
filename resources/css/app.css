@@ -100,11 +100,11 @@
   border: 0px solid #ddd;
   background: white;
   font-size: 14px;
-  position: absolute;
+  /* position: absolute; */
   width: 210mm;
   height:  297mm;
-  top: 0px;
-  left: -9999px;
+  /* top: 0px;
+  left: -9999px; */
   
 }
 
@@ -121,6 +121,7 @@
 .active{
   display: none!important;
 }
+
 
 #pdf-content .detalhesName span:first-child {
   font-weight: 700;
@@ -260,6 +261,30 @@ td {
 }
 #pdf-content table {
   page-break-before: always;
+}
+
+.containerDetailsDialog{
+  height: calc(100vh - 220px);
+  overflow-y: auto;
+  border: 0px solid black;
+  margin-bottom: 10px;
+  /* width: 210mm; */
+  /* height:  297mm; */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.pdf-content-cgate1{
+  position: absolute!important;
+  padding: 20px;
+  border: 0px solid #ddd;
+  background: white;
+  font-size: 14px;
+  width: 210mm;
+  height:  297mm;
+  top: 0px;
+  left: -9999px;
 }
 @media print {
   .imagensRelatorio {

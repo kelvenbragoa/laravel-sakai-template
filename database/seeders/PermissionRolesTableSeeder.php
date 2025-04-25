@@ -20,6 +20,11 @@ class PermissionRolesTableSeeder extends Seeder
                 ['name' => 'Admin', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
                 ['name' => 'Manager', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
                 ['name' => 'Security', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+
+                ['name' => 'CGate1x-Terminal', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+                ['name' => 'CGate1x-General Cargo', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+                ['name' => 'CGate2x-Terminal', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+                ['name' => 'CGate2x-General Cargo', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
             ]
         );
 

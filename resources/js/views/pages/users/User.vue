@@ -12,10 +12,9 @@ checkAccess()
 let dialogoUserVisble = ref(false);
 let dialogUserUpdateVisible = ref(false);
 let dialogRoleUpdateVisible = ref(false);
+const applications = ref([])
 const rolesName = ref([]);
 let verificarA = ref([]);
-const checked = ref(true);
-const checked2 = ref([false]);
 const empresas = ref([]);
 const empresa = ref([]);
 const empresaName = ref([]);
@@ -39,13 +38,10 @@ const rolesItems = ref([]);
 const permissions = ref([]);
 
 const gates = ref([]);
-const gateFiltros = ref([]);
 
 const permissionsItems = [];
 
 const loading = ref(false);
-
-const breakLoopGate = ref(false)
 
 const formDataSave = reactive({
   name: "",
@@ -54,6 +50,8 @@ const formDataSave = reactive({
   company_id: "0",
   password: "",
   roles: "",
+  applications: "",
+  gate: ""
 });
 
 const countries = ref([
@@ -83,6 +81,32 @@ const ative_selected = ref({ name: "Inativo", code: "0" });
 
 const getToken = () => {
   return localStorage.getItem("access_token");
+};
+
+const buscarApplication = async () => {
+  loading.value = true;
+  const token = getToken();
+  if (!token) {
+    backLog()
+    return;
+  }
+  try {
+    const response = await axios.get(
+      baseUrls.applications, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    applications.value = response.data.data.data
+    ("Response")
+    (applications.value)
+
+
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 
 const buscarUsuarios = async (page = 1) => {
@@ -138,7 +162,7 @@ const fetchPermissions = async () => {
 
     loading.value = false;
   } catch (error) {
-    console.log(error);
+    (error);
   }
 };
 
@@ -299,21 +323,24 @@ const addUser = async () => {
 // }
 
 const salvarDadosShow = async () => {
-  let arrayRols = []
-  formDataSave.roles.forEach((elements)=>{
-    arrayRols.push(elements['name'])
-    // console.log(elements['name'])
-  })
+  // let arrayRols = []
+  // formDataSave.roles.forEach((elements)=>{
+  //   arrayRols.push(elements['name'])
+  //   // (elements['name'])
+  // })
   let dadosAddL = {
     user_full_name: formDataSave.name,
     user_name: formDataSave.user,
     email: formDataSave.email,
-    company_id: String(formDataSave.company_id.id),
+    // company_id: String(formDataSave.company_id.id),
     password: formDataSave.password,
     roles: formDataSave.roles,
+    gates: formDataSave.gate,
+    applications: formDataSave.applications
+
   };
 
-  console.log(dadosAddL)
+  (dadosAddL)
 
   const token = getToken();
 
@@ -349,6 +376,8 @@ const salvarDadosShow = async () => {
         formDataSave.password = "";
         formDataSave.company_id = "0";
         formDataSave.roles = [];
+        formDataSave.applications = [];
+        formDataSave.gate = []
       } catch (error) {
         console.error(
           "Erro ao adicionar usuário:",
@@ -418,15 +447,16 @@ const atualizarDadosShow = async () => {
 
 
   const dadoAtualizacao = {
-    id: dadosAtualizar.id,
+    // id: dadosAtualizar.id,
     user_full_name: dadosAtualizar.user_full_name,
     email: dadosAtualizar.email,
     is_active: Number(ative_selected.value.code),
     gates: gateIdArray.value,
     roles: roleSelected.value,
+    
   };
 
-  console.log(dadoAtualizacao)
+  (dadoAtualizacao)
 
 
 
@@ -441,8 +471,8 @@ const atualizarDadosShow = async () => {
       dialogUserUpdateVisible.value = false;
       loading.value = true;
       try {
-        await axios.post(
-          `${baseUrls.userList}/${dadoAtualizacao.id}`,
+        await axios.put(
+          `${baseUrls.userList}/${dadosAtualizar.id}`,
           dadoAtualizacao,
           {
             headers: {
@@ -516,7 +546,7 @@ async function apaga() {
     return;
   }
   try {
-    const response = await axios.post(
+    const response = await axios.delete(
       `${baseUrls.userList}/${dadosUserDelete.value.id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -560,8 +590,11 @@ const dadosAtualizar = reactive({
   is_active: Number(ative_selected.value.code),
   email: "",
   roles: roleSelected.value,
+  gate: gates.value,
 });
 const atualizarDados = (dados) => {
+  ("Gates")
+  (dados)
 
   gateSelected.value = []
   gateIdArray.value = []
@@ -574,15 +607,15 @@ const atualizarDados = (dados) => {
   let arrayRols = []
   dados.roles.forEach((elements)=>{
     arrayRols.push({name: elements['name']})
-    // console.log(elements['name'])
+    // (elements['name'])
   })
 
   roleSelected.value = arrayRols
 
-  console.log(roleSelected.value)
+  (roleSelected.value)
   
   dadosAtualizar.roles = roleSelected.value;
-  // console.log(dadosAtualizar.roles)
+  // (dadosAtualizar.roles)
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
 
@@ -680,7 +713,8 @@ const buscarGates = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    gates.value = response.data.data;
+    gates.value = response.data.data.data;
+    
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -701,6 +735,7 @@ onMounted(() => {
   buscarUsuarios();
   buscarEmpresas();
   buscarGates();
+  buscarApplication();
 });
 </script>
 
@@ -741,11 +776,11 @@ onMounted(() => {
       <Column field="user_name" header="Username" style="min-width: 10rem" sortable>
       </Column>
 
-      <Column field="company_id" header="Empresa" style="min-width: 10rem" sortable="">
+      <!-- <Column field="company_id" header="Empresa" style="min-width: 10rem" sortable="">
         <template #body="{ data }">
           {{ empresaMap[data.company_id] || data.company_id }}
         </template>
-      </Column>
+      </Column> -->
 
       <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
         <template #body="{ data }">
@@ -812,7 +847,7 @@ onMounted(() => {
       </div>
       <hr />
       <div class="camposAgrupadosFormulario my-5">
-        <!-- Nome nome -->
+        <!-- Usuario -->
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="name">User</label>
@@ -820,7 +855,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- Email -->
+        <!-- Nome completo -->
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="name">Nome completo</label>
@@ -830,7 +865,7 @@ onMounted(() => {
       </div>
 
       <div class="camposAgrupadosFormulario my-5">
-        <!-- Nome -->
+        <!-- Email -->
 
         <div class="formUserAdd">
           <div class="field formUserAddI">
@@ -850,11 +885,35 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="formUserAdd">
+      <div class="camposAgrupadosFormulario my-5">
+        <!-- Aplications -->
+
+        <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="acesso">Aplicações</label>
+            <MultiSelect v-model="formDataSave.applications" :options="applications" optionLabel="name" placeholder="Aplicações" display="chip"
+              class="w-full" />
+
+          </div>
+
+        </div>
+        <!-- Gates -->
+        <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="acesso">Gates</label>
+            <MultiSelect v-model="formDataSave.gate" :options="gates" optionLabel="name" placeholder="Portões" display="chip"
+              class="w-full" />
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- <div class="formUserAdd">
         <label for="empresa">Empresa</label>
         <Select id="empresa" v-model="formDataSave.company_id" :options="empresa" optionLabel="name"
           placeholder="Empresas" class="w-full"></Select>
-      </div>
+      </div> -->
 
       <!-- Senha -->
       <div class="formUserAdd" style="margin-top: 15px; width: 100%">

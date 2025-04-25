@@ -11,10 +11,12 @@ const toast = useToast();
 const filtroDados = ref("");
 const dialogGate = ref(false)
 const dialogGateUpdate = ref(false)
-const dialogGateDelete = ref(false)
+const dialogApplicationDelete = ref(false)
 
 const formDataSave = reactive({
-  name: ""
+  name: "",
+  version: "",
+  description: ""
 })
 
 const idGate = ref(0)
@@ -26,14 +28,14 @@ const getToken = () => {
 };
 
 const number = ref(0)
-const gates = ref([])
+const applications = ref([])
 const gateFiltros = ref([])
 
 
 
 const loading = ref(false)
 
-const buscarGates = async () => {
+const buscarApplication = async () => {
   loading.value = true;
   const token = getToken();
   if (!token) {
@@ -42,14 +44,12 @@ const buscarGates = async () => {
   }
   try {
     const response = await axios.get(
-      baseUrls.gate, {
+      baseUrls.applications, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    gates.value = response.data.data.data
-    ("Response")
-    (response)
+    applications.value = response.data.data.data
 
 
   } catch (error) {
@@ -59,88 +59,82 @@ const buscarGates = async () => {
   }
 };
 
-const saveGate = async () => {
+const saveApplications = async () => {
   loading.value = true;
   fieldIsEmpty.value = ""
   if (verifyEmpty(formDataSave)) {
-    ("Can save")
     const token = getToken();
     if (!token) {
       return;
     }
-    (`O token: ${token}`)
+
     try {
-      const response = await axios.post(baseUrls.gate, formDataSave, {
+      const response = await axios.post(baseUrls.applications, formDataSave, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
-      (response)
+
       loading.value = false;
       dialogGate.value = false
       fieldVoid(formDataSave)
-      buscarGates()
+      buscarApplication()
     } catch (error) {
       fieldIsEmpty.value = "Erro ao adicionar gate"
       loading.value = false;
     }
   } else {
     fieldIsEmpty.value = "Campo vazio"
-    ("Fill all field")
     loading.value = false;
   }
 
 }
 
-const getDataGate = (data) => {
+const getDataApplications = (data) => {
+  
   fieldIsEmpty.value = ""
   dialogGateUpdate.value = true
-  (data)
-  formDataSave.name = data.name
+  // formDataSave.name = data.name
   idGate.value = data.id
-  // for (let dados in data) {
-  //   formDataSave[dados] = data[dados]
-  // }
-
-
+  for (let dados in formDataSave) {
+    formDataSave[dados] = data[dados]
+  }
 
 }
 
-const getDataGateDelete = (data) => {
+const getDataApplicationsDelete = (data) => {
   fieldIsEmpty.value = ""
-  dialogGateDelete.value = true
+  dialogApplicationDelete.value = true
   idGate.value = data.id
 }
 
-const updateGate = async () => {
+const updateApplication = async () => {
   const token = getToken();
   if (!token) {
     return;
   }
   try {
     loading.value = true;
-    const response = await axios.put(`${baseUrls.gate}/${idGate.value}`, formDataSave, {
+    const response = await axios.put(`${baseUrls.applications}/${idGate.value}`, formDataSave, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
-    (response)
     dialogGateUpdate.value = false
     fieldVoid(formDataSave)
     loading.value = false;
     idGate.value = 0
-    buscarGates()
+    buscarApplication()
   } catch (error) {
     fieldIsEmpty.value = "Erro ao tentar atualizar"
     loading.value = false;
     console.error(`Erro ${error}`)
-    (`Token: ${token}`)
   }
 
 }
 
 
-const deleteGate = async () => {
+const deleteApplication = async () => {
   loading.value = true;
   const token = getToken();
   if (!token) {
@@ -148,17 +142,16 @@ const deleteGate = async () => {
   }
   fieldIsEmpty.value = ""
   try {
-    
-    const response = await axios.delete(`${baseUrls.gate}/${idGate.value}`, {
+
+    const response = await axios.delete(`${baseUrls.applications}/${idGate.value}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
     idGate.value = 0
     loading.value = false;
-    dialogGateDelete.value = false
-    buscarGates()
-    (response)
+    dialogApplicationDelete.value = false
+    buscarApplication()
   } catch (error) {
     loading.value = false;
     fieldIsEmpty.value = "Erro ao apagar o dado"
@@ -185,7 +178,7 @@ const fieldVoid = (data) => {
 
 
 onMounted(() => {
-  buscarGates();
+  buscarApplication();
 }
 )
 </script>
@@ -197,8 +190,8 @@ onMounted(() => {
     </div>
   </div>
   <div class="card">
-    <div class="font-semibold text-xl mb-4">Gates</div>
-    <DataTable :value="gates" :paginator="true" :rows="10">
+    <div class="font-semibold text-xl mb-4">Aplicações</div>
+    <DataTable :value="applications" :paginator="true" :rows="10">
       <template #header>
         <div class="flex justify-between">
           <IconField class="searchText">
@@ -217,6 +210,7 @@ onMounted(() => {
       <Column field="id" header="Id" style="min-width: 10rem"> </Column>
       <Column field="name" header="Nome" style="min-width: 12rem"> </Column>
       <Column field="created_by" header="Criado por" style="min-width: 12rem"> </Column>
+      <Column field="version" header="Versão" style="min-width: 12rem"> </Column>
 
       <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
         <template #body="{ data }">
@@ -228,7 +222,7 @@ onMounted(() => {
                 display: none;
               " />
             <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
-              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataGate(data)" />
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataApplications(data)" />
             <div>
 
               <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="
@@ -236,7 +230,7 @@ onMounted(() => {
                   background-color: transparent;
                   color: #ff0000;
                   border: 0px;
-                " @click="getDataGateDelete(data)" />
+                " @click="getDataApplicationsDelete(data)" />
             </div>
           </div>
         </template>
@@ -245,7 +239,7 @@ onMounted(() => {
   </div>
 
   <div class="p-fluid">
-    <Dialog header="Confirmação" v-model:visible="dialogGateDelete" :style="{ width: '350px' }" :modal="true">
+    <Dialog header="Confirmação" v-model:visible="dialogApplicationDelete" :style="{ width: '350px' }" :modal="true">
       <div class="msgErrorField">
         <p>
           {{ fieldIsEmpty }}
@@ -262,12 +256,12 @@ onMounted(() => {
         <span>Tens a certeza que queres eliminar?</span>
       </div>
       <template #footer>
-        <Button label="Não" icon="pi pi-times" @click="dialogGateDelete = false" text severity="secondary" />
-        <Button label="Sim" icon="pi pi-check" @click="deleteGate" severity="danger" outlined autofocus />
+        <Button label="Não" icon="pi pi-times" @click="dialogApplicationDelete = false" text severity="secondary" />
+        <Button label="Sim" icon="pi pi-check" @click="deleteApplication" severity="danger" outlined autofocus />
       </template>
     </Dialog>
 
-    <Dialog header="Atualizar Gate" v-model:visible="dialogGateUpdate" :closable="true" :modal="true" :draggable="false"
+    <Dialog header="Atualizar Aplicações" v-model:visible="dialogGateUpdate" :closable="true" :modal="true" :draggable="false"
       :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
       <!-- optionLabel="name" -->
       <div class="msgErrorField">
@@ -283,8 +277,21 @@ onMounted(() => {
         <InputText id="name" v-model="formDataSave.name" required autofocus class="w-full" />
 
       </div>
+
+      <div class="formUserAdd">
+        <label for="gatename">Versão</label>
+        <InputText id="name" v-model="formDataSave.version" required autofocus class="w-full" />
+
+      </div>
+
+      <div class="formUserAdd">
+        <label for="gatename">Descrição</label>
+        <Textarea v-model="formDataSave.description" rows="5" cols="30" />
+        <!-- <InputText id="name" v-model="formDataSave.name" required autofocus class="w-full" /> -->
+
+      </div>
       <div class="flex">
-        <button class="p-button p-component cores" @click="updateGate">
+        <button class="p-button p-component cores" @click="updateApplication">
           Atualizar
         </button>
         <button class="p-button p-component p-button-secondary mx-2" @click="dialogGateUpdate = false">
@@ -293,7 +300,7 @@ onMounted(() => {
       </div>
     </Dialog>
 
-    <Dialog header="Adicionar Gate" v-model:visible="dialogGate" :closable="true" :modal="true" :draggable="false"
+    <Dialog header="Adicionar Aplicações" v-model:visible="dialogGate" :closable="true" :modal="true" :draggable="false"
       :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
       <!-- optionLabel="name" -->
       <div class="msgErrorField">
@@ -309,8 +316,23 @@ onMounted(() => {
         <InputText id="name" v-model="formDataSave.name" required autofocus class="w-full" />
 
       </div>
+
+      <div class="formUserAdd">
+        <label for="gatename">Versão</label>
+        <InputText id="name" v-model="formDataSave.version" required autofocus class="w-full" />
+
+      </div>
+
+      <div class="formUserAdd">
+        <label for="gatename">Descrição</label>
+        <Textarea v-model="formDataSave.description" rows="5" cols="30" />
+        <!-- <InputText id="name" v-model="formDataSave.name" required autofocus class="w-full" /> -->
+
+      </div>
+
+
       <div class="flex">
-        <button class="p-button p-component cores" @click="saveGate">
+        <button class="p-button p-component cores" @click="saveApplications">
           Salvar
         </button>
         <button class="p-button p-component p-button-secondary mx-2" @click="dialogGate = false">
@@ -445,5 +467,12 @@ onMounted(() => {
 
 .sprate {
   height: 20px;
+}
+
+.formUserAdd textarea {
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 150px;
+  max-height: 150px;
 }
 </style>

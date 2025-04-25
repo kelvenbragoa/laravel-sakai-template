@@ -12,7 +12,7 @@ const getUserData = () => {
     }
     return false
 }
-console.log(getUserData())
+
 if (!getUserData()) {
     backLog()
 }
@@ -32,32 +32,6 @@ const acessRouters = ref(
 )
 
 const model = ref([]);
-const userMenus = ref([{
-    label: 'Usuários',
-    icon: 'pi pi-fw pi-users',
-    items: [
-        {
-            label: "Permissões",
-            icon: 'pi pi-key',
-            to: '/rolespermissions'
-        },
-        {
-            label: 'User',
-            icon: 'pi pi-user',
-            to: '/user'
-        },
-        {
-            label: 'Empresas',
-            icon: 'pi pi-building',
-            to: '/company'
-        },
-        {
-            label: 'Gates',
-            icon: 'pi pi-window-maximize',
-            to: '/gate'
-        }
-    ]
-}])
 
 const userMenu = () => {
     return ({
@@ -83,6 +57,11 @@ const userMenu = () => {
                 label: 'Gates',
                 icon: 'pi pi-window-maximize',
                 to: '/gate'
+            },
+            {
+                label: 'Aplicações',
+                icon: 'pi pi-mobile',
+                to: '/applications'
             }
         ]
     })

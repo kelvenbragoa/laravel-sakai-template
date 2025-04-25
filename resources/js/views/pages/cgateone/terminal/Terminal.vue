@@ -450,7 +450,7 @@ import { baseUrls } from "../../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
 import { backLog } from "../../../../utils/accesRoute";
-console.log("Transacoes")
+("Transacoes")
 const isActive = ref(true)
 const userFiltro = ref([])
 const dadosRelatorio = ref({
@@ -707,7 +707,7 @@ const buscarTransccoes = async () => {
       
     });
 
-    console.log(removerGate(gateId.value))
+    (removerGate(gateId.value))
 
     transactions.value = response.data.data.data;
 

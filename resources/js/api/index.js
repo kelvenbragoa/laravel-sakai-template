@@ -63,6 +63,7 @@ const baseURLCgate2 = "http://20.87.9.35/api/v1/transacoes"
     userList: `${baseURLCDMProd}/users`,
     empresaAdd: `${baseURLCDMProd}/companies`,
     gate: `${baseURLCDMProd}/gates`,
+    applications: `${baseURLCDMProd}/applications`,
     baseURl: baseURLCDMProd,
     storageUrl: storageImg
   };

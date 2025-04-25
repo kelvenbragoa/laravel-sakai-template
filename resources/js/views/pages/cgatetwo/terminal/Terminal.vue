@@ -638,7 +638,7 @@ const endDate = ref(null);
 const detailsOpen = (data) => {
   dialogRoleUpdateVisible.value = true;
   dadosRelatorio.value = data
-  console.log(dadosRelatorio.value)
+  (dadosRelatorio.value)
 };
 
 const totalRecords = ref(0);
@@ -750,7 +750,7 @@ const filterDate = async () => {
       userFiltro.value = response.data.data;
       transactions.value = response.data.result.data
       transactionsFilter.value = transactions.value
-      console.log("")
+      ("")
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
       toast.add({
@@ -900,7 +900,7 @@ const filtroChange = () => {
 
     loading.value = false;
   } else {
-    console.log(`Search: ${filtroDados.value}`)
+    (`Search: ${filtroDados.value}`)
     dadoSearch.value = filtroDados.value.toLowerCase()
     buscarTransccoes()
   }
@@ -1073,7 +1073,7 @@ const generatePDF = (rowData) => {
 
 const generatePDFCanva = async (rowData) => {
   loading.value = true
-  console.log(rowData)
+  (rowData)
   dadosRelatorio.value = { ...rowData }
 
   await nextTick();

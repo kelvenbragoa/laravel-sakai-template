@@ -687,7 +687,7 @@ const buscarTransccoes = async () => {
       
     });
 
-    console.log(removerGate(gateId.value))
+    (removerGate(gateId.value))
 
     transactions.value = response.data.data.data;
 

@@ -181,6 +181,11 @@ const router = createRouter({
                     path: "/gate",
                     name: "gate",
                     component: () => import('@/views/pages/gate/Gate.vue')
+                },
+                {
+                    path: "/applications",
+                    name: "applications",
+                    component: () => import('@/views/pages/application/Application.vue')
                 }
             ]
         },

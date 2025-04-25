@@ -39,7 +39,6 @@ const autenticar = async () => {
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("cgate_user", JSON.stringify(user));
       localStorage.setItem("cgate_logged_click", true)
-      // console.log(user)
 
       router.push("/dashboard");
       loading.value = false;

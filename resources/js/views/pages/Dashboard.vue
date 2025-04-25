@@ -9,8 +9,6 @@ import { onMounted } from 'vue';
 // const getUserData = ()=>{
 //     return JSON.parse(localStorage.getItem("cgate_user"))
 // }
-
-// console.log(getUserData())   
 </script>
 
 

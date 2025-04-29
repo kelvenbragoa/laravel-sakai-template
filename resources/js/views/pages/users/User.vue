@@ -7,6 +7,10 @@ import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../api/index";
 import { useRouter } from "vue-router";
+import axios from "axios";
+import { backLog, checkAccess } from "../../../utils/accesRoute";
+import { elements } from "chart.js";
+
 
 checkAccess()
 let dialogoUserVisble = ref(false);
@@ -97,10 +101,17 @@ const buscarApplication = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    applications.value = response.data.data.data
-    ("Response")
-    (applications.value)
+    // applications.value = response.data.data.data
+    // applications.value.forEach((elements) => {
+    //   applications.value['name'] = elements['name'] + elements['version']
+    // })
 
+    applications.value = response.data.data.data.map((element) => {
+      return {
+        ...element,
+        name: element.name +" "+ element.version,
+      };
+    });
 
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
@@ -167,8 +178,7 @@ const fetchPermissions = async () => {
 };
 
 
-import axios from "axios";
-import { backLog, checkAccess } from "../../../utils/accesRoute";
+
 
 const fetchRoles = async () => {
   try {
@@ -199,47 +209,11 @@ const fetchRoles = async () => {
   }
 };
 
-// watch(
-//   rolesName,
-//   (newRoles) => {
-//     if (newRoles.length > 0) {
-//       dadosAtualizar.roles =
-//         newRoles.find((role) => role.name === "Admin") || null;
-//     }
-//   },
-//   { immediate: true }
-// );
-
-const sexoItem = ref([
-  { name: "Masculino", code: "M" },
-  { name: "Feminino", code: "F" },
-]);
-
-const gateItem = ref([
-  { name: "Gate 4", code: 4 },
-  { name: "Gate 5", code: 5 },
-  { name: "Gate 6", code: 6 },
-  { name: "Gate 11A", code: 11 },
-  { name: "Gate 8A", code: 8 },
-  { name: "Gate 3", code: 3 },
-]);
 
 const statusItems = ref([
   { name: "Ativo", code: "1" },
   { name: "Inativo", code: "0" },
 ]);
-
-const acessoItem = ref([
-  { name: "Administrador", code: "Admin" },
-  { name: "Manager", code: "Manager" },
-  { name: "Operator", code: "Operator" },
-  { name: "Super Admin", code: "SuperAdmin" },
-]);
-
-const acesso = ref();
-const gate = ref();
-
-const sexo = ref();
 
 const toast = useToast();
 
@@ -310,37 +284,36 @@ const addUser = async () => {
   }
 };
 
-// {
-//     "user_full_name":"userfullname",
-//     "user_name":"usernamekelven2",
-//     "email":"",
-//     "password":"12345678",
-//     "roles":[
-//         {
-//             "name":"Admin"
-//         }
-//     ]
-// }
-
 const salvarDadosShow = async () => {
   // let arrayRols = []
   // formDataSave.roles.forEach((elements)=>{
   //   arrayRols.push(elements['name'])
   //   // (elements['name'])
   // })
+
+  let idsApplications = []
+  let idsGates = []
+
+  formDataSave.applications.forEach((element) => {
+    idsApplications.push({ application_id: element['id'] })
+  })
+
+  formDataSave.gate.forEach((element) => {
+    idsGates.push({
+      "gate_id": element['id']
+    })
+  })
   let dadosAddL = {
     user_full_name: formDataSave.name,
     user_name: formDataSave.user,
     email: formDataSave.email,
-    // company_id: String(formDataSave.company_id.id),
+    company_id: String(formDataSave.company_id.id),
     password: formDataSave.password,
     roles: formDataSave.roles,
-    gates: formDataSave.gate,
-    applications: formDataSave.applications
+    gates: idsGates,
+    applications: idsApplications
 
   };
-
-  (dadosAddL)
 
   const token = getToken();
 
@@ -453,7 +426,7 @@ const atualizarDadosShow = async () => {
     is_active: Number(ative_selected.value.code),
     gates: gateIdArray.value,
     roles: roleSelected.value,
-    
+
   };
 
   (dadoAtualizacao)
@@ -593,9 +566,6 @@ const dadosAtualizar = reactive({
   gate: gates.value,
 });
 const atualizarDados = (dados) => {
-  ("Gates")
-  (dados)
-
   gateSelected.value = []
   gateIdArray.value = []
   gatePreSelecteds.value = []
@@ -605,15 +575,13 @@ const atualizarDados = (dados) => {
   dadosAtualizar.id = dados.id;
   // // dadosAtualizar.roles = [{name: dados.roles[0].name}];
   let arrayRols = []
-  dados.roles.forEach((elements)=>{
-    arrayRols.push({name: elements['name']})
+  dados.roles.forEach((elements) => {
+    arrayRols.push({ name: elements['name'] })
     // (elements['name'])
   })
 
   roleSelected.value = arrayRols
 
-  (roleSelected.value)
-  
   dadosAtualizar.roles = roleSelected.value;
   // (dadosAtualizar.roles)
   dadosAtualizar.email = dados.email;
@@ -714,7 +682,7 @@ const buscarGates = async () => {
       },
     });
     gates.value = response.data.data.data;
-    
+
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -776,11 +744,12 @@ onMounted(() => {
       <Column field="user_name" header="Username" style="min-width: 10rem" sortable>
       </Column>
 
-      <!-- <Column field="company_id" header="Empresa" style="min-width: 10rem" sortable="">
+
+      <Column field="company_id" header="Empresa" style="min-width: 10rem" sortable="">
         <template #body="{ data }">
           {{ empresaMap[data.company_id] || data.company_id }}
         </template>
-      </Column> -->
+      </Column>
 
       <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
         <template #body="{ data }">
@@ -877,8 +846,8 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Acesso</label>
-            <MultiSelect v-model="formDataSave.roles" :options="rolesName" optionLabel="name" placeholder="Portões" display="chip"
-              class="w-full" />
+            <MultiSelect v-model="formDataSave.roles" :options="rolesName" optionLabel="name" placeholder="Papel"
+              display="chip" class="w-full" />
 
           </div>
 
@@ -891,8 +860,8 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Aplicações</label>
-            <MultiSelect v-model="formDataSave.applications" :options="applications" optionLabel="name" placeholder="Aplicações" display="chip"
-              class="w-full" />
+            <MultiSelect v-model="formDataSave.applications" :options="applications" optionLabel="name"
+              placeholder="Aplicações" display="chip" class="w-full" />
 
           </div>
 
@@ -900,20 +869,20 @@ onMounted(() => {
         <!-- Gates -->
         <div class="formUserAdd">
           <div class="field formUserAddI">
-            <label for="acesso">Gates</label>
-            <MultiSelect v-model="formDataSave.gate" :options="gates" optionLabel="name" placeholder="Portões" display="chip"
-              class="w-full" />
+            <label for="gates">Gates</label>
+            <MultiSelect v-model="formDataSave.gate" :options="gates" optionLabel="name" placeholder="Portões"
+              display="chip" class="w-full" />
 
           </div>
 
         </div>
       </div>
 
-      <!-- <div class="formUserAdd">
+      <div class="formUserAdd">
         <label for="empresa">Empresa</label>
         <Select id="empresa" v-model="formDataSave.company_id" :options="empresa" optionLabel="name"
           placeholder="Empresas" class="w-full"></Select>
-      </div> -->
+      </div>
 
       <!-- Senha -->
       <div class="formUserAdd" style="margin-top: 15px; width: 100%">
@@ -964,7 +933,7 @@ onMounted(() => {
 
         <div class="formUserAdd">
           <div class="field formUserAddI">
-            <label for="acesso">Portão</label>
+            <label for="gates">Portão</label>
             <MultiSelect v-model="gateSelected" :options="gates" optionLabel="name" placeholder="Portões" display="chip"
               class="w-full" />
 
@@ -975,8 +944,8 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Acesso</label>
-            <MultiSelect v-model="roleSelected" :options="rolesName" optionLabel="name" placeholder="Portões" display="chip"
-              class="w-full" />
+            <MultiSelect v-model="roleSelected" :options="rolesName" optionLabel="name" placeholder="Papel"
+              display="chip" class="w-full" />
 
           </div>
 

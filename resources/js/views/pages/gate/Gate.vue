@@ -48,8 +48,6 @@ const buscarGates = async () => {
       },
     });
     gates.value = response.data.data.data
-    ("Response")
-    (response)
 
 
   } catch (error) {
@@ -63,19 +61,16 @@ const saveGate = async () => {
   loading.value = true;
   fieldIsEmpty.value = ""
   if (verifyEmpty(formDataSave)) {
-    ("Can save")
     const token = getToken();
     if (!token) {
       return;
     }
-    (`O token: ${token}`)
     try {
       const response = await axios.post(baseUrls.gate, formDataSave, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
-      (response)
       loading.value = false;
       dialogGate.value = false
       fieldVoid(formDataSave)
@@ -86,7 +81,6 @@ const saveGate = async () => {
     }
   } else {
     fieldIsEmpty.value = "Campo vazio"
-    ("Fill all field")
     loading.value = false;
   }
 
@@ -95,14 +89,8 @@ const saveGate = async () => {
 const getDataGate = (data) => {
   fieldIsEmpty.value = ""
   dialogGateUpdate.value = true
-  (data)
   formDataSave.name = data.name
   idGate.value = data.id
-  // for (let dados in data) {
-  //   formDataSave[dados] = data[dados]
-  // }
-
-
 
 }
 
@@ -124,7 +112,6 @@ const updateGate = async () => {
         Authorization: `Bearer ${token}`
       }
     })
-    (response)
     dialogGateUpdate.value = false
     fieldVoid(formDataSave)
     loading.value = false;
@@ -134,7 +121,6 @@ const updateGate = async () => {
     fieldIsEmpty.value = "Erro ao tentar atualizar"
     loading.value = false;
     console.error(`Erro ${error}`)
-    (`Token: ${token}`)
   }
 
 }
@@ -158,7 +144,6 @@ const deleteGate = async () => {
     loading.value = false;
     dialogGateDelete.value = false
     buscarGates()
-    (response)
   } catch (error) {
     loading.value = false;
     fieldIsEmpty.value = "Erro ao apagar o dado"

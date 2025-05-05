@@ -1,8 +1,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { jsPDF } from "jspdf";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import * as XLSX from "xlsx";
+import { permissionsAcess } from "../../../../utils/accesRoute";
+
+if (permissionsAcess().adminAcesseSuperAdmin == false) {
+  if (permissionsAcess().cgate2dotxfound == false) {
+    useRouter().push("/dashboard")
+  }
+}
 
 const data = ref([]);
 const totalRecords = ref(0);

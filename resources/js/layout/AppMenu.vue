@@ -4,7 +4,7 @@ import { h, onMounted, ref } from 'vue';
 import AppMenuItem from './AppMenuItem.vue';
 import { elements } from 'chart.js';
 import { useRouter } from 'vue-router';
-import { backLog } from '../utils/accesRoute';
+import { acessRouters, backLog } from '../utils/accesRoute';
 import axios from 'axios';
 import { baseUrls } from '../api';
 
@@ -27,20 +27,21 @@ if (!getUserData()) {
 }
 
 
-const acessRouters = ref(
-    {
-        "cgate1dotxfound": false,
-        "cgate1dot0found": false,
-        "cgate1dot1found": false,
-        "cgate2dotxfound": false,
-        "cgate1dotxfoundCargo": false,
-        "cgate1dotxfoundTerminal": false,
-        "cgate2dotxfoundCargo": false,
-        "cgate2dotxfoundTerminal": false,
-        "adminAcesse": false,
-        "adminAcesseSuperAdmin": false
-    }
-)
+// const acessRouters = ref(
+//     {
+//         cgate1dotxfound: false,
+//         cgate1dot0found: false,
+//         cgate1dot1found: false,
+//         cgate2dotxfound: false,
+//         cgate1dotxfoundCargo: false,
+//         cgate1dotxfoundTerminal: false,
+//         cgate2dotxfoundCargo: false,
+//         cgate2dotxfoundTerminal: false,
+//         adminAcesse: false,
+//         adminAcesseSuperAdmin: false,
+//         precheck: false,
+//     }
+// )
 
 const model = ref([]);
 
@@ -73,6 +74,20 @@ const userMenu = () => {
                 label: 'Aplicações',
                 icon: 'pi pi-mobile',
                 to: '/applications'
+            }
+        ]
+    })
+}
+
+const aplicationsMenu = () => {
+    return ({
+        label: 'Pre check',
+        icon: 'pi pi-fw pi-check-square',
+        items: [
+            {
+                label: "Pre check 1.0",
+                icon: 'pi pi-check',
+                to: '/precheck'
             }
         ]
     })
@@ -357,12 +372,12 @@ const gates1dot2 = (name) => {
 }
 const cgateWitch1X = (gate, [name, gateespecific]) => {
     if (gateespecific == "" && gate != "") {
-        
+
         if (gate == "c-gate 1.2") {
-            
+
             return [gates1dot2(name)]
         } else if (gate == "c-gate 1.1") {
-            
+
             return [gates1dot1(name)]
         }
         else {
@@ -378,7 +393,7 @@ const cgateWitch1X = (gate, [name, gateespecific]) => {
             return [gates1dot1(name), gates1dot2(name)]
         }
     } else {
-       
+
         if (gate == "c-gate 1.2") {
             return [gates1dot2(name)]
         } else if (gate == "c-gate 1.1") {
@@ -442,46 +457,47 @@ const cgateMenuPages = async (roles, empresas) => {
 
     empresas.forEach(element => {
         applications.value.forEach(e => {
-            if(element['application_id'] == e['id']){
+            if (element['application_id'] == e['id']) {
                 applicationsView.push(e['name'])
             }
         })
     });
 
 
-    applicationsView.forEach(e=>{
+    applicationsView.forEach(e => {
 
 
-        if(e.toLowerCase().includes("c-gate")){
-            if(e.toLowerCase().includes("1")){
-                
-                if(e.toLowerCase().indexOf("1") < e.toLowerCase().indexOf(".")){
+        if (e.toLowerCase().includes("c-gate")) {
+            if (e.toLowerCase().includes("1")) {
+
+                if (e.toLowerCase().indexOf("1") < e.toLowerCase().indexOf(".")) {
                     acessRouters.value.cgate1dotxfound = true
                     acessRouters.value.cgate1dotxfoundCargo = true
                     acessRouters.value.cgate1dotxfoundTerminal = true
-                    cgate1dotxviewer+=e.toLowerCase()
-                    if(e.toLowerCase().lastIndexOf("1") > e.toLowerCase().indexOf(".")){
+                    cgate1dotxviewer += e.toLowerCase()
+                    if (e.toLowerCase().lastIndexOf("1") > e.toLowerCase().indexOf(".")) {
                         // console.log(e)
-                        
-                    }else if(e.toLowerCase().indexOf("2") > e.toLowerCase().indexOf(".")){
+
+                    } else if (e.toLowerCase().indexOf("2") > e.toLowerCase().indexOf(".")) {
                         // console.log(e)
                     }
 
-                    
-                }
-            }else if(e.toLowerCase().includes("2")){
 
-                if(e.toLowerCase().indexOf("2") < e.toLowerCase().indexOf(".")){
+                }
+            } else if (e.toLowerCase().includes("2")) {
+
+                if (e.toLowerCase().indexOf("2") < e.toLowerCase().indexOf(".")) {
                     acessRouters.value.cgate2dotxfound = true
 
                 }
             }
+        }else if(e.toLowerCase().includes("pre check")){
+           acessRouters.value.precheck = true
         }
     })
 
-
-
-    if(roleVerify(roles)){
+    if (roleVerify(roles)) {
+        
         acessRouters.value.adminAcesseSuperAdmin = true
         acessRouters.value.adminAcesse = true
     }
@@ -499,7 +515,9 @@ const cgateMenuPages = async (roles, empresas) => {
                 label: 'C-Gate 2.x',
                 icon: 'pi pi-globe',
                 items: cgateMenuPages2dot1("")
-            }]
+            },
+            // aplicationsMenu()
+        ]
         )
     } else {
 
@@ -521,7 +539,9 @@ const cgateMenuPages = async (roles, empresas) => {
                         // funVerifyv2()
                         ""
                     )
-                }]
+                },
+
+                ]
             )
         } else if (acessRouters.value.cgate1dotxfound && !acessRouters.value.cgate2dotxfound) {
             return (
@@ -555,7 +575,8 @@ const baseMenu = ref(
     {
         home: homeMenu(),
         cgate: {
-            label: 'Paginas',
+            // label: 'Paginas',
+            label: 'Aplicações',
             icon: 'pi pi-fw pi-briefcase',
             items: [
                 // cgateMenuPages(viewsMenu.value)
@@ -596,7 +617,7 @@ const baseMenu = ref(
 const menusVisiveis = ["terminal", "carga"]
 
 
-const buildMenu = async() => {
+const buildMenu = async () => {
     if (!getUserData()) {
         backLog()
     } else {
@@ -616,8 +637,13 @@ const buildMenu = async() => {
 
         }
         cgatePages.value['items'] = await cgateMenuPages(viewsMenu.value, getUserData().application)
+        if(acessRouters.value.precheck){
+            cgatePages.value['items'].push(aplicationsMenu())
+        }
         menuBase.value.push(cgatePages.value)
+        console.log(`acess admin: ${acessRouters.value.adminAcesseSuperAdmin}`)
         if (acessRouters.value.adminAcesseSuperAdmin) {
+
             menuBase.value.push(userMenu())
         }
 

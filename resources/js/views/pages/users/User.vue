@@ -121,6 +121,7 @@ const buscarApplication = async () => {
 };
 
 const buscarUsuarios = async (page = 1) => {
+  loading.value = true
   const token = getToken();
 
   if (!token) {

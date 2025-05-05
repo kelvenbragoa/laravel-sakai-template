@@ -26,14 +26,14 @@ const router = createRouter({
                 {
                     path: '/cargaonetwo/:id',
                     name: 'cargaone',
-                    component: () => import('@/views/pages/cgateone/carga/Carga.vue'),
+                    component: () => import('@/views/pages/cgateonetwo/carga/Carga.vue'),
                     props: true
                 },
                
                 {
                     path: '/terminalonetwo/:id',
                     name: 'terminalone',
-                    component: () => import('@/views/pages/cgateone/terminal/Terminal.vue'),
+                    component: () => import('@/views/pages/cgateonetwo/terminal/Terminal.vue'),
                     props: true
                     
                 },
@@ -66,6 +66,14 @@ const router = createRouter({
                     
                 },
                 //------
+                //Precheck
+                //v1
+                {
+                    path: '/precheck',
+                    name: 'precheck',
+                    component: () => import('@/views/pages/precheck/versionone/Precheck.vue')
+                },
+                //-------------------------------------
                 {
                     path: '/uikit/formlayout',
                     name: 'formlayout',

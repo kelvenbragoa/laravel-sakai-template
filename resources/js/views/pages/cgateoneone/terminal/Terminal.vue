@@ -437,7 +437,7 @@
 import { ref, onMounted, watch } from "vue";
 import { FilterMatchMode } from "@primevue/core/api";
 import { getCarga, getTransactions } from "@/api";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { jsPDF } from "jspdf";
 import json from "../../../../../../public/user.json";
 import * as XLSX from "xlsx";
@@ -445,7 +445,15 @@ import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
-import { backLog } from "../../../../utils/accesRoute";
+import { backLog, permissionsAcess } from "../../../../utils/accesRoute";
+
+
+if (permissionsAcess().adminAcesseSuperAdmin == false) {
+  if (permissionsAcess().cgate1dotxfoundTerminal == false) {
+    useRouter().push("/dashboard")
+  }
+}
+
 const isActive = ref(true)
 const userFiltro = ref([])
 const dadosRelatorio = ref({

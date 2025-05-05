@@ -1,14 +1,22 @@
 <template>
+  <div v-if="loading" class="loader-overlay">
+    <div class="louderL">
+      <ProgressSpinner />
+    </div>
+  </div>
 
   <div class="card">
-    <DataTable :value="transactions" :filters="filters" :loading="loading" :rows="rowsPerPage" :paginator="true"
+    <!-- <DataTable :value="transactions" :filters="filters" :loading="loading" :rows="rowsPerPage" :paginator="true"
       :total-records="totalRecords" :first="(currentPage - 1) * rowsPerPage" @page="onPageChange" :global-filter-fields="[
         'transaction_gate',
         'driver_name',
         'truck_license_plate_number',
         'status',
         'type',
-      ]" table-style="min-width: 60rem">
+      ]" table-style="min-width: 60rem"> -->
+
+      <DataTable :value="transactions" paginator :rows="rowsPerPage" :totalRecords="totalRecords"
+      lazy :first="first" @page="onPageChange">
       <template #header>
         <div class="flex justify-between align-center">
           <h2>
@@ -29,16 +37,21 @@
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
-              <InputText v-model="filters['global'].value" placeholder="Pesquisa" />
+              <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
+              <!-- <InputText v-model="filtroChange" placeholder="Pesquisa" /> -->
             </IconField>
           </div>
         </div>
       </template>
       <template #empty> Nenhum dado encontrado. </template>
-      <template #loading> Carregando os dados. Por favor, aguarde. </template>
       <!-- <Column field="appointment_nbr" header="Appointment Number" style="min-width: 12rem" /> -->
 
-      <Column field="first_last_name" header="Condutor" style="min-width: 12rem" />
+      <div v-if="first_last_name">
+        <Column field="first_last_name" header="Condutor" style="min-width: 12rem" />
+      </div>
+      <div v-else>
+        <Column field="first_last_name_overwrite" header="Condutor" style="min-width: 12rem" />
+      </div>
       <Column field="main_plate" header="Placa de caminhão" style="min-width: 12rem" />
       <Column field="gate" header="Gate" style="min-width: 12rem"></Column>
       <Column field="movement" header="Tipo de movimento" style="min-width: 12rem"></Column>
@@ -72,14 +85,20 @@
       </Column>
       <Column header="Detalhes" style="min-width: 10rem">
         <template #body="{ data }">
-          <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
-            style="border: 0px" />
+          <!-- <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
+            style="border: 0px" /> -->
+            <Button class="btnEstiliza" label="VER" icon="pi pi-eye" @click="detailsOpen(data)" style="border: 0px" />
         </template>
       </Column>
     </DataTable>
   </div>
 
-  <div id="pdf-content" class="pdf-content-cgate1">
+
+
+  <Dialog header="Detalhes" v-model:visible="dialogRoleUpdateVisible" :closable="true" :modal="true" :draggable="false"
+    :resizable="false" style="width:  250mm; min-height: 90vh" :footer="productDialogFooterForm">
+    <div class="containerDetailsDialog">
+      <div id="pdf-content" >
     <div class="detalhesLogo">
       <div class="detalhesName">
         <span>
@@ -228,6 +247,7 @@
         <tr>
           
           <td :style="{ backgroundImage: 'url(' +baseUrls.storageUrl+''+dadosRelatorio.main_plate_cutout_photo + ')' }">
+            <!-- <td style="background-image: url(/public/testeimgcgate.png);"> -->
            
             <div class="imgNone" v-if="dadosRelatorio.main_plate_cutout_photo == null">
                 <p>
@@ -435,13 +455,23 @@
     </div>
 
   </div>
+    </div>
+    <div class="flex">
+      <button class="p-button p-component cores" @click="generatePDFCanva(dadosRelatorio)">
+        Pdf
+      </button>
+      <button class="p-button p-component p-button-secondary mx-2" @click="dialogRoleUpdateVisible = false">
+        SAIR
+      </button>
+    </div>
+  </Dialog>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { FilterMatchMode } from "@primevue/core/api";
 import { getCarga, getTransactions } from "@/api";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { jsPDF } from "jspdf";
 import json from "../../../../../../public/user.json";
 import * as XLSX from "xlsx";
@@ -449,8 +479,20 @@ import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
-import { backLog } from "../../../../utils/accesRoute";
-("Transacoes")
+import { backLog, permissionsAcess } from "../../../../utils/accesRoute";
+
+if (permissionsAcess().adminAcesseSuperAdmin == false) {
+
+  if (permissionsAcess().cgate1dotxfoundTerminal == false) {
+    useRouter().push("/dashboard")
+  }
+}
+
+const dialogRoleUpdateVisible = ref(false);
+
+console.log("jdscjd")
+const dadoSearch = ref("");
+const filtroDados = ref("");
 const isActive = ref(true)
 const userFiltro = ref([])
 const dadosRelatorio = ref({
@@ -507,6 +549,7 @@ const tabelaDados = ref({
 });
 
 const dataAtual = new Date();
+const transactionsFilter = ref([])
 
 const formatDates = (date) => {
   if (!date) return "";
@@ -593,6 +636,8 @@ const filterDate = async () => {
 
       userFiltro.value = response.data.data;
       transactions.value = response.data.data.data
+      transactionsFilter.value = transactions.value
+      
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
       toast.add({
@@ -647,40 +692,14 @@ const tabelaDados2 = ref({
   updated_at: "Atualizado em",
 });
 
-// Referências reativas
-const transactions = ref([]); // Dados das transações
-const totalRecords2 = ref(0); // Total de registros para paginação
+const transactions = ref([]); 
+const totalRecords2 = ref(0); 
 
 const currentPage = ref(1);
-const rowsPerPage = ref(7);
+const rowsPerPage = ref(10);
 const filters2 = ref({
   global: { value: "" }, // Filtro global
 });
-
-// Métodos
-const fetchTransactions = async (page = 1) => {
-  loading.value = true;
-  try {
-    const response = await axios.get(
-      `http://20.87.9.35/api/v1/transacoes/lista`,
-      {
-        params: {
-          page: page,
-        },
-      }
-    );
-
-    const { data, current_page, total } = response.data.result;
-    transactions.value = data;
-    currentPage.value = current_page;
-    totalRecords.value = total;
-    // exportToExcel()
-  } catch (error) {
-    console.error("Erro ao carregar dados:", error);
-  } finally {
-    loading.value = false;
-  }
-};
 
 const getToken = () => {
   return localStorage.getItem("access_token");
@@ -689,7 +708,8 @@ function removerGate(texto) {
     return texto.replace(/^Gate\s*/, '');
 }
 
-const buscarTransccoes = async () => {
+const buscarTransccoes = async (page = 1) => {
+  loading.value = true
 
   const token = getToken();
   if (!token) {
@@ -702,22 +722,37 @@ const buscarTransccoes = async () => {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        gate: removerGate(gateId.value)
+        gate: removerGate(gateId.value),
+        page: page,
+        query: dadoSearch.value
       }
       
     });
-
-    (removerGate(gateId.value))
-
     transactions.value = response.data.data.data;
-
-
-    // });
-    // exportToExcel()
+    transactionsFilter.value = transactions.value
+    totalRecords.value = response.data.data.total
+    // loading.value = true
+    
   } catch (error) {
     console.error("Erro ao carregar dados fkdsjf,:", error);
   } finally {
     loading.value = false;
+  }
+};
+
+const filtroChange = () => {
+  loading.value = true;
+  if (filtroDados.value.trim() === "") {
+    // userFiltro.value = [...usersL.value];
+    transactionsFilter.value = [...transactions.value]
+
+
+
+    loading.value = false;
+  } else {
+    (`Search: ${filtroDados.value}`)
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarTransccoes()
   }
 };
 
@@ -728,13 +763,14 @@ const exportToExcel = () => {
   XLSX.writeFile(workbook, "transacoes.xlsx");
 };
 
-// Troca de página
-const onPageChange = (event) => {
-  const newPage = event.page + 1; // PrimeVue usa index 0
-  // fetchTransactions(newPage);
-};
 
-// Formatar data
+const onPageChange = (event) => {
+  first.value = event.first
+  const newPage = Math.floor(event.first / rowsPerPage.value) + 1
+  buscarTransccoes(newPage)
+
+}
+
 const formatDate2 = (date) => {
   const options = { year: "numeric", month: "long", day: "numeric" };
   return new Date(date).toLocaleDateString(undefined, options);
@@ -750,12 +786,13 @@ const loadJson = async () => {
 };
 
 onMounted(() => {
-  loadJson();
   // fetchTransactions(currentPage.value);
   tratamentoDoId()
   buscarTransccoes();
   
 });
+
+const first = ref(0);
 
 const route = useRoute();
 const userId = route.params.id;
@@ -822,9 +859,9 @@ const generatePDF = (rowData) => {
     return [r, g, b];
   }
 
-  // Definindo a cor de fundo com hexadecimal
-  let color = hexToRgb("#f5f5f5"); // Hexadecimal convertido para RGB
-  let color2 = hexToRgb("#ffffff"); // Hexadecimal convertido para RGB
+
+  let color = hexToRgb("#f5f5f5"); 
+  let color2 = hexToRgb("#ffffff"); 
 
   let corChange = false;
   // /images/logo.png
@@ -915,11 +952,14 @@ const generatePDF = (rowData) => {
 };
 
 const generatePDFCanva = async (rowData) => {
+  loading.value = true
   dadosRelatorio.value = { ...rowData }
 
   await nextTick();
   isActive.value = false
+  
   generatePDFs();
+  
 
 }
 
@@ -957,11 +997,18 @@ const generatePDFs = async () => {
   pdf.addImage(imagensImgData, "JPEG", margin, margin, pdfWidth - 2 * margin, imagensHeight);
 
   pdf.save("transacoes_relatorio.pdf");
+
+  loading.value = false
 };
 
 let dateToday = new Date()
 const dataLk = ref(formatDate(String(dateToday)))
 const emptyField = ref("Vazio")
+
+const detailsOpen = (data) => {
+  dialogRoleUpdateVisible.value = true;
+  dadosRelatorio.value = data
+};
 
 
 watch(() => route.params.id, (newId) => {
@@ -970,7 +1017,6 @@ watch(() => route.params.id, (newId) => {
   buscarTransccoes()
   
 })
-
 const getSeverity = (status) => {
   switch (status) {
     case "Pending":

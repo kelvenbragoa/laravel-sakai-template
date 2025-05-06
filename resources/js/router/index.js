@@ -242,6 +242,11 @@ const router = createRouter({
             path: "/jsonread",
             name: 'jsonread',
             component: () => import('@/views/pages/ScreenJson.vue')
+        },
+        {
+            path: "/precheck-form",
+            name: 'precheck-form',
+            component: () => import('@/views/pages/precheck/form/Precheck.vue')
         }
     ]
 });

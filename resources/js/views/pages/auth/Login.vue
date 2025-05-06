@@ -54,6 +54,10 @@ const autenticar = async () => {
     }
   }
 };
+
+const goToPrecheck = ()=>{
+  router.push("/precheck-form")
+}
 const checked = ref(false);
 </script>
 
@@ -123,6 +127,7 @@ const checked = ref(false);
                     senha?</span>
                 </div>
                 <Button label="Entrar" class="w-full facebook-button hover" @click="autenticar"></Button>
+                <Button label="Pre check" class="butoonCheck" @click="goToPrecheck"></Button>
                 <!-- as="router-link" -->
                 <!-- to="/dashboard" -->
               </div>
@@ -192,5 +197,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.butoonCheck{
+  margin: 10px 0px;
+  width: 100%;
+  color: #222;
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700!important;
+}
+
+.butoonCheck:hover{
+  background-color: transparent!important;
+  color: #1558b0!important;
+  border: none!important;
 }
 </style>

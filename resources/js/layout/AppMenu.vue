@@ -491,15 +491,16 @@ const cgateMenuPages = async (roles, empresas) => {
 
                 }
             }
-        }else if(e.toLowerCase().includes("pre check")){
-           acessRouters.value.precheck = true
+        } else if (e.toLowerCase().includes("pre check")) {
+            acessRouters.value.precheck = true
         }
     })
 
     if (roleVerify(roles)) {
-        
+
         acessRouters.value.adminAcesseSuperAdmin = true
         acessRouters.value.adminAcesse = true
+        acessRouters.value.precheck = true
     }
 
     if (acessRouters.value.adminAcesse) {
@@ -516,8 +517,8 @@ const cgateMenuPages = async (roles, empresas) => {
                 icon: 'pi pi-globe',
                 items: cgateMenuPages2dot1("")
             },
-            // aplicationsMenu()
-        ]
+                // aplicationsMenu()
+            ]
         )
     } else {
 
@@ -623,7 +624,7 @@ const buildMenu = async () => {
     } else {
 
         const menuBase = ref([])
-        const cgatePages = ref()
+        const cgatePages = ref([])
 
         for (let items in baseMenu.value) {
             if (items == "users") {
@@ -637,13 +638,25 @@ const buildMenu = async () => {
 
         }
         cgatePages.value['items'] = await cgateMenuPages(viewsMenu.value, getUserData().application)
-        if(acessRouters.value.precheck){
-            cgatePages.value['items'].push(aplicationsMenu())
+        // console.log(await cgateMenuPages(viewsMenu.value, getUserData().application))
+        if (acessRouters.value.precheck) {
+            if (cgatePages.value?.['items'] == null) {
+                console.log("Nulo")
+                cgatePages.value['items'] = aplicationsMenu()
+            }else{
+                cgatePages.value['items'].push(aplicationsMenu())
+            }
+            
+            // console.log("Precheck")
+            // console.log(cgatePages.value['items'])
         }
-        menuBase.value.push(cgatePages.value)
-        console.log(`acess admin: ${acessRouters.value.adminAcesseSuperAdmin}`)
-        if (acessRouters.value.adminAcesseSuperAdmin) {
 
+        console.log(cgatePages.value['items'])
+        menuBase.value.push(cgatePages.value)
+        console.log(menuBase.value)
+        // console.log(`acess admin: ${acessRouters.value.adminAcesseSuperAdmin}`)
+        if (acessRouters.value.adminAcesseSuperAdmin) {
+            // cgatePages.value['items'].push(aplicationsMenu())
             menuBase.value.push(userMenu())
         }
 

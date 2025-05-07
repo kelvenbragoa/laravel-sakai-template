@@ -290,6 +290,28 @@ td {
   top: 0px;
   left: -9999px;
 }
+
+.quantiUsers{
+  display: flex;
+  justify-content: space-between;
+  /* margin: 20px 0px; */
+  margin-bottom: 5px;
+  border-bottom: 1px solid #eee;
+  padding: 20px 0px;
+}
+
+.quantiUsers span:first-child{
+  font-size: 1.1rem;
+  font-weight: 500;
+  
+}
+
+.quantiUsers span:last-child{
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #007bff;
+  
+}
 @media print {
   .imagensRelatorio {
     page-break-before: always;

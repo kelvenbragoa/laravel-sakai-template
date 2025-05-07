@@ -5,17 +5,21 @@ import { baseUrls } from "../../../api/index"
 import { backLog, checkAccess } from "../../../utils/accesRoute";
 import axios from "axios";
 
+
 checkAccess()
 
 const toast = useToast();
 const filtroDados = ref("");
 const dialogGate = ref(false)
 const dialogGateUpdate = ref(false)
+const dialogDetalhes = ref(false)
 const dialogGateDelete = ref(false)
 
 const formDataSave = reactive({
   name: ""
 })
+
+const users = ref([])
 
 const idGate = ref(0)
 
@@ -168,9 +172,42 @@ const fieldVoid = (data) => {
 }
 
 
+const detailsGates = (data)=>{
+  console.log("Details")
+  console.log(data)
+  dialogDetalhes.value = true
+}
+
+const usersData = async()=>{
+  const token = getToken();
+  if (!token) {
+    backLog()
+    return;
+  }
+
+  console.log(token)
+  try{
+    const response = await axios.get(baseUrls.userList, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        page: '4'
+      }
+    })
+    users.value = response.data.data
+
+    console.log(users.value)
+  }catch(e){
+    console.error(e)
+  }
+}
+
+
 
 onMounted(() => {
   buscarGates();
+  usersData()
 }
 )
 </script>
@@ -192,9 +229,9 @@ onMounted(() => {
             </InputIcon>
             <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
           </IconField>
-          <div class="btnsL">
+          <!-- <div class="btnsL">
             <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogGate = true" />
-          </div>
+          </div> -->
         </div>
       </template>
       <template #empty> Vazio. </template>
@@ -212,9 +249,11 @@ onMounted(() => {
                 color: #1558b0;
                 display: none;
               " />
-            <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
-              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataGate(data)" />
-            <div>
+            <Button class="btnEstiliza" label="Detalhes" icon="pi  pi-eye"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="detailsGates(data)" />
+              <!-- <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataGate(data)" /> -->
+            <!-- <div>
 
               <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="
                   padding: 5px 0px;
@@ -222,7 +261,7 @@ onMounted(() => {
                   color: #ff0000;
                   border: 0px;
                 " @click="getDataGateDelete(data)" />
-            </div>
+            </div> -->
           </div>
         </template>
       </Column>
@@ -303,6 +342,27 @@ onMounted(() => {
         </button>
       </div>
     </Dialog>
+
+    <Dialog header="Detalhes Gate" v-model:visible="dialogDetalhes" :closable="true" :modal="true" :draggable="false"
+      :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
+      <hr />
+      <!-- <Select id="permis" v-model="permissions" :options="permissionsItems"  placeholder="S. Nivel de acesso" class="w-full" style="margin-top: 15px;"></Select> -->
+
+      <div class="quantiUsers">
+          <span>Quantidade de usuários:</span>
+
+          <span>10</span>
+        </div>
+      <div class="flex">
+        <button class="p-button p-component cores" @click="dialogDetalhes = false">
+          Ok
+        </button>
+       
+        <!-- <button class="p-button p-component p-button-secondary mx-2" @click="dialogDetalhes = false">
+          Cancelar
+        </button> -->
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -366,9 +426,23 @@ onMounted(() => {
   width: 100% !important;
 }
 
+
+.btnEstiliza {
+  background-color: rgba(21, 88, 176, 0.8117647059) !important;
+  border: 1px solid rgba(21, 88, 176, 0.5333333333) !important;
+  color: #fff!important;
+}
+
+// .btnEstiliza{
+//   border: #1558b0 1px solid!important;
+//   background-color: #1558b0!important;
+//   color: #fff!important;
+// }
+
 .btnEstiliza:hover {
   color: #1558b0a4 !important;
   background: #1558b033 !important;
+  border: #1558b033 1px solid!important;
   transition: all 0.5s ease !important;
 }
 

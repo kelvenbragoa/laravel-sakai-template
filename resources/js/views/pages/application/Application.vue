@@ -12,6 +12,7 @@ const filtroDados = ref("");
 const dialogGate = ref(false)
 const dialogGateUpdate = ref(false)
 const dialogApplicationDelete = ref(false)
+const dialogDetalhes = ref(false)
 
 const formDataSave = reactive({
   name: "",
@@ -91,7 +92,7 @@ const saveApplications = async () => {
 }
 
 const getDataApplications = (data) => {
-  
+
   fieldIsEmpty.value = ""
   dialogGateUpdate.value = true
   // formDataSave.name = data.name
@@ -175,6 +176,13 @@ const fieldVoid = (data) => {
   }
 }
 
+const detailsGates = (data) => {
+  console.log("Details")
+  console.log(data)
+  dialogDetalhes.value = true
+}
+
+
 
 
 onMounted(() => {
@@ -200,9 +208,9 @@ onMounted(() => {
             </InputIcon>
             <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
           </IconField>
-          <div class="btnsL">
+          <!-- <div class="btnsL">
             <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogGate = true" />
-          </div>
+          </div> -->
         </div>
       </template>
       <template #empty> Vazio. </template>
@@ -215,15 +223,18 @@ onMounted(() => {
       <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
         <template #body="{ data }">
           <div style="display: flex; gap: 0px">
-            <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style="
+            <!-- <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style="
                 border: 0px;
                 background-color: transparent;
                 color: #1558b0;
                 display: none;
-              " />
-            <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
-              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataApplications(data)" />
-            <div>
+              " /> -->
+
+            <Button class="btnEstiliza" label="Detalhes" icon="pi  pi-eye"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="detailsGates(data)" />
+            <!-- <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataApplications(data)" /> -->
+            <!-- <div>
 
               <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="
                   padding: 5px 0px;
@@ -231,7 +242,7 @@ onMounted(() => {
                   color: #ff0000;
                   border: 0px;
                 " @click="getDataApplicationsDelete(data)" />
-            </div>
+            </div> -->
           </div>
         </template>
       </Column>
@@ -261,8 +272,8 @@ onMounted(() => {
       </template>
     </Dialog>
 
-    <Dialog header="Atualizar Aplicações" v-model:visible="dialogGateUpdate" :closable="true" :modal="true" :draggable="false"
-      :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
+    <Dialog header="Atualizar Aplicações" v-model:visible="dialogGateUpdate" :closable="true" :modal="true"
+      :draggable="false" :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
       <!-- optionLabel="name" -->
       <div class="msgErrorField">
         <p>
@@ -340,6 +351,27 @@ onMounted(() => {
         </button>
       </div>
     </Dialog>
+
+    <Dialog header="Detalhes Aplicações" v-model:visible="dialogDetalhes" :closable="true" :modal="true" :draggable="false"
+      :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
+      <hr />
+      <!-- <Select id="permis" v-model="permissions" :options="permissionsItems"  placeholder="S. Nivel de acesso" class="w-full" style="margin-top: 15px;"></Select> -->
+
+      <div class="quantiUsers">
+          <span>Quantidade de usuários:</span>
+
+          <span>10</span>
+        </div>
+      <div class="flex">
+        <button class="p-button p-component cores" @click="dialogDetalhes = false">
+          Ok
+        </button>
+       
+        <!-- <button class="p-button p-component p-button-secondary mx-2" @click="dialogDetalhes = false">
+          Cancelar
+        </button> -->
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -408,6 +440,13 @@ onMounted(() => {
   background: #1558b033 !important;
   transition: all 0.5s ease !important;
 }
+
+.btnEstiliza {
+  background-color: rgba(21, 88, 176, 0.8117647059) !important;
+  border: 1px solid rgba(21, 88, 176, 0.5333333333) !important;
+  color: #fff!important;
+}
+
 
 .btnEstilizaDel:hover {
   color: #ff0000a5 !important;

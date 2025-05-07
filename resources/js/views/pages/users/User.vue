@@ -21,9 +21,13 @@ const rolesName = ref([]);
 let verificarA = ref([]);
 const empresas = ref([]);
 const empresa = ref([]);
+const empresaL = ref([]);
 const empresaName = ref([]);
 const empresaMap = {};
 const dadoSearch = ref("")
+
+const dialogUserDetails = ref(false)
+const userDetails = ref()
 
 const errorL = ref();
 const rowsPerPage = ref(50);
@@ -109,7 +113,7 @@ const buscarApplication = async () => {
     applications.value = response.data.data.data.map((element) => {
       return {
         ...element,
-        name: element.name +" "+ element.version,
+        name: element.name + " " + element.version,
       };
     });
 
@@ -385,6 +389,10 @@ const buscarEmpresas = async () => {
 
 
     empresas.value = response.data.data.data;
+    empresaL.value = response.data.data.data
+
+    console.log("----------------------------")
+    console.log( response.data.data.data)
 
     empresas.value.forEach((element, key) => {
 
@@ -691,6 +699,46 @@ const buscarGates = async () => {
   }
 };
 
+const detailsUser = (data) => {
+  dialogUserDetails.value = true
+  userDetails.value = data
+  console.log("00--------------------------------00")
+  console.log(gates.value)
+  console.log("-------")
+  console.log(data)
+  console.log(returnGates(0))
+
+}
+
+const returnAplications = (id)=>{
+  const app = applications.value.find(a => a.id === Number(id));
+  return app ? app.name : String(id);
+}
+
+const returnCompany = (id)=>{
+  console.log(empresaName.value)
+  for(let i=0; i<empresaName.value.length; i++){
+    if(i === (Number(id) - 1)){
+      return empresaName.value[i]
+    }
+  }
+  return id
+
+}
+
+const returnGates = (id)=>{
+
+  for(let i=0; i<gates.value.length; i++){
+    if(Number(id) === i){
+      return gates.value[i].name
+    }
+  }
+  return id
+
+  // const app = gates.value.find(a => a.id === Number(id));
+  // return app ? app.name : String(id);
+}
+
 
 // const nextPage = () => {
 //   pagesCurrent.value++;
@@ -761,6 +809,9 @@ onMounted(() => {
                 color: #1558b0;
                 display: none;
               " />
+            <Button class="btnEstiliza" label="" icon="pi  pi-eye"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="detailsUser(data)" />
+
             <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
               style="border: 0px; background-color: transparent; color: #1558b0" @click="atualizarDados(data)" />
             <div>
@@ -1001,6 +1052,84 @@ onMounted(() => {
         </button>
       </div>
     </Dialog>
+
+    <Dialog header="Detalhes do user" v-model:visible="dialogUserDetails" :closable="true" :modal="true"
+      :draggable="false" :resizable="false" style="width: 50vw; min-height: 5vh" :footer="productDialogFooterForm">
+
+      <!-- <hr /> -->
+      <div class="containersDetails">
+        <div class="cardUserDetails">
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-user"></i>
+              <div class="titleCardUser">Informações do Usuário</div>
+            </div>
+            <div class="dateDetails"><span class="label">ID:</span><span class="value">{{ userDetails.id }}</span></div>
+            <div class="dateDetails"><span class="label">Nome:</span><span
+                class="value">{{ userDetails.user_full_name }}</span></div>
+            <div class="dateDetails"><span class="label">Email:</span><span class="value">{{ userDetails.email }}</span>
+            </div>
+            <div class="dateDetails"><span class="label">Ativo:</span><span class="value">{{ userDetails.is_active == 0 ?
+                'Inativo':'Ativo'}}</span></div>
+          </div>
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-box"></i>
+              <div class="titleCardUser">Aplicações</div>
+            </div>
+            <div class="dateDetails">
+              <ul>
+                <li v-for="(app, index) in userDetails.application" :key="app.id">
+                  <span class="label">Aplicação {{ index+1 }}: </span>
+                  <span class="value">{{ returnAplications(app.application_id) }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-box"></i>
+              <div class="titleCardUser">Empresa</div>
+            </div>
+            <div class="dateDetails">
+              <span class="label">Nome:</span><span class="value">{{ returnCompany(userDetails.company_id) }}</span>
+              <!-- <span class="label">Id:</span><span class="value">{{ userDetails.company_id }}</span> -->
+              
+              <!-- <ul>
+                <li v-for="(app, index) in userDetails.application" :key="app.id">
+                  <span class="label">Aplicação {{ index+1 }}: </span>
+                  <span class="value">{{ returnAplications(app.application_id) }}</span>
+                </li>
+              </ul> -->
+            </div>
+            
+          </div>
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-sign-in"></i>
+              <div class="titleCardUser">Gates</div>
+            </div>
+            <div class="chip dateDetails">Gate ID: 6</div>
+            <div class="chip dateDetails">Gate ID: 1</div>
+          </div>
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-shield"></i>
+              <div class="titleCardUser">Funções</div>
+            </div>
+            <div class="chip dateDetails">Manager</div>
+          </div>
+          <hr>
+          <br>
+          <div class="flex">
+            <button class="p-button p-component cores" @click="dialogUserDetails = false">
+              Sair
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </Dialog>
   </div>
 </template>
 
@@ -1085,5 +1214,87 @@ onMounted(() => {
   color: #555555 !important;
   transition: all 0.3s ease;
   border-radius: 5px;
+}
+
+.cardUserDetails {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 99%;
+  // margin: 0 auto;
+  margin: 20px 0px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardUserDetails h2 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.section div {
+  // margin: 15px 0px;
+}
+
+.dateDetails {
+  margin: 15px 0px;
+}
+
+.section div:first-child {
+  // border: 1px solid red;
+  margin: 0px !important;
+}
+
+.label {
+  font-weight: bold;
+  color: #555;
+  font-size: 1.2rem;
+}
+
+.value {
+  margin-left: 10px;
+  color: #333;
+}
+
+.chip {
+  display: inline-block;
+  background-color: #e0f2f1;
+  color: #00796b;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.titleCardUsers {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  // margin: 10px 0px;
+  // border: 1px solid black;
+}
+
+.section span:last-child {
+  font-size: 1.1rem;
+}
+
+.titleCardUsers .titleCardUser {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1558b0;
+}
+
+.titleCardUsers i {
+  display: block;
+  color: #1558b0;
+}
+
+.containersDetails {
+  display: flex;
+  justify-content: center;
 }
 </style>

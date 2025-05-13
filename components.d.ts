@@ -30,6 +30,7 @@ declare module 'vue' {
     SelectButton: typeof import('primevue/selectbutton')['default']
     Textarea: typeof import('primevue/textarea')['default']
     Toast: typeof import('primevue/toast')['default']
+    TreeSelect: typeof import('primevue/treeselect')['default']
   }
   export interface ComponentCustomProperties {
     StyleClass: typeof import('primevue/styleclass')['default']

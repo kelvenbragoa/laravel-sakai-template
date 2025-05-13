@@ -14,7 +14,7 @@ const router = useRouter()
 //     return false
 // }
 
-// console.log(getUserData())
+
 
 function logoutfun() {
     localStorage.removeItem('access_token');
@@ -31,8 +31,6 @@ function logoutfun() {
         }
         router.push('/');
     } else {
-        // if (accessToken) console.log("access_token ainda existe:", accessToken);
-        // if (user) console.log("cgate_user ainda existe:", JSON.parse(user));
     }
 }
 

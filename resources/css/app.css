@@ -312,6 +312,17 @@ td {
   color: #007bff;
   
 }
+
+.aplicationsCHip{
+  position: relative;
+}
+
+.subApplications{
+  position: absolute;
+  top: 0;
+  left: -40px;
+  width: 100%;
+}
 @media print {
   .imagensRelatorio {
     page-break-before: always;

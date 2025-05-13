@@ -19,6 +19,12 @@ export const acessRouters = ref(
     }
 )
 
+export const dataUser = ref(
+    {
+        applicationsPermissions: []
+    }
+)
+
 
 
 const getToken = () => {

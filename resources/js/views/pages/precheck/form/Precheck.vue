@@ -25,7 +25,6 @@ const precheck = async () => {
   errorL.value = " "
   emptyField()
   if (errorL.value == " ") {
-    console.log("Check feito")
   }
 
 };

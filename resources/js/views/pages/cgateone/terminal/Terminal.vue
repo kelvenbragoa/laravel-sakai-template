@@ -490,7 +490,6 @@ if (permissionsAcess().adminAcesseSuperAdmin == false) {
 
 const dialogRoleUpdateVisible = ref(false);
 
-console.log("jdscjd")
 const dadoSearch = ref("");
 const filtroDados = ref("");
 const isActive = ref(true)

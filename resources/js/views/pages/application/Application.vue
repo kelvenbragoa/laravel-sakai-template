@@ -4,6 +4,7 @@ import { onMounted, reactive, ref } from "vue";
 import { baseUrls } from "../../../api/index"
 import { backLog, checkAccess } from "../../../utils/accesRoute";
 import axios from "axios";
+import { elements } from "chart.js";
 
 checkAccess()
 
@@ -13,6 +14,7 @@ const dialogGate = ref(false)
 const dialogGateUpdate = ref(false)
 const dialogApplicationDelete = ref(false)
 const dialogDetalhes = ref(false)
+const permissionsApplications = ref()
 
 const formDataSave = reactive({
   name: "",
@@ -52,6 +54,12 @@ const buscarApplication = async () => {
     });
     applications.value = response.data.data.data
 
+    for (let aplicacaoField in applications.value) {
+      // for(let permissionsField in applications.value[aplicacaoField]){
+      //   console.log(permissionsField)
+      // }
+    }
+
 
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
@@ -59,6 +67,7 @@ const buscarApplication = async () => {
     loading.value = false;
   }
 };
+
 
 const saveApplications = async () => {
   loading.value = true;
@@ -177,9 +186,9 @@ const fieldVoid = (data) => {
 }
 
 const detailsGates = (data) => {
-  console.log("Details")
-  console.log(data)
   dialogDetalhes.value = true
+
+  permissionsApplications.value = data.application_permissions
 }
 
 
@@ -214,6 +223,7 @@ onMounted(() => {
         </div>
       </template>
       <template #empty> Vazio. </template>
+      
 
       <Column field="id" header="Id" style="min-width: 10rem"> </Column>
       <Column field="name" header="Nome" style="min-width: 12rem"> </Column>
@@ -352,21 +362,33 @@ onMounted(() => {
       </div>
     </Dialog>
 
-    <Dialog header="Detalhes Aplicações" v-model:visible="dialogDetalhes" :closable="true" :modal="true" :draggable="false"
-      :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
+    <Dialog header="Detalhes Aplicações" v-model:visible="dialogDetalhes" :closable="true" :modal="true"
+      :draggable="false" :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
       <hr />
       <!-- <Select id="permis" v-model="permissions" :options="permissionsItems"  placeholder="S. Nivel de acesso" class="w-full" style="margin-top: 15px;"></Select> -->
 
       <div class="quantiUsers">
-          <span>Quantidade de usuários:</span>
+        <span>Quantidade de usuários:</span>
 
-          <span>10</span>
-        </div>
+        <span>10</span>
+      </div>
+      <div class="titleCardUsers"> 
+        <div class="titleCardUser">Permissões</div>
+      </div>
+      <div class="dateDetails">
+        <ul class="aplicationUserEspecific">
+          <li v-for="app in permissionsApplications" :key="app.id">
+            <span class="value">{{ app.permission.name }}</span>
+            <!-- <span class="value">{{ app.application_permission?.permission || 'Sem nome' }}</span> -->
+          </li>
+        </ul>
+
+      </div>
       <div class="flex">
         <button class="p-button p-component cores" @click="dialogDetalhes = false">
           Ok
         </button>
-       
+
         <!-- <button class="p-button p-component p-button-secondary mx-2" @click="dialogDetalhes = false">
           Cancelar
         </button> -->
@@ -444,7 +466,7 @@ onMounted(() => {
 .btnEstiliza {
   background-color: rgba(21, 88, 176, 0.8117647059) !important;
   border: 1px solid rgba(21, 88, 176, 0.5333333333) !important;
-  color: #fff!important;
+  color: #fff !important;
 }
 
 
@@ -513,5 +535,54 @@ onMounted(() => {
   min-width: 100%;
   min-height: 150px;
   max-height: 150px;
+}
+
+.chip {
+  display: inline-block;
+  background-color: #e0f2f1;
+  color: #00796b;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.aplicationUserEspecific .value {
+  color: #00796b;
+}
+
+.aplicationUserEspecific{
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding: 10px 0px;
+  
+  
+}
+
+.aplicationUserEspecific li{
+  background-color: #e0f2f1;
+  // margin-left: 10px;
+  color: #00796b;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
+  min-width: calc((100% / 2) - 10px);
+  max-width: 100%;
+}
+
+.aplicationUserEspecific li:nth-child(odd){
+  background-color: #1558b01c;
+  
+}
+
+.aplicationUserEspecific li:nth-child(odd) .value{
+  color: #1558b0!important;
 }
 </style>

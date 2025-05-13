@@ -173,8 +173,6 @@ const fieldVoid = (data) => {
 
 
 const detailsGates = (data)=>{
-  console.log("Details")
-  console.log(data)
   dialogDetalhes.value = true
 }
 
@@ -185,7 +183,6 @@ const usersData = async()=>{
     return;
   }
 
-  console.log(token)
   try{
     const response = await axios.get(baseUrls.userList, {
       headers: {
@@ -196,8 +193,6 @@ const usersData = async()=>{
       }
     })
     users.value = response.data.data
-
-    console.log(users.value)
   }catch(e){
     console.error(e)
   }

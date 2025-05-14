@@ -1,8 +1,27 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { jsPDF } from "jspdf";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import * as XLSX from "xlsx";
+import { permissionsAcess } from "../../../../utils/accesRoute";
+import { baseUrls } from "../../../../api";
+
+if (permissionsAcess().adminAcesseSuperAdmin == false) {
+  if (permissionsAcess().cgate2dotxfound == false) {
+    useRouter().push("/dashboard")
+  }
+}
+
+const buscarCargaGeral = async()=>{
+  try{
+    const response = await axios.get(`${baseUrls.transacoesCgate2dotzeroCarga}`);
+    data.value = response.data.data.data;
+    totalRecords.value = response.data.data.data.total
+    console.log(response)
+  }catch(e){
+    console.error(e)
+  }
+}
 
 const data = ref([]);
 const totalRecords = ref(0);
@@ -10,14 +29,8 @@ const first = ref(0);
 const rowsPerPage = ref(10);
 const pageNumber = ref(1);
 const loading = ref(false);
-// const filters = ref({ global: { value: null } }); // Inicialize os filtros
 const filters = ref("");
 
-//  [
-//     "Carga",
-//     "Criado",
-//     "Número do documento"
-//   ]
 
 const tabelaDados = ref({
   cargo_type: "Carga",
@@ -69,7 +82,7 @@ if (Number(gateId.indexOf("Out")) > -1) {
   gateId = `Portão ${gateId} (Entrada)`;
 }
 
-// Função para carregar os dados
+
 const dataFilter = ref();
 const loadData = async (page) => {
   loading.value = true;
@@ -103,7 +116,6 @@ const loadData = async (page) => {
   }
 };
 
-// Evento ao mudar a página
 const onPage = (event) => {
   first.value = event.first;
   pageNumber.value = Math.floor(first.value / rowsPerPage.value) + 1;
@@ -132,14 +144,14 @@ const generatePDF = (rowData) => {
     40,
     10
   );
-  //  doc.addImage("/logo.png" , 'JPEG', larguraPagina-60, 7, 40, 10);
+  
   let y = 15;
-  // Linha de separação
+
   doc.setLineWidth(0.1);
   doc.line(20, 20, 190, 20);
   y += 10;
 
-  // Função para converter hexadecimal em RGB
+
   function hexToRgb(hex) {
     var bigint = parseInt(hex.replace("#", ""), 16);
     var r = (bigint >> 16) & 255;
@@ -148,21 +160,20 @@ const generatePDF = (rowData) => {
     return [r, g, b];
   }
 
-  // Definindo a cor de fundo com hexadecimal
-  let color = hexToRgb("#f5f5f5"); // Hexadecimal convertido para RGB
-  let color2 = hexToRgb("#ffffff"); // Hexadecimal convertido para RGB
+
+  let color = hexToRgb("#f5f5f5"); 
+  let color2 = hexToRgb("#ffffff"); 
 
   let corChange = false;
-  // /images/logo.png
   doc.setFontSize(9);
 
   for (let key in rowData) {
     if (rowData[key] != null) {
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(0, 0, 0); // Preto
+      doc.setTextColor(0, 0, 0); 
       if (!corChange) {
         doc.setFillColor(color2[0], color2[1], color2[2]);
-        doc.rect(20, y, 80, 10, "F"); // Borda da célula
+        doc.rect(20, y, 80, 10, "F"); 
 
         doc.text(
           String(key).length > 30
@@ -172,7 +183,7 @@ const generatePDF = (rowData) => {
           y + 6
         );
         doc.setFillColor(color2[0], color2[1], color2[2]);
-        doc.rect(100, y, larguraPagina / 2 - 15, 10, "F"); // Borda da célula
+        doc.rect(100, y, larguraPagina / 2 - 15, 10, "F"); 
         doc.text(
           String(rowData[key]).length > 50
             ? String(rowData[key]).substring(0, 20) + "..."
@@ -183,7 +194,7 @@ const generatePDF = (rowData) => {
         corChange = true;
       } else {
         doc.setFillColor(color[0], color[1], color[2]);
-        doc.rect(20, y, 80, 10, "F"); // Borda da célula
+        doc.rect(20, y, 80, 10, "F"); 
         doc.text(
           String(key).length > 30
             ? String(tabelaDados.value[key]).substring(0, 20) + "..."
@@ -192,7 +203,7 @@ const generatePDF = (rowData) => {
           y + 6
         );
         doc.setFillColor(color[0], color[1], color[2]);
-        doc.rect(100, y, larguraPagina / 2 - 15, 10, "F"); // Borda da célula
+        doc.rect(100, y, larguraPagina / 2 - 15, 10, "F"); 
         doc.text(
           String(rowData[key]).length > 50
             ? String(rowData[key]).substring(0, 20) + "..."
@@ -212,7 +223,7 @@ const generatePDF = (rowData) => {
   doc.addImage(rowData.trailer_1_internal_cargo_photo, "JPEG", 20, y, 180, 160);
 
   const data = new Date();
-  // const hoje = data.getDate()+"/"+(data.getMonth()+1)+"/"+data.getUTCFullYear()+" - "+data.getHours+"h:"+data.getMinutes+"min:"+data.getSeconds+"s"
+  
   const hoje =
     data.getDate() + "/" + (data.getMonth() + 1) + "/" + data.getUTCFullYear();
 
@@ -230,9 +241,12 @@ const generatePDF = (rowData) => {
   );
 };
 
-// Carrega os dados inicialmente
+
 onMounted(() => {
   loadData(pageNumber.value);
+  buscarCargaGeral()
+
+  
 });
 </script>
 <template>

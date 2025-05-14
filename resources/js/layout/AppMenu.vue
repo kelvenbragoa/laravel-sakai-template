@@ -316,7 +316,7 @@ const cgate2dot1CargaGeralMenu = () => {
                 {
                     label: 'Portão 1',
                     icon: 'pi pi-window-maximize',
-                    to: '/cargaotwo/1Out'
+                    to: '/cargaotwo/1'
                 },
                 // {
                 //     label: 'Portão 2',
@@ -326,12 +326,12 @@ const cgate2dot1CargaGeralMenu = () => {
                 {
                     label: 'Portão 3',
                     icon: 'pi pi-window-maximize',
-                    to: '/cargaotwo/3In'
+                    to: '/cargaotwo/3'
                 },
                 {
                     label: 'Portão 16',
                     icon: 'pi pi-window-maximize',
-                    to: '/cargaotwo/16In'
+                    to: '/cargaotwo/16'
                 }
             ]
         }

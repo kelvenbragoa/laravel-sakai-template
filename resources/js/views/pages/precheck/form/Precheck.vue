@@ -6,14 +6,16 @@ import { baseUrls } from "../../../../api/index";
 import * as XLSX from 'xlsx';
 
 const containers = ref([]);
-const updateContainerNumber = ref()
-const idDocs =  ref()
+const updateContainerNumber = ref(null)
+const idDocs = ref()
 const router = useRouter();
 
 const token = ref("");
 const precheckData = ref({
-  containerNumber: ""
+  containerNumber: null
 });
+
+
 
 const dialogGateUpdate = ref(false)
 
@@ -76,14 +78,15 @@ function handleFileUpload(event) {
 const atualizarDados = (dados) => {
   dialogGateUpdate.value = true
   idDocs.value = (dados.id - 1)
-  updateContainerNumber.value = dados.containerNumber
+  
+  updateContainerNumber.value = Number(dados.appointment_number)
 }
 
 const atualizar = () => {
-  containers.value[idDocs.value].containerNumber = updateContainerNumber.value
+  containers.value[idDocs.value].appointment_number = String(updateContainerNumber.value)
   dialogGateUpdate.value = false
 }
-const deleteContainerData = (dados)=>{
+const deleteContainerData = (dados) => {
   idDocs.value = (dados.id - 1)
   deleteContainer(idDocs.value)
 }
@@ -96,6 +99,10 @@ function deleteContainer(dadosId) {
 </script>
 
 <template>
+
+
+
+
   <FloatingConfigurator />
 
 
@@ -121,15 +128,8 @@ function deleteContainer(dadosId) {
               background-color: #ffffff;
             ">
               <div class="text-center mb-8">
-                <!-- <img src="@/images/login.png" alt="Descrição da imagem" class="my-image" /> -->
-                <!-- <img :src="require('@/assets/images/login.png')" alt="Descrição da imagem" /> -->
+
                 <div class="flex items-center justify-center w-full">
-                  <!-- <Image src="@/assets/images/logo.png" alt="Image" width="200" /> -->
-                  <!-- <img
-                  src="http://[::1]:5173/resources/js/assets/images/logo.png"
-                  alt="logo"
-                  style="width: 200px"
-                /> -->
                   <div class="imageLogoLogin"></div>
                 </div>
                 <div class="m-20"></div>
@@ -145,8 +145,7 @@ function deleteContainer(dadosId) {
 
               <div>
                 <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"></label>
-                <InputText id="email1" type="text" placeholder="Número de container"
-                  class="w-full md:w-[30rem] mb-8 inputsCaixas" v-model="precheckData.containerNumber" />
+                <InputNumber v-model="precheckData.containerNumber" inputId="numberOnly" :useGrouping="false" :min="0" required autofocus class="w-full md:w-[30rem] mb-8 inputsCaixas" placeholder="Appointment Number" />
 
                 <label for="excelFile" class="excelLabel">
                   <i class="pi pi-file-excel"></i>
@@ -174,10 +173,10 @@ function deleteContainer(dadosId) {
             ">
             <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4"
               style="text-align: center; font-size: 1.4rem; font-weight: 600;">
-              Tabela de container numbers (Excel)
+              Appointment Numbers (Excel)
             </div>
             <DataTable :value="containers" class="tabelaContainerNumber" paginator :rows="6">
-              <Column field="containerNumber" header="Número do Contêiner" />
+              <Column field="appointment_number" header="Appointment Number" />
               <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
                 <template #body="{ data }">
                   <div style="display: flex; gap: 0px">
@@ -221,7 +220,9 @@ function deleteContainer(dadosId) {
     <div class="formUserAdd">
 
       <label for="gatename" style="display: block; margin-top: 10px;">Contêiner</label>
-      <InputText id="name" v-model="updateContainerNumber" required autofocus class="w-full my-4" />
+      <InputNumber v-model="updateContainerNumber" inputId="numberOnly" :useGrouping="false" :min="0" required autofocus class="w-full my-4" />
+
+
       <!-- v-model="formDataSave.name" -->
 
     </div>

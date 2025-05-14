@@ -367,11 +367,11 @@ onMounted(() => {
       <hr />
       <!-- <Select id="permis" v-model="permissions" :options="permissionsItems"  placeholder="S. Nivel de acesso" class="w-full" style="margin-top: 15px;"></Select> -->
 
-      <div class="quantiUsers">
+      <!--<div class="quantiUsers">
         <span>Quantidade de usuários:</span>
 
         <span>10</span>
-      </div>
+      </div>-->
       <div class="titleCardUsers"> 
         <div class="titleCardUser">Permissões</div>
       </div>

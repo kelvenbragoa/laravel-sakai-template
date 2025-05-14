@@ -231,11 +231,11 @@ onMounted(() => {
       </template>
       <template #empty> Vazio. </template>
 
-      <Column field="id" header="Id" style="min-width: 10rem"> </Column>
+      <!-- <Column field="id" header="Id" style="min-width: 10rem"> </Column> -->
       <Column field="name" header="Nome" style="min-width: 12rem"> </Column>
       <Column field="created_by" header="Criado por" style="min-width: 12rem"> </Column>
 
-      <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
+      <!--<Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
         <template #body="{ data }">
           <div style="display: flex; gap: 0px">
             <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style="
@@ -246,9 +246,9 @@ onMounted(() => {
               " />
             <Button class="btnEstiliza" label="Detalhes" icon="pi  pi-eye"
               style="border: 0px; background-color: transparent; color: #1558b0" @click="detailsGates(data)" />
-              <!-- <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
-              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataGate(data)" /> -->
-            <!-- <div>
+              <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataGate(data)" /> 
+             <div>
 
               <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="
                   padding: 5px 0px;
@@ -256,10 +256,10 @@ onMounted(() => {
                   color: #ff0000;
                   border: 0px;
                 " @click="getDataGateDelete(data)" />
-            </div> -->
+            </div
           </div>
         </template>
-      </Column>
+      </Column>-->
     </DataTable>
   </div>
 

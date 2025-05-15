@@ -42,7 +42,7 @@ class ContainerTransactionController extends Controller
                     $query->whereBetween('created_at', [$startDateTimeSearch, $endDateTimeSearch]);
             })
             ->when(request('gate'), function ($query, $gateQuery) {
-                $query->where('gate','like', "{$gateQuery}%");
+                $query->where('gate','like', "%{$gateQuery}%");
             })
             ->orderBy('created_at', 'desc')
             ->paginate(50);

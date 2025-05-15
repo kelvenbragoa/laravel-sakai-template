@@ -53,7 +53,7 @@ class AuthController extends Controller
 
         // Buscar usuário pelo nome de usuário (convertido para minúsculas)
         $user = User::where('user_name', strtolower($loginUserData['user_name']))
-            ->with(['gate', 'company','applications'])
+            ->with(['gate.gate_name', 'company'])
             ->first();
 
         if ($user && Hash::check($loginUserData['password'], $user->password)) {

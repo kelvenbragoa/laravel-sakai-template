@@ -118,14 +118,7 @@ const checked = ref(false);
                 <Password id="password1" v-model="dadosUserAuth.password" placeholder="Senha" :toggleMask="true"
                   class="mb-4 inputsCaixas" fluid :feedback="false"></Password>
 
-                <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                  <div class="flex items-center">
-                    <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                    <label for="rememberme1">Lembrar</label>
-                  </div>
-                  <span class="font-medium no-underline ml-2 text-right cursor-pointer corPrimaria">Esqueceste a
-                    senha?</span>
-                </div>
+               
                 <Button label="Entrar" class="w-full facebook-button hover" @click="autenticar"></Button>
                 <Button label="Pre check" class="butoonCheck" @click="goToPrecheck"></Button>
                 <!-- as="router-link" -->

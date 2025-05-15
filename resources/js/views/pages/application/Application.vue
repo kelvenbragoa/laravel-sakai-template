@@ -4,7 +4,7 @@ import { onMounted, reactive, ref } from "vue";
 import { baseUrls } from "../../../api/index"
 import { backLog, checkAccess } from "../../../utils/accesRoute";
 import axios from "axios";
-
+import { elements } from "chart.js";
 
 checkAccess()
 
@@ -12,14 +12,15 @@ const toast = useToast();
 const filtroDados = ref("");
 const dialogGate = ref(false)
 const dialogGateUpdate = ref(false)
+const dialogApplicationDelete = ref(false)
 const dialogDetalhes = ref(false)
-const dialogGateDelete = ref(false)
+const permissionsApplications = ref()
 
 const formDataSave = reactive({
-  name: ""
+  name: "",
+  version: "",
+  description: ""
 })
-
-const users = ref([])
 
 const idGate = ref(0)
 
@@ -30,14 +31,14 @@ const getToken = () => {
 };
 
 const number = ref(0)
-const gates = ref([])
+const applications = ref([])
 const gateFiltros = ref([])
 
 
 
 const loading = ref(false)
 
-const buscarGates = async () => {
+const buscarApplication = async () => {
   loading.value = true;
   const token = getToken();
   if (!token) {
@@ -46,12 +47,18 @@ const buscarGates = async () => {
   }
   try {
     const response = await axios.get(
-      baseUrls.gate, {
+      baseUrls.applications, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    gates.value = response.data.data.data
+    applications.value = response.data.data.data
+
+    for (let aplicacaoField in applications.value) {
+      // for(let permissionsField in applications.value[aplicacaoField]){
+      //   console.log(permissionsField)
+      // }
+    }
 
 
   } catch (error) {
@@ -61,7 +68,8 @@ const buscarGates = async () => {
   }
 };
 
-const saveGate = async () => {
+
+const saveApplications = async () => {
   loading.value = true;
   fieldIsEmpty.value = ""
   if (verifyEmpty(formDataSave)) {
@@ -69,16 +77,18 @@ const saveGate = async () => {
     if (!token) {
       return;
     }
+
     try {
-      const response = await axios.post(baseUrls.gate, formDataSave, {
+      const response = await axios.post(baseUrls.applications, formDataSave, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
+
       loading.value = false;
       dialogGate.value = false
       fieldVoid(formDataSave)
-      buscarGates()
+      buscarApplication()
     } catch (error) {
       fieldIsEmpty.value = "Erro ao adicionar gate"
       loading.value = false;
@@ -90,28 +100,32 @@ const saveGate = async () => {
 
 }
 
-const getDataGate = (data) => {
+const getDataApplications = (data) => {
+
   fieldIsEmpty.value = ""
   dialogGateUpdate.value = true
-  formDataSave.name = data.name
+  // formDataSave.name = data.name
   idGate.value = data.id
+  for (let dados in formDataSave) {
+    formDataSave[dados] = data[dados]
+  }
 
 }
 
-const getDataGateDelete = (data) => {
+const getDataApplicationsDelete = (data) => {
   fieldIsEmpty.value = ""
-  dialogGateDelete.value = true
+  dialogApplicationDelete.value = true
   idGate.value = data.id
 }
 
-const updateGate = async () => {
+const updateApplication = async () => {
   const token = getToken();
   if (!token) {
     return;
   }
   try {
     loading.value = true;
-    const response = await axios.put(`${baseUrls.gate}/${idGate.value}`, formDataSave, {
+    const response = await axios.put(`${baseUrls.applications}/${idGate.value}`, formDataSave, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -120,7 +134,7 @@ const updateGate = async () => {
     fieldVoid(formDataSave)
     loading.value = false;
     idGate.value = 0
-    buscarGates()
+    buscarApplication()
   } catch (error) {
     fieldIsEmpty.value = "Erro ao tentar atualizar"
     loading.value = false;
@@ -130,7 +144,7 @@ const updateGate = async () => {
 }
 
 
-const deleteGate = async () => {
+const deleteApplication = async () => {
   loading.value = true;
   const token = getToken();
   if (!token) {
@@ -138,16 +152,16 @@ const deleteGate = async () => {
   }
   fieldIsEmpty.value = ""
   try {
-    
-    const response = await axios.delete(`${baseUrls.gate}/${idGate.value}`, {
+
+    const response = await axios.delete(`${baseUrls.applications}/${idGate.value}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
     idGate.value = 0
     loading.value = false;
-    dialogGateDelete.value = false
-    buscarGates()
+    dialogApplicationDelete.value = false
+    buscarApplication()
   } catch (error) {
     loading.value = false;
     fieldIsEmpty.value = "Erro ao apagar o dado"
@@ -171,38 +185,17 @@ const fieldVoid = (data) => {
   }
 }
 
-
-const detailsGates = (data)=>{
+const detailsGates = (data) => {
   dialogDetalhes.value = true
+
+  permissionsApplications.value = data.application_permissions
 }
 
-const usersData = async()=>{
-  const token = getToken();
-  if (!token) {
-    backLog()
-    return;
-  }
-
-  try{
-    const response = await axios.get(baseUrls.userList, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      params: {
-        page: '4'
-      }
-    })
-    users.value = response.data.data
-  }catch(e){
-    console.error(e)
-  }
-}
 
 
 
 onMounted(() => {
-  buscarGates();
-  usersData()
+  buscarApplication();
 }
 )
 </script>
@@ -214,8 +207,8 @@ onMounted(() => {
     </div>
   </div>
   <div class="card">
-    <div class="font-semibold text-xl mb-4">Gates</div>
-    <DataTable :value="gates" :paginator="true" :rows="10">
+    <div class="font-semibold text-xl mb-4">Aplicações</div>
+    <DataTable :value="applications" :paginator="true" :rows="10">
       <template #header>
         <div class="flex justify-between">
           <IconField class="searchText">
@@ -230,41 +223,44 @@ onMounted(() => {
         </div>
       </template>
       <template #empty> Vazio. </template>
+      
 
-      <!-- <Column field="id" header="Id" style="min-width: 10rem"> </Column> -->
+      <Column field="id" header="Id" style="min-width: 10rem"> </Column>
       <Column field="name" header="Nome" style="min-width: 12rem"> </Column>
       <Column field="created_by" header="Criado por" style="min-width: 12rem"> </Column>
+      <Column field="version" header="Versão" style="min-width: 12rem"> </Column>
 
-      <!--<Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
+      <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
         <template #body="{ data }">
           <div style="display: flex; gap: 0px">
-            <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style="
+            <!-- <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style="
                 border: 0px;
                 background-color: transparent;
                 color: #1558b0;
                 display: none;
-              " />
+              " /> -->
+
             <Button class="btnEstiliza" label="Detalhes" icon="pi  pi-eye"
               style="border: 0px; background-color: transparent; color: #1558b0" @click="detailsGates(data)" />
-              <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
-              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataGate(data)" /> 
-             <div>
+            <!-- <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataApplications(data)" /> -->
+            <!-- <div>
 
               <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="
                   padding: 5px 0px;
                   background-color: transparent;
                   color: #ff0000;
                   border: 0px;
-                " @click="getDataGateDelete(data)" />
-            </div
+                " @click="getDataApplicationsDelete(data)" />
+            </div> -->
           </div>
         </template>
-      </Column>-->
+      </Column>
     </DataTable>
   </div>
 
   <div class="p-fluid">
-    <Dialog header="Confirmação" v-model:visible="dialogGateDelete" :style="{ width: '350px' }" :modal="true">
+    <Dialog header="Confirmação" v-model:visible="dialogApplicationDelete" :style="{ width: '350px' }" :modal="true">
       <div class="msgErrorField">
         <p>
           {{ fieldIsEmpty }}
@@ -281,13 +277,13 @@ onMounted(() => {
         <span>Tens a certeza que queres eliminar?</span>
       </div>
       <template #footer>
-        <Button label="Não" icon="pi pi-times" @click="dialogGateDelete = false" text severity="secondary" />
-        <Button label="Sim" icon="pi pi-check" @click="deleteGate" severity="danger" outlined autofocus />
+        <Button label="Não" icon="pi pi-times" @click="dialogApplicationDelete = false" text severity="secondary" />
+        <Button label="Sim" icon="pi pi-check" @click="deleteApplication" severity="danger" outlined autofocus />
       </template>
     </Dialog>
 
-    <Dialog header="Atualizar Gate" v-model:visible="dialogGateUpdate" :closable="true" :modal="true" :draggable="false"
-      :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
+    <Dialog header="Atualizar Aplicações" v-model:visible="dialogGateUpdate" :closable="true" :modal="true"
+      :draggable="false" :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
       <!-- optionLabel="name" -->
       <div class="msgErrorField">
         <p>
@@ -302,8 +298,21 @@ onMounted(() => {
         <InputText id="name" v-model="formDataSave.name" required autofocus class="w-full" />
 
       </div>
+
+      <div class="formUserAdd">
+        <label for="gatename">Versão</label>
+        <InputText id="name" v-model="formDataSave.version" required autofocus class="w-full" />
+
+      </div>
+
+      <div class="formUserAdd">
+        <label for="gatename">Descrição</label>
+        <Textarea v-model="formDataSave.description" rows="5" cols="30" />
+        <!-- <InputText id="name" v-model="formDataSave.name" required autofocus class="w-full" /> -->
+
+      </div>
       <div class="flex">
-        <button class="p-button p-component cores" @click="updateGate">
+        <button class="p-button p-component cores" @click="updateApplication">
           Atualizar
         </button>
         <button class="p-button p-component p-button-secondary mx-2" @click="dialogGateUpdate = false">
@@ -312,7 +321,7 @@ onMounted(() => {
       </div>
     </Dialog>
 
-    <Dialog header="Adicionar Gate" v-model:visible="dialogGate" :closable="true" :modal="true" :draggable="false"
+    <Dialog header="Adicionar Aplicações" v-model:visible="dialogGate" :closable="true" :modal="true" :draggable="false"
       :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
       <!-- optionLabel="name" -->
       <div class="msgErrorField">
@@ -328,8 +337,23 @@ onMounted(() => {
         <InputText id="name" v-model="formDataSave.name" required autofocus class="w-full" />
 
       </div>
+
+      <div class="formUserAdd">
+        <label for="gatename">Versão</label>
+        <InputText id="name" v-model="formDataSave.version" required autofocus class="w-full" />
+
+      </div>
+
+      <div class="formUserAdd">
+        <label for="gatename">Descrição</label>
+        <Textarea v-model="formDataSave.description" rows="5" cols="30" />
+        <!-- <InputText id="name" v-model="formDataSave.name" required autofocus class="w-full" /> -->
+
+      </div>
+
+
       <div class="flex">
-        <button class="p-button p-component cores" @click="saveGate">
+        <button class="p-button p-component cores" @click="saveApplications">
           Salvar
         </button>
         <button class="p-button p-component p-button-secondary mx-2" @click="dialogGate = false">
@@ -338,21 +362,33 @@ onMounted(() => {
       </div>
     </Dialog>
 
-    <Dialog header="Detalhes Gate" v-model:visible="dialogDetalhes" :closable="true" :modal="true" :draggable="false"
-      :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
+    <Dialog header="Detalhes Aplicações" v-model:visible="dialogDetalhes" :closable="true" :modal="true"
+      :draggable="false" :resizable="false" style="width: 30vw; min-height: 5vh" :footer="productDialogFooterForm">
       <hr />
       <!-- <Select id="permis" v-model="permissions" :options="permissionsItems"  placeholder="S. Nivel de acesso" class="w-full" style="margin-top: 15px;"></Select> -->
 
-      <div class="quantiUsers">
-          <span>Quantidade de usuários:</span>
+      <!--<div class="quantiUsers">
+        <span>Quantidade de usuários:</span>
 
-          <span>10</span>
-        </div>
+        <span>10</span>
+      </div>-->
+      <div class="titleCardUsers"> 
+        <div class="titleCardUser">Permissões</div>
+      </div>
+      <div class="dateDetails">
+        <ul class="aplicationUserEspecific">
+          <li v-for="app in permissionsApplications" :key="app.id">
+            <span class="value">{{ app.permission.name }}</span>
+            <!-- <span class="value">{{ app.application_permission?.permission || 'Sem nome' }}</span> -->
+          </li>
+        </ul>
+
+      </div>
       <div class="flex">
         <button class="p-button p-component cores" @click="dialogDetalhes = false">
           Ok
         </button>
-       
+
         <!-- <button class="p-button p-component p-button-secondary mx-2" @click="dialogDetalhes = false">
           Cancelar
         </button> -->
@@ -421,25 +457,18 @@ onMounted(() => {
   width: 100% !important;
 }
 
+.btnEstiliza:hover {
+  color: #1558b0a4 !important;
+  background: #1558b033 !important;
+  transition: all 0.5s ease !important;
+}
 
 .btnEstiliza {
   background-color: rgba(21, 88, 176, 0.8117647059) !important;
   border: 1px solid rgba(21, 88, 176, 0.5333333333) !important;
-  color: #fff!important;
+  color: #fff !important;
 }
 
-// .btnEstiliza{
-//   border: #1558b0 1px solid!important;
-//   background-color: #1558b0!important;
-//   color: #fff!important;
-// }
-
-.btnEstiliza:hover {
-  color: #1558b0a4 !important;
-  background: #1558b033 !important;
-  border: #1558b033 1px solid!important;
-  transition: all 0.5s ease !important;
-}
 
 .btnEstilizaDel:hover {
   color: #ff0000a5 !important;
@@ -499,5 +528,61 @@ onMounted(() => {
 
 .sprate {
   height: 20px;
+}
+
+.formUserAdd textarea {
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 150px;
+  max-height: 150px;
+}
+
+.chip {
+  display: inline-block;
+  background-color: #e0f2f1;
+  color: #00796b;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.aplicationUserEspecific .value {
+  color: #00796b;
+}
+
+.aplicationUserEspecific{
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding: 10px 0px;
+  
+  
+}
+
+.aplicationUserEspecific li{
+  background-color: #e0f2f1;
+  // margin-left: 10px;
+  color: #00796b;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
+  min-width: calc((100% / 2) - 10px);
+  max-width: 100%;
+}
+
+.aplicationUserEspecific li:nth-child(odd){
+  background-color: #1558b01c;
+  
+}
+
+.aplicationUserEspecific li:nth-child(odd) .value{
+  color: #1558b0!important;
 }
 </style>

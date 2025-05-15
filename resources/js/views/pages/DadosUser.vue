@@ -99,7 +99,7 @@ axios
 
   })
   .catch((error) => {
-    console.log(error);
+    (error);
   });
   
 

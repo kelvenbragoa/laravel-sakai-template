@@ -173,7 +173,7 @@
 
 
         </div>
-        <div class="footerLd">
+        <div class="footerLd" v-if="pageview.page1">
           <div class="lineDiv"></div>
           <div class="containerFooter">
             <div class="processadoPorCgate">
@@ -571,7 +571,7 @@
 import { ref, onMounted, watch } from "vue";
 import { FilterMatchMode } from "@primevue/core/api";
 import { getCarga, getTransactions } from "@/api";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { jsPDF } from "jspdf";
 import json from "../../../../../../public/user.json";
 import * as XLSX from "xlsx";
@@ -579,7 +579,13 @@ import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
-import { backLog } from "../../../../utils/accesRoute";
+import { backLog, permissionsAcess } from "../../../../utils/accesRoute";
+if (permissionsAcess().adminAcesseSuperAdmin == false) {
+  if (permissionsAcess().cgate2dotxfound == false) {
+    useRouter().push("/dashboard")
+  }
+}
+
 const dialogRoleUpdateVisible = ref(false);
 const isActive = ref(true)
 const userFiltro = ref([])
@@ -627,6 +633,11 @@ const dadosRelatorio = ref({
   updated_at: null
 })
 
+const pageview = ref({
+  page1: false,
+  page2: false,
+  page3: false
+})
 
 
 const toast = useToast();
@@ -638,7 +649,6 @@ const endDate = ref(null);
 const detailsOpen = (data) => {
   dialogRoleUpdateVisible.value = true;
   dadosRelatorio.value = data
-  console.log(dadosRelatorio.value)
 };
 
 const totalRecords = ref(0);
@@ -750,7 +760,7 @@ const filterDate = async () => {
       userFiltro.value = response.data.data;
       transactions.value = response.data.result.data
       transactionsFilter.value = transactions.value
-      console.log("")
+      ("")
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
       toast.add({
@@ -900,7 +910,7 @@ const filtroChange = () => {
 
     loading.value = false;
   } else {
-    console.log(`Search: ${filtroDados.value}`)
+    (`Search: ${filtroDados.value}`)
     dadoSearch.value = filtroDados.value.toLowerCase()
     buscarTransccoes()
   }
@@ -1073,7 +1083,6 @@ const generatePDF = (rowData) => {
 
 const generatePDFCanva = async (rowData) => {
   loading.value = true
-  console.log(rowData)
   dadosRelatorio.value = { ...rowData }
 
   await nextTick();
@@ -1086,6 +1095,7 @@ const generatePDFCanva = async (rowData) => {
 }
 
 const generatePDFs = async () => {
+  
   const pdf = new jsPDF("p", "mm", "a4");
   const pdfWidth = 210;
   const pdfHeight = 297;

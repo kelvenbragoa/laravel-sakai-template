@@ -7,20 +7,56 @@ import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../api/index";
 import { useRouter } from "vue-router";
+import axios from "axios";
+import { backLog, checkAccess, dataUser } from "../../../utils/accesRoute";
+import { elements } from "chart.js";
+import { computed } from "vue";
+
 
 checkAccess()
 let dialogoUserVisble = ref(false);
 let dialogUserUpdateVisible = ref(false);
 let dialogRoleUpdateVisible = ref(false);
+const applications = ref([])
 const rolesName = ref([]);
 let verificarA = ref([]);
-const checked = ref(true);
-const checked2 = ref([false]);
 const empresas = ref([]);
 const empresa = ref([]);
+const empresaL = ref([]);
 const empresaName = ref([]);
 const empresaMap = {};
 const dadoSearch = ref("")
+const treeApplications = ref([
+])
+
+
+const aplicationsLabels = ref([])
+
+const treeGates = ref([
+])
+
+const numberL = []
+
+for (let i = 0; i < 10; i++) {
+  numberL[i] = i
+}
+const applicationsAcesso = ref([
+  {
+    name: 'acesso1'
+  },
+  {
+    name: 'acesso2'
+  },
+  {
+    name: 'acesso3'
+  },
+  {
+    name: 'acesso4'
+  }
+])
+
+const dialogUserDetails = ref(false)
+const userDetails = ref()
 
 const errorL = ref();
 const rowsPerPage = ref(50);
@@ -39,13 +75,10 @@ const rolesItems = ref([]);
 const permissions = ref([]);
 
 const gates = ref([]);
-const gateFiltros = ref([]);
 
 const permissionsItems = [];
 
 const loading = ref(false);
-
-const breakLoopGate = ref(false)
 
 const formDataSave = reactive({
   name: "",
@@ -54,6 +87,8 @@ const formDataSave = reactive({
   company_id: "0",
   password: "",
   roles: "",
+  applications: "",
+  gate: ""
 });
 
 const countries = ref([
@@ -67,15 +102,6 @@ const gateIdArray = ref([])
 // Definindo a pré-seleção (exemplo: Moçambique)
 const selectedCountry = ref(countries.value[0]);
 const roleSelected = ref([]);
-// const gateSelected = ref({
-//   id: 70,
-//   user_id: "120",
-//   gate_id: "1",
-//   created_by: null,
-//   updated_by: null,
-//   created_at: "2025-03-04T07:01:43.383000Z",
-//   updated_at: "2025-03-04T07:01:43.383000Z",
-// });
 
 const gateSelected = ref([])
 const gatePreSelecteds = ref([])
@@ -85,7 +111,100 @@ const getToken = () => {
   return localStorage.getItem("access_token");
 };
 
+const getUserDataEspecific = async (id) => {
+  
+    const token = getToken();
+    if (!token) {
+        backLog()
+        return;
+    }
+    try {
+      loading.value = true;
+        const response = await axios.get(`${baseUrls.userList}/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        loading.value = false;
+
+        return response.data.data
+    } catch (e) {
+        return e
+    }
+    
+}
+
+const getApplicationsUserEspecific = () => {
+  return JSON.parse(localStorage.getItem("cgate_applicationsPermissions"))
+}
+
+
+const aplicationsAcesso = (id) => {
+
+  let result = []
+  for (let aplicationsField in applications.value) {
+    if (Number(id) == Number(applications.value[aplicationsField].id)) {
+      for (let i in applications.value[aplicationsField].application_permissions) {
+        result.push({
+          value: `${id}#${applications.value[aplicationsField].application_permissions[i].permission.id}`,
+          label: applications.value[aplicationsField].application_permissions[i].permission.name
+        })
+      }
+      return result
+    }
+  }
+
+  return ({ label: '', value: '' })
+}
+
+
+
+
+const buscarApplication = async () => {
+  loading.value = true;
+  const token = getToken();
+  if (!token) {
+    backLog()
+    return;
+  }
+  try {
+    const response = await axios.get(
+      baseUrls.applications, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    applications.value = response.data.data.data.map((element) => {
+
+      return {
+        ...element,
+        name: element.name + " " + element.version,
+      };
+    });
+
+
+
+    applications.value.forEach((element) => {
+
+      treeApplications.value.push(
+        aplicationsLabels.value.push(
+          {
+            label: String(element.name),
+            items: aplicationsAcesso(element.id)
+          }
+        )
+      )
+    })
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
 const buscarUsuarios = async (page = 1) => {
+  loading.value = true
   const token = getToken();
 
   if (!token) {
@@ -138,13 +257,12 @@ const fetchPermissions = async () => {
 
     loading.value = false;
   } catch (error) {
-    console.log(error);
+    (error);
   }
 };
 
 
-import axios from "axios";
-import { backLog, checkAccess } from "../../../utils/accesRoute";
+
 
 const fetchRoles = async () => {
   try {
@@ -175,47 +293,11 @@ const fetchRoles = async () => {
   }
 };
 
-// watch(
-//   rolesName,
-//   (newRoles) => {
-//     if (newRoles.length > 0) {
-//       dadosAtualizar.roles =
-//         newRoles.find((role) => role.name === "Admin") || null;
-//     }
-//   },
-//   { immediate: true }
-// );
-
-const sexoItem = ref([
-  { name: "Masculino", code: "M" },
-  { name: "Feminino", code: "F" },
-]);
-
-const gateItem = ref([
-  { name: "Gate 4", code: 4 },
-  { name: "Gate 5", code: 5 },
-  { name: "Gate 6", code: 6 },
-  { name: "Gate 11A", code: 11 },
-  { name: "Gate 8A", code: 8 },
-  { name: "Gate 3", code: 3 },
-]);
 
 const statusItems = ref([
   { name: "Ativo", code: "1" },
   { name: "Inativo", code: "0" },
 ]);
-
-const acessoItem = ref([
-  { name: "Administrador", code: "Admin" },
-  { name: "Manager", code: "Manager" },
-  { name: "Operator", code: "Operator" },
-  { name: "Super Admin", code: "SuperAdmin" },
-]);
-
-const acesso = ref();
-const gate = ref();
-
-const sexo = ref();
 
 const toast = useToast();
 
@@ -286,23 +368,51 @@ const addUser = async () => {
   }
 };
 
-// {
-//     "user_full_name":"userfullname",
-//     "user_name":"usernamekelven2",
-//     "email":"",
-//     "password":"12345678",
-//     "roles":[
-//         {
-//             "name":"Admin"
-//         }
-//     ]
-// }
+function mapApplications(applications) {
+  return applications.map(item => {
+    const [application_id, application_permission_id] = item.split('#').map(Number);
+    return {
+      application_id,
+      application_permission_id
+    };
+  });
+}
+
 
 const salvarDadosShow = async () => {
-  let arrayRols = []
-  formDataSave.roles.forEach((elements)=>{
-    arrayRols.push(elements['name'])
-    // console.log(elements['name'])
+  // let arrayRols = []
+  // formDataSave.roles.forEach((elements)=>{
+  //   arrayRols.push(elements['name'])
+  //   // (elements['name'])
+  // })
+
+  const resultadoAplications = mapApplications(formDataSave.applications);
+
+  let idsApplications = []
+  let idsGates = []
+  let applicationsName = []
+
+  for (let i in formDataSave.applications) {
+
+    numberL.forEach(elements => {
+      if (elements == i) {
+        applicationsName.push(returnPermissionsApplications(i))
+      }
+    })
+  }
+  // returnPermissionsApplications(2)
+
+  // formDataSave.applications.forEach(elements=>{
+  // })
+
+  // formDataSave.applications.forEach((element) => {
+  //   idsApplications.push({ application_id: element['id'] })
+  // })
+
+  formDataSave.gate.forEach((element) => {
+    idsGates.push({
+      "gate_id": element['id']
+    })
   })
   let dadosAddL = {
     user_full_name: formDataSave.name,
@@ -311,9 +421,10 @@ const salvarDadosShow = async () => {
     company_id: String(formDataSave.company_id.id),
     password: formDataSave.password,
     roles: formDataSave.roles,
-  };
+    gates: idsGates,
+    applications: resultadoAplications
 
-  console.log(dadosAddL)
+  };
 
   const token = getToken();
 
@@ -349,6 +460,8 @@ const salvarDadosShow = async () => {
         formDataSave.password = "";
         formDataSave.company_id = "0";
         formDataSave.roles = [];
+        formDataSave.applications = [];
+        formDataSave.gate = []
       } catch (error) {
         console.error(
           "Erro ao adicionar usuário:",
@@ -382,7 +495,7 @@ const buscarEmpresas = async () => {
 
 
     empresas.value = response.data.data.data;
-
+    empresaL.value = response.data.data.data
     empresas.value.forEach((element, key) => {
 
       empresa.value.push({ id: element.id, name: element.name });
@@ -415,21 +528,29 @@ const atualizarDadosShow = async () => {
     gateIdArray.value.push({ "gate_id": dados.id })
   })
 
+  const resultadoAplications = mapApplications(dadosAtualizar.applications);
+
 
 
   const dadoAtualizacao = {
-    id: dadosAtualizar.id,
+    // id: dadosAtualizar.id,
     user_full_name: dadosAtualizar.user_full_name,
+    user_name: dadosAtualizar.user_name,
     email: dadosAtualizar.email,
     is_active: Number(ative_selected.value.code),
     gates: gateIdArray.value,
     roles: roleSelected.value,
+    applications: resultadoAplications,
+    company_id: dadosAtualizar.company_id.id,
   };
 
-  console.log(dadoAtualizacao)
-
-
-
+  if (dadosAtualizar.password != "") {
+    dadoAtualizacao.password = dadosAtualizar.password
+  } else {
+    if (dadoAtualizacao.password !== undefined) {
+      delete teste["password"];
+    }
+  }
 
   const token = getToken();
   if (!token) {
@@ -441,8 +562,8 @@ const atualizarDadosShow = async () => {
       dialogUserUpdateVisible.value = false;
       loading.value = true;
       try {
-        await axios.post(
-          `${baseUrls.userList}/${dadoAtualizacao.id}`,
+        await axios.put(
+          `${baseUrls.userList}/${dadosAtualizar.id}`,
           dadoAtualizacao,
           {
             headers: {
@@ -489,23 +610,13 @@ const atualizarDadosShow = async () => {
 };
 
 const displayConfirmation = ref(false);
-function openConfirmation() {
-  displayConfirmation.value = true;
-}
+
 
 function closeConfirmatio2n() {
   displayConfirmation.value = false;
 }
 
-function closeConfirmation() {
-  displayConfirmation.value = false;
-  toast.add({
-    severity: "success",
-    summary: "Confirmação",
-    detail: "Usuário eliminado",
-    life: 3000,
-  });
-}
+
 
 async function apaga() {
   displayConfirmation.value = false;
@@ -516,7 +627,7 @@ async function apaga() {
     return;
   }
   try {
-    const response = await axios.post(
+    const response = await axios.delete(
       `${baseUrls.userList}/${dadosUserDelete.value.id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -554,15 +665,80 @@ const salvarPermissions = async () => {
 };
 
 
+const returnAplications = (id) => {
+  const app = applications.value.find(a => a.id === Number(id));
+  return app ? app.name : String(id);
+}
+
+
+
+const returnCompany = (id) => {
+  for (let i = 0; i < empresaName.value.length; i++) {
+    if (i === (Number(id) - 1)) {
+      return empresaName.value[i]
+    }
+  }
+  return id
+
+}
+
+const returnGates = (id) => {
+
+  for (let i = 0; i < gates.value.length; i++) {
+    if (Number(id) === i) {
+      return gates.value[i].name
+    }
+  }
+  return id
+}
+
+const returnAcessos = (id) => {
+
+  for (let i = 0; i < rolesItems.value.length; i++) {
+    if (Number(id) === rolesItems.value[i].id) {
+      return rolesItems.value[i].name
+    }
+  }
+  return id
+}
+
+const returnPermissionsApplications = (id) => {
+  for (let i = 0; i < applicationsAcesso.value.length; i++) {
+    if (Number(id) === i) {
+      return applicationsAcesso.value[i].name
+    }
+  }
+  return id
+}
+
+const returnAplicationsIds = (dados) => {
+  let result = []
+  for (let i in dados) {
+    for (let c in dados[i].user_application_permissions) {
+      result.push(`${dados[i].application_id}#${dados[i].user_application_permissions[c].application_permission_id}`)
+    }
+  }
+  return result
+}
+
+// returnAplicationsIds(getApplicationsUserEspecific().applications)
+
 const dadosAtualizar = reactive({
   id: null,
   user_full_name: "",
+  user_name: "",
   is_active: Number(ative_selected.value.code),
   email: "",
+  applications: "",
+  company_id: "",
   roles: roleSelected.value,
+  gate: gates.value,
+  password: ""
 });
-const atualizarDados = (dados) => {
-
+const atualizarDados = async(dados) => {
+  const result = await getUserDataEspecific(dados.id)
+  dadosAtualizar.applications = returnAplicationsIds(result.applications)
+  dadosAtualizar.company_id = { id: Number(dados.company_id), name: returnCompany(dados.company_id) }
   gateSelected.value = []
   gateIdArray.value = []
   gatePreSelecteds.value = []
@@ -570,19 +746,16 @@ const atualizarDados = (dados) => {
 
   dialogUserUpdateVisible.value = true;
   dadosAtualizar.id = dados.id;
+  dadosAtualizar.user_name = dados.user_name
   // // dadosAtualizar.roles = [{name: dados.roles[0].name}];
   let arrayRols = []
-  dados.roles.forEach((elements)=>{
-    arrayRols.push({name: elements['name']})
-    // console.log(elements['name'])
+  dados.roles.forEach((elements) => {
+    arrayRols.push({ name: elements['name'] })
   })
 
   roleSelected.value = arrayRols
 
-  console.log(roleSelected.value)
-  
   dadosAtualizar.roles = roleSelected.value;
-  // console.log(dadosAtualizar.roles)
   dadosAtualizar.email = dados.email;
   dadosAtualizar.user_full_name = dados.user_full_name;
 
@@ -657,17 +830,6 @@ const verificadorDeCampos = (dado) => {
   }
 };
 
-
-
-const categories = ref([
-  { name: "Tecnologia", code: "T" },
-  { name: "Saúde", code: "S" },
-  { name: "Educação", code: "E" },
-  { name: "Esportes", code: "SP" }
-]);
-
-const selectedCategories = ref([]);
-
 const buscarGates = async () => {
   const token = getToken();
   if (!token) {
@@ -680,7 +842,24 @@ const buscarGates = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    gates.value = response.data.data;
+    gates.value = response.data.data.data;
+
+    gates.value.forEach((element) => {
+
+      treeGates.value.push(
+        {
+          key: String(element.gate_id),
+          label: element.name,
+          children: {
+            key: `0`,
+            label: ""
+          }
+        }
+      )
+    })
+
+    // treeGates
+
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -688,12 +867,92 @@ const buscarGates = async () => {
   }
 };
 
+const detailsUser = (data) => {
+  dialogUserDetails.value = true
+  userDetails.value = data
+}
+
+
 
 // const nextPage = () => {
 //   pagesCurrent.value++;
 //   buscarUsuarios(pagesCurrent);
 // };
+// Dados da árvore
+const treeNodes = ref([
+  {
+    key: '0',
+    label: 'Documentos',
+    children: [
+      {
+        key: '0-0',
+        label: 'Trabalho',
+        // children: [{ key: '0-0-0', label: 'Relatório.docx' }]
+      },
+      {
+        key: '0-1',
+        label: 'Pessoal',
+        // children: [{ key: '0-1-0', label: 'Fotos.zip' }]
+      }
+    ]
+  },
+  {
+    key: '1',
+    label: 'Downloads',
+    children: [{ key: '1-0', label: 'Softwares' }]
+  }
+])
 
+// Nó selecionado
+const selectedKey = ref(null)
+
+const valoresSelecionados = ref([])
+const valueCat = ref()
+
+const opcoes = [
+  {
+    label: 'Frutas',
+    items: [
+      { label: 'Manga', value: 'frutas-manga' },
+      { label: 'Banana', value: 'frutas-banana' },
+      { label: 'Maçã', value: 'frutas-maca' },
+    ]
+  },
+  {
+    label: 'Doces',
+    items: [
+      { label: 'Manga', value: 'doces-manga' },
+      { label: 'Paçoca', value: 'doces-pacoca' }
+    ]
+  }
+  ,
+  {
+    label: 'Aplications',
+    items: [
+      { label: 'Manga', value: 'doces-manga' },
+      { label: 'Paçoca', value: 'doces-pacoca' }
+    ]
+  }
+]
+
+// Organiza por categoria baseado no value selecionado
+const selecionadosPorCategoria = computed(() => {
+  const resultado = {}
+
+  for (const grupo of opcoes) {
+    const selecionados = grupo.items
+      .filter(item => valoresSelecionados.value.includes(item.value))
+      .map(item => item.label)
+
+    if (selecionados.length > 0) {
+      resultado[grupo.label] = selecionados
+    }
+  }
+
+  valueCat.value = resultado
+
+  // return resultado
+})
 onMounted(() => {
   //   fetchUsers();
   fetchRoles();
@@ -701,6 +960,8 @@ onMounted(() => {
   buscarUsuarios();
   buscarEmpresas();
   buscarGates();
+  buscarApplication();
+  
 });
 </script>
 
@@ -712,6 +973,41 @@ onMounted(() => {
   </div>
   <div class="card">
     <div class="font-semibold text-xl mb-4">Users</div>
+
+    <!-- <div class="p-4">
+      <TreeSelect v-model="selectedKey" :options="treeNodes" placeholder="Selecione um item" selectionMode="single"
+        :metaKeySelection="false" class="w-full md:w-30rem mb-3" />
+
+      <div>
+        <strong>Selecionado:</strong>
+        <pre>{{ selectedKey }}</pre>
+      </div>
+    </div> -->
+    <!-- <MultiSelect 
+      v-model="valoresSelecionados"
+      :options="opcoes"
+      optionLabel="label"
+      optionValue="value"
+      optionGroupLabel="label"
+      optionGroupChildren="items"
+      placeholder="Selecione frutas ou doces"
+      display="chip"
+      :filter="true"
+    /> -->
+
+    <!-- <span>{{ valoresSelecionados }}</span> -->
+
+    <!-- <div v-if="Object.keys(selecionadosPorCategoria).length" class="mt-4">
+      <h3>Selecionados:</h3>
+      <div v-for="(itens, categoria) in selecionadosPorCategoria" :key="categoria" class="mb-2">
+        <strong>{{ categoria }}:</strong>
+        <ul>
+          <li v-for="item in itens" :key="item">{{ item }}</li>
+        </ul>
+      </div>
+    </div> -->
+
+
     <DataTable :value="userFiltro" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy :first="first"
       @page="onPageChange">
 
@@ -741,6 +1037,7 @@ onMounted(() => {
       <Column field="user_name" header="Username" style="min-width: 10rem" sortable>
       </Column>
 
+
       <Column field="company_id" header="Empresa" style="min-width: 10rem" sortable="">
         <template #body="{ data }">
           {{ empresaMap[data.company_id] || data.company_id }}
@@ -756,6 +1053,9 @@ onMounted(() => {
                 color: #1558b0;
                 display: none;
               " />
+            <Button class="btnEstiliza" label="" icon="pi  pi-eye"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="detailsUser(data)" />
+
             <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
               style="border: 0px; background-color: transparent; color: #1558b0" @click="atualizarDados(data)" />
             <div>
@@ -812,7 +1112,7 @@ onMounted(() => {
       </div>
       <hr />
       <div class="camposAgrupadosFormulario my-5">
-        <!-- Nome nome -->
+        <!-- Usuario -->
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="name">User</label>
@@ -820,7 +1120,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- Email -->
+        <!-- Nome completo -->
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="name">Nome completo</label>
@@ -830,7 +1130,7 @@ onMounted(() => {
       </div>
 
       <div class="camposAgrupadosFormulario my-5">
-        <!-- Nome -->
+        <!-- Email -->
 
         <div class="formUserAdd">
           <div class="field formUserAddI">
@@ -842,8 +1142,47 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Acesso</label>
-            <MultiSelect v-model="formDataSave.roles" :options="rolesName" optionLabel="name" placeholder="Portões" display="chip"
-              class="w-full" />
+            <MultiSelect v-model="formDataSave.roles" :options="rolesName" optionLabel="name" placeholder="Papel"
+              display="chip" class="w-full" />
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- <TreeSelect v-model="selectedKey" :options="treeGates" placeholder="Selecione um item"
+        selectionMode="single" :metaKeySelection="false" class="w-full md:w-30rem mb-3" /> -->
+
+      <div class="camposAgrupadosFormulario my-5">
+        <!-- Aplications -->
+
+        <div class="formUserAdd aplicationsCHip">
+
+          <div class="field formUserAddI">
+            <label for="acesso">Aplicações</label>
+            <!-- <TreeSelect v-model="formDataSave.applications" :options="treeApplications" placeholder="applications"
+              selectionMode="checkbox" :metaKeySelection="false" class="w-full md:w-30rem mb-3" /> -->
+            <!-- <MultiSelect v-model="formDataSave.applications" :options="applications" optionLabel="name"
+              placeholder="Aplicações" display="chip" class="w-full" /> -->
+
+
+
+            <MultiSelect v-model="formDataSave.applications" :options="aplicationsLabels" optionLabel="label"
+              optionValue="value" optionGroupLabel="label" optionGroupChildren="items" placeholder="Aplicações"
+              display="chip" class="w-full" />
+
+          </div>
+
+        </div>
+        <!-- Gates -->
+        <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="gates">Gates</label>
+            <MultiSelect v-model="formDataSave.gate" :options="gates" optionLabel="name" placeholder="Portões"
+              display="chip" class="w-full" />
+
+            <!-- <TreeSelect v-model="formDataSave.gate" :options="treeGates" placeholder="Portões" selectionMode="checkbox"
+              :metaKeySelection="false" class="w-full md:w-30rem mb-3" /> -->
 
           </div>
 
@@ -851,7 +1190,7 @@ onMounted(() => {
       </div>
 
       <div class="formUserAdd">
-        <label for="empresa">Empresa</label>
+        <span>{{ dadosAtualizar.company_id }}</span>
         <Select id="empresa" v-model="formDataSave.company_id" :options="empresa" optionLabel="name"
           placeholder="Empresas" class="w-full"></Select>
       </div>
@@ -891,6 +1230,19 @@ onMounted(() => {
           </div>
         </div>
 
+        <!--User-->
+
+        <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="name">User</label>
+            <InputText id="name" v-model="dadosAtualizar.user_name" required autofocus class="camposTextos" />
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="camposAgrupadosFormulario my-5">
         <!-- Email -->
         <div class="formUserAdd">
           <div class="field formUserAddI">
@@ -898,14 +1250,27 @@ onMounted(() => {
             <InputText id="email" v-model="dadosAtualizar.email" required autofocus class="camposTextos" />
           </div>
         </div>
+
+
+        <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="acesso">Aplicações</label>
+            <MultiSelect v-model="dadosAtualizar.applications" :options="aplicationsLabels" optionLabel="label"
+              optionValue="value" optionGroupLabel="label" optionGroupChildren="items" placeholder="Aplicações"
+              display="chip" class="w-full" />
+
+          </div>
+
+        </div>
       </div>
+
 
       <div class="camposAgrupadosFormulario my-5">
         <!-- GAte -->
 
         <div class="formUserAdd">
           <div class="field formUserAddI">
-            <label for="acesso">Portão</label>
+            <label for="gates">Portão</label>
             <MultiSelect v-model="gateSelected" :options="gates" optionLabel="name" placeholder="Portões" display="chip"
               class="w-full" />
 
@@ -916,27 +1281,44 @@ onMounted(() => {
         <div class="formUserAdd">
           <div class="field formUserAddI">
             <label for="acesso">Acesso</label>
-            <MultiSelect v-model="roleSelected" :options="rolesName" optionLabel="name" placeholder="Portões" display="chip"
-              class="w-full" />
+            <MultiSelect v-model="roleSelected" :options="rolesName" optionLabel="name" placeholder="Papel"
+              display="chip" class="w-full" />
 
           </div>
 
         </div>
-
-
-        <!-- <div class="formUserAdd">
-          <div class="field formUserAddI">
-            <label for="acesso">Acesso</label>
-            <Select id="acesso" v-model="roleSelected" :options="rolesName" optionLabel="name"
-              placeholder="S. Nivel de acesso" class="w-full"></Select>
-          </div>
-        </div> -->
       </div>
-      <div class="formUserAdd">
-        <div class="field formUserAddI">
-          <label for="acesso">Status</label>
-          <Select id="status" v-model="ative_selected" :options="statusItems" optionLabel="name" placeholder="Status"
-            class="w-full"></Select>
+
+
+
+
+      <div class="camposAgrupadosFormulario my-5">
+        <!-- Empresa -->
+        <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="email">Empresa</label>
+            <Select id="empresa" v-model="dadosAtualizar.company_id" :options="empresa" optionLabel="name"
+              placeholder="Empresas" class="w-full"></Select>
+          </div>
+        </div>
+
+
+        <!--status-->
+        <div class="formUserAdd">
+          <div class="field formUserAddI">
+            <label for="acesso">Status</label>
+            <Select id="status" v-model="ative_selected" :options="statusItems" optionLabel="name" placeholder="Status"
+              class="w-full"></Select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Senha -->
+      <div class="formUserAdd" style="margin-top: 15px; width: 100%">
+        <div class="field formUserAddI" style="width: 100%; border: 0px solid black">
+          <label for="senha" class="my-5">Senha</label>
+          <Password id="senha" v-model="dadosAtualizar.password" placeholder="Senha" :toggleMask="true"
+            class="mb-4 inputsCaixas camposTextos" fluid :feedback="false"></Password>
         </div>
       </div>
 
@@ -971,6 +1353,100 @@ onMounted(() => {
           Cancelar
         </button>
       </div>
+    </Dialog>
+
+    <Dialog header="Detalhes do user" v-model:visible="dialogUserDetails" :closable="true" :modal="true"
+      :draggable="false" :resizable="false" style="width: 50vw; min-height: 5vh" :footer="productDialogFooterForm">
+
+      <!-- <hr /> -->
+      <div class="containersDetails">
+        <div class="cardUserDetails">
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-user"></i>
+              <div class="titleCardUser">Informações do Usuário</div>
+            </div>
+            <div class="dateDetails"><span class="label">ID:</span><span class="value">{{ userDetails.id }}</span></div>
+            <div class="dateDetails"><span class="label">Nome:</span><span class="value">{{ userDetails.user_full_name
+                }}</span></div>
+            <div class="dateDetails"><span class="label">Email:</span><span class="value">{{ userDetails.email }}</span>
+            </div>
+            <div class="dateDetails"><span class="label">Ativo:</span><span class="value">{{ userDetails.is_active == 0
+              ?
+              'Inativo' : 'Ativo' }}</span></div>
+          </div>
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-box"></i>
+              <div class="titleCardUser">Aplicações</div>
+            </div>
+            <div class="dateDetails">
+              <ul class="aplicationUserEspecific">
+                <li v-for="(app, index) in userDetails.applications" :key="app.id">
+                  <span class="label">Aplicação {{ index + 1 }}: </span>
+                  <span class="value">{{ returnAplications(app.application_id) }}</span>
+                  <!-- <span class="value">{{ app.application_id }}</span> -->
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-box"></i>
+              <div class="titleCardUser">Empresa</div>
+            </div>
+            <div class="dateDetails">
+              <span class="label">Nome:</span><span class="value">{{ returnCompany(userDetails.company_id) }}</span>
+              <!-- <span class="label">Id:</span><span class="value">{{ userDetails.company_id }}</span> -->
+
+              <!-- <ul>
+                <li v-for="(app, index) in userDetails.application" :key="app.id">
+                  <span class="label">Aplicação {{ index+1 }}: </span>
+                  <span class="value">{{ returnAplications(app.application_id) }}</span>
+                </li>
+              </ul> -->
+            </div>
+
+          </div>
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-sign-in"></i>
+              <div class="titleCardUser">Gates</div>
+            </div>
+            <ul class="gatesCircle">
+              <li v-for="(app) in userDetails.gate" :key="app.id">
+                <div class="chip dateDetails"><span class="value">{{ returnGates(app.gate_id) }}</span></div>
+
+
+              </li>
+            </ul>
+
+            <!-- <div class="chip dateDetails">Gate ID: 1</div> -->
+          </div>
+
+          <div class="section">
+            <div class="titleCardUsers"> <i class="pi pi-shield"></i>
+              <div class="titleCardUser">Acesso</div>
+            </div>
+            <ul class="gatesCircle">
+              <li v-for="(app) in userDetails.roles" :key="app.id">
+                <div class="chip dateDetails"><span class="value">{{ returnAcessos(app.id) }}</span></div>
+
+
+              </li>
+            </ul>
+            <!-- <div class="chip dateDetails">Manager</div> -->
+          </div>
+          <hr>
+          <br>
+          <div class="flex">
+            <button class="p-button p-component cores" @click="dialogUserDetails = false">
+              Sair
+            </button>
+          </div>
+        </div>
+      </div>
+
     </Dialog>
   </div>
 </template>
@@ -1056,5 +1532,105 @@ onMounted(() => {
   color: #555555 !important;
   transition: all 0.3s ease;
   border-radius: 5px;
+}
+
+.cardUserDetails {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 99%;
+  // margin: 0 auto;
+  margin: 20px 0px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardUserDetails h2 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.section div {
+  // margin: 15px 0px;
+}
+
+.dateDetails {
+  margin: 15px 0px;
+}
+
+.section div:first-child {
+  // border: 1px solid red;
+  margin: 0px !important;
+}
+
+.label {
+  font-weight: bold;
+  color: #555;
+  font-size: 1.2rem;
+}
+
+.value {
+  margin-left: 10px;
+  color: #333;
+}
+
+.chip {
+  display: inline-block;
+  background-color: #e0f2f1;
+  color: #00796b;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.titleCardUsers {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  // margin: 10px 0px;
+  // border: 1px solid black;
+}
+
+.section span:last-child {
+  font-size: 1.1rem;
+}
+
+.titleCardUsers .titleCardUser {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1558b0;
+}
+
+.titleCardUsers i {
+  display: block;
+  color: #1558b0;
+}
+
+.containersDetails {
+  display: flex;
+  justify-content: center;
+}
+
+.gatesCircle {
+  display: flex;
+  margin-top: 10px;
+
+}
+
+.gatesCircle .value {
+  color: #00796b;
+}
+
+.gatesCircle li {
+  margin-right: 10px;
+}
+
+.aplicationUserEspecific li {
+  margin-top: 10px;
 }
 </style>

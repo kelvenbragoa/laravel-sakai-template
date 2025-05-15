@@ -26,14 +26,14 @@ const router = createRouter({
                 {
                     path: '/cargaonetwo/:id',
                     name: 'cargaone',
-                    component: () => import('@/views/pages/cgateone/carga/Carga.vue'),
+                    component: () => import('@/views/pages/cgateonetwo/carga/Carga.vue'),
                     props: true
                 },
                
                 {
                     path: '/terminalonetwo/:id',
                     name: 'terminalone',
-                    component: () => import('@/views/pages/cgateone/terminal/Terminal.vue'),
+                    component: () => import('@/views/pages/cgateonetwo/terminal/Terminal.vue'),
                     props: true
                     
                 },
@@ -66,6 +66,14 @@ const router = createRouter({
                     
                 },
                 //------
+                //Precheck
+                //v1
+                {
+                    path: '/precheck',
+                    name: 'precheck',
+                    component: () => import('@/views/pages/precheck/versionone/Precheck.vue')
+                },
+                //-------------------------------------
                 {
                     path: '/uikit/formlayout',
                     name: 'formlayout',
@@ -181,6 +189,11 @@ const router = createRouter({
                     path: "/gate",
                     name: "gate",
                     component: () => import('@/views/pages/gate/Gate.vue')
+                },
+                {
+                    path: "/applications",
+                    name: "applications",
+                    component: () => import('@/views/pages/application/Application.vue')
                 }
             ]
         },
@@ -229,6 +242,11 @@ const router = createRouter({
             path: "/jsonread",
             name: 'jsonread',
             component: () => import('@/views/pages/ScreenJson.vue')
+        },
+        {
+            path: "/precheck-form",
+            name: 'precheck-form',
+            component: () => import('@/views/pages/precheck/form/Precheck.vue')
         }
     ]
 });

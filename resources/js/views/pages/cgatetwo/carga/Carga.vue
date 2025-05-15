@@ -1,23 +1,164 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { jsPDF } from "jspdf";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import * as XLSX from "xlsx";
+import { permissionsAcess } from "../../../../utils/accesRoute";
+import { baseUrls } from "../../../../api";
+import { useToast } from "primevue/usetoast";
 
+if (permissionsAcess().adminAcesseSuperAdmin == false) {
+  if (permissionsAcess().cgate2dotxfound == false) {
+    useRouter().push("/dashboard")
+  }
+}
+
+const toast = useToast();
 const data = ref([]);
 const totalRecords = ref(0);
 const first = ref(0);
 const rowsPerPage = ref(10);
 const pageNumber = ref(1);
 const loading = ref(false);
-// const filters = ref({ global: { value: null } }); // Inicialize os filtros
 const filters = ref("");
+const route = useRoute();
+const userId = route.params.id;
+const gateId = ref(userId);
+const dadoSearch = ref("");
+const filtroDados = ref("");
+const cargaFilter = ref([])
+const startDate = ref(null);
+const dateError = ref(false);
+const endDate = ref(null);
 
-//  [
-//     "Carga",
-//     "Criado",
-//     "Número do documento"
-//   ]
+
+function removerGate(texto) {
+  return texto.replace(/^Gate\s*/, '');
+}
+
+const formatDates = (date) => {
+  if (!date) return "";
+
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  const seconds = String(d.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+
+const buscarCargaGeral = async (page = 1) => {
+  try {
+    loading.value = true
+    const response = await axios.get(`${baseUrls.transacoesCgate2dotzeroCarga}`, {
+      params: {
+        gate: removerGate(gateId.value),
+        page: page,
+        query: dadoSearch.value
+      }
+    });
+    data.value = response.data.data.data;
+    totalRecords.value = response.data.data.data.total
+    console.log(response)
+    loading.value = false
+  } catch (e) {
+    loading.value = false
+    console.error(e)
+  }
+}
+
+const filtroChange = () => {
+  loading.value = true;
+  if (filtroDados.value.trim() === "") {
+    cargaFilter.value = [...data.value]
+    loading.value = false;
+  } else {
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarCargaGeral()
+  }
+};
+
+const filterDate = async () => {
+
+
+  if (!startDate.value || !endDate.value) {
+    toast.add({
+      severity: "error",
+      summary: "Erro",
+      detail: "Preencha os campos",
+      life: 3000,
+    });
+    return;
+  }
+
+
+  const start = new Date(startDate.value);
+  const end = new Date(endDate.value);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+  start.setHours(0, 0, 0, 0);
+
+  if (end > today) {
+    dateError.value = true;
+    toast.add({
+      severity: "error",
+      summary: "Erro",
+      detail: "A data não pode ser maior que a data de hoje.",
+      life: 3000,
+    });
+    return;
+  }
+
+  if (start.getTime() === end.getTime()) {
+    dateError.value = false;
+  } else if (start > end) {
+    dateError.value = true;
+    toast.add({
+      severity: "error",
+      summary: "Erro",
+      detail: "A data de início não pode ser maior que a data de fim.",
+      life: 3000,
+    });
+    return;
+  }
+
+  const startFormatted = formatDates(startDate.value);
+  const endFormatted = formatDates(endDate.value);
+
+  try {
+    const response = await axios.get(
+      `${baseUrls.transacoesCgate2dotzeroCarga}`,
+
+      {
+        params: {
+          startdatetime: startFormatted,
+          enddatetime: endFormatted,
+        }
+      }
+    );
+
+
+    userFiltro.value = response.data.data;
+    transactions.value = response.data.data.data
+    transactionsFilter.value = transactions.value
+
+  } catch (error) {
+    console.error("Erro ao buscar dados:", error);
+    toast.add({
+      severity: "error",
+      summary: "Erro",
+      detail: "Não foi possível buscar os dados.",
+      life: 3000,
+    });
+  }
+};
+
+
 
 const tabelaDados = ref({
   cargo_type: "Carga",
@@ -58,56 +199,25 @@ const tabelaDados = ref({
 });
 
 
-const route = useRoute();
-const userId = route.params.id;
-let gateId = userId;
-if (Number(gateId.indexOf("Out")) > -1) {
-  gateId = gateId.replace("Out", "");
-  gateId = `Portão ${gateId} (Saida)`;
-} else {
-  gateId = gateId.replace("In", "");
-  gateId = `Portão ${gateId} (Entrada)`;
+
+const tratamentoDoId = () => {
+  if (Number(gateId.value.indexOf("Out")) > -1) {
+    gateId.value = gateId.value.replace("Out", "");
+    gateId.value = `Gate ${gateId.value}`;
+  } else {
+    gateId.value = gateId.value.replace("In", "");
+    gateId.value = `Gate ${gateId.value}`;
+  }
 }
 
-// Função para carregar os dados
+
 const dataFilter = ref();
-const loadData = async (page) => {
-  loading.value = true;
-  try {
-    const response = await fetch(`/data.json?page=${page}`);
-    if (response.ok) {
-      const result = await response.json();
-      dataFilter.value = result.data;
-      if (filters.value.trim() === "") {
-        data.value = dataFilter.value;
-      } else {
-        data.value = dataFilter.value.filter(
-          (dados) =>
-            dados.status.toLowerCase().includes(filters.value.toLowerCase()) ||
-            dados.user_name
-              .toLowerCase()
-              .includes(filters.value.toLowerCase()) ||
-            dados.document_number_overwrite
-              .toLowerCase()
-              .includes(filters.value.toLowerCase())
-        );
-      }
 
-      totalRecords.value =
-        result.meta.total || result.meta.last_page * rowsPerPage.value;
-    }
-  } catch (error) {
-    console.error("Erro ao carregar os dados:", error);
-  } finally {
-    loading.value = false;
-  }
-};
 
-// Evento ao mudar a página
 const onPage = (event) => {
   first.value = event.first;
-  pageNumber.value = Math.floor(first.value / rowsPerPage.value) + 1;
-  loadData(pageNumber.value);
+  const newPage = Math.floor(event.first / rowsPerPage.value) + 1
+  buscarCargaGeral(newPage)
 };
 
 const exportToExcel = () => {
@@ -132,14 +242,14 @@ const generatePDF = (rowData) => {
     40,
     10
   );
-  //  doc.addImage("/logo.png" , 'JPEG', larguraPagina-60, 7, 40, 10);
+
   let y = 15;
-  // Linha de separação
+
   doc.setLineWidth(0.1);
   doc.line(20, 20, 190, 20);
   y += 10;
 
-  // Função para converter hexadecimal em RGB
+
   function hexToRgb(hex) {
     var bigint = parseInt(hex.replace("#", ""), 16);
     var r = (bigint >> 16) & 255;
@@ -148,21 +258,20 @@ const generatePDF = (rowData) => {
     return [r, g, b];
   }
 
-  // Definindo a cor de fundo com hexadecimal
-  let color = hexToRgb("#f5f5f5"); // Hexadecimal convertido para RGB
-  let color2 = hexToRgb("#ffffff"); // Hexadecimal convertido para RGB
+
+  let color = hexToRgb("#f5f5f5");
+  let color2 = hexToRgb("#ffffff");
 
   let corChange = false;
-  // /images/logo.png
   doc.setFontSize(9);
 
   for (let key in rowData) {
     if (rowData[key] != null) {
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(0, 0, 0); // Preto
+      doc.setTextColor(0, 0, 0);
       if (!corChange) {
         doc.setFillColor(color2[0], color2[1], color2[2]);
-        doc.rect(20, y, 80, 10, "F"); // Borda da célula
+        doc.rect(20, y, 80, 10, "F");
 
         doc.text(
           String(key).length > 30
@@ -172,7 +281,7 @@ const generatePDF = (rowData) => {
           y + 6
         );
         doc.setFillColor(color2[0], color2[1], color2[2]);
-        doc.rect(100, y, larguraPagina / 2 - 15, 10, "F"); // Borda da célula
+        doc.rect(100, y, larguraPagina / 2 - 15, 10, "F");
         doc.text(
           String(rowData[key]).length > 50
             ? String(rowData[key]).substring(0, 20) + "..."
@@ -183,7 +292,7 @@ const generatePDF = (rowData) => {
         corChange = true;
       } else {
         doc.setFillColor(color[0], color[1], color[2]);
-        doc.rect(20, y, 80, 10, "F"); // Borda da célula
+        doc.rect(20, y, 80, 10, "F");
         doc.text(
           String(key).length > 30
             ? String(tabelaDados.value[key]).substring(0, 20) + "..."
@@ -192,7 +301,7 @@ const generatePDF = (rowData) => {
           y + 6
         );
         doc.setFillColor(color[0], color[1], color[2]);
-        doc.rect(100, y, larguraPagina / 2 - 15, 10, "F"); // Borda da célula
+        doc.rect(100, y, larguraPagina / 2 - 15, 10, "F");
         doc.text(
           String(rowData[key]).length > 50
             ? String(rowData[key]).substring(0, 20) + "..."
@@ -212,7 +321,7 @@ const generatePDF = (rowData) => {
   doc.addImage(rowData.trailer_1_internal_cargo_photo, "JPEG", 20, y, 180, 160);
 
   const data = new Date();
-  // const hoje = data.getDate()+"/"+(data.getMonth()+1)+"/"+data.getUTCFullYear()+" - "+data.getHours+"h:"+data.getMinutes+"min:"+data.getSeconds+"s"
+
   const hoje =
     data.getDate() + "/" + (data.getMonth() + 1) + "/" + data.getUTCFullYear();
 
@@ -230,53 +339,32 @@ const generatePDF = (rowData) => {
   );
 };
 
-// Carrega os dados inicialmente
+watch(() => route.params.id, (newId) => {
+  gateId.value = newId
+  buscarCargaGeral()
+  tratamentoDoId()
+})
+
+
 onMounted(() => {
-  loadData(pageNumber.value);
+  buscarCargaGeral()
 });
 </script>
 <template>
-  <DataTable
-    :value="data"
-    paginator
-    :rows="rowsPerPage"
-    :first="first"
-    :loading="loading"
-    :totalRecords="totalRecords"
-    dataKey="id"
-    filterDisplay="row"
-    @page="onPage"
-  >
+  <DataTable :value="data" paginator :rows="rowsPerPage" :first="first" lazy :totalRecords="totalRecords" @page="onPage">
     <template #header>
       <div class="flex justify-between align-center py-5">
         <h2>
           Gate selecionado: <strong>{{ gateId }}</strong>
         </h2>
         <div class="groupExel">
-          <Button
-            @click="exportToExcel"
-            label="Excel"
-            icon="pi pi-file-excel"
-          />
+          <Button @click="exportToExcel" label="Excel" icon="pi pi-file-excel" />
           <div class="calendaryFilter">
-            <DatePicker
-              v-model="startDate"
-              fluid
-              iconDisplay="input"
-              showTime
-              hourFormat="24"
-              placeholder="Data de Início"
-            />
+            <DatePicker v-model="startDate" fluid iconDisplay="input" showTime hourFormat="24"
+              placeholder="Data de Início" />
             <span></span>
-            <DatePicker
-              v-model="endDate"
-              fluid
-              iconDisplay="input"
-              class="dtPicker"
-              showTime
-              hourFormat="24"
-              placeholder="Data de Fim"
-            />
+            <DatePicker v-model="endDate" fluid iconDisplay="input" class="dtPicker" showTime hourFormat="24"
+              placeholder="Data de Fim" />
             <span></span>
             <Button class="dtFilter" icon="pi pi-filter" @click="filterDate" />
           </div>
@@ -284,11 +372,7 @@ onMounted(() => {
             <InputIcon>
               <i class="pi pi-search" />
             </InputIcon>
-            <InputText
-              v-model="filters"
-              @input="loadData(pageNumber)"
-              placeholder="Pesquise"
-            />
+            <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
           </IconField>
         </div>
       </div>
@@ -301,12 +385,7 @@ onMounted(() => {
     <Column field="truck_license_plate_number" header="Placa de caminhão" />
     <Column header="Detalhes">
       <template #body="{ data }">
-        <Button
-          class="btnEstiliza"
-          label="PDF"
-          icon="pi pi-file-pdf"
-          @click="generatePDF(data)"
-        />
+        <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDF(data)" />
       </template>
     </Column>
   </DataTable>

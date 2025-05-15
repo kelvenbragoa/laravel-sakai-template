@@ -35,7 +35,7 @@ const fetchData = async () => {
           
     })
     .catch((error) => {
-            console.log(error);
+            (error);
     });
 };
 </script>

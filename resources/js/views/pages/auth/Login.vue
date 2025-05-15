@@ -39,7 +39,6 @@ const autenticar = async () => {
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("cgate_user", JSON.stringify(user));
       localStorage.setItem("cgate_logged_click", true)
-      // console.log(user)
 
       router.push("/dashboard");
       loading.value = false;
@@ -55,6 +54,10 @@ const autenticar = async () => {
     }
   }
 };
+
+const goToPrecheck = ()=>{
+  router.push("/precheck-form")
+}
 const checked = ref(false);
 </script>
 
@@ -115,15 +118,9 @@ const checked = ref(false);
                 <Password id="password1" v-model="dadosUserAuth.password" placeholder="Senha" :toggleMask="true"
                   class="mb-4 inputsCaixas" fluid :feedback="false"></Password>
 
-                <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                  <div class="flex items-center">
-                    <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                    <label for="rememberme1">Lembrar</label>
-                  </div>
-                  <span class="font-medium no-underline ml-2 text-right cursor-pointer corPrimaria">Esqueceste a
-                    senha?</span>
-                </div>
+               
                 <Button label="Entrar" class="w-full facebook-button hover" @click="autenticar"></Button>
+                <Button label="Pre check" class="butoonCheck" @click="goToPrecheck"></Button>
                 <!-- as="router-link" -->
                 <!-- to="/dashboard" -->
               </div>
@@ -193,5 +190,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.butoonCheck{
+  margin: 10px 0px;
+  width: 100%;
+  color: #222;
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700!important;
+}
+
+.butoonCheck:hover{
+  background-color: transparent!important;
+  color: #1558b0!important;
+  border: none!important;
 }
 </style>

@@ -24,18 +24,18 @@ class MobileContainerTransactionController extends Controller
         //
         $transaction = $this->transaction::query()
         ->when(request('search'), function ($query, $searchQuery) {
-            $query->where('driver_license_number', 'like', "%{$searchQuery}%")
-            ->orWhere('driver_license_number_overwrite', 'like', "%{$searchQuery}%")
+            $query->where('driver_license_number', 'like', "{$searchQuery}%")
+            ->orWhere('driver_license_number_overwrite', 'like', "{$searchQuery}%")
             ->orWhere('main_plate', 'like', "%{$searchQuery}%")
-            ->orWhere('main_plate_overwrite', 'like', "%{$searchQuery}%")
-            ->orWhere('trailer_1_license_plate_number', 'like', "%{$searchQuery}%")
-            ->orWhere('trailer_2_license_plate_number', 'like', "%{$searchQuery}%")
-            ->orWhere('container_number_1', 'like', "%{$searchQuery}%")
-            ->orWhere('container_seal_number_1', 'like', "%{$searchQuery}%")
+            ->orWhere('main_plate_overwrite', 'like', "{$searchQuery}%")
+            ->orWhere('trailer_1_license_plate_number', 'like', "{$searchQuery}%")
+            ->orWhere('trailer_2_license_plate_number', 'like', "{$searchQuery}%")
+            ->orWhere('container_number_1', 'like', "{$searchQuery}%")
+            ->orWhere('container_seal_number_1', 'like', "{$searchQuery}%")
             ->orWhere('container_number_2', 'like', "%{$searchQuery}%")
-            ->orWhere('container_seal_number_2', 'like', "%{$searchQuery}%")
-            ->orWhere('container_number_3', 'like', "%{$searchQuery}%")
-            ->orWhere('container_seal_number_3', 'like', "%{$searchQuery}%")
+            ->orWhere('container_seal_number_2', 'like', "{$searchQuery}%")
+            ->orWhere('container_number_3', 'like', "{$searchQuery}%")
+            ->orWhere('container_seal_number_3', 'like', "{$searchQuery}%")
             ;
         })
         ->when(request('startdatetime') && request('enddatetime'), function ($query) {
@@ -49,7 +49,7 @@ class MobileContainerTransactionController extends Controller
     
                 $query->whereBetween('created_at', [$startDateTimeSearch, $endDateTimeSearch]);
         })
-        ->orderBy('id','desc')->paginate();
+        ->orderBy('id','desc')->paginate(15);
         return response()->json([
             'error'     => [],
             'message'   => [],

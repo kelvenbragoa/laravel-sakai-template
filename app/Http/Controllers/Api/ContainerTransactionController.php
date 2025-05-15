@@ -17,18 +17,18 @@ class ContainerTransactionController extends Controller
 
         $transaction = ContainerTransaction::query()
             ->when(request('query'), function ($query, $searchQuery) {
-                $query->where('driver_license_number', 'like', "%{$searchQuery}%")
-                ->orWhere('driver_license_number_overwrite', 'like', "%{$searchQuery}%")
-                ->orWhere('main_plate', 'like', "%{$searchQuery}%")
-                ->orWhere('main_plate_overwrite', 'like', "%{$searchQuery}%")
-                ->orWhere('trailer_1_license_plate_number', 'like', "%{$searchQuery}%")
-                ->orWhere('trailer_2_license_plate_number', 'like', "%{$searchQuery}%")
-                ->orWhere('container_number_1', 'like', "%{$searchQuery}%")
-                ->orWhere('container_seal_number_1', 'like', "%{$searchQuery}%")
-                ->orWhere('container_number_2', 'like', "%{$searchQuery}%")
-                ->orWhere('container_seal_number_2', 'like', "%{$searchQuery}%")
-                ->orWhere('container_number_3', 'like', "%{$searchQuery}%")
-                ->orWhere('container_seal_number_3', 'like', "%{$searchQuery}%");
+                $query->where('driver_license_number', 'like', "{$searchQuery}%")
+                ->orWhere('driver_license_number_overwrite', 'like', "{$searchQuery}%")
+                ->orWhere('main_plate', 'like', "{$searchQuery}%")
+                ->orWhere('main_plate_overwrite', 'like', "{$searchQuery}%")
+                ->orWhere('trailer_1_license_plate_number', 'like', "{$searchQuery}%")
+                ->orWhere('trailer_2_license_plate_number', 'like', "{$searchQuery}%")
+                ->orWhere('container_number_1', 'like', "{$searchQuery}%")
+                ->orWhere('container_seal_number_1', 'like', "{$searchQuery}%")
+                ->orWhere('container_number_2', 'like', "{$searchQuery}%")
+                ->orWhere('container_seal_number_2', 'like', "{$searchQuery}%")
+                ->orWhere('container_number_3', 'like', "{$searchQuery}%")
+                ->orWhere('container_seal_number_3', 'like', "{$searchQuery}%");
             })
              ->when(request('startdatetime') && request('enddatetime'), function ($query) {
                     //general DB ENEGNINE
@@ -42,7 +42,7 @@ class ContainerTransactionController extends Controller
                     $query->whereBetween('created_at', [$startDateTimeSearch, $endDateTimeSearch]);
             })
             ->when(request('gate'), function ($query, $gateQuery) {
-                $query->where('gate','like', "%{$gateQuery}%");
+                $query->where('gate','like', "{$gateQuery}%");
             })
             ->orderBy('created_at', 'desc')
             ->paginate(50);

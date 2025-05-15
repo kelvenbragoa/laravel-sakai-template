@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Gate;
+use App\Models\Application;
 use Illuminate\Http\Request;
 
-class GateController extends Controller
+class ApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,15 +15,16 @@ class GateController extends Controller
     {
         //
         $searchQuery = request('query');
-        $gate = Gate::query()
+        $app = Application::query()
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('name', 'like', "%{$searchQuery}%");
             })
+            ->with('application_permissions.permission')
             ->orderBy('name', 'asc')
             ->paginate(50);
 
         return response()->json([
-            'data' => $gate
+            'data' => $app
         ]);
     }
 
@@ -40,17 +41,20 @@ class GateController extends Controller
         try {
             $registerApplicationData = $request->validate([
                 'name' => 'nullable|string',
-                
+                'version' => 'nullable|string',
+                'description' => 'nullable|string',
             ]);
 
 
-            $gate = Gate::create([
+            $app = Application::create([
                 'name' => $registerApplicationData['name'],
+                'version' => $registerApplicationData['version'] ?? null,
+                'description' => $registerApplicationData['description'] ?? null,
             ]);
 
         
             return response()->json([
-                'data' => $gate
+                'data' => $app
             ]);
         } catch (\Exception $e) {
             // Retorna o erro com a mensagem detalhada
@@ -67,10 +71,10 @@ class GateController extends Controller
     public function show(string $id)
     {
         //
-        $gate = Gate::findOrFail($id);
+        $app = Application::with('application_permissions.permission')->findOrFail($id);
 
         return response()->json([
-            'data' => $gate
+            'data' => $app
         ]);
     }
 
@@ -80,30 +84,37 @@ class GateController extends Controller
     public function edit(string $id)
     {
         //
-        $gate = Gate::findOrFail($id);
+        $app = Application::with('application_permissions.permission')->findOrFail($id);
 
         return response()->json([
-            'data' => $gate
+            'data' => $app
         ]);
     }
 
 
-    public function update(Request $request, Gate $gate)
+    public function update(Request $request, string $id)
     {
         try {
+            $app = Application::findOrFail($id);
             // Validação
             $validatedData = $request->validate([
                 'name' => 'nullable|string',
-                
+                'version' => 'nullable|string',
+                'description' => 'nullable|string',
             ]);
 
-            // Atualizar o usuário
-            $gate->update([
-                'name' => $validatedData['name'] ?? $gate->name,
+            
+
+            // Atualizar a aplicacao
+            $app->update([
+                'name' => $validatedData['name'] ?? $app->name,
+                'version' => $validatedData['version'] ?? $app->version,
+                'description' => $validatedData['description'] ?? $app->description,
             ]);
+
 
             return response()->json([
-                'data' => $gate
+                'data' => $app
             ], 200);
         } catch (\Exception $e) {
             // Retorna o erro detalhado para debugging
@@ -120,9 +131,9 @@ class GateController extends Controller
     public function destroy(string $id)
     {
         //
-        $gate = Gate::findOrFail($id);
+        $app = Application::findOrFail($id);
 
-        // $gate->delete();
+        // $app->delete();
 
         return response()->noContent();
     }

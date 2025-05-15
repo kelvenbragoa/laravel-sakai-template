@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasMany(UserGate::class, 'user_id','id');
     }
 
+    public function applications()
+    {
+        return $this->hasMany(UserApplication::class, 'user_id','id');
+    }
+
     public function company(){
         return $this->hasOne(Company::class, 'id', 'company_id');
     }

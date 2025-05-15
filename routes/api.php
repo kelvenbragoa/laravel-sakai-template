@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ContainerTransactionController;
@@ -34,6 +35,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('containertransaction',ContainerTransactionController::class);
     Route::resource('companies',CompanyController::class);
     Route::resource('gates',GateController::class);
+    Route::resource('applications',ApplicationController::class);
 
 
 

@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ApplicationPermission;
 use App\Models\User;
+use App\Models\UserApplication;
+use App\Models\UserApplicationPermission;
 use App\Models\UserGate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,7 +23,12 @@ class UserController extends Controller
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('user_full_name', 'like', "%{$searchQuery}%")->orWhere('user_name', 'like', "%{$searchQuery}%");
             })
-            ->with(['permissions', 'roles','gate'])
+            ->with([
+                'permissions', 
+                'roles',
+                'gate',
+                'applications'
+                ])
             ->orderBy('user_full_name', 'asc')
             ->paginate(50);
 
@@ -74,14 +83,18 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
+            $data = $request->all();
+
             $registerUserData = $request->validate([
                 'user_full_name' => 'required|string',
                 'user_name' => 'required|string|unique:users',
                 'email' => 'nullable|string|email|unique:users',
                 'password' => 'required|min:8',
                 'roles' => 'required|array',
-                'company_id' => 'nullable|string',
+                'company_id' => 'nullable',
                 'roles.*.name' => 'required|string',
+                'gates' => 'array',
+                'applications' => 'array',
             ]);
 
 
@@ -97,8 +110,50 @@ class UserController extends Controller
             $roleNames = collect($registerUserData['roles'])->pluck('name')->toArray();
             $user->syncRoles($roleNames);
 
+            if (isset($registerUserData['gates'])) {
+                // dd($registerUserData['gates']);
+                $user->gate()->delete();
+                foreach($registerUserData["gates"] as $gate){
+                    
+                    UserGate::create([
+                        'user_id' => $user->id,
+                        'gate_id' => $gate['gate_id'],
+                    ]);
+                }
+                
+            }
+
+            if (isset($registerUserData['applications'])) {
+                // dd($registerUserData['applications']);
+                $user->applications()->delete();
+                foreach($registerUserData["applications"] as $app){
+                    // $permission = ApplicationPermission::where('id', $app['application_permission_id'])
+                    //     ->where('application_id', $app['application_id'])
+                    //     ->first();
+
+                    // if (!$permission) {
+                    //     return response()->json([
+                    //         'error' => 'Permissão inválida para a aplicação selecionada.'
+                    //     ], 422);
+                    // }
+                    
+                    UserApplication::updateOrCreate([
+                        'user_id' => $user->id,
+                        'application_id' => $app['application_id'],
+                    ]);
+                    UserApplicationPermission::updateOrCreate([
+                        'user_id' => $user->id,
+                        'application_id' => $app['application_id'],
+                        'application_permission_id' => $app['application_permission_id'],
+                    ]);
+                }
+                
+            }
+            $updatedUser = User::with(['permissions', 'roles','gate','applications'])->findOrFail($user->id);
+
+
             return response()->json([
-                'data' => $user
+                'data' => $updatedUser
             ]);
         } catch (\Exception $e) {
             // Retorna o erro com a mensagem detalhada
@@ -115,7 +170,15 @@ class UserController extends Controller
     public function show(string $id)
     {
         //
-        $user = User::with(['permissions', 'roles','gate'])->findOrFail($id);
+        $user = User::with([
+            'permissions', 
+            'roles',
+            'gate',
+            'applications.application_name',
+            'applications.userApplicationPermissions' => function ($query) use ($id) {
+                $query->where('user_id', $id);
+            }
+            ])->findOrFail($id);
 
         return response()->json([
             'data' => $user
@@ -171,6 +234,8 @@ class UserController extends Controller
                 'roles' => 'nullable|array',
                 'roles.*.name' => 'required|string',
                 'gates' => 'array',
+                'applications' => 'array',
+                'password' => ['nullable', 'string', 'min:8'],
             ]);
 
             // Atualizar o usuário
@@ -181,6 +246,11 @@ class UserController extends Controller
                 'email' => $validatedData['email'] ?? $user->email,
                 'company_id' => $validatedData['company_id'] ?? $user->company_id,
             ]);
+
+            if (!empty($validatedData['password'])) {
+                $user->password = Hash::make($validatedData['password']);
+                $user->save();
+            }
 
             // Sincronizar roles, se fornecido
             if (isset($validatedData['roles'])) {
@@ -195,10 +265,26 @@ class UserController extends Controller
                         'user_id' => $user->id,
                         'gate_id' => $gate['gate_id'],
                     ]);
-                    // $user->gate()->updateOrCreate(
-                    //     ['user_id' => $user->id], // Condição para verificar se já existe
-                    //     ['gate_id' => $gate['gate_id']] // Dados a serem atualizados ou criados
-                    // );
+                }
+                
+            }
+
+            if (isset($validatedData['applications'])) {
+                // dd($validatedData['applications']);
+                $user->applications()->delete();
+                UserApplicationPermission::where('user_id', $user->id)->delete();
+                foreach($validatedData["applications"] as $app){
+                    
+                    
+                    UserApplication::updateOrCreate([
+                        'user_id' => $user->id,
+                        'application_id' => $app['application_id'],
+                    ]);
+                    UserApplicationPermission::updateOrCreate([
+                        'user_id' => $user->id,
+                        'application_id' => $app['application_id'],
+                        'application_permission_id' => $app['application_permission_id'],
+                    ]);
                 }
                 
             }

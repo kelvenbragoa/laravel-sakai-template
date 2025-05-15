@@ -56,7 +56,6 @@ const buscarApplication = async () => {
 
     for (let aplicacaoField in applications.value) {
       // for(let permissionsField in applications.value[aplicacaoField]){
-      //   console.log(permissionsField)
       // }
     }
 

@@ -51,7 +51,7 @@ export const getCarga = async (page, limit, search, status) => {
     }
   };
 const baseURLCDMDev = "https://cdmapi.cornelder.co.mz/cgate1x/api"
-const baseURLCDMProd = "http://10.0.8.44:8010/api"
+const baseURLCDMProd = "http://192.168.1.118:8010/api"
 const storageImg =  "https://cdmapi.cornelder.co.mz/cgate1x"
 //cgate2 - terminal
 const baseURLCgate2 = "http://20.87.9.35/api/v1/transacoes"

@@ -17,7 +17,6 @@ const buscarCargaGeral = async()=>{
     const response = await axios.get(`${baseUrls.transacoesCgate2dotzeroCarga}`);
     data.value = response.data.data.data;
     totalRecords.value = response.data.data.data.total
-    console.log(response)
   }catch(e){
     console.error(e)
   }

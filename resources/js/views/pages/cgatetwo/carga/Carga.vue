@@ -63,7 +63,6 @@ const buscarCargaGeral = async (page = 1) => {
     });
     data.value = response.data.data.data;
     totalRecords.value = response.data.data.data.total
-    console.log(response)
     loading.value = false
   } catch (e) {
     loading.value = false

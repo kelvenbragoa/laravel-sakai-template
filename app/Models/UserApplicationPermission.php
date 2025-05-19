@@ -19,4 +19,9 @@ class UserApplicationPermission extends Model
         ->logOnly(['*']);
         // Chain fluent methods for configuration options
     }
+
+    public function permission()
+    {
+        return $this->belongsTo(ApplicationPermission::class, 'application_permission_id', 'id');
+    }
 }

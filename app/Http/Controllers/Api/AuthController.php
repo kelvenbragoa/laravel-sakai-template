@@ -52,11 +52,38 @@ class AuthController extends Controller
         ]);
 
         // Buscar usuário pelo nome de usuário (convertido para minúsculas)
+        // $user = User::where('user_name', strtolower($loginUserData['user_name']))
+        //     ->with([
+        //         'gate.gate_name', 
+        //         'company', 
+        //         'applications.application_name',
+        //         'applications.userApplicationPermissions.permission',
+        //         ])
+        //     ->first();
         $user = User::where('user_name', strtolower($loginUserData['user_name']))
-            ->with(['gate.gate_name', 'company', 'applications'])
+            ->with([
+                'gate.gate_name', 
+                'company', 
+                // 'applications.application_name',
+                ])
             ->first();
+        
+        $userId = $user->id ?? null;
+
+        
+        
 
         if ($user && Hash::check($loginUserData['password'], $user->password)) {
+            $user->load([
+                'applications' => function ($query) use ($userId) {
+                    $query->with(['application_name',
+                        'userApplicationPermissions' => function ($query) use ($userId) {
+                            $query->where('user_id', $userId);
+                        },
+                        'userApplicationPermissions.permission'
+                    ]);
+                }
+            ]);
             // Criar token
             $token = $user->createToken($user->user_name . '-AuthToken')->plainTextToken;
 

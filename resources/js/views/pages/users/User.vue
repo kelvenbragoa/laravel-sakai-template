@@ -562,7 +562,7 @@ const atualizarDadosShow = async () => {
       dialogUserUpdateVisible.value = false;
       loading.value = true;
       try {
-        await axios.put(
+        await axios.post(
           `${baseUrls.userList}/${dadosAtualizar.id}`,
           dadoAtualizacao,
           {
@@ -627,8 +627,8 @@ async function apaga() {
     return;
   }
   try {
-    const response = await axios.delete(
-      `${baseUrls.userList}/${dadosUserDelete.value.id}`,
+    const response = await axios.post(
+      `${baseUrls.userList}/${dadosUserDelete.value.id}/delete`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }

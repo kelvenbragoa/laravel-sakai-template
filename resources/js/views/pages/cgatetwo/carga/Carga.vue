@@ -61,8 +61,8 @@ const buscarCargaGeral = async (page = 1) => {
         query: dadoSearch.value
       }
     });
-    data.value = response.data.data.data;
-    totalRecords.value = response.data.data.data.total
+    data.value = response.data.result.data;
+    totalRecords.value = response.data.result.data.total
     loading.value = false
   } catch (e) {
     loading.value = false

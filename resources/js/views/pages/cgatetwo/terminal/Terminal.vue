@@ -760,7 +760,6 @@ const filterDate = async () => {
       userFiltro.value = response.data.data;
       transactions.value = response.data.result.data
       transactionsFilter.value = transactions.value
-      ("")
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
       toast.add({

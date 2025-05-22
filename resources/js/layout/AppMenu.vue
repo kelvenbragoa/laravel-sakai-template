@@ -17,6 +17,9 @@ const getUserData = () => {
     return false
 }
 
+console.log("Login")
+console.log(getUserData())
+
 
 const getToken = () => {
     return localStorage.getItem("access_token");

@@ -29,6 +29,10 @@ const dadoSearch = ref("")
 const treeApplications = ref([
 ])
 
+const aplicationsLabelsAll = ref([]);
+const aplicationsLabelsAll2 = ref([]);
+
+
 
 const aplicationsLabels = ref([])
 
@@ -86,10 +90,13 @@ const formDataSave = reactive({
   email: "",
   company_id: "0",
   password: "",
-  roles: "",
-  applications: "",
+  roles: [],
+  applications: [],
   gate: ""
 });
+
+
+
 
 const countries = ref([
   { name: "Moçambique", code: "MZ" },
@@ -112,26 +119,26 @@ const getToken = () => {
 };
 
 const getUserDataEspecific = async (id) => {
-  
-    const token = getToken();
-    if (!token) {
-        backLog()
-        return;
-    }
-    try {
-      loading.value = true;
-        const response = await axios.get(`${baseUrls.userList}/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        loading.value = false;
 
-        return response.data.data
-    } catch (e) {
-        return e
-    }
-    
+  const token = getToken();
+  if (!token) {
+    backLog()
+    return;
+  }
+  try {
+    loading.value = true;
+    const response = await axios.get(`${baseUrls.userList}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    loading.value = false;
+
+    return response.data.data
+  } catch (e) {
+    return e
+  }
+
 }
 
 const getApplicationsUserEspecific = () => {
@@ -150,6 +157,9 @@ const aplicationsAcesso = (id) => {
           label: applications.value[aplicationsField].application_permissions[i].permission.name
         })
       }
+
+      aplicationsLabelsAll.value.push(result)
+
       return result
     }
   }
@@ -391,15 +401,14 @@ const salvarDadosShow = async () => {
   let idsApplications = []
   let idsGates = []
   let applicationsName = []
+  // for (let i in formDataSave.applications) {
 
-  for (let i in formDataSave.applications) {
-
-    numberL.forEach(elements => {
-      if (elements == i) {
-        applicationsName.push(returnPermissionsApplications(i))
-      }
-    })
-  }
+  //   numberL.forEach(elements => {
+  //     if (elements == i) {
+  //       applicationsName.push(returnPermissionsApplications(i))
+  //     }
+  //   })
+  // }
   // returnPermissionsApplications(2)
 
   // formDataSave.applications.forEach(elements=>{
@@ -432,50 +441,50 @@ const salvarDadosShow = async () => {
     backLog()
     return;
   } else {
-    verificadorDeCampos(dadosAddL);
-    if (errorL.value === "") {
-      dialogoUserVisble.value = false;
-      loading.value = true;
+    // verificadorDeCampos(dadosAddL);
+    // if (errorL.value === "") {
+    //   dialogoUserVisble.value = false;
+    //   loading.value = true;
 
-      try {
-        const response = await axios.post(baseUrls.userList, dadosAddL, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    //   try {
+    //     const response = await axios.post(baseUrls.userList, dadosAddL, {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     });
 
-        toast.add({
-          severity: "success",
-          summary: "Confirmação",
-          detail: `Usuário criado com sucesso!`,
-          life: 3000,
-        });
-        // fetchUsers();
-        buscarUsuarios();
-        loading.value = false;
+    //     toast.add({
+    //       severity: "success",
+    //       summary: "Confirmação",
+    //       detail: `Usuário criado com sucesso!`,
+    //       life: 3000,
+    //     });
+    //     // fetchUsers();
+    //     buscarUsuarios();
+    //     loading.value = false;
 
-        formDataSave.name = "";
-        formDataSave.user = "";
-        formDataSave.email = "";
-        formDataSave.password = "";
-        formDataSave.company_id = "0";
-        formDataSave.roles = [];
-        formDataSave.applications = [];
-        formDataSave.gate = []
-      } catch (error) {
-        console.error(
-          "Erro ao adicionar usuário:",
-          error.response?.data || error
-        );
-        toast.add({
-          severity: "error",
-          summary: "Erro",
-          detail: error.response?.data?.message || "Erro ao criar o usuário.",
-          life: 3000,
-        });
-        loading.value = false;
-      }
-    }
+    //     formDataSave.name = "";
+    //     formDataSave.user = "";
+    //     formDataSave.email = "";
+    //     formDataSave.password = "";
+    //     formDataSave.company_id = "0";
+    //     formDataSave.roles = [];
+    //     formDataSave.applications = [];
+    //     formDataSave.gate = []
+    //   } catch (error) {
+    //     console.error(
+    //       "Erro ao adicionar usuário:",
+    //       error.response?.data || error
+    //     );
+    //     toast.add({
+    //       severity: "error",
+    //       summary: "Erro",
+    //       detail: error.response?.data?.message || "Erro ao criar o usuário.",
+    //       life: 3000,
+    //     });
+    //     loading.value = false;
+    //   }
+    // }
   }
 };
 
@@ -563,7 +572,7 @@ const atualizarDadosShow = async () => {
       loading.value = true;
       try {
         await axios.post(
-          `${baseUrls.userList}/${dadosAtualizar.id}`,
+          `${baseUrls.userList}/${dadosAtualizar.id}/update`,
           dadoAtualizacao,
           {
             headers: {
@@ -626,11 +635,15 @@ async function apaga() {
     backLog()
     return;
   }
+  console.log(`Token: ${token}`)
   try {
     const response = await axios.post(
       `${baseUrls.userList}/${dadosUserDelete.value.id}/delete`,
+      {},
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 
@@ -735,7 +748,7 @@ const dadosAtualizar = reactive({
   gate: gates.value,
   password: ""
 });
-const atualizarDados = async(dados) => {
+const atualizarDados = async (dados) => {
   const result = await getUserDataEspecific(dados.id)
   dadosAtualizar.applications = returnAplicationsIds(result.applications)
   dadosAtualizar.company_id = { id: Number(dados.company_id), name: returnCompany(dados.company_id) }
@@ -872,87 +885,173 @@ const detailsUser = (data) => {
   userDetails.value = data
 }
 
-
-
-// const nextPage = () => {
-//   pagesCurrent.value++;
-//   buscarUsuarios(pagesCurrent);
-// };
-// Dados da árvore
-const treeNodes = ref([
+const gatesApplacations = [
   {
-    key: '0',
-    label: 'Documentos',
-    children: [
-      {
-        key: '0-0',
-        label: 'Trabalho',
-        // children: [{ key: '0-0-0', label: 'Relatório.docx' }]
-      },
-      {
-        key: '0-1',
-        label: 'Pessoal',
-        // children: [{ key: '0-1-0', label: 'Fotos.zip' }]
-      }
-    ]
+    name: "Cgate 2.0 Terminal",
+    gates: ["4", "5", "6", "8A", "11A"]
   },
   {
-    key: '1',
-    label: 'Downloads',
-    children: [{ key: '1-0', label: 'Softwares' }]
-  }
-])
-
-// Nó selecionado
-const selectedKey = ref(null)
-
-const valoresSelecionados = ref([])
-const valueCat = ref()
-
-const opcoes = [
-  {
-    label: 'Frutas',
-    items: [
-      { label: 'Manga', value: 'frutas-manga' },
-      { label: 'Banana', value: 'frutas-banana' },
-      { label: 'Maçã', value: 'frutas-maca' },
-    ]
+    name: "Cgate 1.2",
+    gates: ["4", "5", "6", "8A", "11A"]
   },
+
   {
-    label: 'Doces',
-    items: [
-      { label: 'Manga', value: 'doces-manga' },
-      { label: 'Paçoca', value: 'doces-pacoca' }
-    ]
-  }
-  ,
-  {
-    label: 'Aplications',
-    items: [
-      { label: 'Manga', value: 'doces-manga' },
-      { label: 'Paçoca', value: 'doces-pacoca' }
-    ]
+    name: "Cgate 2.0 Cargo",
+    gates: ["1", "3", "16"]
   }
 ]
 
-// Organiza por categoria baseado no value selecionado
-const selecionadosPorCategoria = computed(() => {
-  const resultado = {}
-
-  for (const grupo of opcoes) {
-    const selecionados = grupo.items
-      .filter(item => valoresSelecionados.value.includes(item.value))
-      .map(item => item.label)
-
-    if (selecionados.length > 0) {
-      resultado[grupo.label] = selecionados
-    }
+const perfis = [
+  {
+    nome: "Tally 8A",
+    gate: ["8A"],
+    permissao: ["Tally In"],
+    papel: "Tally"
+  },
+  {
+    nome: "Security 8A",
+    gate: ["8A"],
+    permissao: ["Security Check In"],
+    papel: "Security"
+  },
+  {
+    nome: "General Cargo Security",
+    gate: ["1", "3"],
+    permissao: ["Security Check In", "Security Check Out"],
+    papel: "Security"
+  },
+  {
+    nome: "Tally 11A",
+    gate: ["11A"],
+    permissao: ["Tally In", "Tally Out"],
+    papel: "Tally"
+  },
+  {
+    nome: "Security 11A",
+    gate: ["11A"],
+    permissao: ["Security Check In", "Security Check Out"],
+    papel: "Security"
+  },
+  {
+    nome: "Security 8A CG1.2",
+    gate: ["8A"],
+    permissao: ["Security Check In"],
+    papel: "Security"
+  },
+  {
+    nome: "Security 4,5,6 CG1.2",
+    gate: ["4", "5", "6"],
+    permissao: ["Security Check Out"],
+    papel: "Security"
+  },
+  {
+    nome: "Precheck",
+    gate: ["none"],
+    permissao: ["Check Appointment"],
+    papel: "Tally"
+  },
+  {
+    nome: "Admin",
+    gate: ["all"],
+    permissao: ["all"],
+    papel: "Admin"
+  },
+  {
+    nome: "Manager Tc",
+    gate: ["4", "5", "6", "8A", "11A"],
+    // gate: ["Cgate 2.0 Terminal", "Cgate 1.2"],
+    permissao: ["all"],
+    papel: "Manager"
+  },
+  {
+    nome: "Manager Cargo",
+    gate: ["4", "5", "6", "8A", "11A"],
+    // gate: ["Cgate 2.0 Cargo"],
+    permissao: ["all"],
+    papel: "Manager"
   }
+];
 
-  valueCat.value = resultado
 
-  // return resultado
-})
+
+const allRoleNames = () => {
+  aplicationsLabelsAll.value.forEach(
+    (e) => {
+      for (let i in e) {
+        aplicationsLabelsAll2.value.push(e[i]['value'])
+
+      }
+
+    }
+  )
+}
+
+
+const returGatesForName = (gateName) => {
+  if (gateName == "all") {
+    formDataSave.gate = gates.value
+  } else {
+    gates.value.forEach((gate) => {
+      if (gate.name.includes(gateName)) {
+        // console.log("Yes")
+        console.log(gate.name)
+      }
+
+    })
+  }
+}
+
+const returApplicationsForName = (aplicationName) => {
+  if (aplicationName == "all") {
+    formDataSave.applications = aplicationsLabelsAll2.value
+  }
+}
+
+const preenchimentoRoles = (name) => {
+  perfis.forEach((elements) => {
+    if (name.toLocaleUpperCase() == elements.papel.toLocaleUpperCase()) {
+      // console.log(`Yes: ${elements.papel}`)
+      returGatesForName(elements.gate)
+      returApplicationsForName(elements.permissao)
+
+    }
+  })
+}
+
+
+// const rolePrePreenchido = (dado) => {
+// for (let item in dado) {
+//   preenchimentoRoles(dado[item].name)
+// }
+// }
+const preAllRoleName = ref(true)
+
+const preechimentoField = (dado) => {
+  console.log(dado)
+  // rolePrePreenchido(dados)
+  for (let item in dado) {
+    preenchimentoRoles(dado[item].name)
+
+  }
+}
+
+
+watch(
+  () => formDataSave.roles,
+  (newValue) => {
+    formDataSave.gate = []
+    formDataSave.applications = []
+    preechimentoField(newValue)
+
+
+    if (preAllRoleName.value) {
+      allRoleNames()
+      preAllRoleName.value = false
+    }
+  },
+  { deep: true }
+);
+
 onMounted(() => {
   //   fetchUsers();
   fetchRoles();
@@ -961,7 +1060,7 @@ onMounted(() => {
   buscarEmpresas();
   buscarGates();
   buscarApplication();
-  
+
 });
 </script>
 
@@ -1190,7 +1289,7 @@ onMounted(() => {
       </div>
 
       <div class="formUserAdd">
-        <span>{{ dadosAtualizar.company_id }}</span>
+
         <Select id="empresa" v-model="formDataSave.company_id" :options="empresa" optionLabel="name"
           placeholder="Empresas" class="w-full"></Select>
       </div>

@@ -50,14 +50,14 @@ export const getCarga = async (page, limit, search, status) => {
       throw error; 
     }
   };
-const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
-// const baseURLCDMProd = "http://10.0.8.44:8010/api"
+// const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
+const baseURLCDMProd = "http://10.0.8.44:8010/api"
 // const baseURLCDMProd = "http://127.0.0.1:8000/api"
 
 const storageImg =  "https://cdmapi.cornelder.co.mz/cgate1x"
 //cgate2 - terminal
 // const baseURLCgate2 = "http://20.87.9.35/api/v1/transacoes"
-const baseURLCgate2 = "https://cdmapi.cornelder.co.mz/cgate1x"
+const baseURLCgate2 = "https://cdmapi.cornelder.co.mz/cgate1x/api"
 //cgate2 - carga
 const baseURLCgate2Carga = "https://cdmapi.cornelder.co.mz"
 

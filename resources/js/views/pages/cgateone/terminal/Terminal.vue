@@ -6,6 +6,7 @@
   </div>
 
   <div class="card">
+    
     <!-- <DataTable :value="transactions" :filters="filters" :loading="loading" :rows="rowsPerPage" :paginator="true"
       :total-records="totalRecords" :first="(currentPage - 1) * rowsPerPage" @page="onPageChange" :global-filter-fields="[
         'transaction_gate',
@@ -37,7 +38,7 @@
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
-              <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
+              <InputText v-model="filtroDados" placeholder="Pesquisar" />
               <!-- <InputText v-model="filtroChange" placeholder="Pesquisa" /> -->
             </IconField>
           </div>
@@ -760,10 +761,8 @@ const filtroChange = () => {
   if (filtroDados.value.trim() === "") {
     // userFiltro.value = [...usersL.value];
     transactionsFilter.value = [...transactions.value]
-
-
-
-    loading.value = false;
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarTransccoes()
   } else {
     dadoSearch.value = filtroDados.value.toLowerCase()
     buscarTransccoes()
@@ -798,6 +797,19 @@ const loadJson = async () => {
     console.error("Erro ao carregar o JSON:", error);
   }
 };
+
+let timeoutId = null
+
+watch(filtroDados, (value)=>{
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+  }
+
+  timeoutId = setTimeout(() => {
+    filtroChange()
+   
+  }, 500)
+})
 
 onMounted(() => {
   // fetchTransactions(currentPage.value);

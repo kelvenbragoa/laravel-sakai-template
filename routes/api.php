@@ -21,6 +21,14 @@ Route::post('updatepassword',[AuthController::class,'updatepassword'])->middlewa
 Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::post('/users/{userId}/update', [UserController::class, 'updateuser'])->name('users.updateuser');
+    Route::post('/users/{userId}/delete', [UserController::class, 'deleteuser'])->name('users.deleteuser');
+
+    Route::post('/companies/{companyId}/update', [CompanyController::class, 'updatecompany'])->name('companies.update');
+    Route::post('/companies/{companyId}/delete', [CompanyController::class, 'deletecompany'])->name('companies.delete');
+
+
     Route::resource('roles',RolesController::class);
     Route::post('/roles/{roleId}/rolepermission', [RolesController::class, 'storeRolePermission'])->name('roles.storeRolePermission');
     Route::get('/roles/{roleId}/rolepermission', [RolesController::class, 'addRolePermission'])->name('roles.addRolePermission');

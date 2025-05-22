@@ -301,10 +301,102 @@ class UserController extends Controller
     }
 
 
+    public function updateuser(Request $request, String $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            // Validação
+            $validatedData = $request->validate([
+                'user_full_name' => 'nullable|string|max:255',
+                'user_name' => 'nullable|max:255|unique:users,user_name,' . $user->id,
+                'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
+                'gate_id' => 'nullable',
+                'company_id' => 'nullable',
+                'is_active' => 'nullable',
+                'roles' => 'nullable|array',
+                'roles.*.name' => 'required|string',
+                'gates' => 'array',
+                'applications' => 'array',
+                'password' => ['nullable', 'string', 'min:8'],
+            ]);
+
+            // Atualizar o usuário
+            $user->update([
+                'user_full_name' => $validatedData['user_full_name'] ?? $user->user_full_name,
+                'user_name' => $validatedData['user_name'] ?? $user->user_name,
+                'is_active' => $validatedData['is_active'] ?? $user->is_active,
+                'email' => $validatedData['email'] ?? $user->email,
+                'company_id' => $validatedData['company_id'] ?? $user->company_id,
+            ]);
+
+            if (!empty($validatedData['password'])) {
+                $user->password = Hash::make($validatedData['password']);
+                $user->save();
+            }
+
+            // Sincronizar roles, se fornecido
+            if (isset($validatedData['roles'])) {
+                $user->syncRoles($validatedData['roles']);
+            }
+            if (isset($validatedData['gates'])) {
+                // dd($validatedData['gates']);
+                $user->gate()->delete();
+                foreach($validatedData["gates"] as $gate){
+                    
+                    UserGate::create([
+                        'user_id' => $user->id,
+                        'gate_id' => $gate['gate_id'],
+                    ]);
+                }
+                
+            }
+
+            if (isset($validatedData['applications'])) {
+                // dd($validatedData['applications']);
+                $user->applications()->delete();
+                UserApplicationPermission::where('user_id', $user->id)->delete();
+                foreach($validatedData["applications"] as $app){
+                    
+                    
+                    UserApplication::updateOrCreate([
+                        'user_id' => $user->id,
+                        'application_id' => $app['application_id'],
+                    ]);
+                    UserApplicationPermission::updateOrCreate([
+                        'user_id' => $user->id,
+                        'application_id' => $app['application_id'],
+                        'application_permission_id' => $app['application_permission_id'],
+                    ]);
+                }
+                
+            }
+
+            return response()->json([
+                'data' => $user
+            ], 200);
+        } catch (\Exception $e) {
+            // Retorna o erro detalhado para debugging
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
+    {
+        //
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return response()->noContent();
+    }
+
+    public function deleteuser(string $id)
     {
         //
         $user = User::findOrFail($id);

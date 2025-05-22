@@ -19,4 +19,9 @@ class Company extends Model
         ->logOnly(['*']);
         // Chain fluent methods for configuration options
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

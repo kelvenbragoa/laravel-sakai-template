@@ -120,6 +120,37 @@ class CompanyController extends Controller
         }
     }
 
+    public function updatecompany(Request $request, String $id)
+    {
+        try {
+            $company = Company::findOrFail($id);
+            // Validação
+            $validatedData = $request->validate([
+                'name' => 'nullable|string',
+                'mobile' => 'nullable|string',
+                'email' => 'nullable|string|email',
+                'address' => 'nullable|string',
+            ]);
+
+            // Atualizar o usuário
+            $company->update([
+                'name' => $validatedData['name'] ?? $company->name,
+                'mobile' => $validatedData['mobile'] ?? $company->mobile,
+                'email' => $validatedData['email'] ?? $company->email,
+                'address' => $validatedData['address'] ?? $company->address,
+            ]);
+
+            return response()->json([
+                'data' => $company
+            ], 200);
+        } catch (\Exception $e) {
+            // Retorna o erro detalhado para debugging
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -132,5 +163,29 @@ class CompanyController extends Controller
         // $user->delete();
 
         return response()->noContent();
+    }
+
+    public function deletecompany(Request $request, String $id)
+    {
+        try {
+            $company = Company::findOrFail($id);
+
+             if ($company->users()->exists()) {
+                return response()->json([
+                    'error' => 'Não é possível excluir esta empresa porque ela possui usuários relacionados.'
+                ], 400);
+            }
+            
+            $company->delete();
+
+            return response()->json([
+                'message' => 'Company deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            // Retorna o erro detalhado para debugging
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

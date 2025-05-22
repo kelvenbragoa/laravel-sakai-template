@@ -979,7 +979,7 @@ const allRoleNames = () => {
     (e) => {
       for (let i in e) {
         aplicationsLabelsAll2.value.push(e[i]['value'])
-
+        // console.log(e)
       }
 
     }
@@ -1006,6 +1006,13 @@ const returGatesForName = (gateName) => {
 const returApplicationsForName = (aplicationName) => {
   if (aplicationName == "all") {
     formDataSave.applications = aplicationsLabelsAll2.value
+  }else{
+    // console.log("Aplications diferentes")
+    // console.log(aplicationName)
+
+    aplicationName.forEach((e)=>{
+      console.log(e)
+    })
   }
 }
 

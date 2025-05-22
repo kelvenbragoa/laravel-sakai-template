@@ -988,14 +988,15 @@ const allRoleNames = () => {
 
 
 const returGatesForName = (gateName) => {
-  console.log
+  console.log(gateName)
   if (gateName == "all") {
     formDataSave.gate = gates.value
   } else {
     gates.value.forEach((gate) => {
       if (gate.name.includes(gateName)) {
+        formDataSave.gate.push(gate)
         // console.log("Yes")
-        console.log(gate.name)
+        // console.log(gate.name)
       }
 
     })

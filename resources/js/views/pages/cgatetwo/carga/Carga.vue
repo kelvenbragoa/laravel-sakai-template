@@ -62,7 +62,7 @@ const buscarCargaGeral = async (page = 1) => {
       }
     });
     data.value = response.data.result.data;
-    totalRecords.value = response.data.result.data.total
+    totalRecords.value = response.data.result.total
     loading.value = false
   } catch (e) {
     loading.value = false

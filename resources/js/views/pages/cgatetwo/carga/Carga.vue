@@ -74,7 +74,8 @@ const filtroChange = () => {
   loading.value = true;
   if (filtroDados.value.trim() === "") {
     cargaFilter.value = [...data.value]
-    loading.value = false;
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarCargaGeral()
   } else {
     dadoSearch.value = filtroDados.value.toLowerCase()
     buscarCargaGeral()
@@ -345,6 +346,20 @@ watch(() => route.params.id, (newId) => {
 })
 
 
+let timeoutId = null
+
+watch(filtroDados, (value)=>{
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+  }
+
+  timeoutId = setTimeout(() => {
+    filtroChange()
+   
+  }, 500)
+})
+
+
 onMounted(() => {
   buscarCargaGeral()
 });
@@ -371,9 +386,10 @@ onMounted(() => {
             <InputIcon>
               <i class="pi pi-search" />
             </InputIcon>
-            <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
+            <InputText v-model="filtroDados" placeholder="Pesquisar" />
           </IconField>
         </div>
+
       </div>
     </template>
     <template #empty> Nenhum dado encontrado. </template>

@@ -73,6 +73,7 @@ const dadosUserDelete = ref({
 const first = ref(0);
 const pagesCurrent = ref(2);
 const filtroDados = ref("");
+let timeoutId = null
 
 const roles = ref();
 const rolesItems = ref([]);
@@ -333,7 +334,8 @@ const filtroChange = () => {
   loading.value = true;
   if (filtroDados.value.trim() === "") {
     userFiltro.value = [...usersL.value];
-    loading.value = false;
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarUsuarios()
   } else {
     dadoSearch.value = filtroDados.value.toLowerCase()
     buscarUsuarios()
@@ -441,50 +443,50 @@ const salvarDadosShow = async () => {
     backLog()
     return;
   } else {
-    // verificadorDeCampos(dadosAddL);
-    // if (errorL.value === "") {
-    //   dialogoUserVisble.value = false;
-    //   loading.value = true;
+    verificadorDeCampos(dadosAddL);
+    if (errorL.value === "") {
+      dialogoUserVisble.value = false;
+      loading.value = true;
 
-    //   try {
-    //     const response = await axios.post(baseUrls.userList, dadosAddL, {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     });
+      try {
+        const response = await axios.post(baseUrls.userList, dadosAddL, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    //     toast.add({
-    //       severity: "success",
-    //       summary: "Confirmação",
-    //       detail: `Usuário criado com sucesso!`,
-    //       life: 3000,
-    //     });
-    //     // fetchUsers();
-    //     buscarUsuarios();
-    //     loading.value = false;
+        toast.add({
+          severity: "success",
+          summary: "Confirmação",
+          detail: `Usuário criado com sucesso!`,
+          life: 3000,
+        });
+        // fetchUsers();
+        buscarUsuarios();
+        loading.value = false;
 
-    //     formDataSave.name = "";
-    //     formDataSave.user = "";
-    //     formDataSave.email = "";
-    //     formDataSave.password = "";
-    //     formDataSave.company_id = "0";
-    //     formDataSave.roles = [];
-    //     formDataSave.applications = [];
-    //     formDataSave.gate = []
-    //   } catch (error) {
-    //     console.error(
-    //       "Erro ao adicionar usuário:",
-    //       error.response?.data || error
-    //     );
-    //     toast.add({
-    //       severity: "error",
-    //       summary: "Erro",
-    //       detail: error.response?.data?.message || "Erro ao criar o usuário.",
-    //       life: 3000,
-    //     });
-    //     loading.value = false;
-    //   }
-    // }
+        formDataSave.name = "";
+        formDataSave.user = "";
+        formDataSave.email = "";
+        formDataSave.password = "";
+        formDataSave.company_id = "0";
+        formDataSave.roles = [];
+        formDataSave.applications = [];
+        formDataSave.gate = []
+      } catch (error) {
+        console.error(
+          "Erro ao adicionar usuário:",
+          error.response?.data || error
+        );
+        toast.add({
+          severity: "error",
+          summary: "Erro",
+          detail: error.response?.data?.message || "Erro ao criar o usuário.",
+          life: 3000,
+        });
+        loading.value = false;
+      }
+    }
   }
 };
 
@@ -635,7 +637,6 @@ async function apaga() {
     backLog()
     return;
   }
-  console.log(`Token: ${token}`)
   try {
     const response = await axios.post(
       `${baseUrls.userList}/${dadosUserDelete.value.id}/delete`,
@@ -969,6 +970,13 @@ const perfis = [
     // gate: ["Cgate 2.0 Cargo"],
     permissao: ["all"],
     papel: "Manager"
+  },
+  {
+    nome: "super admin",
+    gate: ["all"],
+    // gate: ["Cgate 2.0 Cargo"],
+    permissao: ["all"],
+    papel: "super admin"
   }
 ];
 
@@ -979,7 +987,6 @@ const allRoleNames = () => {
     (e) => {
       for (let i in e) {
         aplicationsLabelsAll2.value.push(e[i]['value'])
-        // console.log(e)
       }
 
     }
@@ -988,41 +995,61 @@ const allRoleNames = () => {
 
 
 const returGatesForName = (gateName) => {
-  console.log(gateName)
   if (gateName == "all") {
     formDataSave.gate = gates.value
   } else {
     gates.value.forEach((gate) => {
-      if (gate.name.includes(gateName)) {
-        formDataSave.gate.push(gate)
-        // console.log("Yes")
-        // console.log(gate.name)
-      }
+      gateName.forEach(gateItem => {
+        if (gate.name.includes(gateItem)) {
+          formDataSave.gate.push(gate)
+        }
+      })
+
 
     })
   }
 }
 
+function limparDuplicados() {
+  const dados = aplicationsLabelsAll2.value;
+  const dadosUnicos = [...new Set(dados)];
+  aplicationsLabelsAll2.value = dadosUnicos;
+}
+
+let resultAplicationsName = ref([])
+
 const returApplicationsForName = (aplicationName) => {
+
   if (aplicationName == "all") {
     formDataSave.applications = aplicationsLabelsAll2.value
-  }else{
-    // console.log("Aplications diferentes")
-    // console.log(aplicationName)
+    resultAplicationsName.value = aplicationsLabelsAll2.value
+  } else {
+    aplicationName.forEach((nameAp) => {
+      aplicationsLabelsAll.value.forEach((itemslabels) => {
+        itemslabels.forEach((names) => {
+          if (names['label'] == nameAp) {
+            resultAplicationsName.value.push(names['value'])
 
-    aplicationName.forEach((e)=>{
-      console.log(e)
+          }
+        })
+
+      })
     })
+
+    formDataSave.applications = resultAplicationsName.value
+
+
   }
+
+
 }
 
 const preenchimentoRoles = (name) => {
+
   perfis.forEach((elements) => {
-    if (name.toLocaleUpperCase() == elements.papel.toLocaleUpperCase()) {
-      // console.log(`Yes: ${elements.papel}`)
+    if (elements.papel.toLocaleUpperCase().includes(name.toLocaleUpperCase())) {
       returGatesForName(elements.gate)
       returApplicationsForName(elements.permissao)
-
     }
   })
 }
@@ -1036,11 +1063,8 @@ const preenchimentoRoles = (name) => {
 const preAllRoleName = ref(true)
 
 const preechimentoField = (dado) => {
-  console.log(dado)
-  // rolePrePreenchido(dados)
   for (let item in dado) {
     preenchimentoRoles(dado[item].name)
-
   }
 }
 
@@ -1048,6 +1072,9 @@ const preechimentoField = (dado) => {
 watch(
   () => formDataSave.roles,
   (newValue) => {
+    resultAplicationsName.value = []
+    // result = []
+    // aplicationsLabelsAll2.value = [];
     formDataSave.gate = []
     formDataSave.applications = []
     preechimentoField(newValue)
@@ -1060,6 +1087,17 @@ watch(
   },
   { deep: true }
 );
+
+watch(filtroDados, (value)=>{
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+  }
+
+  timeoutId = setTimeout(() => {
+    filtroChange()
+   
+  }, 500)
+})
 
 onMounted(() => {
   //   fetchUsers();
@@ -1125,7 +1163,7 @@ onMounted(() => {
             <InputIcon>
               <i class="pi pi-search" />
             </InputIcon>
-            <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
+            <InputText v-model="filtroDados" placeholder="Pesquisar" />
           </IconField>
           <div class="btnsL">
             <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogoUserVisble = true" />

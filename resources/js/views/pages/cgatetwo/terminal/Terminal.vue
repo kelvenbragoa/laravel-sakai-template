@@ -37,7 +37,7 @@
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
-              <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
+              <InputText v-model="filtroDados" placeholder="Pesquisar" />
             </IconField>
           </div>
         </div>
@@ -904,16 +904,27 @@ const filtroChange = () => {
   if (filtroDados.value.trim() === "") {
     // userFiltro.value = [...usersL.value];
     transactionsFilter.value = [...transactions.value]
-
-
-
-    loading.value = false;
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarTransccoes()
   } else {
-    (`Search: ${filtroDados.value}`)
     dadoSearch.value = filtroDados.value.toLowerCase()
     buscarTransccoes()
   }
 };
+
+let timeoutId = null
+
+watch(filtroDados, (value)=>{
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+  }
+
+  timeoutId = setTimeout(() => {
+    filtroChange()
+   
+  }, 500)
+})
+
 
 onMounted(() => {
   loadJson();

@@ -17,9 +17,6 @@ const getUserData = () => {
     return false
 }
 
-console.log("Login")
-console.log(getUserData())
-
 
 const getToken = () => {
     return localStorage.getItem("access_token");
@@ -465,25 +462,25 @@ const roleVerify = (role) => {
 const cgateMenuPages = async (roles, empresas) => {
 
     const token = getToken()
-    if (!token) {
-        return;
-    } else {
-        try {
-            const response = await axios.get(baseUrls.applications, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            applications.value = response.data.data.data.map((element) => {
-                return {
-                    ...element,
-                    name: element.name + " " + element.version,
-                };
-            });
-        } catch (e) {
-            console.error(e)
-        }
-    }
+    // if (!token) {
+    //     return;
+    // } else {
+    //     try {
+    //         const response = await axios.get(baseUrls.applications, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         })
+    //         applications.value = response.data.data.data.map((element) => {
+    //             return {
+    //                 ...element,
+    //                 name: element.name + " " + element.version,
+    //             };
+    //         });
+    //     } catch (e) {
+    //         console.error(e)
+    //     }
+    // }
 
 
     let applicationsView = []
@@ -492,12 +489,14 @@ const cgateMenuPages = async (roles, empresas) => {
     //     applicationsView.push(elements.name)
     // })
 
+
     empresas.forEach(element => {
-        applications.value.forEach(e => {
-            if (element['application_id'] == e['id']) {
-                applicationsView.push(e['name'])
-            }
-        })
+        applicationsView.push(element.application_name.name)
+        // applications.value.forEach(e => {
+        //     if (element['application_id'] == e['id']) {
+        //         applicationsView.push(e['name'])
+        //     }
+        // })
     });
 
 

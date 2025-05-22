@@ -20,6 +20,7 @@ class PermissionRolesTableSeeder extends Seeder
                 ['name' => 'Admin', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
                 ['name' => 'Manager', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
                 ['name' => 'Security', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+                ['name' => 'Tally', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
             ]
         );
 

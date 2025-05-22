@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Cgatev2Controller;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ContainerTransactionController;
 use App\Http\Controllers\Api\GateController;
@@ -40,6 +41,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/users/{userId}/permissions', [PermissionsController::class, 'storePermissionToUser'])->name('users.storePermissionUser');
     Route::get('/users/{userId}/permissions', [PermissionsController::class, 'addPermissionToUser'])->name('users.addPermissionUser');
 
+
+
+
     Route::resource('containertransaction',ContainerTransactionController::class);
     Route::resource('companies',CompanyController::class);
     Route::resource('gates',GateController::class);
@@ -56,6 +60,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/update_transaction/{id}', [MobileContainerTransactionController::class, 'update'])->name('api.v1.c_gate.container.update_transaction');
         Route::post('/upload-image', [MobileContainerTransactionController::class, 'uploadimage'])->name('api.v1.c_gate.container.uploadimage');
     });
+
+    Route::prefix('cgate2')->group(function () {
+        Route::get('/transaction', [Cgatev2Controller::class, 'transaction'])->name('cgate2.transaction');
+    });
+
 
 
 

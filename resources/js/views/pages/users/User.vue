@@ -988,6 +988,7 @@ const allRoleNames = () => {
 
 
 const returGatesForName = (gateName) => {
+  console.log
   if (gateName == "all") {
     formDataSave.gate = gates.value
   } else {

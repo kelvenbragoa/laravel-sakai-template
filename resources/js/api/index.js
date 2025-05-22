@@ -50,8 +50,8 @@ export const getCarga = async (page, limit, search, status) => {
       throw error; 
     }
   };
-// const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
-const baseURLCDMProd = "http://10.0.8.44:8010/api"
+const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
+// const baseURLCDMProd = "http://10.0.8.44:8010/api"
 // const baseURLCDMProd = "http://127.0.0.1:8000/api"
 
 const storageImg =  "https://cdmapi.cornelder.co.mz/cgate1x"

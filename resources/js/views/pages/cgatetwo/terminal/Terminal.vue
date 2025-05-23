@@ -814,11 +814,9 @@ const tabelaDados2 = ref({
   updated_at: "Atualizado em",
 });
 
-// Referências reativas
-const transactions = ref([]); // Dados das transações
+const transactions = ref([]); 
 const transactionsFilter = ref([])
-const totalRecords2 = ref(0); // Total de registros para paginação
-
+const totalRecords2 = ref(0); 
 const currentPage = ref(1);
 const rowsPerPage = ref(15);
 const filters2 = ref({

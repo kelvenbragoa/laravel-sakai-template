@@ -712,9 +712,9 @@ const transactions = ref([]);
 const totalRecords2 = ref(0);
 
 const currentPage = ref(1);
-const rowsPerPage = ref(10);
+const rowsPerPage = ref(50);
 const filters2 = ref({
-  global: { value: "" }, // Filtro global
+  global: { value: "" }, 
 });
 
 const getToken = () => {

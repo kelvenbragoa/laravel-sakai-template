@@ -654,7 +654,7 @@ const transactions = ref([]); // Dados das transações
 const totalRecords2 = ref(0); // Total de registros para paginação
 
 const currentPage = ref(1);
-const rowsPerPage = ref(7);
+const rowsPerPage = ref(50);
 const filters2 = ref({
   global: { value: "" }, // Filtro global
 });

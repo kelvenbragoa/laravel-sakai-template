@@ -10,8 +10,8 @@
         'type',
       ]" table-style="min-width: 60rem"> -->
 
-    <DataTable :value="transactionsFilter" paginator :rows="rowsPerPage" :totalRecords="totalRecords"
-      lazy :first="first" @page="onPageChange">
+    <DataTable :value="transactionsFilter" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy
+      :first="first" @page="onPageChange">
       <div v-if="loading" class="loader-overlay">
         <div class="louderL">
           <ProgressSpinner />
@@ -49,6 +49,11 @@
       <Column field="driver_name" header="Condutor" style="min-width: 12rem" />
       <Column field="truck_license_plate_number" header="Placa de caminhão" style="min-width: 12rem" />
       <Column field="transaction_gate" header="Gate" style="min-width: 12rem"></Column>
+      <Column field="created_at" header="Data" style="min-width: 12rem">
+        <template #body="{ data }">
+          {{ formatDate(data.created_at) }}
+        </template>
+      </Column>
       <Column field="movement_type" header="Tipo de movimento" style="min-width: 12rem"></Column>
       <Column header="Detalhes" style="min-width: 10rem">
         <template #body="{ data }">
@@ -814,9 +819,9 @@ const tabelaDados2 = ref({
   updated_at: "Atualizado em",
 });
 
-const transactions = ref([]); 
+const transactions = ref([]);
 const transactionsFilter = ref([])
-const totalRecords2 = ref(0); 
+const totalRecords2 = ref(0);
 const currentPage = ref(1);
 const rowsPerPage = ref(15);
 const filters2 = ref({
@@ -912,14 +917,14 @@ const filtroChange = () => {
 
 let timeoutId = null
 
-watch(filtroDados, (value)=>{
+watch(filtroDados, (value) => {
   if (timeoutId) {
     clearTimeout(timeoutId)
   }
 
   timeoutId = setTimeout(() => {
     filtroChange()
-   
+
   }, 500)
 })
 
@@ -961,17 +966,35 @@ const filters = ref({
 const statuses = ref(["Pending", "Done", "Started", "Cancelled"]);
 const loading = ref(true);
 
+// const formatDate = (dateString) => {
+//   const options = {
+//     year: "numeric",
+//     month: "long",
+//     day: "numeric",
+//     hour: "2-digit",
+//     minute: "2-digit",
+//   };
+//   const date = new Date(dateString);
+//   return date.toLocaleDateString("pt-BR", options);
+// };
+
+// const formatDate = (dateString) => {
+//   const date = new Date(dateString);
+
+
+//   const day = String(date.getDate()).padStart(2, '0');
+//   const month = String(date.getMonth() + 1).padStart(2, '0'); 
+//   const year = date.getFullYear();
+
+//   return `${day}/${month}/${year}`;
+// };
+
 const formatDate = (dateString) => {
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  };
   const date = new Date(dateString);
-  return date.toLocaleDateString("pt-BR", options);
+  return date.toLocaleDateString("pt-BR");
 };
+
+
 
 const generatePDF = (rowData) => {
   const doc = new jsPDF();
@@ -1095,15 +1118,15 @@ const generatePDFCanva = async (rowData) => {
 
   await nextTick();
   isActive.value = false
-  
-  
+
+
   generatePDFs();
-  
+
 
 }
 
 const generatePDFs = async () => {
-  
+
   const pdf = new jsPDF("p", "mm", "a4");
   const pdfWidth = 210;
   const pdfHeight = 297;

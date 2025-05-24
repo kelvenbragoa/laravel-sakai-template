@@ -119,6 +119,16 @@ const aplicationsMenu = () => {
                 label: "Pre check 1.0",
                 icon: 'pi pi-check',
                 to: '/precheck'
+            },
+            {
+                label: "Pre check 1.0",
+                icon: 'pi pi-check',
+                to: '/precheck'
+            },
+            {
+                label: "Form",
+                icon: 'pi pi-file-check',
+                to: '/precheck-form'
             }
         ]
     })

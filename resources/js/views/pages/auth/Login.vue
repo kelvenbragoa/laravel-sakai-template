@@ -120,7 +120,7 @@ const checked = ref(false);
 
                
                 <Button label="Entrar" class="w-full facebook-button hover" @click="autenticar"></Button>
-                <Button label="Pre check" class="butoonCheck" @click="goToPrecheck"></Button>
+                <!-- <Button label="Pre check" class="butoonCheck" @click="goToPrecheck"></Button> -->
                 <!-- as="router-link" -->
                 <!-- to="/dashboard" -->
               </div>

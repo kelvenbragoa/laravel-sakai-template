@@ -34,7 +34,7 @@ const precheck = async () => {
 const goToPrecheck = () => {
   router.push("/")
 }
-const checked = ref(false);
+const checked = ref(false); 
 
 
 const emptyField = () => {
@@ -78,7 +78,7 @@ function handleFileUpload(event) {
 const atualizarDados = (dados) => {
   dialogGateUpdate.value = true
   idDocs.value = (dados.id - 1)
-  
+
   updateContainerNumber.value = Number(dados.appointment_number)
 }
 
@@ -99,14 +99,6 @@ function deleteContainer(dadosId) {
 </script>
 
 <template>
-
-
-
-
-  <FloatingConfigurator />
-
-
-
   <div v-if="loading" class="loader-overlay">
     <div class="louderL">
       <ProgressSpinner />
@@ -114,8 +106,8 @@ function deleteContainer(dadosId) {
     </div>
   </div>
   <div v-else style="background-color: #f9f9f9; border: 0px solid black"
-    class="dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
-    <FloatingConfigurator />
+    class="dark:bg-surface-950 flex items-center justify-center  overflow-auto containerPrecheckC">
+
 
     <div class="containerPrecheck">
 
@@ -145,7 +137,8 @@ function deleteContainer(dadosId) {
 
               <div>
                 <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"></label>
-                <InputNumber v-model="precheckData.containerNumber" inputId="numberOnly" :useGrouping="false" :min="0" required autofocus class="w-full md:w-[30rem] mb-8 inputsCaixas" placeholder="Appointment Number" />
+                <InputNumber v-model="precheckData.containerNumber" inputId="numberOnly" :useGrouping="false" :min="0"
+                  required autofocus class="w-full md:w-[30rem] mb-8 inputsCaixas" placeholder="Appointment Number" />
 
                 <label for="excelFile" class="excelLabel">
                   <i class="pi pi-file-excel"></i>
@@ -156,7 +149,6 @@ function deleteContainer(dadosId) {
 
 
                 <Button label="Pre check" class="w-full facebook-button hover" @click="precheck"></Button>
-                <Button label="Login" class="butoonCheck" @click="goToPrecheck"></Button>
                 <!-- as="router-link" -->
                 <!-- to="/dashboard" -->
               </div>
@@ -220,7 +212,8 @@ function deleteContainer(dadosId) {
     <div class="formUserAdd">
 
       <label for="gatename" style="display: block; margin-top: 10px;">Contêiner</label>
-      <InputNumber v-model="updateContainerNumber" inputId="numberOnly" :useGrouping="false" :min="0" required autofocus class="w-full my-4" />
+      <InputNumber v-model="updateContainerNumber" inputId="numberOnly" :useGrouping="false" :min="0" required autofocus
+        class="w-full my-4" />
 
 
       <!-- v-model="formDataSave.name" -->
@@ -358,6 +351,7 @@ body {
   ;
   border: 0px solid red !important;
   align-items: flex-start;
+  padding: 40px;
 
   /* width: 100%; */
 }
@@ -366,5 +360,14 @@ body {
   margin-left: 20px;
   width: 400px;
   border-radius: 40px !important;
+}
+
+.containerPrecheckC {
+  border: 0px solid red !important;
+  border-radius: 15px;
+  width: 100%;
+  display: flex;
+  align-content: center;
+  justify-self: center;
 }
 </style>

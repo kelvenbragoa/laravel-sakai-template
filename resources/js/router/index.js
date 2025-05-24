@@ -73,6 +73,12 @@ const router = createRouter({
                     name: 'precheck',
                     component: () => import('@/views/pages/precheck/versionone/Precheck.vue')
                 },
+//form
+                {
+                    path: "/precheck-form",
+                    name: 'precheck-form',
+                    component: () => import('@/views/pages/precheck/form/Precheck.vue')
+                },
                 //-------------------------------------
                 {
                     path: '/uikit/formlayout',
@@ -242,11 +248,6 @@ const router = createRouter({
             path: "/jsonread",
             name: 'jsonread',
             component: () => import('@/views/pages/ScreenJson.vue')
-        },
-        {
-            path: "/precheck-form",
-            name: 'precheck-form',
-            component: () => import('@/views/pages/precheck/form/Precheck.vue')
         }
     ]
 });

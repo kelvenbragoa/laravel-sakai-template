@@ -3,11 +3,16 @@
         <h1 style="font-weight: 600; font-size: 1.3rem;">
             Cadastro de novo portão
         </h1>
-        <form action="#" @click="onFormSubmit">
+        <div v-if="isLoading" class="loader-overlay">
+            <div class="louderL">
+                <ProgressSpinner />
+            </div>
+        </div>
+        <div class="form">
             <div class="formUserAdd">
                 <div class="field formUserAddI">
                     <label for="name">Nome</label>
-                    <InputText id="name" v-model="formDataSave.user" required autofocus class="camposTextos"
+                    <InputText id="name" v-model="gateName" required autofocus class="camposTextos"
                         placeholder="Nome do portão" />
                 </div>
             </div>
@@ -64,11 +69,11 @@
             </div>
             <div class="btns">
                 <Button @click="gotoList" severity="secondary" label="Cancel" icon="pi pi-times-circle" />
-                <Button type="submit" severity="secondary" label="Salvar" icon="pi pi-save" />
+                <Button @click="onFormSubmit" severity="secondary" label="Salvar" icon="pi pi-save" />
             </div>
 
 
-        </form>
+        </div>
 
     </div>
 
@@ -82,22 +87,14 @@ import axios from "axios";
 import { baseUrls } from "../../../api";
 const toast = useToast()
 const router = useRouter()
-const formDataSave = reactive({
-    name: "",
-    user: "",
-    email: "",
-    company_id: "0",
-    password: "",
-    roles: [],
-    applications: [],
-    gate: ""
-});
+const gateName = ref()
 const gatesPermissions = ref([])
 const categoria1 = ref([]) // => Inserção e Escaneamento
 const categoria2 = ref([]) // => Verificações e Validações
 const categoria3 = ref([]) // => Opções de plataforma de comparação de dados
 const categoria4 = ref([]) // => Opções de segurança
 const selectedPermissions = ref({})
+const isLoading = ref(true)
 
 
 const checked = ref(false);
@@ -119,6 +116,7 @@ const getToken = () => {
 
 
 const buscarGatePermissions = async () => {
+    isLoading.value = true
     const token = getToken();
     if (!token) {
         backLog()
@@ -133,20 +131,22 @@ const buscarGatePermissions = async () => {
 
             gatesPermissions.value = response.data.data
             categorizarPermissoes(gatesPermissions.value)
-            console.log("Cat1")
-            console.log(categoria1.value)
-            console.log("------------------------------")
-            console.log("Cat2")
-            console.log(categoria2.value)
-            console.log("------------------------------")
-            console.log("Cat3")
-            console.log(categoria3.value)
-            console.log("------------------------------")
-            console.log("Cat4")
-            console.log(categoria4.value)
-            console.log("------------------------------")
+            // console.log("Cat1")
+            // console.log(categoria1.value)
+            // console.log("------------------------------")
+            // console.log("Cat2")
+            // console.log(categoria2.value)
+            // console.log("------------------------------")
+            // console.log("Cat3")
+            // console.log(categoria3.value)
+            // console.log("------------------------------")
+            // console.log("Cat4")
+            // console.log(categoria4.value)
+            // console.log("------------------------------")
             // console.log(gatesPermissions.value)
+            isLoading.value = false
         } catch (e) {
+            isLoading.value = false
             toast.add({ severity: 'error', summary: `Erro ao buscar as permissões ${e}`, life: 3000 });
         }
     }
@@ -200,7 +200,8 @@ const categorizarPermissoes = (dados) => {
     ))
 }
 
-const onFormSubmit = () => {
+const onFormSubmit = async () => {
+
     const selecionados = [
         ...categoria1.value,
         ...categoria2.value,
@@ -210,8 +211,29 @@ const onFormSubmit = () => {
         .map(p => ({ gate_permission_id: p.id }))
 
     console.log('permissions:', selecionados)
+    let gateSave = {
+        'name': gateName.value,
+        'permissions': selecionados
+    }
+    console.log(gateSave)
+    const token = getToken();
+    if (!token) {
+        backLog()
+        return;
+    } else {
+        try {
+            const response = await axios.post(baseUrls.gate, gateSave, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            toast.add({ severity: 'success', summary: `Gate adicionado com sucesso`, life: 3000 });
+        } catch (e) {
+            toast.add({ severity: 'error', summary: `Erro ao buscar as permissões ${e}`, life: 3000 });
+        }
+    }
 
-    toast.add({ severity: 'success', summary: 'Permissões salvas!', detail: JSON.stringify(selecionados), life: 5000 })
+    // toast.add({ severity: 'success', summary: 'Permissões salvas!', detail: JSON.stringify(selecionados), life: 5000 })
 }
 
 onMounted(() => {
@@ -230,17 +252,17 @@ onMounted(() => {
     margin-top: 15px;
 }
 
-form {
+.form {
     border: 0px solid black;
     margin-top: 10px;
     min-height: 20px;
 }
 
-form input:focus {
+.form input:focus {
     border: 1px solid #1558b0 !important;
 }
 
-form textarea:focus {
+.form textarea:focus {
     border: 1px solid #1558b0 !important;
 }
 
@@ -270,14 +292,14 @@ form textarea:focus {
 
 }
 
-.btns Button[type="submit"] {
+.btns Button:last-child {
     background-color: #1558b0;
     border: 1px solid #1558b0;
 
     margin-left: 10px;
 }
 
-.btns Button[type="submit"]:hover {
+.btns Button:last-child:hover {
     background-color: #0c4b9d88 !important;
     border: 1px solid #0c4b9d88 !important;
     color: #fff;
@@ -300,15 +322,16 @@ form textarea:focus {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-left: 15px;
+    margin-right: 20px;
+    margin-top: 15px;
 }
 
-.permissionsCheck .permissionCheckItem:first-child {
+.permissionsCheck .permissionCheckItem:last-child {
     margin-left: 0px;
 }
 
 .permissionsCheck .permissionCheckItem label {
-    margin-left: 5px;
+    margin-left: 10px;
     cursor: pointer;
 }
 

@@ -4,6 +4,9 @@ import { onMounted, reactive, ref } from "vue";
 import { baseUrls } from "../../../api/index"
 import { backLog, checkAccess } from "../../../utils/accesRoute";
 import axios from "axios";
+import { useRouter } from "vue-router";
+const router = useRouter()
+
 
 
 checkAccess()
@@ -198,6 +201,10 @@ const usersData = async()=>{
   }
 }
 
+const goTOadd = ()=>{
+  router.push("/newgate")
+}
+
 
 
 onMounted(() => {
@@ -225,7 +232,7 @@ onMounted(() => {
             <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
           </IconField>
           <div class="btnsL">
-            <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogGate = true" />
+            <Button label="Novo" icon="pi pi-plus" class="cores" @click="goTOadd" />
           </div>
         </div>
       </template>
@@ -233,6 +240,7 @@ onMounted(() => {
 
       <!-- <Column field="id" header="Id" style="min-width: 10rem"> </Column> -->
       <Column field="name" header="Nome" style="min-width: 12rem"> </Column>
+      <Column field="description" header="Descrição" style="min-width: 12rem"> </Column>
       <Column field="created_by" header="Criado por" style="min-width: 12rem"> </Column>
 
       <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
@@ -244,8 +252,8 @@ onMounted(() => {
                 color: #1558b0;
                 display: none;
               " />
-            <!-- <Button class="btnEstiliza" label="Detalhes" icon="pi  pi-eye"
-              style="border: 0px; background-color: transparent; color: #1558b0" @click="detailsGates(data)" /> -->
+            <Button class="btnEstiliza" label="" icon="pi  pi-eye"
+              style="border: 0px; background-color: transparent; color: #1558b0" @click="detailsGates(data)" />
               
               <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
               style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataGate(data)" /> 
@@ -425,9 +433,10 @@ onMounted(() => {
 
 
 .btnEstiliza {
-  background-color: rgba(21, 88, 176, 0.8117647059) !important;
-  border: 1px solid rgba(21, 88, 176, 0.5333333333) !important;
-  color: #fff!important;
+  color: rgba(21, 88, 176, 0.8117647059) !important;
+  // border: 1px solid rgba(21, 88, 176, 0.5333333333) !important;
+  margin-left: 5px;
+  // color: #fff!important;
 }
 
 // .btnEstiliza{

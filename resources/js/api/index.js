@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Exception } from 'sass';
 
 
 //cgate2.0
@@ -60,6 +61,8 @@ const storageImg =  "https://cdmapi.cornelder.co.mz/cgate1x"
 const baseURLCgate2 = "https://cdmapi.cornelder.co.mz/cgate1x/api"
 //cgate2 - carga
 const baseURLCgate2Carga = "https://cdmapi.cornelder.co.mz"
+//Excecoes
+const baseURLExcecoes = "http://20.87.9.35/api/v1/excepcoes"
 
   export const baseUrls = {
     auth: `${baseURLCDMProd}/login`,
@@ -69,7 +72,10 @@ const baseURLCgate2Carga = "https://cdmapi.cornelder.co.mz"
     userList: `${baseURLCDMProd}/users`,
     empresaAdd: `${baseURLCDMProd}/companies`,
     gate: `${baseURLCDMProd}/gates`,
+    gatePermissions: `${baseURLCDMProd}/gatepermissions`,
     applications: `${baseURLCDMProd}/applications`,
+    exceptionsList: `${baseURLExcecoes}/lista`,
+    precheckList: `${baseURLCDMProd}/cdms/precheck`,
     baseURl: baseURLCDMProd,
     storageUrl: storageImg
   };

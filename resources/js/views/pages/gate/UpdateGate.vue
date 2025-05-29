@@ -69,7 +69,7 @@
             </div>
             <div class="btns">
                 <Button @click="gotoList" severity="secondary" label="Cancel" icon="pi pi-times-circle" />
-                <Button @click="onFormSubmit" severity="secondary" label="Salvar" icon="pi pi-save" />
+                <Button @click="onFormSubmit" severity="secondary" label="Atualizar" icon="pi pi-pencil" />
             </div>
 
 
@@ -127,19 +127,15 @@ const buscarGate = async()=>{
         return;
     } else {
         try {
-            const response = await axios.get(baseUrls.gatePermissions, {
+            const response = await axios.get(baseUrls.gate, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-
-            gateAll.value = response.data.data
-            gateEspecific.value = gateAll.value.find(gate => gate.id === Number(gateIdParam));
-            console.log("Gate especifico")
-            console.log(gateEspecific.value
+            gateAll.value = response.data.data.data
             
-            )
-            // categorizarPermissoes(gatesPermissions.value)
+            gateEspecific.value = gateAll.value.find(gate => gate.id === Number(gateIdParam));
+            gateName.value = gateEspecific.value.name
             isLoading.value = false
         } catch (e) {
             isLoading.value = false
@@ -163,11 +159,6 @@ const buscarGatePermissions = async () => {
             })
 
             gatesPermissions.value = response.data.data
-            gateEspecific.value = gatesPermissions.value.find(gate => gate.id === Number(gateIdParam));
-            console.log("Gate especifico")
-            console.log(gateEspecific.value
-            
-            )
             categorizarPermissoes(gatesPermissions.value)
             isLoading.value = false
         } catch (e) {
@@ -178,7 +169,12 @@ const buscarGatePermissions = async () => {
 }
 
 const categorizarPermissoes = (dados) => {
-    const mapChecked = (arr) => arr.map(p => ({ ...p, checked: false }))
+    const permissoesSelecionadas = gateEspecific.value?.permissions?.map(p => Number(p.gate_permission_id)) || []
+
+    const mapChecked = (arr) => arr.map(p => ({
+        ...p,
+        checked: permissoesSelecionadas.includes(p.id)
+    }))
 
     categoria1.value = mapChecked(dados.filter(p =>
         [
@@ -251,7 +247,7 @@ const onFormSubmit = async () => {
         } else {
             isLoading.value = true
             try {
-                const response = await axios.post(baseUrls.gate, gateSave, {
+                const response = await axios.put(baseUrls.gate, gateSave, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -280,6 +276,7 @@ const onFormSubmit = async () => {
 }
 
 onMounted(() => {
+    buscarGate()
     buscarGatePermissions()
 })
 </script>

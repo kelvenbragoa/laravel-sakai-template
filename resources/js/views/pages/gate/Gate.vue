@@ -1,10 +1,11 @@
 <script setup>
 import { useToast } from "primevue";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { baseUrls } from "../../../api/index"
 import { backLog, checkAccess } from "../../../utils/accesRoute";
 import axios from "axios";
 import { useRouter } from "vue-router";
+
 const router = useRouter()
 
 
@@ -18,6 +19,8 @@ const dialogGateUpdate = ref(false)
 const dialogDetalhes = ref(false)
 const dialogGateDelete = ref(false)
 const permissionsGates = ref()
+const dadoSearch = ref("");
+
 
 const formDataSave = reactive({
   name: ""
@@ -54,6 +57,9 @@ const buscarGates = async () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: {
+        query: dadoSearch.value
+      }
     });
     gates.value = response.data.data.data
 
@@ -207,11 +213,36 @@ const goTOadd = ()=>{
   router.push("/newgate")
 }
 
+const filtroChange = () => {
+  loading.value = true;
+  if (filtroDados.value.trim() === "") {
+    // userFiltro.value = [...usersL.value];
+    transactionsFilter.value = [...transactions.value]
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarGates();
+  } else {
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarGates();
+  }
+};
+
+let timeoutId = null
+watch(filtroDados, (value)=>{
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+  }
+
+  timeoutId = setTimeout(() => {
+    filtroChange()
+   
+  }, 500)
+})
+
 
 
 onMounted(() => {
   buscarGates();
-  usersData()
+  // usersData()
 }
 )
 </script>
@@ -231,7 +262,7 @@ onMounted(() => {
             <InputIcon>
               <i class="pi pi-search" />
             </InputIcon>
-            <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
+            <InputText v-model="filtroDados" placeholder="Pesquisar" />
           </IconField>
           <div class="btnsL">
             <Button label="Novo" icon="pi pi-plus" class="cores" @click="goTOadd" />

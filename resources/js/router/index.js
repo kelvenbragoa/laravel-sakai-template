@@ -216,6 +216,13 @@ const router = createRouter({
                     props: true
 
                 },
+                {
+                    path: '/gatedetails/:id',
+                    name: 'gatedetails',
+                    component: () => import('@/views/pages/gate/DetalhesGate.vue'),
+                    props: true
+
+                },
                 //---------------
                 {
                     path: "/applications",

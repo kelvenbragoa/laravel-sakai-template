@@ -49,6 +49,7 @@
       <Column field="driver_name" header="Condutor" style="min-width: 12rem" />
       <Column field="truck_license_plate_number" header="Placa de caminhão" style="min-width: 12rem" />
       <Column field="transaction_gate" header="Gate" style="min-width: 12rem"></Column>
+      <Column field="container_number_1" header="Num. do contentor" style="min-width: 12rem"></Column>
       <Column field="created_at" header="Data" style="min-width: 12rem">
         <template #body="{ data }">
           {{ formatDate(data.created_at) }}

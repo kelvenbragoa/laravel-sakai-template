@@ -38,14 +38,15 @@
         <template #empty> Nenhum dado encontrado. </template>
         <!-- <Column field="appointment_nbr" header="Appointment Number" style="min-width: 12rem" /> -->
   
-        <Column field="transaction_id" header="ID da transação" style="min-width: 12rem" />
+        <!-- <Column field="transaction_id" header="ID da transação" style="min-width: 12rem" /> -->
         <Column field="message" header="Mensagem" style="min-width: 12rem" />
         <Column field="type" header="Tipo" style="min-width: 12rem" />
         <Column field="status" header="Status" style="min-width: 12rem"></Column>
         
         <Column header="Ações" style="min-width: 10rem">
           <template #body="{ data }">
-            <Button class="btnEstiliza" label="VER" icon="pi pi-eye" @click="detailsOpen(data)" style="border: 0px" />
+            <Button class="btnEstiliza" label="" icon="pi pi-eye" @click="detailsOpen(data)" style="border: 0px;" />
+            <Button class="btnEstiliza" label="Resolver" icon="pi pi-check" @click="detailsOpen(data)" style="border: 0px" />
           </template>
         </Column>
       </DataTable>
@@ -820,6 +821,17 @@
   
   .btnEstiliza:hover {
     background-color: #046df7 !important;
+  }
+
+  .btnEstiliza:first-child{
+    background-color: transparent;
+    color: #046df7;
+    /* border: 1px solid #046df7!important; */
+    margin-right: 10px;
+  }
+
+  .btnEstiliza:first-child:hover{
+    color: #fff!important;
   }
   </style>
   

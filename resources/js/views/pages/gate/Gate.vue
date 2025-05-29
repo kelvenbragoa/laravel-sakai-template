@@ -183,8 +183,8 @@ const fieldVoid = (data) => {
 
 
 const detailsGates = (data)=>{
-  dialogDetalhes.value = true
   permissionsGates.value = data.permissions
+  router.push(`gatedetails/${data.id}`)
 }
 
 const usersData = async()=>{

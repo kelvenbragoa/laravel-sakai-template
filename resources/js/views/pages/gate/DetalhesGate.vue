@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <h1 style="font-weight: 600; font-size: 1.3rem;">
-            Atualização do portão: {{ gateIdParam }}
+            Detalhes do portão: {{ gateIdParam }}
         </h1>
         <div v-if="isLoading" class="loader-overlay">
             <div class="louderL">
@@ -68,8 +68,8 @@
 
             </div>
             <div class="btns">
-                <Button @click="gotoList" severity="secondary" label="Cancel" icon="pi pi-times-circle" />
-                <Button @click="onFormSubmit" severity="secondary" label="Atualizar" icon="pi pi-pencil" />
+                <Button @click="onFormSubmi" severity="secondary" label="Eliminar" icon="pi pi-times-circle" />
+                <Button @click="gotoList" severity="secondary" label="Voltar" icon="pi pi-angle-left" />
             </div>
 
 

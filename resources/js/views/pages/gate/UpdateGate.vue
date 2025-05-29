@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <h1 style="font-weight: 600; font-size: 1.3rem;">
-            Cadastro de novo portão
+            Atualização do portão: {{ gateIdParam }}
         </h1>
         <div v-if="isLoading" class="loader-overlay">
             <div class="louderL">
@@ -81,15 +81,19 @@
 <script setup>
 
 import { onBeforeMount, onMounted, reactive, ref, watch } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useToast } from "primevue";
 import axios from "axios";
 import { baseUrls } from "../../../api";
 const toast = useToast()
 const router = useRouter()
+const routePath = useRoute()
+const gateIdParam = routePath.params.id;
 const gateName = ref('')
 const description = ref('')
 const gatesPermissions = ref([])
+const gateEspecific = ref([])
+const gateAll = ref([])
 const categoria1 = ref([]) // => Inserção e Escaneamento
 const categoria2 = ref([]) // => Verificações e Validações
 const categoria3 = ref([]) // => Opções de plataforma de comparação de dados
@@ -115,6 +119,34 @@ const getToken = () => {
     return localStorage.getItem("access_token");
 };
 
+const buscarGate = async()=>{
+    isLoading.value = true
+    const token = getToken();
+    if (!token) {
+        backLog()
+        return;
+    } else {
+        try {
+            const response = await axios.get(baseUrls.gatePermissions, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            gateAll.value = response.data.data
+            gateEspecific.value = gateAll.value.find(gate => gate.id === Number(gateIdParam));
+            console.log("Gate especifico")
+            console.log(gateEspecific.value
+            
+            )
+            // categorizarPermissoes(gatesPermissions.value)
+            isLoading.value = false
+        } catch (e) {
+            isLoading.value = false
+            toast.add({ severity: 'error', summary: `Erro ao buscar as permissões ${e}`, life: 3000 });
+        }
+    }
+}
 
 const buscarGatePermissions = async () => {
     isLoading.value = true
@@ -131,6 +163,11 @@ const buscarGatePermissions = async () => {
             })
 
             gatesPermissions.value = response.data.data
+            gateEspecific.value = gatesPermissions.value.find(gate => gate.id === Number(gateIdParam));
+            console.log("Gate especifico")
+            console.log(gateEspecific.value
+            
+            )
             categorizarPermissoes(gatesPermissions.value)
             isLoading.value = false
         } catch (e) {

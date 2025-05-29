@@ -713,7 +713,6 @@ const buildMenu = async () => {
 
         }
         const result = await cgateMenuPages(viewsMenu.value, getUserData().applications);
-        // console.log(result)
         // const result = 0
 
         if (!result || (Array.isArray(result) && result.length === 0)) {

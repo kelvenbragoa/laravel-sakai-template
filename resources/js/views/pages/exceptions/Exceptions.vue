@@ -700,7 +700,6 @@
         }
   
       });
-      console.log(response.data.result)
       transactions.value = response.data.result.data;
       transactionsFilter.value = transactions.value
       totalRecords.value = response.data.result.total

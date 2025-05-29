@@ -700,7 +700,6 @@ const buscarTransccoes = async (page = 1) => {
       }
 
     });
-    console.log(response.data.data.data)
     transactions.value = response.data.data.data;
     transactionsFilter.value = transactions.value
     totalRecords.value = response.data.data.total

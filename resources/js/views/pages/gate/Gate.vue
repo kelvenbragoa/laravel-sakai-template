@@ -17,6 +17,7 @@ const dialogGate = ref(false)
 const dialogGateUpdate = ref(false)
 const dialogDetalhes = ref(false)
 const dialogGateDelete = ref(false)
+const permissionsGates = ref()
 
 const formDataSave = reactive({
   name: ""
@@ -97,7 +98,7 @@ const getDataGate = (data) => {
   fieldIsEmpty.value = ""
   dialogGateUpdate.value = true
   formDataSave.name = data.name
-  idGate.value = data.id
+  router.push(`gateupdate/${data.id}`)
 
 }
 
@@ -177,6 +178,7 @@ const fieldVoid = (data) => {
 
 const detailsGates = (data)=>{
   dialogDetalhes.value = true
+  permissionsGates.value = data.permissions
 }
 
 const usersData = async()=>{
@@ -353,11 +355,24 @@ onMounted(() => {
       <hr />
       <!-- <Select id="permis" v-model="permissions" :options="permissionsItems"  placeholder="S. Nivel de acesso" class="w-full" style="margin-top: 15px;"></Select> -->
 
-      <div class="quantiUsers">
+      <!-- <div class="quantiUsers">
           <span>Quantidade de usuários:</span>
 
           <span>10</span>
-        </div>
+        </div> -->
+
+        <div class="titleCardUsers"> 
+        <div class="titleCardUser">Permissões</div>
+      </div>
+      <div class="dateDetails">
+        <ul class="aplicationUserEspecific">
+          <li v-for="app in permissionsGates" :key="app.id">
+            <span class="value">{{ app.gate_permission.name}}</span>
+            <!-- <span class="value">{{ app.application_permission?.permission || 'Sem nome' }}</span> -->
+          </li>
+        </ul>
+
+      </div>
       <div class="flex">
         <button class="p-button p-component cores" @click="dialogDetalhes = false">
           Ok

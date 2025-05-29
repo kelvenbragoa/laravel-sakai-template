@@ -536,52 +536,5 @@ onMounted(() => {
   max-height: 150px;
 }
 
-.chip {
-  display: inline-block;
-  background-color: #e0f2f1;
-  color: #00796b;
-  padding: 5px 10px;
-  border-radius: 15px;
-  margin-right: 10px;
-  margin-top: 10px;
-}
 
-.aplicationUserEspecific .value {
-  color: #00796b;
-}
-
-.aplicationUserEspecific{
-  display: flex;
-  align-content: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-bottom: 20px;
-
-  margin-bottom: 10px;
-  border-bottom: 1px solid #eee;
-  padding: 10px 0px;
-  
-  
-}
-
-.aplicationUserEspecific li{
-  background-color: #e0f2f1;
-  // margin-left: 10px;
-  color: #00796b;
-  padding: 5px 10px;
-  border-radius: 15px;
-  margin-right: 10px;
-  margin-top: 10px;
-  min-width: calc((100% / 2) - 10px);
-  max-width: 100%;
-}
-
-.aplicationUserEspecific li:nth-child(odd){
-  background-color: #1558b01c;
-  
-}
-
-.aplicationUserEspecific li:nth-child(odd) .value{
-  color: #1558b0!important;
-}
 </style>

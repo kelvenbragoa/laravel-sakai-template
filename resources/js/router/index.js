@@ -209,6 +209,13 @@ const router = createRouter({
                     name: "newgate",
                     component: () => import('@/views/pages/gate/NewGate.vue')
                 },
+                {
+                    path: '/gateupdate/:id',
+                    name: 'gateupdate',
+                    component: () => import('@/views/pages/gate/UpdateGate.vue'),
+                    props: true
+
+                },
                 //---------------
                 {
                     path: "/applications",

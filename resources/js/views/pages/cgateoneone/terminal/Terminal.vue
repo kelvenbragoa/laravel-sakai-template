@@ -794,11 +794,9 @@ const loading = ref(true);
 // };
 
 const formatDate = (dateString) => {
-  console.log(dateString)
   const date = new Date(dateString);
   return date.toLocaleDateString("pt-BR");
 };
-console.log("Tela correta")
 
 
 const generatePDF = (rowData) => {

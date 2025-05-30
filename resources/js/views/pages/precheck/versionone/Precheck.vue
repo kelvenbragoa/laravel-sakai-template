@@ -14,6 +14,7 @@
           <h2 style="font-weight: 600;">
               Precheck
           </h2>
+          <!-- <Button label="Precheck" icon="pi pi-calendar" @click="showDialog = true" /> -->
           <div class="groupExel">
             <Button @click="exportToExcel">Excel</Button>
             <div class="calendaryFilter">
@@ -107,7 +108,10 @@
             <span>{{ dadosRelatorio.created_by == null ? emptyField : dadosRelatorio.created_by }}</span>
           </div>
 
-          
+          <div class="lineRow">
+            <span>Atualizado por </span>
+            <span>{{ dadosRelatorio.updated_by == null ? emptyField : dadosRelatorio.updated_by }}</span>
+          </div>
           <div class="lineRow">
             <span>Categoria</span>
             <span>{{ dadosRelatorio.category == null ? emptyField : dadosRelatorio.category }}</span>
@@ -158,11 +162,11 @@
             <span>{{ dadosRelatorio.status == null ? emptyField : dadosRelatorio.status
               }}</span>
           </div>
-          <div class="lineRow">
+          <!-- <div class="lineRow">
             <span>Vessel visit</span>
             <span>{{ dadosRelatorio.vessel_visit ==
               null ? emptyField : dadosRelatorio.vessel_visit }}</span>
-          </div>
+          </div> -->
           
 
         </div>
@@ -189,15 +193,37 @@
 
       </div>
     </div>
-    <div class="flex">
-      <button class="p-button p-component cores" @click="generatePDFCanva(dadosRelatorio)">
+    <div class="flex" style="display: flex; align-items: center; justify-content: space-between;">
+      <div class="btnsCheckL">
+        <button class="p-button p-component cores" @click="generatePDFCanva(dadosRelatorio)">
         Pdf
       </button>
       <button class="p-button p-component p-button-secondary mx-2" @click="dialogRoleUpdateVisible = false">
         SAIR
       </button>
+      </div>
+     
+      <button class="p-button p-component cores" @click="precheck" v-if="dadosRelatorio.status == 'Pending'">
+        Check Apointment
+      </button>
+      
     </div>
   </Dialog>
+
+  <Dialog header="Pre check" v-model:visible="showDialog" modal :closable="false">
+      <div class="p-fluid">
+
+        <InputNumber v-model="tempNumber" inputId="appointment" :useGrouping="false" style="width: 400px; margin: 10px 0px;" placeholder="Inserir Appointment Number" />
+      </div>
+
+
+      <template #footer>
+        <div class="flex">
+        <Button label="Cancelar" icon="pi pi-times" class="p-button p-component p-button-secondary mx-2" @click="cancelDialog" />
+        <Button label="Check" icon="pi pi-check" @click="confirmAppointment" class="p-button p-component cores" />
+      </div>
+      </template>
+    </Dialog>
 </template>
 
 <script setup>
@@ -219,6 +245,18 @@ if (permissionsAcess().adminAcesseSuperAdmin == false) {
   if (permissionsAcess().cgate1dotxfoundTerminal == false) {
     useRouter().push("/dashboard")
   }
+}
+
+
+const showDialog = ref(false)
+const tempNumber = ref(null)
+const appointmentNumber = ref(null)
+
+
+function confirmAppointment() {
+  appointmentNumber.value = tempNumber.value
+  alert(tempNumber.value)
+  showDialog.value = false
 }
 
 const dialogRoleUpdateVisible = ref(false);
@@ -742,11 +780,48 @@ let dateToday = new Date()
 const dataLk = ref(formatDate(String(dateToday)))
 const emptyField = ref("Vazio")
 
+const precheckData = ref({
+  containerNumber: null
+});
+
 const detailsOpen = (data) => {
   dialogRoleUpdateVisible.value = true;
   dadosRelatorio.value = data
-  console.log(data)
+
+  precheckData.value.containerNumber = data.number
 };
+
+
+const precheck = async () => {
+
+    let dados = {
+      appointment_number: precheckData.value.containerNumber
+    }
+    const tokens = getToken();
+    if (!tokens) {
+      backLog()
+      return;
+    } else {
+      loading.value = true
+      try {
+        const response = await axios.post(`${baseUrls.precheckCheckappointment}`, dados, {
+          headers: {
+            Authorization: `Bearer ${tokens}`,
+          },
+        });
+        toast.add({ severity: 'success', summary: `Precheck feito`, life: 3000 });
+        loading.value = false
+        dialogRoleUpdateVisible.value = false
+        precheckData.value.containerNumber = null
+
+
+      } catch (e) {
+        toast.add({ severity: 'error', summary: `Erro ao buscar as permissões ${e}`, life: 3000 });
+        loading.value = false
+      }
+    }
+
+  }
 
 
 

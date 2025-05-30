@@ -4,11 +4,23 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { baseUrls } from "../../../../api/index";
 import * as XLSX from 'xlsx';
+import { useToast } from "primevue/usetoast";
+import { nextTick } from 'vue';
+import { jsPDF } from "jspdf";
+import html2canvas from 'html2canvas';
+
+const emptyField2 = ref("Vazio")
 
 const containers = ref([]);
 const updateContainerNumber = ref(null)
 const idDocs = ref()
 const router = useRouter();
+const toast = useToast();
+
+const isActive = ref(true)
+const getToken = () => {
+  return localStorage.getItem("access_token");
+};
 
 const token = ref("");
 const precheckData = ref({
@@ -16,25 +28,115 @@ const precheckData = ref({
 });
 
 
+const dadosRelatorio = ref({
+  id: null,
+  gate: null,
+  first_last_name: null,
+  created_by: null,
+  movement: null,
+  checklist: null,
+  containers: null,
+  trailers: null,
+  driver_license_number: null,
+  main_plate: null,
+  trailer_1_license_plate_number: null,
+  trailer_2_license_plate_number: null,
+  container_number_1: null,
+  container_number_2: null,
+  container_number_3: null,
+  container_seal_number_2: null,
+  checklist_check: null,
+  delivery_note_check: null,
+  driver_license_check: null,
+  notes: null,
+  updated_by: null,
+  updated_at: null,
+})
+
+
 
 const dialogGateUpdate = ref(false)
 
+const dialogRoleUpdateVisible = ref(false);
 
 const loading = ref(false);
 const errorL = ref(" ");
+
+const precheckList = async () => {
+  errorL.value = " "
+  emptyField()
+  if (errorL.value == " ") {
+
+    const tokens = getToken();
+    if (!tokens) {
+      backLog()
+      return;
+    } else {
+      loading.value = true
+      try {
+        const response = await axios.get(`${baseUrls.precheckList}/${precheckData.value.containerNumber}`, {
+          headers: {
+            Authorization: `Bearer ${tokens}`,
+          },
+        });
+
+        detailsOpen(response.data.data)
+        loading.value = false
+
+      } catch (e) {
+        toast.add({ severity: 'error', summary: `Erro ao buscar apointment ${e}`, life: 3000 });
+        loading.value = false
+      }
+    }
+
+  }
+
+};
 
 const precheck = async () => {
   errorL.value = " "
   emptyField()
   if (errorL.value == " ") {
+    
+    let dados = {
+      appointment_number: precheckData.value.containerNumber
+    }
+    const tokens = getToken();
+    if (!tokens) {
+      backLog()
+      return;
+    } else {
+      loading.value = true
+      try {
+        const response = await axios.post(`${baseUrls.precheckCheckappointment}`, dados, {
+          headers: {
+            Authorization: `Bearer ${tokens}`,
+          },
+        });
+        toast.add({ severity: 'success', summary: `Precheck feito`, life: 3000 });
+        loading.value = false
+        dialogRoleUpdateVisible.value = false
+        precheckData.value.containerNumber = null
+
+      } catch (e) {
+        toast.add({ severity: 'error', summary: `Erro ao buscar as permissões ${e}`, life: 3000 });
+        loading.value = false
+      }
+    }
+
   }
 
 };
 
+const detailsOpen = (data) => {
+  dialogRoleUpdateVisible.value = true;
+  dadosRelatorio.value = data
+
+};
 const goToPrecheck = () => {
   router.push("/")
 }
-const checked = ref(false); 
+const checked = ref(false);
 
 
 const emptyField = () => {
@@ -96,6 +198,61 @@ function deleteContainer(dadosId) {
 
 }
 
+const generatePDFCanva = async (rowData) => {
+  loading.value = true
+  dadosRelatorio.value = { ...rowData }
+
+  await nextTick();
+  isActive.value = false
+
+  generatePDFs();
+
+
+}
+
+const generatePDFs = async () => {
+  const pdf = new jsPDF("p", "mm", "a4");
+  const pdfWidth = 210;
+  const pdfHeight = 297;
+  const margin = 10;
+  const contentElement = document.getElementById("pdf-content");
+  const imagensElement = document.querySelector(".imagensRelatorio");
+
+  if (!contentElement || contentElement.style.display === "none") {
+    return;
+  }
+
+  // corpo
+  const contentCanvas = await html2canvas(contentElement, {
+    useCORS: true,
+    allowTaint: true,
+    scale: 2
+  });
+  const contentImgData = contentCanvas.toDataURL("image/jpeg", 1.0);
+
+  let contentHeight = (contentCanvas.height * (pdfWidth - 2 * margin)) / contentCanvas.width;
+  pdf.addImage(contentImgData, "JPEG", margin, margin, pdfWidth - 2 * margin, contentHeight);
+
+  //pagina 1
+  // pdf.addPage();
+
+  // tabela
+  // const imagensCanvas = await html2canvas(imagensElement, {
+  //   useCORS: true,
+  //   allowTaint: true,
+  //   scale: 2
+  // });
+  // const imagensImgData = imagensCanvas.toDataURL("image/jpeg", 1.0);
+  // let imagensHeight = (imagensCanvas.height * (pdfWidth - 2 * margin)) / imagensCanvas.width;
+
+  // pdf.addImage(imagensImgData, "JPEG", margin, margin, pdfWidth - 2 * margin, imagensHeight);
+
+  pdf.save("transacoes_relatorio.pdf");
+
+  loading.value = false
+};
+
+
 </script>
 
 <template>
@@ -105,13 +262,13 @@ function deleteContainer(dadosId) {
 
     </div>
   </div>
-  <div v-else style="background-color: #f9f9f9; border: 0px solid black"
+  <div v-else style="background-color: #fff; border: 0px solid black; height: 100vh;"
     class="dark:bg-surface-950 flex items-center justify-center  overflow-auto containerPrecheckC">
 
 
     <div class="containerPrecheck">
 
-      <div style="background-color: #f9f9f9; border: 0px solid black">
+      <div style="background-color: #fff; border: 0px solid black">
         <div class="flex flex-col items-center justify-center">
           <div style="border-radius: 56px; padding: 0.3rem" class="blue-gradient">
             <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="
@@ -121,14 +278,14 @@ function deleteContainer(dadosId) {
             ">
               <div class="text-center mb-8">
 
-                <div class="flex items-center justify-center w-full">
+                <!-- <div class="flex items-center justify-center w-full">
                   <div class="imageLogoLogin"></div>
-                </div>
+                </div> -->
                 <div class="m-20"></div>
-                <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">
+                <!-- <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">
                   Bem vindo ao pre-check
-                </div>
-                <span class="text-muted-color font-medium">Preencha o campo</span>
+                </div> -->
+                <!-- <span class="text-muted-color font-medium">Preencha o campo</span> -->
               </div>
 
               <div class="erroMessage">
@@ -136,19 +293,23 @@ function deleteContainer(dadosId) {
               </div>
 
               <div>
-                <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"></label>
-                <InputNumber v-model="precheckData.containerNumber" inputId="numberOnly" :useGrouping="false" :min="0"
-                  required autofocus class="w-full md:w-[30rem] mb-8 inputsCaixas" placeholder="Appointment Number" />
+                <label for="appointment"
+                  class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"></label>
+                <InputNumber v-model="precheckData.containerNumber" inputId="appointment" :useGrouping="false"
+                  class="inputsCaixas" placeholder="Inserir Appointment Number" />
+                <!-- <InputNumber v-model="precheckData.containerNumber" inputId="numberOnly" :useGrouping="false" :min="0"
+                  required autofocus class="w-full inputsCaixas" placeholder="Appointment Number" /> -->
 
-                <label for="excelFile" class="excelLabel">
+                <!-- <label for="excelFile" class="excelLabel">
                   <i class="pi pi-file-excel"></i>
-                  <span>Carregar excel</span></label>
-                <input type="file" accept=".xlsx, .xls" @change="handleFileUpload" id="excelFile" class="excelArqui" />
+                  <span>Carregar excel</span></label> -->
+                <!-- <input type="file" accept=".xlsx, .xls" @change="handleFileUpload" id="excelFile" class="excelArqui" /> -->
 
 
 
 
-                <Button label="Pre check" class="w-full facebook-button hover" @click="precheck"></Button>
+                <Button label="Check" class="w-full facebook-button hover " style="width: 500px; display: block;"
+                  @click="precheckList"></Button>
                 <!-- as="router-link" -->
                 <!-- to="/dashboard" -->
               </div>
@@ -228,6 +389,164 @@ function deleteContainer(dadosId) {
       </button>
     </div>
   </Dialog>
+
+  
+  <Dialog header="Detalhes" v-model:visible="dialogRoleUpdateVisible" :closable="true" :modal="true" :draggable="false"
+    :resizable="false" style="width:  250mm; min-height: 90vh" :footer="productDialogFooterForm">
+    <div class="containerDetailsDialog">
+      <div id="pdf-content">
+        <div class="detalhesLogo">
+          <div class="detalhesName">
+            <span>
+              Detalhes precheck:
+            </span>
+            <span>
+              <span>{{ dadosRelatorio.number == null ? emptyField2 : dadosRelatorio.number }}</span>
+            </span>
+          </div>
+          <div class="logoCornelderRelatorio">
+            <!-- <img src="/public/logo.png" alt=""> -->
+            <div class="imageLogoPdf"></div>
+          </div>
+        </div>
+        <div class="lineDiv"></div>
+        <div class="columTable">
+          <div class="lineRow">
+            <span>Number</span>
+            <span>{{ dadosRelatorio.number == null ? emptyField2 : dadosRelatorio.number }}</span>
+          </div>
+
+          <div class="lineRow">
+            <span>Nome do motorista</span>
+            <span>{{ dadosRelatorio.driver_name == null ? emptyField2 : dadosRelatorio.driver_name }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Num. carta</span>
+            <span>{{ dadosRelatorio.driver_license_number == null ? emptyField2 : dadosRelatorio.driver_license_number }}</span>
+          </div>
+
+          <div class="lineRow">
+            <span>placa do caminhão</span>
+            <span>{{ dadosRelatorio.truck_license_number == null ? emptyField2 : dadosRelatorio.truck_license_number }}</span>
+          </div>
+
+          <div class="lineRow">
+            <span>transportadora</span>
+            <span>{{ dadosRelatorio.trucking_company == null ? emptyField2 : dadosRelatorio.trucking_company }}</span>
+          </div>
+          <div class="lineRow">
+            <span>QR code</span>
+            <span>{{ dadosRelatorio.appointment_qr_code == null ? emptyField2 : dadosRelatorio.appointment_qr_code }}</span>
+          </div>
+          
+          <div class="lineRow">
+            <span>Criado por </span>
+            <span>{{ dadosRelatorio.created_by == null ? emptyField2 : dadosRelatorio.created_by }}</span>
+          </div>
+
+          <div class="lineRow">
+            <span>Atualizado por </span>
+            <span>{{ dadosRelatorio.updated_by == null ? emptyField : dadosRelatorio.updated_by }}</span>
+          </div>
+
+          
+          <div class="lineRow">
+            <span>Categoria</span>
+            <span>{{ dadosRelatorio.category == null ? emptyField2 : dadosRelatorio.category }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Agent</span>
+            <span>{{ dadosRelatorio.agent == null ? emptyField2 : dadosRelatorio.agent }}</span>
+          </div>
+
+          <div class="lineRow">
+            <span>Num. da empresa do agente</span>
+            <span>{{ dadosRelatorio.checklist == null ? emptyField2 : dadosRelatorio.checklist }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Time slot</span>
+            <span>{{ dadosRelatorio.appointment_time_slot == null ? emptyField2 : dadosRelatorio.appointment_time_slot }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Pin number </span>
+            <span>{{ dadosRelatorio.appointment_pin_number == null ? emptyField2 : dadosRelatorio.appointment_pin_number }}</span>
+          </div>
+          <div class="lineRow">
+            <span>appointment data</span>
+            <span>{{ dadosRelatorio.appointment_date == null ? emptyField2 : dadosRelatorio.appointment_date
+              }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Num. de embarque da conta</span>
+            <span>{{ dadosRelatorio.bill_lading_number == "" ? emptyField2 : dadosRelatorio.bill_lading_number }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Num. do container</span>
+            <span>{{ dadosRelatorio.container_number ==
+              null ? emptyField2 : dadosRelatorio.container_number }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Tipo contêiner</span>
+            <span>{{ dadosRelatorio.container_type ==
+              null ? emptyField2 : dadosRelatorio.container_type }}</span>
+          </div>
+          <div class="lineRow">
+            <span>hold status</span>
+            <span>{{ dadosRelatorio.hold_status == null ? emptyField2 : dadosRelatorio.hold_status
+              }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Status</span>
+            <span>{{ dadosRelatorio.status == null ? emptyField2 : dadosRelatorio.status
+              }}</span>
+          </div>
+          <!-- <div class="lineRow">
+            <span>Vessel visit</span>
+            <span>{{ dadosRelatorio.vessel_visit ==
+              null ? emptyField2 : dadosRelatorio.vessel_visit }}</span>
+          </div> -->
+          
+
+        </div>
+        <div class="footerLd">
+          <div class="lineDiv"></div>
+          <div class="containerFooter">
+            <div class="processadoPorCgate">
+              <span>Processado por:</span>
+              <span>
+                C-gate
+              </span>
+            </div>
+            <div class="processadoPorCgate">
+              <span>{{ dataLk }}</span>
+            </div>
+
+            <div class="processadoPorCgate">
+              <span>1/1</span>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+    <div class="flex" style="display: flex; align-items: center; justify-content: space-between;">
+      <div class="btnsCheckL">
+        <button class="p-button p-component cores" @click="generatePDFCanva(dadosRelatorio)">
+        Pdf
+      </button>
+      <button class="p-button p-component p-button-secondary mx-2" @click="dialogRoleUpdateVisible = false">
+        SAIR
+      </button>
+      </div>
+     
+      <button class="p-button p-component cores" @click="precheck">
+        Check Apointment
+      </button>
+      
+    </div>
+  </Dialog>
 </template>
 
 <style scoped>
@@ -261,12 +580,14 @@ function deleteContainer(dadosId) {
 }
 
 .blue-gradient {
-  background: linear-gradient(180deg, #1558b0 10%, rgba(33, 150, 243, 0) 30%);
+  /* background: linear-gradient(180deg, #1558b0 10%, rgba(33, 150, 243, 0) 30%); */
 }
 
 .inputsCaixas {
   height: 50px !important;
   outline: none !important;
+  width: 500px !important;
+  margin-bottom: 20px;
 }
 
 .inputsCaixas:focus {

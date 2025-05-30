@@ -53,7 +53,7 @@ export const getCarga = async (page, limit, search, status) => {
   };
 // const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
 const baseURLCDMProd = "http://10.0.8.44:8010/api"
-// const baseURLCDMProd = "http://127.0.0.1:8000/api"
+// const baseURLCDMProd = "https://c006-197-249-75-55.ngrok-free.app/api"
 
 const storageImg =  "https://cdmapi.cornelder.co.mz/cgate1x"
 //cgate2 - terminal
@@ -75,7 +75,9 @@ const baseURLExcecoes = "http://20.87.9.35/api/v1/excepcoes"
     gatePermissions: `${baseURLCDMProd}/gatepermissions`,
     applications: `${baseURLCDMProd}/applications`,
     exceptionsList: `${baseURLExcecoes}/lista`,
+    exceptionsUpdate: `${baseURLExcecoes}/actualizar`,
     precheckList: `${baseURLCDMProd}/cdms/precheck`,
+    precheckCheckappointment: `${baseURLCDMProd}/cdms/checkappointment`,
     baseURl: baseURLCDMProd,
     storageUrl: storageImg
   };

@@ -34,7 +34,7 @@
             <div class="flex justify-between mb-4">
                 <div>
                     <span className="block text-500 font-medium mb-3">Portões</span>
-                     <div className="text-900 font-medium text-xl">28</div>
+                     <div className="text-900 font-medium text-xl">5</div>
                 </div>
                 <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
                     <i className="pi pi-window-maximize text-cyan-500 text-xl" />

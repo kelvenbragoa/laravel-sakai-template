@@ -228,6 +228,8 @@ const buscarUsuarios = async (page = 1) => {
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        'Content-Type': 'application/json',
         },
         params: {
           page: page,

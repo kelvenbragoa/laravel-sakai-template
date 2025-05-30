@@ -11,16 +11,18 @@
         <div class="form">
             <div class="formUserAdd">
                 <div class="field formUserAddI">
-                    <label for="name">Nome</label>
-                    <InputText id="name" v-model="gateName" required autofocus class="camposTextos"
-                        placeholder="Nome do portão" />
+                    <div class="nameGate">
+                        <label for="name">Nome</label>
+                        <span>{{ gateName }}</span>
+                    </div>
+                    
                 </div>
             </div>
 
             <div class="formUserAdd descL">
                 <div class="field formUserAddI">
                     <label for="name">Descrição</label>
-                    <Textarea placeholder="Descrição" v-model="description" />
+                    
                 </div>
             </div>
 
@@ -30,7 +32,7 @@
                     <h2>Inserção e Escaneamento</h2>
                     <div class="permissionsCheck">
                         <div class="permissionCheckItem" v-for="item in categoria1" :key="item.id">
-                            <Checkbox v-model="item.checked" binary :inputId="`checkitem-${item.id}`" />
+                            <!-- <Checkbox v-model="item.checked" binary :inputId="`checkitem-${item.id}`" /> -->
                             <label :for="`checkitem-${item.id}`">{{ item.name }}</label>
                         </div>
                     </div>
@@ -40,7 +42,7 @@
                     <h2>Verificações e Validações</h2>
                     <div class="permissionsCheck">
                         <div class="permissionCheckItem" v-for="item in categoria2" :key="item.id">
-                            <Checkbox v-model="item.checked" binary :inputId="`checkitem-${item.id}`" />
+                            <!-- <Checkbox v-model="item.checked" binary :inputId="`checkitem-${item.id}`" /> -->
                             <label :for="`checkitem-${item.id}`">{{ item.name }}</label>
                         </div>
                     </div>
@@ -50,7 +52,7 @@
                     <h2>Opções de plataforma de comparação de dados</h2>
                     <div class="permissionsCheck">
                         <div class="permissionCheckItem" v-for="item in categoria3" :key="item.id">
-                            <Checkbox v-model="item.checked" binary :inputId="`checkitem-${item.id}`" />
+                            <!-- <Checkbox v-model="item.checked" binary :inputId="`checkitem-${item.id}`" /> -->
                             <label :for="`checkitem-${item.id}`">{{ item.name }}</label>
                         </div>
                     </div>
@@ -60,7 +62,7 @@
                     <h2>Opções de segurança</h2>
                     <div class="permissionsCheck">
                         <div class="permissionCheckItem" v-for="item in categoria4" :key="item.id">
-                            <Checkbox v-model="item.checked" binary :inputId="`checkitem-${item.id}`" />
+                            <!-- <Checkbox v-model="item.checked" binary :inputId="`checkitem-${item.id}`" /> -->
                             <label :for="`checkitem-${item.id}`">{{ item.name }}</label>
                         </div>
                     </div>
@@ -136,6 +138,7 @@ const buscarGate = async()=>{
             
             gateEspecific.value = gateAll.value.find(gate => gate.id === Number(gateIdParam));
             gateName.value = gateEspecific.value.name
+            categorizarPermissoes2(gateEspecific.value)
             isLoading.value = false
         } catch (e) {
             isLoading.value = false
@@ -159,7 +162,7 @@ const buscarGatePermissions = async () => {
             })
 
             gatesPermissions.value = response.data.data
-            categorizarPermissoes(gatesPermissions.value)
+            // categorizarPermissoes(gatesPermissions.value)
             isLoading.value = false
         } catch (e) {
             isLoading.value = false
@@ -167,6 +170,53 @@ const buscarGatePermissions = async () => {
         }
     }
 }
+
+const categorizarPermissoes2 = (gate) => {
+    const permissoes = gate?.permissions?.map(p => ({
+        ...p.gate_permission,
+        checked: true
+    })) || []
+
+    const filtrarCategoria = (nomes) =>
+        permissoes.filter(p => nomes.includes(p.name))
+
+    categoria1.value = filtrarCategoria([
+        'Inserir e Escanear os Contentores',
+        'Inserir e Escanear as Cartas de condução',
+        'Inserir e Escanear as matrículas do camião',
+        'Inserir e Escanear as matrículas dos atrelados',
+        'Inserir e Escanear os tipos de carga',
+        'Inserir e Escanear os números de selos',
+        'Inserir e Escanear as Pesagens'
+    ])
+
+    categoria2.value = filtrarCategoria([
+        'Verificar e Validar Contentor',
+        'Verificar e Validar Carta de condução',
+        'Verificar e Validar matrícula do camião',
+        'Verificar e Validar matrícula dos atrelados',
+        'Verificar e Validar o tipo de carga',
+        'Verificar e Validar os números de selos',
+        'Verificar e Validar Pesagens'
+    ])
+
+    categoria3.value = filtrarCategoria([
+        'N4',
+        'CDMS',
+        'Neuralabs'
+    ])
+
+    categoria4.value = filtrarCategoria([
+        'Verificação de segurança',
+        'Verificação de Appointment',
+        'Pre-Check',
+        'After check',
+        'Excepções',
+        'Imprimir o TID',
+        'Imprimir a nota de entrega'
+    ])
+}
+
 
 const categorizarPermissoes = (dados) => {
     const permissoesSelecionadas = gateEspecific.value?.permissions?.map(p => Number(p.gate_permission_id)) || []
@@ -223,54 +273,54 @@ const categorizarPermissoes = (dados) => {
 
 const onFormSubmit = async () => {
 
+router.push('/gate')
+    // const selecionados = [
+    //     ...categoria1.value,
+    //     ...categoria2.value,
+    //     ...categoria3.value,
+    //     ...categoria4.value
+    // ].filter(p => p.checked)
+    //     .map(p => ({ gate_permission_id: p.id }))
+    // let gateSave = {
+    //     'name': gateName.value,
+    //     'description': description.value,
+    //     'permissions': selecionados
+    // }
+    // const token = getToken();
+    // if (!token) {
+    //     backLog()
+    //     return;
+    // } else {
+    //     if (selecionados.length === 0 || gateName.value == '') {
+    //         toast.add({ severity: 'warn', summary: 'Selecione pelo menos uma permissão ou preencha o campo Nome.', life: 3000 })
+    //         return
+    //     } else {
+    //         isLoading.value = true
+    //         try {
+    //             const response = await axios.put(`${baseUrls.gate}/${gateIdParam}`, gateSave, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`,
+    //                 },
+    //             });
+    //             toast.add({ severity: 'success', summary: `Gate ${gateName.value} atualizado com sucesso`, life: 3000 });
 
-    const selecionados = [
-        ...categoria1.value,
-        ...categoria2.value,
-        ...categoria3.value,
-        ...categoria4.value
-    ].filter(p => p.checked)
-        .map(p => ({ gate_permission_id: p.id }))
-    let gateSave = {
-        'name': gateName.value,
-        'description': description.value,
-        'permissions': selecionados
-    }
-    const token = getToken();
-    if (!token) {
-        backLog()
-        return;
-    } else {
-        if (selecionados.length === 0 || gateName.value == '') {
-            toast.add({ severity: 'warn', summary: 'Selecione pelo menos uma permissão ou preencha o campo Nome.', life: 3000 })
-            return
-        } else {
-            isLoading.value = true
-            try {
-                const response = await axios.put(`${baseUrls.gate}/${gateIdParam}`, gateSave, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                toast.add({ severity: 'success', summary: `Gate ${gateName.value} atualizado com sucesso`, life: 3000 });
+    //             isLoading.value = false
+    //             gateName.value = ''
+    //             description.value = ''
+    //             const resetChecks = (categoria) => {
+    //                 categoria.value.forEach(p => p.checked = false)
+    //             }
 
-                isLoading.value = false
-                gateName.value = ''
-                description.value = ''
-                const resetChecks = (categoria) => {
-                    categoria.value.forEach(p => p.checked = false)
-                }
-
-                resetChecks(categoria1)
-                resetChecks(categoria2)
-                resetChecks(categoria3)
-                resetChecks(categoria4)
-            } catch (e) {
-                toast.add({ severity: 'error', summary: `Erro ao buscar as permissões ${e}`, life: 3000 });
-                isLoading.value = false
-            }
-        }
-    }
+    //             resetChecks(categoria1)
+    //             resetChecks(categoria2)
+    //             resetChecks(categoria3)
+    //             resetChecks(categoria4)
+    //         } catch (e) {
+    //             toast.add({ severity: 'error', summary: `Erro ao buscar as permissões ${e}`, life: 3000 });
+    //             isLoading.value = false
+    //         }
+    //     }
+    // }
 
     // toast.add({ severity: 'success', summary: 'Permissões salvas!', detail: JSON.stringify(selecionados), life: 5000 })
 }
@@ -286,6 +336,15 @@ onMounted(() => {
 .formUserAdd label {
     margin-bottom: 5px;
     font-weight: 600;
+}
+
+.nameGate{
+    display: flex;
+    // align-items: center;
+}
+
+.nameGate span{
+    margin-left: 5px;
 }
 
 .descL {

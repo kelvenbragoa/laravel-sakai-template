@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Cgatev2Controller;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ContainerTransactionController;
+use App\Http\Controllers\Api\ExceptionController;
 use App\Http\Controllers\Api\GateController;
 use App\Http\Controllers\Api\Mobile\MobileContainerTransactionController;
 use App\Http\Controllers\Api\PermissionsController;
@@ -68,6 +69,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::prefix('cgate2')->group(function () {
         Route::get('/transaction', [Cgatev2Controller::class, 'transaction'])->name('cgate2.transaction');
+
+        Route::get('/excepcoes/lista', [ExceptionController::class, 'listar'])->name('cgate2.listar');
+
+        Route::post('/excepcoes/actualizar/{id}', [ExceptionController::class, 'actualizar'])->name('cgate2.actualizar');
     });
 
     Route::prefix('cdms')->group(function () {
@@ -75,6 +80,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/checkappointment', [PreCheckController::class, 'checkappointment'])->name('cdms.precheck.checkappointment');
 
     });
+
+    // Route::resource('exceptions',ExceptionController::class);
 
 
 });

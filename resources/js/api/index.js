@@ -62,7 +62,7 @@ const baseURLCgate2 = "https://cdmapi.cornelder.co.mz/cgate1x/api"
 //cgate2 - carga
 const baseURLCgate2Carga = "https://cdmapi.cornelder.co.mz"
 //Excecoes
-const baseURLExcecoes = "http://20.87.9.35/api/v1/excepcoes"
+// const baseURLExcecoes = "https://cdmapi.cornelder.co.mz/cgate1x/api"
 
   export const baseUrls = {
     auth: `${baseURLCDMProd}/login`,
@@ -74,8 +74,8 @@ const baseURLExcecoes = "http://20.87.9.35/api/v1/excepcoes"
     gate: `${baseURLCDMProd}/gates`,
     gatePermissions: `${baseURLCDMProd}/gatepermissions`,
     applications: `${baseURLCDMProd}/applications`,
-    exceptionsList: `${baseURLExcecoes}/lista`,
-    exceptionsUpdate: `${baseURLExcecoes}/actualizar`,
+    exceptionsList: `${baseURLCDMProd}/cgate2/excepcoes/lista`,
+    exceptionsUpdate: `${baseURLCDMProd}/cgate2/excepcoes/actualizar`,
     precheckList: `${baseURLCDMProd}/cdms/precheck`,
     precheckCheckappointment: `${baseURLCDMProd}/cdms/checkappointment`,
     baseURl: baseURLCDMProd,

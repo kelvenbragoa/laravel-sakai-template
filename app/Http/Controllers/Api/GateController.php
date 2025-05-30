@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Gate;
+use App\Models\GateHasPermission;
+use App\Models\GatePermission;
 use Illuminate\Http\Request;
 
 class GateController extends Controller
@@ -19,11 +21,24 @@ class GateController extends Controller
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('name', 'like', "%{$searchQuery}%");
             })
+            ->with('permissions.gate_permission')
             ->orderBy('name', 'asc')
             ->paginate(50);
 
         return response()->json([
             'data' => $gate
+        ]);
+    }
+
+    public function gatepermissions()
+    {
+        //
+        $searchQuery = request('query');
+        $gatepermissions = GatePermission::orderBy('name', 'asc')
+            ->get();
+
+        return response()->json([
+            'data' => $gatepermissions
         ]);
     }
 
@@ -40,13 +55,23 @@ class GateController extends Controller
         try {
             $registerApplicationData = $request->validate([
                 'name' => 'nullable|string',
+                'description' => 'nullable|string',
+                'permissions' => 'array',
                 
             ]);
 
 
             $gate = Gate::create([
                 'name' => $registerApplicationData['name'],
+                'description' => $registerApplicationData['description'],
             ]);
+
+            foreach ($registerApplicationData['permissions'] as $permission) {
+                GateHasPermission::create([
+                    'gate_id' => $gate->id,
+                    'gate_permission_id' => $permission['gate_permission_id'],
+                ]);
+            }
 
         
             return response()->json([
@@ -94,13 +119,28 @@ class GateController extends Controller
             // Validação
             $validatedData = $request->validate([
                 'name' => 'nullable|string',
-                
+                'description' => 'nullable|string',
+                'permissions' => 'array',
             ]);
 
             // Atualizar o usuário
             $gate->update([
                 'name' => $validatedData['name'] ?? $gate->name,
+                'description' => $validatedData['description'] ?? $gate->description,
             ]);
+            // Atualizar as permissões
+            if (isset($validatedData['permissions'])) {
+                // Limpar permissões existentes
+                GateHasPermission::where('gate_id', $gate->id)->delete();
+
+                // Adicionar novas permissões
+                foreach ($validatedData['permissions'] as $permission) {
+                    GateHasPermission::create([
+                        'gate_id' => $gate->id,
+                        'gate_permission_id' => $permission['gate_permission_id'],
+                    ]);
+                }
+            }
 
             return response()->json([
                 'data' => $gate

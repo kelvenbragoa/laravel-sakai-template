@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(GateTableSeeder::class);
         // $this->call(UserTableSeeder::class);
 
-        $this->call(ApplicationSeeder::class);
+        // $this->call(ApplicationSeeder::class);
+        $this->call(GatePermissionTableSeeder::class);
     }
 }

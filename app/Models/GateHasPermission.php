@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Gate extends Model
+class GateHasPermission extends Model
 {
     //
     use CreatedUpdatedBy, LogsActivity;
@@ -20,8 +20,12 @@ class Gate extends Model
         // Chain fluent methods for configuration options
     }
 
-    public function permissions()
+    public function gate()
     {
-        return $this->hasMany(GateHasPermission::class, 'gate_id', 'id');
+        return $this->belongsTo(Gate::class, 'gate_id', 'id');
+    }
+    public function gate_permission()
+    {
+        return $this->belongsTo(GatePermission::class, 'gate_permission_id', 'id');
     }
 }

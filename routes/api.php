@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ContainerTransactionController;
 use App\Http\Controllers\Api\GateController;
 use App\Http\Controllers\Api\Mobile\MobileContainerTransactionController;
 use App\Http\Controllers\Api\PermissionsController;
+use App\Http\Controllers\Api\PreCheckController;
 use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -49,6 +50,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('gates',GateController::class);
     Route::resource('applications',ApplicationController::class);
 
+    Route::get('/gatepermissions', [GateController::class, 'gatepermissions'])->name('gate.gatepermissions');
+
+    
+
 
 
 
@@ -65,7 +70,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/transaction', [Cgatev2Controller::class, 'transaction'])->name('cgate2.transaction');
     });
 
+    Route::prefix('cdms')->group(function () {
+        Route::resource('precheck',PreCheckController::class);
+        Route::post('/checkappointment', [PreCheckController::class, 'checkappointment'])->name('cdms.precheck.checkappointment');
 
+    });
 
 
 });

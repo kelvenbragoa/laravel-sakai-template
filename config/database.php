@@ -111,6 +111,20 @@ return [
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
+        'sqlsrv2' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DB2_URL'),
+            'host' => env('DB2_HOST', '10.0.4.46'),
+            'port' => env('DB_PORT', '1433'),
+            'database' => env('DB2_DATABASE', 'cdms_commercial'),
+            'username' => env('DB2_USERNAME', 'cdms2'),
+            'password' => env('DB2_PASSWORD', 'shD?fk9PGEqpw&3n'),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            // 'encrypt' => env('DB_ENCRYPT', 'yes'),
+            // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
+        ],
 
     ],
 

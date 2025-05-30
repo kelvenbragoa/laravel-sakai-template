@@ -99,7 +99,19 @@ const userMenu = () => {
             {
                 label: 'Gates',
                 icon: 'pi pi-window-maximize',
-                to: '/gate'
+                items: [
+                    {
+                        label: "Lista",
+                        icon: 'pi pi-list',
+                        to: '/gate'
+                    },
+                    {
+                        label: 'Novo',
+                        icon: 'pi pi-plus',
+                        to: '/newgate'
+                    },
+
+                ]
             },
             {
                 label: 'Aplicações',
@@ -116,9 +128,19 @@ const aplicationsMenu = () => {
         icon: 'pi pi-fw pi-check-square',
         items: [
             {
-                label: "Pre check 1.0",
-                icon: 'pi pi-check',
+                label: "Lista",
+                icon: 'pi pi-list-check',
                 to: '/precheck'
+            },
+            // {
+            //     label: "Pre check 1.0",
+            //     icon: 'pi pi-check',
+            //     to: '/precheck'
+            // },
+            {
+                label: "Form",
+                icon: 'pi pi-file-check',
+                to: '/precheck-form'
             }
         ]
     })
@@ -304,6 +326,16 @@ const cgate2dot1TerminalMenu = () => {
     )
 }
 
+const cgate2dot1ExcecoesMenu = () => {
+    return (
+        {
+            label: 'Exceções',
+            icon: 'pi pi-info-circle',
+            to: '/exceptions'
+        }
+    )
+}
+
 const cgate2dot1CargaGeralMenu = () => {
     return (
         {
@@ -354,6 +386,7 @@ const cgateMenuPages1dot1 = (name) => {
 }
 
 const cgateMenuPages1dot2 = (name) => {
+
     if (name == "terminal") {
         return [cgate1dot2TerminalMenu()]
     } else if (name == "carga") {
@@ -380,7 +413,8 @@ const cgateMenuPages2dot1 = (name) => {
         return ([
 
             cgate2dot1TerminalMenu(),
-            cgate2dot1CargaGeralMenu()
+            cgate2dot1CargaGeralMenu(),
+            cgate2dot1ExcecoesMenu()
 
         ])
     }
@@ -402,38 +436,39 @@ const gates1dot2 = (name) => {
     }
 }
 const cgateWitch1X = (gate, [name, gateespecific]) => {
-    if (gateespecific == "" && gate != "") {
+    return [gates1dot2(name)]
+    // if (gateespecific == "" && gate != "") {
 
-        if (gate == "c-gate 1.2") {
+    //     if (gate == "c-gate 1.2") {
 
-            return [gates1dot2(name)]
-        } else if (gate == "c-gate 1.1") {
+    //         return [gates1dot2(name)]
+    //     } else if (gate == "c-gate 1.1") {
 
-            return [gates1dot1(name)]
-        }
-        else {
-            return [gates1dot1(name), gates1dot2(name)]
-        }
-    } else if (gateespecific != "" && gate == "") {
-        if (gateespecific == "c-gate 1.2") {
-            return [gates1dot1(""), gates1dot2(name)]
-        } else if (gateespecific == "c-gate 1.1") {
-            return [gates1dot1(name), gates1dot2("")]
-        }
-        else {
-            return [gates1dot1(name), gates1dot2(name)]
-        }
-    } else {
+    //         return [gates1dot1(name)]
+    //     }
+    //     else {
+    //         return [gates1dot1(name), gates1dot2(name)]
+    //     }
+    // } else if (gateespecific != "" && gate == "") {
+    //     if (gateespecific == "c-gate 1.2") {
+    //         return [gates1dot1(""), gates1dot2(name)]
+    //     } else if (gateespecific == "c-gate 1.1") {
+    //         return [gates1dot1(name), gates1dot2("")]
+    //     }
+    //     else {
+    //         return [gates1dot1(name), gates1dot2(name)]
+    //     }
+    // } else {
 
-        if (gate == "c-gate 1.2") {
-            return [gates1dot2(name)]
-        } else if (gate == "c-gate 1.1") {
-            return [gates1dot1(name)]
-        }
-        else {
-            return [gates1dot1(name), gates1dot2(name)]
-        }
-    }
+    //     if (gate == "c-gate 1.2") {
+    //         return [gates1dot2(name)]
+    //     } else if (gate == "c-gate 1.1") {
+    //         return [gates1dot1(name)]
+    //     }
+    //     else {
+    //         return [gates1dot1(name), gates1dot2(name)]
+    //     }
+    // }
 }
 
 const funVerify = () => {
@@ -544,7 +579,10 @@ const cgateMenuPages = async (roles, empresas) => {
             [{
                 label: 'C-Gate 1.x',
                 icon: 'pi pi-globe',
-                items: cgateWitch1X("", ["", ""])
+                items: [
+                    cgate1dot2TerminalMenu()
+                ]
+                // cgateWitch1X("", ["", ""])
             },
             {
 
@@ -564,7 +602,8 @@ const cgateMenuPages = async (roles, empresas) => {
                     label: 'C-Gate 1.x',
                     icon: 'pi pi-globe',
                     // items: cgateWitch1X("", [acessRouters.value.cgate1dotxfoundCargo ? "carga" : "terminal", ""])
-                    items: cgateWitch1X(cgate1dotxviewer.trim(), [funVerify(), ""])
+                    items: [cgate1dot2TerminalMenu()]
+                    //cgateWitch1X(cgate1dotxviewer.trim(), [funVerify(), ""])
 
                 },
                 {
@@ -584,7 +623,8 @@ const cgateMenuPages = async (roles, empresas) => {
                 [{
                     label: 'C-Gate 1.x',
                     icon: 'pi pi-globe',
-                    items: cgateWitch1X(cgate1dotxviewer.trim(), [funVerify(), ""])
+                    items: [cgate1dot2TerminalMenu()]
+                    // cgateWitch1X(cgate1dotxviewer.trim(), [funVerify(), ""])
                 }]
             )
         } else if (!acessRouters.value.cgate1dotxfound && acessRouters.value.cgate2dotxfound) {

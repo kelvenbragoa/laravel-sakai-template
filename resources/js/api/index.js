@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Exception } from 'sass';
 
 
 //cgate2.0
@@ -50,9 +51,9 @@ export const getCarga = async (page, limit, search, status) => {
       throw error; 
     }
   };
-const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
-// const baseURLCDMProd = "http://10.0.8.44:8010/api"
-// const baseURLCDMProd = "http://127.0.0.1:8000/api"
+// const baseURLCDMProd = "https://cdmapi.cornelder.co.mz/cgate1x/api"
+const baseURLCDMProd = "http://10.0.8.44:8010/api"
+// const baseURLCDMProd = "https://c006-197-249-75-55.ngrok-free.app/api"
 
 const storageImg =  "https://cdmapi.cornelder.co.mz/cgate1x"
 //cgate2 - terminal
@@ -60,6 +61,8 @@ const storageImg =  "https://cdmapi.cornelder.co.mz/cgate1x"
 const baseURLCgate2 = "https://cdmapi.cornelder.co.mz/cgate1x/api"
 //cgate2 - carga
 const baseURLCgate2Carga = "https://cdmapi.cornelder.co.mz"
+//Excecoes
+const baseURLExcecoes = "http://20.87.9.35/api/v1/excepcoes"
 
   export const baseUrls = {
     auth: `${baseURLCDMProd}/login`,
@@ -69,7 +72,12 @@ const baseURLCgate2Carga = "https://cdmapi.cornelder.co.mz"
     userList: `${baseURLCDMProd}/users`,
     empresaAdd: `${baseURLCDMProd}/companies`,
     gate: `${baseURLCDMProd}/gates`,
+    gatePermissions: `${baseURLCDMProd}/gatepermissions`,
     applications: `${baseURLCDMProd}/applications`,
+    exceptionsList: `${baseURLExcecoes}/lista`,
+    exceptionsUpdate: `${baseURLExcecoes}/actualizar`,
+    precheckList: `${baseURLCDMProd}/cdms/precheck`,
+    precheckCheckappointment: `${baseURLCDMProd}/cdms/checkappointment`,
     baseURl: baseURLCDMProd,
     storageUrl: storageImg
   };

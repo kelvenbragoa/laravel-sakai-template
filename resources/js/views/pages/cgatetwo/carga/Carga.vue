@@ -359,6 +359,11 @@ watch(filtroDados, (value)=>{
   }, 500)
 })
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("pt-BR");
+};
+
 
 onMounted(() => {
   buscarCargaGeral()
@@ -398,6 +403,11 @@ onMounted(() => {
     <Column field="document_number" header="Número do documento" />
     <Column field="driver_name" header="Condutor" />
     <Column field="truck_license_plate_number" header="Placa de caminhão" />
+    <Column field="created_at" header="Data" style="min-width: 12rem">
+        <template #body="{ data }">
+          {{ formatDate(data.created_at) }}
+        </template>
+      </Column>
     <Column header="Detalhes">
       <template #body="{ data }">
         <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDF(data)" />

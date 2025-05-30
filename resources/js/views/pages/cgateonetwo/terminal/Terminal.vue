@@ -61,7 +61,7 @@
           {{ formatDate(data.created_at) }}
         </template>
       </Column>
-      <Column field="created_by" header="Criado por" style="min-width: 12rem">
+      <Column field="container_number_1" header="Num. do contentor" style="min-width: 12rem">
         <!-- <template #body="{ data }">
           <Tag :value="data.status" :severity="getSeverity(data.status)" />
         </template>
@@ -849,17 +849,23 @@ const filters = ref({
 const statuses = ref(["Pending", "Done", "Started", "Cancelled"]);
 const loading = ref(true);
 
+// const formatDate = (dateString) => {
+//   const options = {
+//     year: "numeric",
+//     month: "long",
+//     day: "numeric",
+//     hour: "2-digit",
+//     minute: "2-digit",
+//   };
+//   const date = new Date(dateString);
+//   return date.toLocaleDateString("pt-BR", options);
+// };
+
 const formatDate = (dateString) => {
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  };
   const date = new Date(dateString);
-  return date.toLocaleDateString("pt-BR", options);
+  return date.toLocaleDateString("pt-BR");
 };
+
 
 const generatePDF = (rowData) => {
   const doc = new jsPDF();

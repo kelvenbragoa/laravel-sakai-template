@@ -29,13 +29,13 @@ const router = createRouter({
                     component: () => import('@/views/pages/cgateonetwo/carga/Carga.vue'),
                     props: true
                 },
-               
+
                 {
                     path: '/terminalonetwo/:id',
                     name: 'terminalone',
                     component: () => import('@/views/pages/cgateonetwo/terminal/Terminal.vue'),
                     props: true
-                    
+
                 },
 
                 //C-gate 1.1
@@ -53,8 +53,8 @@ const router = createRouter({
                 },
                 //------
 
-                 //C-gate 2.0
-                 {
+                //C-gate 2.0
+                {
                     path: '/cargaotwo/:id',
                     name: 'cargaotwo',
                     component: () => import('@/views/pages/cgatetwo/carga/Carga.vue')
@@ -63,15 +63,28 @@ const router = createRouter({
                     path: '/terminalotwo/:id',
                     name: 'terminalotwo',
                     component: () => import('@/views/pages/cgatetwo/terminal/Terminal.vue'),
-                    
+
                 },
                 //------
+                //Exceptions
+                {
+                    path: '/exceptions/',
+                    name: 'exceptions',
+                    component: () => import('@/views/pages/exceptions/Exceptions.vue')
+                },
+                //-------
                 //Precheck
                 //v1
                 {
                     path: '/precheck',
                     name: 'precheck',
                     component: () => import('@/views/pages/precheck/versionone/Precheck.vue')
+                },
+                //form
+                {
+                    path: "/precheck-form",
+                    name: 'precheck-form',
+                    component: () => import('@/views/pages/precheck/form/Precheck.vue')
                 },
                 //-------------------------------------
                 {
@@ -185,11 +198,32 @@ const router = createRouter({
                     name: "company",
                     component: () => import('@/views/pages/company/Company.vue')
                 },
+                //Gates
                 {
                     path: "/gate",
                     name: "gate",
                     component: () => import('@/views/pages/gate/Gate.vue')
                 },
+                {
+                    path: "/newgate",
+                    name: "newgate",
+                    component: () => import('@/views/pages/gate/NewGate.vue')
+                },
+                {
+                    path: '/gateupdate/:id',
+                    name: 'gateupdate',
+                    component: () => import('@/views/pages/gate/UpdateGate.vue'),
+                    props: true
+
+                },
+                {
+                    path: '/gatedetails/:id',
+                    name: 'gatedetails',
+                    component: () => import('@/views/pages/gate/DetalhesGate.vue'),
+                    props: true
+
+                },
+                //---------------
                 {
                     path: "/applications",
                     name: "applications",
@@ -242,11 +276,6 @@ const router = createRouter({
             path: "/jsonread",
             name: 'jsonread',
             component: () => import('@/views/pages/ScreenJson.vue')
-        },
-        {
-            path: "/precheck-form",
-            name: 'precheck-form',
-            component: () => import('@/views/pages/precheck/form/Precheck.vue')
         }
     ]
 });

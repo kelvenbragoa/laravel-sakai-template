@@ -1,9 +1,13 @@
 <script setup>
 import { useToast } from "primevue";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { baseUrls } from "../../../api/index"
 import { backLog, checkAccess } from "../../../utils/accesRoute";
 import axios from "axios";
+import { useRouter } from "vue-router";
+
+const router = useRouter()
+
 
 
 checkAccess()
@@ -14,6 +18,9 @@ const dialogGate = ref(false)
 const dialogGateUpdate = ref(false)
 const dialogDetalhes = ref(false)
 const dialogGateDelete = ref(false)
+const permissionsGates = ref()
+const dadoSearch = ref("");
+
 
 const formDataSave = reactive({
   name: ""
@@ -49,7 +56,12 @@ const buscarGates = async () => {
       baseUrls.gate, {
       headers: {
         Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
+      params: {
+        query: dadoSearch.value
+      }
     });
     gates.value = response.data.data.data
 
@@ -94,7 +106,7 @@ const getDataGate = (data) => {
   fieldIsEmpty.value = ""
   dialogGateUpdate.value = true
   formDataSave.name = data.name
-  idGate.value = data.id
+  router.push(`gateupdate/${data.id}`)
 
 }
 
@@ -173,7 +185,8 @@ const fieldVoid = (data) => {
 
 
 const detailsGates = (data)=>{
-  dialogDetalhes.value = true
+  permissionsGates.value = data.permissions
+  router.push(`gatedetails/${data.id}`)
 }
 
 const usersData = async()=>{
@@ -198,11 +211,40 @@ const usersData = async()=>{
   }
 }
 
+const goTOadd = ()=>{
+  router.push("/newgate")
+}
+
+const filtroChange = () => {
+  loading.value = true;
+  if (filtroDados.value.trim() === "") {
+    // userFiltro.value = [...usersL.value];
+    transactionsFilter.value = [...transactions.value]
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarGates();
+  } else {
+    dadoSearch.value = filtroDados.value.toLowerCase()
+    buscarGates();
+  }
+};
+
+let timeoutId = null
+watch(filtroDados, (value)=>{
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+  }
+
+  timeoutId = setTimeout(() => {
+    filtroChange()
+   
+  }, 500)
+})
+
 
 
 onMounted(() => {
   buscarGates();
-  usersData()
+  // usersData()
 }
 )
 </script>
@@ -222,44 +264,47 @@ onMounted(() => {
             <InputIcon>
               <i class="pi pi-search" />
             </InputIcon>
-            <InputText v-model="filtroDados" @input="filtroChange" placeholder="Pesquisar" />
+            <InputText v-model="filtroDados" placeholder="Pesquisar" />
           </IconField>
-          <!-- <div class="btnsL">
-            <Button label="Novo" icon="pi pi-plus" class="cores" @click="dialogGate = true" />
-          </div> -->
+          <div class="btnsL">
+            <Button label="Novo" icon="pi pi-plus" class="cores" @click="goTOadd" />
+          </div>
         </div>
       </template>
       <template #empty> Vazio. </template>
 
       <!-- <Column field="id" header="Id" style="min-width: 10rem"> </Column> -->
       <Column field="name" header="Nome" style="min-width: 12rem"> </Column>
+      <Column field="description" header="Descrição" style="min-width: 12rem"> </Column>
       <Column field="created_by" header="Criado por" style="min-width: 12rem"> </Column>
 
-      <!--<Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
+      <Column header="Ações" :showFilterMatchModes="false" style="min-width: 12rem">
         <template #body="{ data }">
-          <div style="display: flex; gap: 0px">
+       
             <Button class="btnEstiliza" label="" icon="pi pi-refresh" @click="generatePDF(data)" style="
                 border: 0px;
                 background-color: transparent;
                 color: #1558b0;
                 display: none;
               " />
-            <Button class="btnEstiliza" label="Detalhes" icon="pi  pi-eye"
+            <Button class="btnEstiliza" label="" icon="pi  pi-eye"
               style="border: 0px; background-color: transparent; color: #1558b0" @click="detailsGates(data)" />
+              
               <Button class="btnEstiliza" label="" icon="pi  pi-pencil"
               style="border: 0px; background-color: transparent; color: #1558b0" @click="getDataGate(data)" /> 
-             <div>
+            
 
-              <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="
+              <!-- <Button label="" class="btnEstilizaDel" icon="pi pi-trash" severity="danger" style="
                   padding: 5px 0px;
                   background-color: transparent;
                   color: #ff0000;
                   border: 0px;
-                " @click="getDataGateDelete(data)" />
-            </div
-          </div>
+                " @click="getDataGateDelete(data)" /> -->
+           
+          
+
         </template>
-      </Column>-->
+      </Column>
     </DataTable>
   </div>
 
@@ -343,11 +388,24 @@ onMounted(() => {
       <hr />
       <!-- <Select id="permis" v-model="permissions" :options="permissionsItems"  placeholder="S. Nivel de acesso" class="w-full" style="margin-top: 15px;"></Select> -->
 
-      <div class="quantiUsers">
+      <!-- <div class="quantiUsers">
           <span>Quantidade de usuários:</span>
 
           <span>10</span>
-        </div>
+        </div> -->
+
+        <div class="titleCardUsers"> 
+        <div class="titleCardUser">Permissões</div>
+      </div>
+      <div class="dateDetails">
+        <ul class="aplicationUserEspecific">
+          <li v-for="app in permissionsGates" :key="app.id">
+            <span class="value">{{ app.gate_permission.name}}</span>
+            <!-- <span class="value">{{ app.application_permission?.permission || 'Sem nome' }}</span> -->
+          </li>
+        </ul>
+
+      </div>
       <div class="flex">
         <button class="p-button p-component cores" @click="dialogDetalhes = false">
           Ok
@@ -423,9 +481,10 @@ onMounted(() => {
 
 
 .btnEstiliza {
-  background-color: rgba(21, 88, 176, 0.8117647059) !important;
-  border: 1px solid rgba(21, 88, 176, 0.5333333333) !important;
-  color: #fff!important;
+  color: rgba(21, 88, 176, 0.8117647059) !important;
+  // border: 1px solid rgba(21, 88, 176, 0.5333333333) !important;
+  margin-left: 5px;
+  // color: #fff!important;
 }
 
 // .btnEstiliza{

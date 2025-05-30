@@ -27,16 +27,16 @@ function setColorOptions() {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     barData.value = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['Novembro', 'Dezembro', 'January', 'February', 'March', 'April', 'May'],
         datasets: [
             {
-                label: 'My First dataset',
+                label: 'Dia',
                 backgroundColor: corAzul,
                 borderColor: documentStyle.getPropertyValue('--p-primary-500'),
                 data: [65, 59, 80, 81, 56, 55, 40]
             },
             {
-                label: 'My Second dataset',
+                label: 'Noite',
                 backgroundColor: corAzul2,
                 borderColor: documentStyle.getPropertyValue('--p-primary-200'),
                 data: [28, 48, 40, 19, 86, 27, 90]
@@ -77,7 +77,7 @@ function setColorOptions() {
     };
 
     pieData.value = {
-        labels: ['A', 'B', 'C'],
+        labels: ['Manhã', 'Dia', 'Noite'],
         datasets: [
             {
                 data: [540, 325, 702],
@@ -99,10 +99,10 @@ function setColorOptions() {
     };
 
     lineData.value = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['Novembro', 'Dezembro', 'January', 'February', 'March', 'April', 'May'],
         datasets: [
             {
-                label: 'First Dataset',
+                label: 'Entrada',
                 data: [65, 59, 80, 81, 56, 55, 40],
                 fill: false,
                 backgroundColor: corAzul2,
@@ -110,7 +110,7 @@ function setColorOptions() {
                 tension: 0.4
             },
             {
-                label: 'Second Dataset',
+                label: 'Saída',
                 data: [28, 48, 40, 19, 86, 27, 90],
                 fill: false,
                 backgroundColor: corAzul,
@@ -233,25 +233,25 @@ watch(
     <Fluid class="grid grid-cols-12 gap-8">
         <div class="col-span-12 xl:col-span-6">
             <div class="card">
-                <div class="font-semibold text-xl mb-4">Linear</div>
+                <div class="font-semibold text-xl mb-4"> Fluxo de Entrada e Saída</div>
                 <Chart type="line" :data="lineData" :options="lineOptions"></Chart>
             </div>
         </div>
         <div class="col-span-12 xl:col-span-6">
             <div class="card">
-                <div class="font-semibold text-xl mb-4">Bar</div>
+                <div class="font-semibold text-xl mb-4">Fluxo por turno</div>
                 <Chart type="bar" :data="barData" :options="barOptions"></Chart>
             </div>
         </div>
         <div class="col-span-12 xl:col-span-6">
             <div class="card flex flex-col items-center">
-                <div class="font-semibold text-xl mb-4">Pie</div>
+                <div class="font-semibold text-xl mb-4">Distribuição de caminhões por turno</div>
                 <Chart type="pie" :data="pieData" :options="pieOptions"></Chart>
             </div>
         </div>
         <div class="col-span-12 xl:col-span-6">
             <div class="card flex flex-col items-center">
-                <div class="font-semibold text-xl mb-4">Doughnut</div>
+                <div class="font-semibold text-xl mb-4">Desempenho Operacional por Gate</div>
                 <Chart type="doughnut" :data="pieData" :options="pieOptions"></Chart>
             </div>
         </div>

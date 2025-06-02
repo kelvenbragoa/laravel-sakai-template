@@ -721,14 +721,15 @@ const buildMenu = async () => {
             cgatePages.value['items'] = result
         }
 
-        if (acessRouters.value.precheck) {
-            if (cgatePages.value?.['items'] == null) {
-                cgatePages.value['items'] = aplicationsMenu()
-            } else {
-                cgatePages.value['items'].push(aplicationsMenu())
-            }
+        //para precheck
+        // if (acessRouters.value.precheck) {
+        //     if (cgatePages.value?.['items'] == null) {
+        //         cgatePages.value['items'] = aplicationsMenu()
+        //     } else {
+        //         cgatePages.value['items'].push(aplicationsMenu())
+        //     }
 
-        }
+        // }
 
         // acessRouters.value.adminAcesseSuperAdmin = true
 

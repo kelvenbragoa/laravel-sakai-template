@@ -44,91 +44,106 @@ const autenticar = async () => {
       loading.value = false;
     } catch (error) {
       console.error("Erro:", error);
-      // alert("Erro");
       loading.value = false;
-      if (error.status == 401) {
-        errorL.value = `Credenciais invalidas ${error.status}`;
+
+      if (error.response) {
+
+        if (error.response.status === 401) {
+          errorL.value = "Credenciais inválidas.";
+        } else if (error.response.status === 403) {
+          errorL.value = "Acesso proibido.";
+        } else if (error.response.status === 404) {
+          errorL.value = "Endpoint não encontrado.";
+        } else if (error.response.status >= 500) {
+          errorL.value = "Erro interno do servidor. Tente mais tarde.";
+        } else {
+          errorL.value = `Erro desconhecido (${error.response.status})`;
+        }
+      } else if (error.request) {
+
+        errorL.value = "Sem resposta do servidor. Verifique sua conexão.";
       } else {
-        errorL.value = "Any Error";
+
+        errorL.value = "Erro na configuração da requisição.";
       }
     }
   }
 };
 
-const goToPrecheck = ()=>{
+const goToPrecheck = () => {
   router.push("/precheck-form")
 }
 const checked = ref(false);
 </script>
 
 <template>
-   <FloatingConfigurator />
+  <FloatingConfigurator />
 
-  
 
-    <div v-if="loading" class="loader-overlay">
-      <div class="louderL">
-        <ProgressSpinner />
 
-      </div>
+  <div v-if="loading" class="loader-overlay">
+    <div class="louderL">
+      <ProgressSpinner />
+
     </div>
-    <div v-else>
-      <FloatingConfigurator />
+  </div>
+  <div v-else>
+    <FloatingConfigurator />
 
-      <div class="dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden"
-        style="background-color: #f9f9f9; border: 0px solid black">
-        <div class="flex flex-col items-center justify-center">
-          <div style="border-radius: 56px; padding: 0.3rem" class="blue-gradient">
-            <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="
+    <div class="dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden"
+      style="background-color: #f9f9f9; border: 0px solid black">
+      <div class="flex flex-col items-center justify-center">
+        <div style="border-radius: 56px; padding: 0.3rem" class="blue-gradient">
+          <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="
               border-radius: 53px;
               border: 0px solid red;
               background-color: #ffffff;
             ">
-              <div class="text-center mb-8">
-                <!-- <img src="@/images/login.png" alt="Descrição da imagem" class="my-image" /> -->
-                <!-- <img :src="require('@/assets/images/login.png')" alt="Descrição da imagem" /> -->
-                <div class="flex items-center justify-center w-full">
-                  <!-- <Image src="@/assets/images/logo.png" alt="Image" width="200" /> -->
-                  <!-- <img
+            <div class="text-center mb-8">
+              <!-- <img src="@/images/login.png" alt="Descrição da imagem" class="my-image" /> -->
+              <!-- <img :src="require('@/assets/images/login.png')" alt="Descrição da imagem" /> -->
+              <div class="flex items-center justify-center w-full">
+                <!-- <Image src="@/assets/images/logo.png" alt="Image" width="200" /> -->
+                <!-- <img
                   src="http://[::1]:5173/resources/js/assets/images/logo.png"
                   alt="logo"
                   style="width: 200px"
                 /> -->
-                  <div class="imageLogoLogin"></div>
-                </div>
-                <div class="m-20"></div>
-                <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">
-                  Bem vindo de volta!
-                </div>
-                <span class="text-muted-color font-medium">Preencha os campos</span>
+                <div class="imageLogoLogin"></div>
               </div>
-
-              <div class="erroMessage">
-                {{ errorL }}
+              <div class="m-20"></div>
+              <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">
+                Bem vindo de volta!
               </div>
+              <span class="text-muted-color font-medium">Preencha os campos</span>
+            </div>
 
-              <div>
-                <label for="email1"
-                  class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">User</label>
-                <InputText id="email1" type="text" placeholder="Usuário" class="w-full md:w-[30rem] mb-8 inputsCaixas"
-                  v-model="dadosUserAuth.user_name" />
+            <div class="erroMessage">
+              {{ errorL }}
+            </div>
 
-                <label for="password1"
-                  class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Senha</label>
-                <Password id="password1" v-model="dadosUserAuth.password" placeholder="Senha" :toggleMask="true"
-                  class="mb-4 inputsCaixas" fluid :feedback="false"></Password>
+            <div>
+              <label for="email1"
+                class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">User</label>
+              <InputText id="email1" type="text" placeholder="Usuário" class="w-full md:w-[30rem] mb-8 inputsCaixas"
+                v-model="dadosUserAuth.user_name" />
 
-               
-                <Button label="Entrar" class="w-full facebook-button hover" @click="autenticar"></Button>
-                <!-- <Button label="Pre check" class="butoonCheck" @click="goToPrecheck"></Button> -->
-                <!-- as="router-link" -->
-                <!-- to="/dashboard" -->
-              </div>
+              <label for="password1"
+                class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Senha</label>
+              <Password id="password1" v-model="dadosUserAuth.password" placeholder="Senha" :toggleMask="true"
+                class="mb-4 inputsCaixas" fluid :feedback="false"></Password>
+
+
+              <Button label="Entrar" class="w-full facebook-button hover" @click="autenticar"></Button>
+              <!-- <Button label="Pre check" class="butoonCheck" @click="goToPrecheck"></Button> -->
+              <!-- as="router-link" -->
+              <!-- to="/dashboard" -->
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <style scoped>
@@ -192,19 +207,19 @@ body {
   justify-content: center;
 }
 
-.butoonCheck{
+.butoonCheck {
   margin: 10px 0px;
   width: 100%;
   color: #222;
   background-color: transparent;
   border: none;
   font-size: 1rem;
-  font-weight: 700!important;
+  font-weight: 700 !important;
 }
 
-.butoonCheck:hover{
-  background-color: transparent!important;
-  color: #1558b0!important;
-  border: none!important;
+.butoonCheck:hover {
+  background-color: transparent !important;
+  color: #1558b0 !important;
+  border: none !important;
 }
 </style>

@@ -1104,7 +1104,6 @@ watch(filtroDados, (value)=>{
 onMounted(() => {
   //   fetchUsers();
   fetchRoles();
-  fetchPermissions();
   buscarUsuarios();
   buscarEmpresas();
   buscarGates();

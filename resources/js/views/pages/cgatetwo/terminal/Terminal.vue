@@ -49,7 +49,12 @@
       <Column field="driver_name" header="Condutor" style="min-width: 12rem" />
       <Column field="truck_license_plate_number" header="Placa de caminhão" style="min-width: 12rem" />
       <Column field="transaction_gate" header="Gate" style="min-width: 12rem"></Column>
-      <Column field="container_number_1" header="Num. do contentor" style="min-width: 12rem"></Column>
+      <Column header="Num. do contentor" style="min-width: 12rem"
+        :body="(data) => data.container_number_1 ? data.container_number_1 : data.type" />
+
+      <!-- <Column field="container_number_1" header="Num. do contentor" style="min-width: 12rem">
+
+      </Column> -->
       <Column field="created_at" header="Data" style="min-width: 12rem">
         <template #body="{ data }">
           {{ formatDate(data.created_at) }}
@@ -231,11 +236,11 @@
             </div>
             <div class="lineRow">
               <span>Atualizado em </span>
-              <span>{{ dadosRelatorio.updated_at == null ? emptyField : dadosRelatorio.updated_at }}</span>
+              <span>{{ dadosRelatorio.updated_at == null ? emptyField : formatDate(dadosRelatorio.updated_at) }}</span>
             </div>
             <div class="lineRow">
               <span>Criado em </span>
-              <span>{{ dadosRelatorio.created_at == null ? emptyField : dadosRelatorio.created_at }}</span>
+              <span>{{ dadosRelatorio.created_at == null ? emptyField : formatDate(dadosRelatorio.created_at) }}</span>
             </div>
           </div>
           <table>
@@ -579,7 +584,6 @@ import { FilterMatchMode } from "@primevue/core/api";
 import { getCarga, getTransactions } from "@/api";
 import { useRoute, useRouter } from "vue-router";
 import { jsPDF } from "jspdf";
-import json from "../../../../../../public/user.json";
 import * as XLSX from "xlsx";
 import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../../api";
@@ -591,6 +595,8 @@ if (permissionsAcess().adminAcesseSuperAdmin == false) {
     useRouter().push("/dashboard")
   }
 }
+
+console.log("Tela correta")
 
 const dialogRoleUpdateVisible = ref(false);
 const isActive = ref(true)
@@ -854,7 +860,7 @@ const buscarTransccoes = async (page = 1) => {
       params: {
         gate: removerGate(gateId.value),
         page: page,
-        query: dadoSearch.value
+        search: dadoSearch.value
       }
 
     });
@@ -894,14 +900,6 @@ const formatDate2 = (date) => {
   return new Date(date).toLocaleDateString(undefined, options);
 };
 
-const loadJson = async () => {
-  try {
-    const response = await fetch("/user.json");
-    users.value = await response.json();
-  } catch (error) {
-    console.error("Erro ao carregar o JSON:", error);
-  }
-};
 
 const filtroChange = () => {
   loading.value = true;
@@ -931,7 +929,6 @@ watch(filtroDados, (value) => {
 
 
 onMounted(() => {
-  loadJson();
   // fetchTransactions(currentPage.value);
   tratamentoDoId()
   buscarTransccoes();

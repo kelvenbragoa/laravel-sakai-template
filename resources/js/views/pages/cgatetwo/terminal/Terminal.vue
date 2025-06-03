@@ -49,8 +49,19 @@
       <Column field="driver_name" header="Condutor" style="min-width: 12rem" />
       <Column field="truck_license_plate_number" header="Placa de caminhão" style="min-width: 12rem" />
       <Column field="transaction_gate" header="Gate" style="min-width: 12rem"></Column>
-      <Column header="Num. do contentor" style="min-width: 12rem"
-        :body="(data) => data.container_number_1 ? data.container_number_1 : data.type" />
+      <Column field="container_number_1" header="Num. do contentor" style="min-width: 12rem">
+        <template #body="{ data }">
+          <div v-if="data.container_number_1">
+            {{ data.container_number_1 }}
+          </div>
+
+          <div v-else>
+            {{ data.type }}
+          </div>
+        </template>
+      </Column>
+      <!-- <Column header="Num. do contentor" style="min-width: 12rem"
+        :body="(data) => data.container_number_1 ? data.container_number_1 : data.type" /> -->
 
       <!-- <Column field="container_number_1" header="Num. do contentor" style="min-width: 12rem">
 

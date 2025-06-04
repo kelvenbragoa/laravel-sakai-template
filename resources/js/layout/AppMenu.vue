@@ -404,9 +404,10 @@ const cgateMenuPages1dot2 = (name) => {
 }
 
 const cgateMenuPages2dot1 = (name) => {
-    if (name == "terminal") {
-        return [cgate2dot1TerminalMenu()]
-    } else if (name == "carga") {
+
+    if (acessRouters.value.cgate2dotxfoundTerminal) {
+        return [cgate2dot1TerminalMenu(), cgate2dot1ExcecoesMenu()]
+    } else if (acessRouters.value.cgate2dotxfoundCargo) {
         return [cgate2dot1CargaGeralMenu()]
     }
     else {
@@ -558,7 +559,12 @@ const cgateMenuPages = async (roles, empresas) => {
 
                 if (e.toLowerCase().indexOf("2") < e.toLowerCase().indexOf(".")) {
                     acessRouters.value.cgate2dotxfound = true
-
+                    if (e.toLowerCase().includes("terminal")) {
+                        acessRouters.value.cgate2dotxfoundExcecoes = true
+                        acessRouters.value.cgate2dotxfoundTerminal = true
+                    } else if (e.toLowerCase().includes("cargo")) {
+                        acessRouters.value.cgate2dotxfoundCargo = true
+                    }
                 }
             }
         } else if (e.toLowerCase().includes("pre-check")) {

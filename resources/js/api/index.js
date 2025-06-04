@@ -67,7 +67,7 @@ const baseURLCgate2Carga = "https://cdmapi.cornelder.co.mz"
   export const baseUrls = {
     auth: `${baseURLCDMProd}/login`,
     transacoes: `${baseURLCDMProd}/containertransaction`,
-    transacoesCgate2dotzero: `${baseURLCgate2}/cgate2/transaction`,
+    transacoesCgate2dotzero: `${baseURLCDMProd}/cgate2/transaction`,
     transacoesCgate2dotzeroCarga: `${baseURLCgate2Carga}/cgate/api/v1/c_gate/general_cargo/list_transactions`,
     userList: `${baseURLCDMProd}/users`,
     empresaAdd: `${baseURLCDMProd}/companies`,

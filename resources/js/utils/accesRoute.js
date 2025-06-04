@@ -11,6 +11,7 @@ export const acessRouters = ref(
         cgate2dotxfound: false,
         cgate1dotxfoundCargo: false,
         cgate1dotxfoundTerminal: false,
+        cgate2dotxfoundExcecoes: false,
         cgate2dotxfoundCargo: false,
         cgate2dotxfoundTerminal: false,
         adminAcesse: false,

@@ -607,8 +607,6 @@ if (permissionsAcess().adminAcesseSuperAdmin == false) {
   }
 }
 
-console.log("Tela correta")
-
 const dialogRoleUpdateVisible = ref(false);
 const isActive = ref(true)
 const userFiltro = ref([])

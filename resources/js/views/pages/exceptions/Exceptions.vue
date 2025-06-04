@@ -277,7 +277,7 @@ import { backLog, permissionsAcess } from "../../../utils/accesRoute";
 
 if (permissionsAcess().adminAcesseSuperAdmin == false) {
 
-  if (permissionsAcess().cgate1dotxfoundTerminal == false) {
+  if (permissionsAcess().cgate2dotxfound == false) {
     useRouter().push("/dashboard")
   }
 }

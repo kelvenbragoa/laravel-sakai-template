@@ -49,9 +49,9 @@ function logoutfun() {
 
             </router-link>
 
-            <button class="layout-menu-button layout-topbar-action mx-10" @click="toggleMenu">
+            <!-- <button class="layout-menu-button layout-topbar-action mx-10" @click="toggleMenu">
                 <i class="pi pi-bars"></i>
-            </button>
+            </button> -->
 
 
 
@@ -63,9 +63,9 @@ function logoutfun() {
                 <i class="pi pi-power-off"></i>
             </button>
             <div class="layout-config-menu">
-                <button type="button" class="layout-topbar-action" @click="toggleDarkMode">
+                <!-- <button type="button" class="layout-topbar-action" @click="toggleDarkMode">
                     <i :class="['pi', { 'pi-moon': isDarkTheme, 'pi-sun': !isDarkTheme }]"></i>
-                </button>
+                </button> -->
                 <!-- <div class="relative">
                     <button
                         v-styleclass="{ selector: '@next', enterFromClass: 'hidden', enterActiveClass: 'animate-scalein', leaveToClass: 'hidden', leaveActiveClass: 'animate-fadeout', hideOnOutsideClick: true }"
@@ -78,10 +78,10 @@ function logoutfun() {
                 </div> -->
             </div>
 
-            <button class="layout-topbar-menu-button layout-topbar-action"
+            <!-- <button class="layout-topbar-menu-button layout-topbar-action"
                 v-styleclass="{ selector: '@next', enterFromClass: 'hidden', enterActiveClass: 'animate-scalein', leaveToClass: 'hidden', leaveActiveClass: 'animate-fadeout', hideOnOutsideClick: true }">
                 <i class="pi pi-ellipsis-v"></i>
-            </button>
+            </button> -->
 
 
             <!-- <div class="layout-topbar-menu hidden lg:block">

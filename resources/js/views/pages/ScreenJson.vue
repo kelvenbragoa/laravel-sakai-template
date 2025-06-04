@@ -16,6 +16,6 @@ import url from "../../../../public/user.json"
         }
     };
     onMounted(
-        loadJson()
+        
     )
 </script>

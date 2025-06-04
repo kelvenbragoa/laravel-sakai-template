@@ -234,11 +234,11 @@
             </div>
             <div class="lineRow">
               <span>Atualizado em </span>
-              <span>{{ dadosRelatorio.updated_at == null ? emptyField : dadosRelatorio.updated_at }}</span>
+              <span>{{ dadosRelatorio.updated_at == null ? emptyField : formatDate(dadosRelatorio.updated_at) }}</span>
             </div>
             <div class="lineRow">
               <span>Criado em </span>
-              <span>{{ dadosRelatorio.created_at == null ? emptyField : dadosRelatorio.created_at }}</span>
+              <span>{{ dadosRelatorio.created_at == null ? emptyField : formatDate(dadosRelatorio.created_at) }}</span>
             </div>
           </div>
           <table>
@@ -490,7 +490,6 @@ import { FilterMatchMode } from "@primevue/core/api";
 import { getCarga, getTransactions } from "@/api";
 import { useRoute, useRouter } from "vue-router";
 import { jsPDF } from "jspdf";
-import json from "../../../../../../public/user.json";
 import * as XLSX from "xlsx";
 import { useToast } from "primevue/usetoast";
 import { baseUrls } from "../../../../api";
@@ -535,7 +534,6 @@ const dadosRelatorio = ref({
   updated_by: null,
   updated_at: null,
 })
-
 
 
 const toast = useToast();
@@ -787,15 +785,6 @@ const onPageChange = (event) => {
 const formatDate2 = (date) => {
   const options = { year: "numeric", month: "long", day: "numeric" };
   return new Date(date).toLocaleDateString(undefined, options);
-};
-
-const loadJson = async () => {
-  try {
-    const response = await fetch("/user.json");
-    users.value = await response.json();
-  } catch (error) {
-    console.error("Erro ao carregar o JSON:", error);
-  }
 };
 
 let timeoutId = null

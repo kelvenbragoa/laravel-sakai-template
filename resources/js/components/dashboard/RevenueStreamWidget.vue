@@ -5,11 +5,13 @@ import { onMounted, ref, watch } from 'vue';
 const { getPrimary, getSurface, isDarkTheme } = useLayout();
 const lineData = ref(null);
 const pieData = ref(null);
+const pieData2 = ref(null);
 const polarData = ref(null);
 const barData = ref(null);
 const radarData = ref(null);
 const lineOptions = ref(null);
 const pieOptions = ref(null);
+const pieOptions2 = ref(null);
 const polarOptions = ref(null);
 const barOptions = ref(null);
 const radarOptions = ref(null);
@@ -30,13 +32,13 @@ function setColorOptions() {
         labels: ['Novembro', 'Dezembro', 'January', 'February', 'March', 'April', 'May'],
         datasets: [
             {
-                label: 'Dia',
+                label: 'Exceções Pendentes',
                 backgroundColor: corAzul,
                 borderColor: documentStyle.getPropertyValue('--p-primary-500'),
                 data: [65, 59, 80, 81, 56, 55, 40]
             },
             {
-                label: 'Noite',
+                label: 'Exceções Aprovadas',
                 backgroundColor: corAzul2,
                 borderColor: documentStyle.getPropertyValue('--p-primary-200'),
                 data: [28, 48, 40, 19, 86, 27, 90]
@@ -77,10 +79,21 @@ function setColorOptions() {
     };
 
     pieData.value = {
-        labels: ['Manhã', 'Dia', 'Noite'],
+        labels: ['Manhã', 'Dia'],
         datasets: [
             {
-                data: [540, 325, 702],
+                data: [70, 30],
+                backgroundColor: [documentStyle.getPropertyValue('--p-indigo-500'), documentStyle.getPropertyValue('--p-purple-500'), documentStyle.getPropertyValue('--p-teal-500')],
+                hoverBackgroundColor: [documentStyle.getPropertyValue('--p-indigo-400'), documentStyle.getPropertyValue('--p-purple-400'), documentStyle.getPropertyValue('--p-teal-400')]
+            }
+        ]
+    };
+
+    pieData2.value = {
+        labels: ['Rejeitadas', 'Pendentes', 'Aprovadas'],
+        datasets: [
+            {
+                data: [70, 30, 200],
                 backgroundColor: [documentStyle.getPropertyValue('--p-indigo-500'), documentStyle.getPropertyValue('--p-purple-500'), documentStyle.getPropertyValue('--p-teal-500')],
                 hoverBackgroundColor: [documentStyle.getPropertyValue('--p-indigo-400'), documentStyle.getPropertyValue('--p-purple-400'), documentStyle.getPropertyValue('--p-teal-400')]
             }
@@ -98,11 +111,22 @@ function setColorOptions() {
         }
     };
 
+    pieOptions2.value = {
+        plugins: {
+            legend: {
+                labels: {
+                    usePointStyle: true,
+                    color: textColor
+                }
+            }
+        }
+    };
+
     lineData.value = {
         labels: ['Novembro', 'Dezembro', 'January', 'February', 'March', 'April', 'May'],
         datasets: [
             {
-                label: 'Entrada',
+                label: 'Tally In',
                 data: [65, 59, 80, 81, 56, 55, 40],
                 fill: false,
                 backgroundColor: corAzul2,
@@ -110,7 +134,7 @@ function setColorOptions() {
                 tension: 0.4
             },
             {
-                label: 'Saída',
+                label: 'Tally Out',
                 data: [28, 48, 40, 19, 86, 27, 90],
                 fill: false,
                 backgroundColor: corAzul,
@@ -239,21 +263,22 @@ watch(
         </div>
         <div class="col-span-12 xl:col-span-6">
             <div class="card">
-                <div class="font-semibold text-xl mb-4">Fluxo por turno</div>
+                <div class="font-semibold text-xl mb-4">Fluxo de Exceções</div>
                 <Chart type="bar" :data="barData" :options="barOptions"></Chart>
             </div>
         </div>
         <div class="col-span-12 xl:col-span-6">
             <div class="card flex flex-col items-center">
-                <div class="font-semibold text-xl mb-4">Distribuição de caminhões por turno</div>
+                <div class="font-semibold text-xl mb-4">Tally IN / OUT Percentual</div>
                 <Chart type="pie" :data="pieData" :options="pieOptions"></Chart>
             </div>
         </div>
         <div class="col-span-12 xl:col-span-6">
             <div class="card flex flex-col items-center">
-                <div class="font-semibold text-xl mb-4">Desempenho Operacional por Gate</div>
-                <Chart type="doughnut" :data="pieData" :options="pieOptions"></Chart>
+                <div class="font-semibold text-xl mb-4">Distribuição de Exceções/div>
+                <Chart type="doughnut" :data="pieData2" :options="pieOptions2"></Chart>
             </div>
+        </div>
         </div>
     </Fluid>
 </template>

@@ -1,5 +1,8 @@
 <template>
+    <!-- <div class="df" style="display: flex; flex-direction: column; width: 100%!important; border: 1px solid black;"><h1>mcids</h1></div> -->
+
     <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        
         <div class="card mb-0">
             <div class="flex justify-between mb-4">
                 <div>

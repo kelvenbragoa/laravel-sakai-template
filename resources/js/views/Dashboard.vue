@@ -8,15 +8,19 @@ import StatsWidget from '@/components/dashboard/StatsWidget.vue';
 
 <template>
     <div class="grid grid-cols-12 gap-8">
+       <div style="display: flex; flex-direction: column;">
+        <h1>cmkds</h1>
         <StatsWidget />
-
         <div class="col-span-12 xl:col-span-6">
             <RecentSalesWidget />
             <BestSellingWidget />
         </div>
+        
         <div class="col-span-12 xl:col-span-6">
             <RevenueStreamWidget />
             <NotificationsWidget />
         </div>
+       </div>
+        
     </div>
 </template>

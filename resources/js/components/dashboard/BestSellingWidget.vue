@@ -10,7 +10,9 @@ const items = ref([
 </script>
 
 <template>
+    
     <div class="card">
+        
         <div class="flex justify-between items-center mb-6">
             <div class="font-semibold text-xl">Best Selling Products</div>
             <div>
@@ -31,6 +33,8 @@ const items = ref([
                     <span class="text-orange-500 ml-4 font-medium">%50</span>
                 </div>
             </li>
+
+            
             <li class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                 <div>
                     <span class="text-surface-900 dark:text-surface-0 font-medium mr-2 mb-1 md:mb-0">Portal Sticker</span>

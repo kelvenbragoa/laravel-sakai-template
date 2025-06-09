@@ -326,12 +326,50 @@ const cgate2dot1TerminalMenu = () => {
     )
 }
 
-const cgate2dot1ExcecoesMenu = () => {
+const multiCgate2dot1ExcecoesMenu = () => {
     return (
         {
             label: 'Exceções',
             icon: 'pi pi-info-circle',
-            to: '/exceptions'
+            items: [
+                cgate2dot1ExcecoesMenu(),
+                cgate2dot1ExcecoesMenuCarga(),
+
+
+
+            ]
+        }
+
+    )
+}
+
+// {
+//             label: 'Terminal',
+//             icon: 'pi pi-info-circle',
+//             to: '/exceptions'
+//         },
+//         {
+//             label: 'Carga',
+//             icon: 'pi pi-info-circle',
+//             to: '/exceptions'
+//         }
+
+const cgate2dot1ExcecoesMenu = () => {
+    return (
+        {
+            label: 'Exceções Terminal',
+            icon: 'pi pi-info-circle',
+            to: '/exceptionsterminal'
+        }
+    )
+}
+
+const cgate2dot1ExcecoesMenuCarga = () => {
+    return (
+        {
+            label: 'Exceções Carga',
+            icon: 'pi pi-info-circle',
+            to: '/exceptionscarga'
         }
     )
 }
@@ -403,19 +441,26 @@ const cgateMenuPages1dot2 = (name) => {
 
 }
 
+// console.log("mkdsfk")
+
 const cgateMenuPages2dot1 = (name) => {
+    // cgate2dot1ExcecoesMenu()
+    // console.log("mkdsfk")
 
     if (acessRouters.value.cgate2dotxfoundTerminal) {
         return [cgate2dot1TerminalMenu(), cgate2dot1ExcecoesMenu()]
     } else if (acessRouters.value.cgate2dotxfoundCargo) {
-        return [cgate2dot1CargaGeralMenu()]
+        return [cgate2dot1CargaGeralMenu(), cgate2dot1ExcecoesMenuCarga()]
     }
     else {
+
         return ([
+
 
             cgate2dot1TerminalMenu(),
             cgate2dot1CargaGeralMenu(),
-            cgate2dot1ExcecoesMenu()
+            multiCgate2dot1ExcecoesMenu()
+
 
         ])
     }

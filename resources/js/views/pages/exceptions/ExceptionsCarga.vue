@@ -6,31 +6,22 @@
   </div>
 
   <div class="card">
-    
-    <!-- <DataTable :value="transactions" :filters="filters" :loading="loading" :rows="rowsPerPage" :paginator="true"
-      :total-records="totalRecords" :first="(currentPage - 1) * rowsPerPage" @page="onPageChange" :global-filter-fields="[
-        'transaction_gate',
-        'driver_name',
-        'truck_license_plate_number',
-        'status',
-        'type',
-      ]" table-style="min-width: 60rem"> -->
 
     <DataTable :value="transactions" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy :first="first"
       @page="onPageChange">
       <template #header>
         <div class="flex justify-between align-center">
           <div>
-          <h2>
-            Gate selecionado: <strong>{{ gateId }}</strong>
-          </h2>
-          <div style="display: flex; align-items: center; margin-top: 3px;">
+            <h2 style="font-weight: 600;">
+              Exceções - Carga
+            </h2>
+            <div style="display: flex; align-items: center; margin-top: 3px;">
               <span>Total:</span>
-              <h2 style="margin-left: 5px; font-weight: bold;">{{ totalRecords }}</h2>
+              <h2 style="margin-left: 5px; font-weight: bold;">{{totalRecords}}</h2>
             </div>
           </div>
-       
-          
+
+          <!-- <Button label="Abrir Resolver" icon="pi pi-pencil" @click="showDialog = true" /> -->
           <div class="groupExel">
             <Button @click="exportToExcel">Excel</Button>
             <div class="calendaryFilter">
@@ -55,48 +46,16 @@
       <template #empty> Nenhum dado encontrado. </template>
       <!-- <Column field="appointment_nbr" header="Appointment Number" style="min-width: 12rem" /> -->
 
-      <div v-if="first_last_name">
-        <Column field="first_last_name" header="Condutor" style="min-width: 12rem" />
-      </div>
-      <div v-else>
-        <Column field="first_last_name_overwrite" header="Condutor" style="min-width: 12rem" />
-      </div>
-      <Column field="main_plate" header="Placa de caminhão" style="min-width: 12rem" />
-      <Column field="gate" header="Gate" style="min-width: 12rem"></Column>
-      <Column field="movement" header="Tipo de movimento" style="min-width: 12rem"></Column>
-      <Column field="created_at" header="Criado" style="min-width: 12rem">
+      <!-- <Column field="transaction_id" header="ID da transação" style="min-width: 12rem" /> -->
+      <Column field="message" header="Mensagem" style="min-width: 12rem" />
+      <Column field="type" header="Tipo" style="min-width: 12rem" />
+      <Column field="status" header="Status" style="min-width: 12rem"></Column>
+
+      <Column header="Ações" style="min-width: 10rem">
         <template #body="{ data }">
-          {{ formatDate(data.created_at) }}
-        </template>
-      </Column>
-      <Column field="container_number_1" header="Num. do contentor" style="min-width: 12rem">
-        <!-- <template #body="{ data }">
-          <Tag :value="data.status" :severity="getSeverity(data.status)" />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <Select
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="statuses"
-            placeholder="Status"
-            style="min-width: 12rem"
-            :showClear="true"
-            
-          >
-            <template #option="slotProps">
-              <Tag
-                :value="slotProps.option"
-                :severity="getSeverity(slotProps.option)"
-              />
-            </template>
-          </Select>
-        </template> -->
-      </Column>
-      <Column header="Detalhes" style="min-width: 10rem">
-        <template #body="{ data }">
-          <!-- <Button class="btnEstiliza" label="PDF" icon="pi pi-file-pdf" @click="generatePDFCanva(data)"
-            style="border: 0px" /> -->
-          <Button class="btnEstiliza" label="VER" icon="pi pi-eye" @click="detailsOpen(data)" style="border: 0px" />
+          <Button class="btnEstiliza" label="" icon="pi pi-eye" @click="detailsOpen(data)" style="border: 0px;" />
+          <Button class="btnEstiliza" label="Resolver" icon="pi pi-check" @click="exceptionCapiture(data)"
+            style="border: 0px" />
         </template>
       </Column>
     </DataTable>
@@ -114,7 +73,7 @@
               Detalhes da transação:
             </span>
             <span>
-              <span>{{ dadosRelatorio.id == null ? emptyField : dadosRelatorio.id }}</span>
+              <span>{{ dadosRelatorio.transaction_id == null ? emptyField : dadosRelatorio.transaction_id }}</span>
             </span>
           </div>
           <div class="logoCornelderRelatorio">
@@ -128,87 +87,128 @@
             <span>Id</span>
             <span>{{ dadosRelatorio.id == null ? emptyField : dadosRelatorio.id }}</span>
           </div>
-          <div class="lineRow">
-            <span>gate</span>
-            <span>{{ dadosRelatorio.gate == null ? emptyField : dadosRelatorio.gate }}</span>
-          </div>
+
           <div class="lineRow">
             <span>Nome</span>
-            <span>{{ dadosRelatorio.first_last_name == null ? emptyField : dadosRelatorio.first_last_name }}</span>
+            <span>{{ dadosRelatorio.logged_user == null ? emptyField : dadosRelatorio.logged_user }}</span>
           </div>
           <div class="lineRow">
-            <span>Criado por </span>
-            <span>{{ dadosRelatorio.created_by == null ? emptyField : dadosRelatorio.created_by }}</span>
+            <span>Mensagem</span>
+            <span>{{ dadosRelatorio.message == null ? emptyField : dadosRelatorio.message }}</span>
+          </div>
+          <div class="lineRow">
+            <span>Comentário</span>
+            <span>{{ dadosRelatorio.comments == null ? emptyField : dadosRelatorio.comments }}</span>
           </div>
           <div class="lineRow">
             <span>Tipo de movimento</span>
-            <span>{{ dadosRelatorio.movement == null ? emptyField : dadosRelatorio.movement }}</span>
+            <span>{{ dadosRelatorio.type == null ? emptyField : dadosRelatorio.type }}</span>
           </div>
           <div class="lineRow">
-            <span>Verificação</span>
-            <span>{{ dadosRelatorio.checklist == null ? emptyField : dadosRelatorio.checklist }}</span>
+            <span>Status</span>
+            <span>{{ dadosRelatorio.status == null ? emptyField : dadosRelatorio.status }}</span>
+          </div>
+
+          <div class="lineRow">
+            <span>Atualizado em </span>
+            <span>{{ dadosRelatorio.updated_at == null ? emptyField : formatDates(dadosRelatorio.updated_at) }}</span>
           </div>
           <div class="lineRow">
-            <span>Quant. Containers</span>
-            <span>{{ dadosRelatorio.containers == null ? emptyField : dadosRelatorio.containers }}</span>
+            <span>Criado em </span>
+            <span>{{ dadosRelatorio.created_at == null ? emptyField : formatDates(dadosRelatorio.created_at) }}</span>
           </div>
-          <div class="lineRow">
-            <span>Quant. trailers </span>
-            <span>{{ dadosRelatorio.trailers == null ? emptyField : dadosRelatorio.trailers }}</span>
+
+        </div>
+        <div class="imagensRelatorio">
+          <div class="columTable">
+
+
+
           </div>
-          <div class="lineRow">
-            <span>Número da carteira de motorista</span>
-            <span>{{ dadosRelatorio.driver_license_number == null ? emptyField : dadosRelatorio.driver_license_number
-              }}</span>
-          </div>
-          <div class="lineRow">
-            <span>Placa</span>
-            <span>{{ dadosRelatorio.main_plate == "" ? emptyField : dadosRelatorio.main_plate }}</span>
-          </div>
-          <div class="lineRow">
-            <span>Atrelado 1</span>
-            <span>{{ dadosRelatorio.trailer_1_license_plate_number ==
-              null ? emptyField : dadosRelatorio.trailer_1_license_plate_number }}</span>
-          </div>
-          <div class="lineRow">
-            <span>Atrelado 2</span>
-            <span>{{ dadosRelatorio.trailer_2_license_plate_number ==
-              null ? emptyField : dadosRelatorio.trailer_2_license_plate_number }}</span>
-          </div>
-          <div class="lineRow">
-            <span>Num. Container</span>
-            <span>{{ dadosRelatorio.container_number_1 == null ? emptyField : dadosRelatorio.container_number_1
-              }}</span>
-          </div>
-          <div class="lineRow">
-            <span>Num. Container 2</span>
-            <span>{{ dadosRelatorio.container_number_2 == null ? emptyField : dadosRelatorio.container_number_2
-              }}</span>
-          </div>
-          <div class="lineRow">
-            <span>Num. Container 3</span>
-            <span>{{ dadosRelatorio.container_number_3 == null ? emptyField : dadosRelatorio.container_number_3
-              }}</span>
-          </div>
-          <div class="lineRow">
-            <span>Selo do contêiner 2</span>
-            <span>{{ dadosRelatorio.container_seal_number_2 ==
-              null ? emptyField : dadosRelatorio.container_seal_number_2 }}</span>
-          </div>
-          <div class="lineRow">
-            <span>Lista Verificação </span>
-            <span>{{ dadosRelatorio.checklist_check == null ? emptyField : dadosRelatorio.checklist_check }}</span>
-          </div>
-          <div class="lineRow">
-            <span>Nota de entrega verificação </span>
-            <span>{{ dadosRelatorio.delivery_note_check == null ? emptyField : dadosRelatorio.delivery_note_check
-              }}</span>
-          </div>
-          <div class="lineRow">
-            <span>verificação de carteira de motorista </span>
-            <span>{{ dadosRelatorio.driver_license_check == null ? emptyField : dadosRelatorio.driver_license_check
-              }}</span>
-          </div>
+          <table>
+            <thead>
+              <th>
+                Foto 1
+              </th>
+              <th>
+                Foto 2
+              </th>
+
+            </thead>
+            <tr>
+
+              <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.photo_1 + ')' }">
+                <!-- <td style="background-image: url(/public/testeimgcgate.png);"> -->
+
+                <div class="imgNone" v-if="dadosRelatorio.photo_1 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+
+                <div class="imgNone" v-else>
+
+                </div>
+
+              </td>
+              <td :style="{ backgroundImage: `url(${baseUrls.storageUrl}${dadosRelatorio.photo_2})` }">
+
+
+
+                <div class="imgNone" v-if="dadosRelatorio.photo_2 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+
+            </tr>
+          </table>
+
+          <table>
+            <thead>
+              <th>
+                Foto 3
+              </th>
+
+              <th>
+                Foto 4
+              </th>
+
+
+            </thead>
+            <tr>
+              <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.photo_3 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.photo_3 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+              <td :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.photo_4 + ')' }">
+                <div class="imgNone" v-if="dadosRelatorio.photo_4 == null">
+                  <p>
+                    Sem imagem
+                  </p>
+                </div>
+
+                <div class="imgNone" v-else>
+
+                </div>
+              </td>
+
+            </tr>
+          </table>
+
 
         </div>
         <div class="footerLd">
@@ -225,259 +225,12 @@
             </div>
 
             <div class="processadoPorCgate">
-              <span>1/2</span>
+              <span>1/1</span>
             </div>
           </div>
 
         </div>
-        <div class="imagensRelatorio">
-          <div class="columTable">
-            <div class="lineRow">
-              <span>notes </span>
-              <span>{{ dadosRelatorio.notes == null ? emptyField : dadosRelatorio.notes }}</span>
-            </div>
-            <div class="lineRow">
-              <span>Atualização </span>
-              <span>{{ dadosRelatorio.updated_by == null ? emptyField : dadosRelatorio.updated_by }}</span>
-            </div>
-            <div class="lineRow">
-              <span>Atualizado em </span>
-              <span>{{ dadosRelatorio.updated_at == null ? emptyField : formatDate(dadosRelatorio.updated_at) }}</span>
-            </div>
-            <div class="lineRow">
-              <span>Criado em </span>
-              <span>{{ dadosRelatorio.created_at == null ? emptyField : formatDate(dadosRelatorio.created_at) }}</span>
-            </div>
-          </div>
-          <table>
-            <thead>
-              <th>
-                Matrícula do caminhão
-              </th>
-              <th>
-                Matrícula do atrelado 1
-              </th>
 
-            </thead>
-            <tr>
-
-              <td
-                :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.main_plate_cutout_photo + ')' }">
-                <!-- <td style="background-image: url(/public/testeimgcgate.png);"> -->
-
-                <div class="imgNone" v-if="dadosRelatorio.main_plate_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-
-                <div class="imgNone" v-else>
-
-                </div>
-
-              </td>
-              <td
-                :style="{ backgroundImage: `url(${baseUrls.storageUrl}${dadosRelatorio.trailer_1_license_plate_cutout_photo})` }">
-
-
-
-                <div class="imgNone" v-if="dadosRelatorio.trailer_1_license_plate_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-                <div class="imgNone" v-else>
-
-                </div>
-              </td>
-
-            </tr>
-          </table>
-
-          <table>
-            <thead>
-              <th>
-                Fotografia do contêiner
-              </th>
-
-              <th>
-                Fotografia da carta de condução
-              </th>
-
-
-            </thead>
-            <tr>
-              <td
-                :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.container_number_1_cutout_photo + ')' }">
-                <div class="imgNone" v-if="dadosRelatorio.container_number_1_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-                <div class="imgNone" v-else>
-
-                </div>
-              </td>
-              <td
-                :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.driver_license_cutout_photo + ')' }">
-                <div class="imgNone" v-if="dadosRelatorio.driver_license_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-                <div class="imgNone" v-else>
-
-                </div>
-              </td>
-
-            </tr>
-          </table>
-
-          <table>
-            <thead>
-              <th>
-                Fotografia do contêiner 3
-              </th>
-              <th>
-                Fotografia do contêiner 2
-              </th>
-
-
-            </thead>
-            <tr>
-              <td
-                :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.container_number_3_cutout_photo + ')' }">
-                <div class="imgNone" v-if="dadosRelatorio.container_number_3_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-                <div class="imgNone" v-else>
-
-                </div>
-              </td>
-              <td
-                :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.container_number_2_cutout_photo + ')' }">
-                <div class="imgNone" v-if="dadosRelatorio.container_number_2_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-                <div class="imgNone" v-else>
-
-                </div>
-              </td>
-
-            </tr>
-          </table>
-
-          <table>
-            <thead>
-              <th>
-                Fotografia de selo 2
-              </th>
-              <th>
-                Fotografia de selo 3
-              </th>
-
-
-            </thead>
-            <tr>
-              <td
-                :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.seal_2_cutout_photo + ')' }">
-                <div class="imgNone" v-if="dadosRelatorio.seal_2_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-                <div class="imgNone" v-else>
-
-                </div>
-              </td>
-              <td
-                :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.seal_3_cutout_photo + ')' }">
-                <div class="imgNone" v-if="dadosRelatorio.seal_3_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-                <div class="imgNone" v-else>
-
-                </div>
-              </td>
-
-
-            </tr>
-          </table>
-          <table>
-            <thead>
-
-              <th>
-                Fotografia de selo 1
-              </th>
-              <th>
-                Fotografia de atrelado 2
-              </th>
-
-
-
-            </thead>
-            <tr>
-              <td
-                :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.seal_1_cutout_photo + ')' }">
-                <div class="imgNone" v-if="dadosRelatorio.seal_1_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-                <div class="imgNone" v-else>
-
-                </div>
-              </td>
-              <td
-                :style="{ backgroundImage: 'url(' + baseUrls.storageUrl + '' + dadosRelatorio.trailer_2_license_plate_cutout_photo + ')' }">
-                <div class="imgNone" v-if="dadosRelatorio.trailer_2_license_plate_cutout_photo == null">
-                  <p>
-                    Sem imagem
-                  </p>
-                </div>
-
-                <div class="imgNone" v-else>
-
-                </div>
-              </td>
-
-            </tr>
-          </table>
-          <div class="footerLd">
-            <div class="lineDiv"></div>
-            <div class="containerFooter">
-              <div class="processadoPorCgate">
-                <span>Processado por:</span>
-                <span>
-                  C-gate
-                </span>
-              </div>
-              <div class="processadoPorCgate">
-                <span>{{ dataLk }}</span>
-              </div>
-
-              <div class="processadoPorCgate">
-                <span>2/2</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
 
       </div>
     </div>
@@ -490,6 +243,30 @@
       </button>
     </div>
   </Dialog>
+
+  <Dialog header="Resolver" v-model:visible="showDialog" modal :closable="false">
+    <div class="p-fluid space-y-3">
+
+      <div>
+
+        <Textarea id="comment" v-model="comment" rows="3" autoResize style="width: 400px; height: 100px!important;"
+          placeholder="Comentarios" />
+      </div>
+
+
+      <div>
+
+        <Dropdown id="statusResolve" v-model="statusResolve" :options="statusOptions" placeholder="Selecione o status"
+          style="width: 400px;" />
+      </div>
+    </div>
+
+
+    <template #footer>
+      <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="cancelDialog" style="color: #5498f1;" />
+      <Button label="Resolver" icon="pi pi-check" @click="resolveItem" class="cores" />
+    </template>
+  </Dialog>
 </template>
 
 <script setup>
@@ -500,14 +277,14 @@ import { useRoute, useRouter } from "vue-router";
 import { jsPDF } from "jspdf";
 import * as XLSX from "xlsx";
 import { useToast } from "primevue/usetoast";
-import { baseUrls } from "../../../../api";
+import { baseUrls } from "../../../api";
 import html2canvas from 'html2canvas';
 import { nextTick } from 'vue';
-import { backLog, permissionsAcess } from "../../../../utils/accesRoute";
+import { backLog, permissionsAcess } from "../../../utils/accesRoute";
 
 if (permissionsAcess().adminAcesseSuperAdmin == false) {
 
-  if (permissionsAcess().cgate1dotxfoundTerminal == false) {
+  if (permissionsAcess().cgate2dotxfound == false) {
     useRouter().push("/dashboard")
   }
 }
@@ -544,6 +321,7 @@ const dadosRelatorio = ref({
 })
 
 
+
 const toast = useToast();
 
 const startDate = ref(null);
@@ -570,6 +348,65 @@ const tabelaDados = ref({
   time: "08:00",
 });
 
+
+const showDialog = ref(false)
+const comment = ref('')
+const statusResolve = ref(null)
+const resultResolv = ref(null)
+
+const statusOptions = ['General Cargo Handled', 'General Cargo Rejected']
+
+function cancelDialog() {
+  comment.value = ''
+  statusResolve.value = null
+  showDialog.value = false
+}
+
+const idExceptions = ref(0)
+
+const exceptionCapiture = (dados) => {
+
+  idExceptions.value = dados.id
+  showDialog.value = true
+}
+
+async function resolveItem() {
+
+  resultResolv.value = {
+    comments: comment.value,
+    status: statusResolve.value
+  }
+
+
+  showDialog.value = false
+  const token = getToken();
+  if (!token) {
+    backLog()
+    return;
+  } else {
+    loading.value = true
+    try {
+      const response = await axios.post(`${baseUrls.exceptionsUpdate}/${idExceptions.value}`, resultResolv.value, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.add({ severity: 'success', summary: `Exceptions resolvido`, life: 3000 });
+      loading.value = false
+      comment.value = ''
+      statusResolve.value = ''
+      idExceptions.value = 0
+      buscarTransccoes()
+
+    } catch (e) {
+      toast.add({ severity: 'error', summary: `Erro ao buscar as permissões ${e}`, life: 3000 });
+      loading.value = false
+    }
+  }
+}
+
+
+
 const dataAtual = new Date();
 const transactionsFilter = ref([])
 
@@ -584,7 +421,7 @@ const formatDates = (date) => {
   const minutes = String(d.getMinutes()).padStart(2, "0");
   const seconds = String(d.getSeconds()).padStart(2, "0");
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${day}`;
 };
 
 
@@ -641,7 +478,7 @@ const filterDate = async () => {
 
     try {
       const response = await axios.get(
-        `${baseUrls.transacoes}`,
+        baseUrls.exceptionsList,
 
         {
           params: {
@@ -656,8 +493,8 @@ const filterDate = async () => {
       );
 
 
-      userFiltro.value = response.data.data;
-      transactions.value = response.data.data.data
+      userFiltro.value = response.data.result.data;
+      transactions.value = response.data.result.data;
       transactionsFilter.value = transactions.value
 
     } catch (error) {
@@ -665,7 +502,7 @@ const filterDate = async () => {
       toast.add({
         severity: "error",
         summary: "Erro",
-        detail: "Não foi possível buscar os dados.",
+        detail: "Não foi possível buscar os dados nesse intervalo.",
         life: 3000,
       });
     }
@@ -718,9 +555,9 @@ const transactions = ref([]);
 const totalRecords2 = ref(0);
 
 const currentPage = ref(1);
-const rowsPerPage = ref(50);
+const rowsPerPage = ref(15);
 const filters2 = ref({
-  global: { value: "" }, 
+  global: { value: "" },
 });
 
 const getToken = () => {
@@ -739,24 +576,24 @@ const buscarTransccoes = async (page = 1) => {
     return;
   }
   try {
-    const response = await axios.get(baseUrls.transacoes, {
+    const response = await axios.get(baseUrls.exceptionsListCarga, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        gate: removerGate(gateId.value),
         page: page,
-        query: dadoSearch.value
+        query: dadoSearch.value,
+        terminal:"cargo"
       }
 
     });
-    transactions.value = response.data.data.data;
+    transactions.value = response.data.result.data;
     transactionsFilter.value = transactions.value
-    totalRecords.value = response.data.data.total
+    totalRecords.value = response.data.result.total
     // loading.value = true
 
   } catch (error) {
-    console.error("Erro ao carregar dados fkdsjf,:", error);
+    console.error("Erro ao carregar dados:", error);
   } finally {
     loading.value = false;
   }
@@ -797,20 +634,18 @@ const formatDate2 = (date) => {
 
 let timeoutId = null
 
-watch(filtroDados, (value)=>{
+watch(filtroDados, (value) => {
   if (timeoutId) {
     clearTimeout(timeoutId)
   }
 
   timeoutId = setTimeout(() => {
     filtroChange()
-   
+
   }, 500)
 })
 
 onMounted(() => {
-  // fetchTransactions(currentPage.value);
-  tratamentoDoId()
   buscarTransccoes();
 
 });
@@ -818,18 +653,6 @@ onMounted(() => {
 const first = ref(0);
 
 const route = useRoute();
-const userId = route.params.id;
-const gateId = ref(userId);
-
-const tratamentoDoId = () => {
-  if (Number(gateId.value.indexOf("Out")) > -1) {
-    gateId.value = gateId.value.replace("Out", "");
-    gateId.value = `Gate ${gateId.value}`;
-  } else {
-    gateId.value = gateId.value.replace("In", "");
-    gateId.value = `Gate ${gateId.value}`;
-  }
-}
 
 const data = ref([]);
 const filters = ref({
@@ -1016,18 +839,6 @@ const generatePDFs = async () => {
   pdf.addImage(contentImgData, "JPEG", margin, margin, pdfWidth - 2 * margin, contentHeight);
 
   //pagina 1
-  pdf.addPage();
-
-  // tabela
-  const imagensCanvas = await html2canvas(imagensElement, {
-    useCORS: true,
-    allowTaint: true,
-    scale: 2
-  });
-  const imagensImgData = imagensCanvas.toDataURL("image/jpeg", 1.0);
-  let imagensHeight = (imagensCanvas.height * (pdfWidth - 2 * margin)) / imagensCanvas.width;
-
-  pdf.addImage(imagensImgData, "JPEG", margin, margin, pdfWidth - 2 * margin, imagensHeight);
 
   pdf.save("transacoes_relatorio.pdf");
 
@@ -1041,15 +852,11 @@ const emptyField = ref("Vazio")
 const detailsOpen = (data) => {
   dialogRoleUpdateVisible.value = true;
   dadosRelatorio.value = data
+
 };
 
 
-watch(() => route.params.id, (newId) => {
-  gateId.value = newId
-  tratamentoDoId()
-  buscarTransccoes()
 
-})
 const getSeverity = (status) => {
   switch (status) {
     case "Pending":
@@ -1098,5 +905,16 @@ p {
 
 .btnEstiliza:hover {
   background-color: #046df7 !important;
+}
+
+.btnEstiliza:first-child {
+  background-color: transparent;
+  color: #046df7;
+  /* border: 1px solid #046df7!important; */
+  margin-right: 10px;
+}
+
+.btnEstiliza:first-child:hover {
+  color: #fff !important;
 }
 </style>

@@ -1,6 +1,8 @@
 <script setup>
+// console.log(variableDash.value)
 import { useLayout } from '@/layout/composables/layout';
 import { onMounted, ref, watch } from 'vue';
+import { variableDash } from '../../utils/variableDashboard';
 
 const { getPrimary, getSurface, isDarkTheme } = useLayout();
 const lineData = ref(null);
@@ -8,6 +10,7 @@ const pieData = ref(null);
 const pieData2 = ref(null);
 const polarData = ref(null);
 const barData = ref(null);
+const barData2 = ref(null);
 const radarData = ref(null);
 const lineOptions = ref(null);
 const pieOptions = ref(null);
@@ -28,23 +31,24 @@ function setColorOptions() {
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-    barData.value = {
-        labels: ['Novembro', 'Dezembro', 'January', 'February', 'March', 'April', 'May'],
-        datasets: [
-            {
-                label: 'Exceções Pendentes',
-                backgroundColor: corAzul,
-                borderColor: documentStyle.getPropertyValue('--p-primary-500'),
-                data: [65, 59, 80, 81, 56, 55, 40]
-            },
-            {
-                label: 'Exceções Aprovadas',
-                backgroundColor: corAzul2,
-                borderColor: documentStyle.getPropertyValue('--p-primary-200'),
-                data: [28, 48, 40, 19, 86, 27, 90]
-            }
-        ]
-    };
+    // barData.value = {
+    //     labels: ['Novembro', 'Dezembro', 'January', 'February', 'March', 'April', 'May'],
+    //     datasets: [
+    //         {
+    //             label: 'Exceções Pendentes',
+    //             backgroundColor: corAzul,
+    //             borderColor: documentStyle.getPropertyValue('--p-primary-500'),
+    //             data: [65, 59, 80, 81, 56, 55, 40]
+    //         },
+    //         {
+    //             label: 'Exceções Aprovadas',
+    //             backgroundColor: corAzul2,
+    //             borderColor: documentStyle.getPropertyValue('--p-primary-200'),
+    //             data: [28, 48, 40, 19, 86, 27, 90]
+    //         }
+    //     ]
+    // };
+    barData.value = variableDash.value.graphExceptionsTerminal
     barOptions.value = {
         plugins: {
             legend: {
@@ -88,6 +92,8 @@ function setColorOptions() {
             }
         ]
     };
+
+    pieData.value = variableDash.value.graphExceptionsTerminal
 
     pieData2.value = {
         labels: ['Rejeitadas', 'Pendentes', 'Aprovadas'],
@@ -256,31 +262,5 @@ watch(
 
 <template>
     
-    <Fluid class="grid grid-cols-12 gap-8">
-        <div class="col-span-12 xl:col-span-6">
-            <div class="card">
-                <div class="font-semibold text-xl mb-4"> Fluxo de Entrada e Saída</div>
-                <Chart type="line" :data="lineData" :options="lineOptions"></Chart>
-            </div>
-        </div>
-        <div class="col-span-12 xl:col-span-6">
-            <div class="card">
-                <div class="font-semibold text-xl mb-4">Fluxo de Exceções</div>
-                <Chart type="bar" :data="barData" :options="barOptions"></Chart>
-            </div>
-        </div>
-        <div class="col-span-12 xl:col-span-6">
-            <div class="card flex flex-col items-center">
-                <div class="font-semibold text-xl mb-4">Tally IN / OUT Percentual</div>
-                <Chart type="pie" :data="pieData" :options="pieOptions"></Chart>
-            </div>
-        </div>
-        <div class="col-span-12 xl:col-span-6">
-            <div class="card flex flex-col items-center">
-                <div class="font-semibold text-xl mb-4">Distribuição de Exceções/div>
-                <Chart type="doughnut" :data="pieData2" :options="pieOptions2"></Chart>
-            </div>
-        </div>
-        </div>
-    </Fluid>
+   
 </template>

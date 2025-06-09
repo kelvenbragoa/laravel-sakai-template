@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
+    Calendar: typeof import('primevue/calendar')['default']
     Chart: typeof import('primevue/chart')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
     Column: typeof import('primevue/column')['default']

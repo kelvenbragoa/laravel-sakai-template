@@ -19,9 +19,15 @@
       </div>
       <template #header>
         <div class="flex justify-between align-center">
-          <h2>
-            Gate selecionado: <strong>{{ gateId }}</strong>
-          </h2>
+          <div>
+            <h2>
+              Gate selecionado: <strong>{{ gateId }}</strong>
+            </h2>
+            <div style="display: flex; align-items: center; margin-top: 3px;">
+              <span>Total:</span>
+              <h2 style="margin-left: 5px; font-weight: bold;">{{ totalRecords }}</h2>
+            </div>
+          </div>
           <div class="groupExel">
             <Button @click="exportToExcel">Excel</Button>
             <div class="calendaryFilter">
@@ -406,7 +412,7 @@
 
         <div class="imagensRelatorio2">
 
-          
+
           <table>
             <thead>
               <th>
@@ -863,6 +869,7 @@ function removerGate(texto) {
 
 
 const buscarTransccoes = async (page = 1) => {
+  loading.value = true
 
   const token = getToken();
   if (!token) {
@@ -870,6 +877,7 @@ const buscarTransccoes = async (page = 1) => {
     return;
   }
   try {
+    
     const response = await axios.get(baseUrls.transacoesCgate2dotzero, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -907,6 +915,7 @@ const exportToExcel = () => {
 const onPageChange = (event) => {
   first.value = event.first
   const newPage = Math.floor(event.first / rowsPerPage.value) + 1
+  
   buscarTransccoes(newPage)
 
 }

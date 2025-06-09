@@ -15,4 +15,11 @@ class Cgatev2Controller extends Controller
 
         return response()->json($response->json(), $response->status());
     }
+
+    public function dashboard(){
+        
+        $response = Http::get('http://20.87.9.35/api/v1/transacoes/dashboard');
+
+        return response()->json($response->json(), $response->status());
+    }
 }

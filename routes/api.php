@@ -73,6 +73,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/excepcoes/lista', [ExceptionController::class, 'listar'])->name('cgate2.listar');
 
         Route::post('/excepcoes/actualizar/{id}', [ExceptionController::class, 'actualizar'])->name('cgate2.actualizar');
+
+        Route::get('/dashboard', [Cgatev2Controller::class, 'dashboard'])->name('cgate2.dashboard');
+
     });
 
     Route::prefix('cdms')->group(function () {

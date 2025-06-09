@@ -9,11 +9,18 @@
 
     <DataTable :value="transactions" paginator :rows="rowsPerPage" :totalRecords="totalRecords" lazy :first="first"
       @page="onPageChange">
+
       <template #header>
         <div class="flex justify-between align-center">
-          <h2 style="font-weight: 600;">
-            Exceções
-          </h2>
+          <div>
+            <h2 style="font-weight: 600;">
+              Exceções - Terminal
+            </h2>
+            <div style="display: flex; align-items: center; margin-top: 3px;">
+              <span>Total:</span>
+              <h2 style="margin-left: 5px; font-weight: bold;">{{ totalRecords }}</h2>
+            </div>
+          </div>
           <!-- <Button label="Abrir Resolver" icon="pi pi-pencil" @click="showDialog = true" /> -->
           <div class="groupExel">
             <Button @click="exportToExcel">Excel</Button>
@@ -104,11 +111,11 @@
 
           <div class="lineRow">
             <span>Atualizado em </span>
-            <span>{{ dadosRelatorio.updated_at == null ? emptyField : dadosRelatorio.updated_at }}</span>
+            <span>{{ dadosRelatorio.updated_at == null ? emptyField : formatDates(dadosRelatorio.updated_at) }}</span>
           </div>
           <div class="lineRow">
             <span>Criado em </span>
-            <span>{{ dadosRelatorio.created_at == null ? emptyField : dadosRelatorio.created_at }}</span>
+            <span>{{ dadosRelatorio.created_at == null ? emptyField : formatDates(dadosRelatorio.created_at) }}</span>
           </div>
 
         </div>
@@ -347,7 +354,7 @@ const comment = ref('')
 const statusResolve = ref(null)
 const resultResolv = ref(null)
 
-const statusOptions = ['Approved', 'Rejected']
+const statusOptions = ['Container Handled', 'Container Rejected']
 
 function cancelDialog() {
   comment.value = ''
@@ -413,8 +420,8 @@ const formatDates = (date) => {
   const hours = String(d.getHours()).padStart(2, "0");
   const minutes = String(d.getMinutes()).padStart(2, "0");
   const seconds = String(d.getSeconds()).padStart(2, "0");
-
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${day}`;
+  // return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
 
@@ -569,13 +576,14 @@ const buscarTransccoes = async (page = 1) => {
     return;
   }
   try {
-    const response = await axios.get(baseUrls.exceptionsList, {
+    const response = await axios.get(baseUrls.exceptionsListTerminal, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       params: {
         page: page,
-        query: dadoSearch.value
+        query: dadoSearch.value,
+         terminal:"container"
       }
 
     });

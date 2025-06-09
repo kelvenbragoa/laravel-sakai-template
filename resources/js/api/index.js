@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ref } from 'vue';
 import { Exception } from 'sass';
 
 
@@ -74,12 +75,34 @@ const baseURLCgate2Carga = "https://cdmapi.cornelder.co.mz"
     gate: `${baseURLCDMProd}/gates`,
     gatePermissions: `${baseURLCDMProd}/gatepermissions`,
     applications: `${baseURLCDMProd}/applications`,
-    exceptionsList: `${baseURLCDMProd}/cgate2/excepcoes/lista`,
+    exceptionsListCarga: `${baseURLCDMProd}/cgate2/excepcoes/lista`,
+    exceptionsListTerminal: `${baseURLCDMProd}/cgate2/excepcoes/lista`,
     exceptionsUpdate: `${baseURLCDMProd}/cgate2/excepcoes/actualizar`,
     precheckList: `${baseURLCDMProd}/cdms/precheck`,
     precheckCheckappointment: `${baseURLCDMProd}/cdms/checkappointment`,
+    dashboardCgate: `${baseURLCDMProd}/cgate2/dashboard`,
     baseURl: baseURLCDMProd,
     storageUrl: storageImg
   };
+
+  // export const dataDashboard = ref([])
+
+  export const getDashboard = async (year, token) => {
+    try {
+      const response = await apiCarga.get(`${baseUrls.dashboardCgate}`, {
+        headers: {
+          Authorization: `Berear ${token}`
+        },
+        params: {
+          year: year
+        },
+      });
+      return response; 
+    } catch (error) {
+      console.error('Erro ao buscar transações:', error);
+      throw error; 
+    }
+  };
+
 
 

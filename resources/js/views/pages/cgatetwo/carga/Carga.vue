@@ -52,6 +52,7 @@ const formatDates = (date) => {
 
 
 const buscarCargaGeral = async (page = 1) => {
+  loading.value = true
   try {
     loading.value = true
     const response = await axios.get(`${baseUrls.transacoesCgate2dotzeroCarga}`, {
@@ -373,9 +374,16 @@ onMounted(() => {
   <DataTable :value="data" paginator :rows="rowsPerPage" :first="first" lazy :totalRecords="totalRecords" @page="onPage">
     <template #header>
       <div class="flex justify-between align-center py-5">
-        <h2>
-          Gate selecionado: <strong>{{ gateId }}</strong>
-        </h2>
+
+        <div>
+            <h2>
+              Gate selecionado: <strong>{{ gateId }}</strong>
+            </h2>
+            <div style="display: flex; align-items: center; margin-top: 3px;">
+              <span>Total:</span>
+              <h2 style="margin-left: 5px; font-weight: bold;">{{ totalRecords }}</h2>
+            </div>
+          </div>
         <div class="groupExel">
           <Button @click="exportToExcel" label="Excel" icon="pi pi-file-excel" />
           <div class="calendaryFilter">

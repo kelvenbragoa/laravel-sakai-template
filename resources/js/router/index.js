@@ -68,9 +68,14 @@ const router = createRouter({
                 //------
                 //Exceptions
                 {
-                    path: '/exceptions/',
-                    name: 'exceptions',
+                    path: '/exceptionsterminal',
+                    name: 'exceptionsterminal',
                     component: () => import('@/views/pages/exceptions/Exceptions.vue')
+                },
+                {
+                    path: '/exceptionscarga',
+                    name: 'exceptionscarga',
+                    component: () => import('@/views/pages/exceptions/ExceptionsCarga.vue')
                 },
                 //-------
                 //Precheck

@@ -133,11 +133,6 @@ const detailsOpen = (data) => {
   dadosRelatorio.value = data
 
 };
-const goToPrecheck = () => {
-  router.push("/")
-}
-const checked = ref(false);
-
 
 const emptyField = () => {
   for (var element in precheckData.value) {

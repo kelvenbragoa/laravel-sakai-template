@@ -245,6 +245,11 @@
               <span>Id do condutor </span>
               <span>{{ dadosRelatorio.driver_id == null ? emptyField : dadosRelatorio.driver_id }}</span>
             </div>
+
+            <div class="lineRow">
+              <span>Usuário Autenticado </span>
+              <span>{{ dadosRelatorio.logged_user == null ? emptyField : dadosRelatorio.logged_user }}</span>
+            </div>
             <div class="lineRow">
               <span>Atualizado em </span>
               <span>{{ dadosRelatorio.updated_at == null ? emptyField : formatDate(dadosRelatorio.updated_at) }}</span>
@@ -377,6 +382,7 @@
 
 
 
+
           <div class="footerLd">
             <div class="lineDiv"></div>
             <div class="containerFooter">
@@ -399,6 +405,8 @@
         </div>
 
         <div class="imagensRelatorio2">
+
+          
           <table>
             <thead>
               <th>

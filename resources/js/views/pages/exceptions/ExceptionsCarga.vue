@@ -49,6 +49,11 @@
       <!-- <Column field="transaction_id" header="ID da transação" style="min-width: 12rem" /> -->
       <Column field="message" header="Mensagem" style="min-width: 12rem" />
       <Column field="type" header="Tipo" style="min-width: 12rem" />
+      <Column header="Data" style="min-width: 10rem">
+        <template #body="{ data }">
+          <div>{{ formatDates(data.created_at) }}</div>
+        </template>
+      </Column>
       <Column field="status" header="Status" style="min-width: 12rem"></Column>
 
       <Column header="Ações" style="min-width: 10rem">

@@ -629,7 +629,6 @@ const exportToExcel = () => {
     updated_at: formatarDataHora(item.updated_at),
   }));
 
-  console.log(dadosFormatados);
 
   //   console.log(transactions.value)
   const worksheet = XLSX.utils.json_to_sheet(dadosFormatados);

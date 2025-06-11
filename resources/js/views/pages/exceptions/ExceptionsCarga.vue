@@ -426,7 +426,7 @@ const formatDates = (date) => {
   const minutes = String(d.getMinutes()).padStart(2, "0");
   const seconds = String(d.getSeconds()).padStart(2, "0");
 
-  return `${year}-${month}-${day}`;
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
 
@@ -618,10 +618,17 @@ const filtroChange = () => {
 };
 
 const exportToExcel = () => {
-  const worksheet = XLSX.utils.json_to_sheet(transactions.value);
+  const dados = transactions.value;
+
+const dadosFormatados = dados.map(item => ({
+  ...item,
+  created_at: formatarDataHora(item.created_at),
+  updated_at: formatarDataHora(item.updated_at),
+}));
+  const worksheet = XLSX.utils.json_to_sheet(dadosFormatados);
   const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Transações");
-  XLSX.writeFile(workbook, "transacoes.xlsx");
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Exceptions");
+  XLSX.writeFile(workbook, "Exceptions.xlsx");
 };
 
 
@@ -691,6 +698,18 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString("pt-BR");
 };
 
+
+function formatarDataHora(dataString) {
+  const data = new Date(dataString);
+  return data.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+}
 
 const generatePDF = (rowData) => {
   const doc = new jsPDF();

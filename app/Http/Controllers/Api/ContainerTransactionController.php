@@ -31,11 +31,6 @@ class ContainerTransactionController extends Controller
                 ->orWhere('container_seal_number_3', 'like', "{$searchQuery}%");
             })
              ->when(request('startdatetime') && request('enddatetime'), function ($query) {
-                    //general DB ENEGNINE
-                    // $startDateTimeSearch = request('startdatetime');
-                    // $endDateTimeSearch = request('enddatetime');
-        
-                    // // //SQL SERVER ENGINE
                     $startDateTimeSearch = Carbon::parse(request('startdatetime'))->format('Y-m-d H:i:s');
                     $endDateTimeSearch = Carbon::parse(request('enddatetime'))->format('Y-m-d H:i:s');
         

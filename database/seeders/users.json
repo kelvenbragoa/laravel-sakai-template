@@ -1,0 +1,1595 @@
+[
+    [
+        "user_full_name": "Administrator",
+        "company_id": 1,
+        "user_name": "administrator@cornelder.co.mz",
+        "email": "administrator@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52"
+    ],
+    [
+        "user_full_name": "Container Terminal",
+        "company_id": 1,
+        "user_name": "ttc@cornelder.co.mz",
+        "email": "ttc@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2024-09-26 11:30:18",
+        "updated_at": "2024-09-26 11:30:18"
+    ],
+    [
+        "user_full_name": "Supervisor",
+        "company_id": 1,
+        "user_name": "supervisor@cornelder.co.mz",
+        "email": "supervisor@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2024-09-26 11:45:26",
+        "updated_at": "2024-09-26 11:45:26"
+    ],
+    [
+        "user_full_name": "TCC Supervisor",
+        "company_id": 1,
+        "user_name": "ttc-supervisor@cornelder.co.mz",
+        "email": "ttc-supervisor@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2024-09-30 14:14:31",
+        "updated_at": "2024-09-30 14:14:31"
+    ],
+    [
+        "user_full_name": "Dasso User",
+        "company_id": 1,
+        "user_name": "dasso@cornelder.co.mz",
+        "email": "dasso@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2024-09-30 14:15:23",
+        "updated_at": "2024-09-30 14:15:23"
+    ],
+    [
+        "user_full_name": "Dasso Supervisor",
+        "company_id": 1,
+        "user_name": "dasso-supervisor@cornelder.co.mz",
+        "email": "dasso-supervisor@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2024-09-30 14:15:57",
+        "updated_at": "2024-09-30 14:15:57"
+    ],
+    [
+        "user_full_name": "Segurança TCG1",
+        "company_id": 1,
+        "user_name": "tcg.security1@cornelder.co.mz",
+        "email": "tcg.security1@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2024-12-12 11:55:05",
+        "updated_at": "2024-12-12 11:56:01"
+    ],
+    [
+        "user_full_name": "Segurança TCG 3",
+        "company_id": 1,
+        "user_name": "tcg.security3@cornelder.co.mz",
+        "email": "tcg.security3@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2024-12-12 11:55:39",
+        "updated_at": "2024-12-12 11:55:39"
+    ],
+    [
+        "user_full_name": "Segurança TCG 16",
+        "company_id": 1,
+        "user_name": "tcg.security16@cornelder.co.mz",
+        "email": "tcg.security16@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2024-12-12 11:56:35",
+        "updated_at": "2024-12-12 11:56:35"
+    ],
+    [
+        "user_full_name": "Clotilde Natalia Vilanculos",
+        "company_id": 1,
+        "user_name": "clotilde.vilanculos@cgate.co.mz",
+        "email": "clotilde.vilanculos@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 10:25:36",
+        "updated_at": "2025-04-03 10:25:36"
+    ],
+    [
+        "user_full_name": "Edson Cudemos",
+        "company_id": 1,
+        "user_name": "edson.cudemos@cgate.co.mz",
+        "email": "edson.cudemos@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 10:26:27",
+        "updated_at": "2025-04-03 10:26:27"
+    ],
+    [
+        "user_full_name": "Joao Mahave",
+        "company_id": 1,
+        "user_name": "joao.mahave@cgate.co.mz",
+        "email": "joao.mahave@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 10:26:55",
+        "updated_at": "2025-04-03 10:26:55"
+    ],
+    [
+        "user_full_name": "Damiao Francisco",
+        "company_id": 1,
+        "user_name": "damiao.francisco@cgate.co.mz",
+        "email": "damiao.francisco@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:24:53",
+        "updated_at": "2025-04-03 11:24:53"
+    ],
+    [
+        "user_full_name": "Manuel Moeza",
+        "company_id": 1,
+        "user_name": "manuel.moeza@cgate.co.mz",
+        "email": "manuel.moeza@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:25:31",
+        "updated_at": "2025-04-03 11:25:31"
+    ],
+    [
+        "user_full_name": "Ema Nhama Issaka",
+        "company_id": 1,
+        "user_name": "ema.issaka@cgate.co.mz",
+        "email": "ema.issaka@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:27:12",
+        "updated_at": "2025-04-03 11:27:12"
+    ],
+    [
+        "user_full_name": "Paulo António de Almeida",
+        "company_id": 1,
+        "user_name": "paulo.almeida@cgate.co.mz",
+        "email": "paulo.almeida@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:27:59",
+        "updated_at": "2025-04-03 11:27:59"
+    ],
+    [
+        "user_full_name": "Rasia Herminia da Costa",
+        "company_id": 1,
+        "user_name": "rasia.costa@cgate.co.mz",
+        "email": "rasia.costa@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:28:28",
+        "updated_at": "2025-04-03 11:28:28"
+    ],
+    [
+        "user_full_name": "Valdomar Fernando Belo",
+        "company_id": 1,
+        "user_name": "valdomar.belo@cgate.co.mz",
+        "email": "valdomar.belo@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:28:54",
+        "updated_at": "2025-04-03 11:28:54"
+    ],
+    [
+        "user_full_name": "Albino Cussajirgua Ziambazo",
+        "company_id": 1,
+        "user_name": "albino.ziambazo@cgate.co.mz",
+        "email": "albino.ziambazo@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:29:22",
+        "updated_at": "2025-04-03 11:29:22"
+    ],
+    [
+        "user_full_name": "Edilson da Castela Francisco",
+        "company_id": 1,
+        "user_name": "edilson.francisco@cgate.co.mz",
+        "email": "edilson.francisco@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:29:51",
+        "updated_at": "2025-04-03 11:29:51"
+    ],
+    [
+        "user_full_name": "Olivio Abel de Morais",
+        "company_id": 1,
+        "user_name": "olivio.morais@cgate.co.mz",
+        "email": "olivio.morais@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:30:13",
+        "updated_at": "2025-04-03 11:30:13"
+    ],
+    [
+        "user_full_name": "Rosa Fernando Malaire",
+        "company_id": 1,
+        "user_name": "rosa.malaire@cgate.co.mz",
+        "email": "rosa.malaire@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:30:40",
+        "updated_at": "2025-04-03 11:30:40"
+    ],
+    [
+        "user_full_name": "Fernandes Mussa António Catruza",
+        "company_id": 1,
+        "user_name": "fernandes.catruza@cgate.co.mz",
+        "email": "fernandes.catruza@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:31:14",
+        "updated_at": "2025-04-03 11:31:14"
+    ],
+    [
+        "user_full_name": "Andrade Mário Sozinho",
+        "company_id": 1,
+        "user_name": "andrade.sozinho@cgate.co.mz",
+        "email": "andrade.sozinho@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:32:11",
+        "updated_at": "2025-04-03 11:32:11"
+    ],
+    [
+        "user_full_name": "Manuel Vilanculos",
+        "company_id": 1,
+        "user_name": "manuel.vilanculos@cgate.co.mz",
+        "email": "manuel.vilanculos@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:32:38",
+        "updated_at": "2025-04-03 11:32:38"
+    ],
+    [
+        "user_full_name": "Andrade Luis Andrade",
+        "company_id": 1,
+        "user_name": "andrade.andrade@cgate.co.mz",
+        "email": "andrade.andrade@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:33:27",
+        "updated_at": "2025-04-03 11:33:27"
+    ],
+    [
+        "user_full_name": "Joana Carlos João Bacar",
+        "company_id": 1,
+        "user_name": "joana.bacar@cgate.co.mz",
+        "email": "joana.bacar@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:33:47",
+        "updated_at": "2025-04-03 11:33:47"
+    ],
+    [
+        "user_full_name": "Dade Fak Ernesto",
+        "company_id": 1,
+        "user_name": "dade.ernesto@cgate.co.mz",
+        "email": "dade.ernesto@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:34:10",
+        "updated_at": "2025-04-03 11:34:10"
+    ],
+    [
+        "user_full_name": "Aderito da Graça Nobre",
+        "company_id": 1,
+        "user_name": "aderito.nobre@cgate.co.mz",
+        "email": "aderito.nobre@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:35:36",
+        "updated_at": "2025-04-03 11:35:36"
+    ],
+    [
+        "user_full_name": "Joaquina Chinaca Sobrinho",
+        "company_id": 1,
+        "user_name": "joaquina.sobrinho@cgate.co.mz",
+        "email": "joaquina.sobrinho@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:36:37",
+        "updated_at": "2025-04-03 11:36:37"
+    ],
+    [
+        "user_full_name": "Joaquim da Barca Alves",
+        "company_id": 1,
+        "user_name": "joaquim.alves@cgate.co.mz",
+        "email": "joaquim.alves@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:37:09",
+        "updated_at": "2025-04-03 11:37:09"
+    ],
+    [
+        "user_full_name": "João Sidonio Mangue",
+        "company_id": 1,
+        "user_name": "joao.mangue@cgate.co.mz",
+        "email": "joao.mangue@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:37:44",
+        "updated_at": "2025-04-03 11:37:44"
+    ],
+    [
+        "user_full_name": "Julia Tafa",
+        "company_id": 1,
+        "user_name": "julia.tafa@cgate.co.mz",
+        "email": "julia.tafa@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:38:07",
+        "updated_at": "2025-04-03 11:38:07"
+    ],
+    [
+        "user_full_name": "Eugénio Chimoio",
+        "company_id": 1,
+        "user_name": "eugenio.chimoio@cgate.co.mz",
+        "email": "eugenio.chimoio@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:38:36",
+        "updated_at": "2025-04-03 11:38:36"
+    ],
+    [
+        "user_full_name": "Laurindo António Simao",
+        "company_id": 1,
+        "user_name": "laurindo.simao@cgate.co.mz",
+        "email": "laurindo.simao@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:39:00",
+        "updated_at": "2025-04-03 11:39:00"
+    ],
+    [
+        "user_full_name": "Antonio Vicente Jemuce",
+        "company_id": 1,
+        "user_name": "antonio.jemuce@cgate.co.mz",
+        "email": "antonio.jemuce@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:39:25",
+        "updated_at": "2025-04-03 11:39:25"
+    ],
+    [
+        "user_full_name": "Dasso Security 8A",
+        "company_id": 1,
+        "user_name": "dasso.security8@cgate.co.mz",
+        "email": "dasso.security8@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-03 11:45:42",
+        "updated_at": "2025-04-03 11:45:42"
+    ],
+    [
+        "user_full_name": "Tendai Gumbo",
+        "company_id": 1,
+        "user_name": "tendai.gumbo@cornelder.co.mz",
+        "email": "tendai.gumbo@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-04 16:27:42",
+        "updated_at": "2025-04-04 16:27:42"
+    ],
+    [
+        "user_full_name": "Ivan Goncalves",
+        "company_id": 1,
+        "user_name": "ivan.goncalves@cornelder.co.mz",
+        "email": "ivan.goncalves@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-04 16:34:44",
+        "updated_at": "2025-04-04 16:34:44"
+    ],
+    [
+        "user_full_name": "Ilidio Bochana",
+        "company_id": 1,
+        "user_name": "ilidio.bochana@cornelder.co.mz",
+        "email": "ilidio.bochana@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-04 16:35:12",
+        "updated_at": "2025-04-04 16:35:12"
+    ],
+    [
+        "user_full_name": "Artur Muguiviza",
+        "company_id": 1,
+        "user_name": "artur.muguiviza@cornelder.co.mz",
+        "email": "artur.muguiviza@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-04 16:36:05",
+        "updated_at": "2025-04-04 16:36:05"
+    ],
+    [
+        "user_full_name": "Samson Manhice",
+        "company_id": 1,
+        "user_name": "samson.manhice@cgate.co.mz",
+        "email": "samson.manhice@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-04 17:22:41",
+        "updated_at": "2025-04-04 17:22:41"
+    ],
+    [
+        "user_full_name": "Arlindo Joao Magule",
+        "company_id": 1,
+        "user_name": "arlindo.magule@cgate.co.mz",
+        "email": "arlindo.magule@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-05 17:43:14",
+        "updated_at": "2025-04-05 17:43:14"
+    ],
+    [
+        "user_full_name": "Miguel Martinho Bazar",
+        "company_id": 1,
+        "user_name": "miguel.bazar@cgate.co.mz",
+        "email": "miguel.bazar@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-05 17:45:10",
+        "updated_at": "2025-04-05 17:45:10"
+    ],
+    [
+        "user_full_name": "Samir Amade Pacheco",
+        "company_id": 1,
+        "user_name": "samir.pacheco@cgate.co.mz",
+        "email": "samir.pacheco@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-05 17:45:46",
+        "updated_at": "2025-04-05 17:45:46"
+    ],
+    [
+        "user_full_name": "Ngano Franque Andicene",
+        "company_id": 1,
+        "user_name": "ngano.andicene@cgate.co.mz",
+        "email": "ngano.andicene@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-05 17:46:21",
+        "updated_at": "2025-04-05 17:46:21"
+    ],
+    [
+        "user_full_name": "Afonso Lichau Queha",
+        "company_id": 1,
+        "user_name": "afonso.queha@cgate.co.mz",
+        "email": "afonso.queha@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-05 17:46:55",
+        "updated_at": "2025-04-05 17:46:55"
+    ],
+    [
+        "user_full_name": "Adriano Jaime Quimisse",
+        "company_id": 1,
+        "user_name": "adriano.quimisse@cgate.co.mz",
+        "email": "adriano.quimisse@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-05 17:47:26",
+        "updated_at": "2025-04-05 17:47:26"
+    ],
+    [
+        "user_full_name": "Benjamim Jose Jasse",
+        "company_id": 1,
+        "user_name": "benjamim.jasse@cgate.co.mz",
+        "email": "benjamim.jasse@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-05 17:47:58",
+        "updated_at": "2025-04-05 17:47:58"
+    ],
+    [
+        "user_full_name": "Requetai Coma Fani",
+        "company_id": 1,
+        "user_name": "requetai.fani@cgate.co.mz",
+        "email": "requetai.fani@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-05 17:48:29",
+        "updated_at": "2025-04-05 17:48:29"
+    ],
+    [
+        "user_full_name": "Jose Pedro Wamba",
+        "company_id": 1,
+        "user_name": "jose.wamba@cgate.co.mz",
+        "email": "jose.wamba@cgate.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-04-05 17:49:04",
+        "updated_at": "2025-04-05 17:49:04"
+    ],
+    [
+        "user_full_name": "Jacinto Bai Bai",
+        "company_id": 1,
+        "user_name": "Jacinto.Baibai@cornelder.co.mz",
+        "email": "Jacinto.Baibai@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-05-12 14:10:57",
+        "updated_at": "2025-05-12 14:10:57"
+    ],
+    [
+        "user_full_name": "Rosa Manane",
+        "company_id": 1,
+        "user_name": "Rosa.Manane@Cornelder.co.mz",
+        "email": "Rosa.Manane@Cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-05-12 14:55:47",
+        "updated_at": "2025-05-12 14:55:47"
+    ],
+    [
+        "user_full_name": "Eduardo Francisco Miclosse",
+        "company_id": 1,
+        "user_name": "Eduardo.Miclosse@cornelder.co.mz",
+        "email": "Eduardo.Miclosse@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "created_at": "2025-05-12 15:56:23",
+        "updated_at": "2025-05-12 15:56:23"
+    ],
+    [
+        "user_full_name": "Ivan Goncalves",
+        "user_name": "ivan.goncalves@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "ivan.goncalves@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Administrator",
+        "user_name": "admin",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "NULL",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "NULL",
+        "user_name": "Tecnico",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "tecnico@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Adelia Guigo",
+        "user_name": "ago",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "adelia.guigo@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Fernando  Ajape",
+        "user_name": "fae",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "fernando.ajape@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Joaquim  Sabado",
+        "user_name": "jso",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "joaquim.sabado@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Ozorio  Inacio",
+        "user_name": "oio",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "ozorio.inacio@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Nazir Botao",
+        "user_name": "nbo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "nazir.botao@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Valentim  Tomas",
+        "user_name": "vte",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "valentim.tomas@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Simao  Tivane",
+        "user_name": "ste",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "simao.tivane@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Brito  Miguel",
+        "user_name": "bml",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "brito.miguel@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Felisberto Mahamba",
+        "user_name": "fma",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "felisberto.mahamba@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Franque  Vasco",
+        "user_name": "fvo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "franque.vasco@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Nancy  Majamanda",
+        "user_name": "nma",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "nancy.majamanda@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Lucas  Bechica",
+        "user_name": "lba",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "lucas.bechica@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Victor Alfai",
+        "user_name": "vai",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "victor.alfai@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Zeca  Tobias",
+        "user_name": "zts",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "zeca.tobias@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Augusto  Tony",
+        "user_name": "aty",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "augusto.tony@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Castigo Magumisse",
+        "user_name": "cme",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "castigo.magumisse@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Celestino  Mualule",
+        "user_name": "cml",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "celestino.mualule@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Ernesto Ernesto",
+        "user_name": "eeo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "ernesto.ernesto@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Isabel Vilanculos",
+        "user_name": "ivs",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "isabel.vilanculos@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Jelito Vasco",
+        "user_name": "jvo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "jelito.vasco@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Pedro Manuel",
+        "user_name": "pml",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "pedro.manuel@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "test",
+        "user_name": "test",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "test@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Jose Comissario",
+        "user_name": "jco",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "jose.comissario@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Ilidio Bochana",
+        "user_name": "ilidio.bochana@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "ilidio.bochana@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Rosa manane",
+        "user_name": "rosa.manane@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "rosa.manane@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Jonas Alfixa",
+        "user_name": "jax",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "jonas.alfixa@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Domingos Sitol",
+        "user_name": "sdl",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "domingos.sitol@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Fundisse Manuel",
+        "user_name": "fml",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "fundisse.manuel@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Joaquim Guitar",
+        "user_name": "jgr",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "joaquim.guitar@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Alberto Zie ",
+        "user_name": "aze",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "alberto.zie@cornelder.co.mz ",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Rambidzai Luas",
+        "user_name": "rls",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "rambidzai.luas@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Lucas Alberto",
+        "user_name": "lao",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "lucas.alberto@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Sabado Roque",
+        "user_name": "sre",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "sabado.roque@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Sérgio Ambrósio",
+        "user_name": "sao",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "sergio.ambrosio@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Joaquim Bene",
+        "user_name": "jbe",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "joaquim.bene@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Inácio Dauce",
+        "user_name": "ine",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "inacio.dauce@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Lucas manuel",
+        "user_name": "lml",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "lucas.manuel@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Carmona Magona",
+        "user_name": "cma",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "carmona.magona@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "José Maria",
+        "user_name": "jma",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "jose.maria@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Fernando Chiraramire",
+        "user_name": "fce",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "fernando.chiraramire@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Pedro António",
+        "user_name": "pao",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "pedro.antonio@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Lucas Machava",
+        "user_name": "lma",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "lucas.machava@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Geraldo Jardim",
+        "user_name": "gjm",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "geraldo.jardim@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Izilda Jose",
+        "user_name": "ije",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "izilda.jose@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Carlos Dique",
+        "user_name": "cde",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "carlos.dique@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Canisio Magrasse",
+        "user_name": "cms",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "canisio.magrasse@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Zito Elias",
+        "user_name": "zes",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "zito.elias@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Fabião Mugai",
+        "user_name": "fmi",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "fabiao.mugai@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Balbina Sebasti",
+        "user_name": "bso",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "balbina.sebasti@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Helenio Tomo",
+        "user_name": "hto",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "helenio.tomo@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Florencia Olesse",
+        "user_name": "foe",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "florencia.olesse@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Paulo Andessene",
+        "user_name": "pae",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "paulo.andessene@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Leandro Nhoazane",
+        "user_name": "lne",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "leandro.nhoazane@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Teresa Amadeu",
+        "user_name": "tau",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "teresa.amadeu@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "José Gimo",
+        "user_name": "jgo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "jose.gimo@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Victor Augusto",
+        "user_name": "vao",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "victor.augusto@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Taura Pery",
+        "user_name": "tpy",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "taura.pery@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Victor Milina",
+        "user_name": "vma",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "victor.milina@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Rumbidzai Lucas",
+        "user_name": "rls",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "rumbidzai.lucas@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Eduardo Niclosse",
+        "user_name": "eduardo.miclosse@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "eduardo.miclosse@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Nelo Jeque",
+        "user_name": "nlj",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "nelo.jeque@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Gilda Sitoe",
+        "user_name": "gilda.sitoe@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "gilda.sitoe@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Tendai Gumbo",
+        "user_name": "tendai.gumbo@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "tendai.gumbo@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Augusto Jiquete",
+        "user_name": "augusto.jiquete@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "augusto.jiquete@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Victor Roque",
+        "user_name": "victor.roque@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "victor.roque@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Victor Roque",
+        "user_name": "vre",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "Victor.Roque@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Nelo Kripton Jeque",
+        "user_name": "Nelo.Jeque@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "Nelo.Jeque@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Rosa Maria Manane",
+        "user_name": "Rosa.Manane@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "Rosa.Manane@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Helder Abreu",
+        "user_name": "Helder.Abreu@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "Helder.Abreu@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Luisa Fossate",
+        "user_name": "Luisa.Fossate@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "Luisa.Fossate@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Pedro Antonio",
+        "user_name": "Pedro.Antonio@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "Pedro.Antonio@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Guilherme Castro",
+        "user_name": "Guilherme.Castro@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "guileherme.castro@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Artur Muguiviza",
+        "user_name": "artur.muguiviza@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "artur.muiguiviza@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Gomes Marcelino",
+        "user_name": "gomesmarcelino@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "gomesmarcelino@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "CUSSARA MAMBONGO",
+        "user_name": "cussara.mambongo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "cussara.mambongo@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "CRISTINA DAVIVRO",
+        "user_name": "cristina.davivro",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "cristina.davivro@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "JOAQUIM JOÃO",
+        "user_name": "joaquim.joao",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "joaquim.joao@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "JOÃO ALBINO",
+        "user_name": "joao.albino",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "joao.albino@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "MARCELO PAULO",
+        "user_name": "marcelo.paulo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "marcelo.paulo@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "WILSON COMPANHIA",
+        "user_name": "wilson.companhia",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "wilson.companhia@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "ELISABETH MANUEL",
+        "user_name": "elisabeth.manuel",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "elisabeth.manuel@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "FERNANDO MUBONE",
+        "user_name": "fernando.mubone",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "fernando.mubone@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "JOÃO BELTRÃO",
+        "user_name": "joao.beltrao",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "joao.beltrao@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "PEDRO POLENE",
+        "user_name": "pedro.polene",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "pedro.polene@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "RICARDO CAMPAUNDE",
+        "user_name": "ricardo.capaunde",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "ricardo.capaunde@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "ZACARIAS BITCHO",
+        "user_name": "zacarias.bitcho",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "zacarias.bitcho@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "AMISSE AMADE",
+        "user_name": "amisse.amade",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "amisse.amade@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "CHICO JOAQUIM",
+        "user_name": "chico.joaquim",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "chico.joaquim@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "LATIFO MABALA",
+        "user_name": "latifo.mabala",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "latifo.mabala@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "SÉRGIO BONA",
+        "user_name": "sergio.bona",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "sergio.bona@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "INOQUE COLAÇO",
+        "user_name": "inoque.colaco",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "inoque.colaco@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "ARLINDO LOURENÇO",
+        "user_name": "arlindo.lourenco",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "arlindo.lourenco@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "ARTUR WIRE GUIDIONE",
+        "user_name": "artur.guidione",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "artur.guidione@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "HERMEN PINTO",
+        "user_name": "hermen.pinto",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "hermen.pinto@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "JAIME LUIS MEQUE",
+        "user_name": "jaime.meque",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "jaime.meque@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "LEONINO BAPTISTA",
+        "user_name": "leonimo.baptista",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "leonimo.baptista@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "MUCOLE AFONSO",
+        "user_name": "mucole.afonso",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "mucole.afonso@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "ROSA JOSÉ MUTENDA",
+        "user_name": "rosa.mutemba",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "rosa.mutemba@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "DOMINGOS DIAS",
+        "user_name": "domingos.dias",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "domingos.dias@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "BOAVNDA CHIMICA",
+        "user_name": "boavinda.chimica",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "boavinda.chimica@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "FERNANDO MAGUMISSE",
+        "user_name": "fernando.maguimisse",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "fernando.maguimisse@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "SOZINHO GINGA",
+        "user_name": "sozinho.ginga",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "sozinho.ginga@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "ISABEL VILANCULOS",
+        "user_name": "isabel.vilanculos",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "isabel.vilanculos@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "FILIPE CARVALHO ",
+        "user_name": "filipe.carvalho",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "filipe.carvalho@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "ARNALDO HENRIQUES",
+        "user_name": "arnaldo.henriques",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "arnaldo.henriques@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "JAIME MARTINHO FERNANDO",
+        "user_name": "jaime.fernando",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "jaime.fernando@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "MANUEL FRANCISCO JONE",
+        "user_name": "manuel.jone",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "manuel.jone@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "DÁRIO JOSÉ TAREMBA",
+        "user_name": "dario.taremba",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "dario.taremba@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "PEDRO JOAQUIM LUIS",
+        "user_name": "pedro.luis",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "pedro.luis@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "QUINCY MAJAMANDA",
+        "user_name": "quincy.majamanda",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "quincy.majamanda@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Joao Mupungue",
+        "user_name": "joao.mupungue",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "joao.mupungue@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Adamo Adamo",
+        "user_name": "adamo.adamo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "adamo.adamo@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Domingos Jaime",
+        "user_name": "domingos.jaime",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "domingos.jaime@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Fiel Salimo",
+        "user_name": "fiel.salimo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "fiel.salimo@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Domingos Arone",
+        "user_name": "domingos.arone",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "domingos.arone@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Paulo Castigo",
+        "user_name": "paulo.castigo",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "paulo.castigo@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "Jose João",
+        "user_name": "jose.joao",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "jose.joão@cgate.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "NULL",
+        "user_name": "Contractor",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "cnt@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "NULL",
+        "user_name": "Contractor1",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "cnt1@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ],
+    [
+        "user_full_name": "NULL",
+        "user_name": "access.control@cornelder.co.mz",
+        "password" : Hash::make('Cornelder1'),
+        "user_email": "access.control@cornelder.co.mz",
+        "created_at": "2024-09-26 08:51:52",
+        "updated_at": "2024-09-26 08:51:52",
+        "company_id": 1        
+    ]
+]

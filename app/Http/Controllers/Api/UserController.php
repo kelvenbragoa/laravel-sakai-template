@@ -309,7 +309,7 @@ class UserController extends Controller
             $validatedData = $request->validate([
                 'user_full_name' => 'nullable|string|max:255',
                 'user_name' => 'nullable|max:255|unique:users,user_name,' . $user->id,
-                'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
+                // 'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
                 'gate_id' => 'nullable',
                 'company_id' => 'nullable',
                 'is_active' => 'nullable',
@@ -325,7 +325,7 @@ class UserController extends Controller
                 'user_full_name' => $validatedData['user_full_name'] ?? $user->user_full_name,
                 'user_name' => $validatedData['user_name'] ?? $user->user_name,
                 'is_active' => $validatedData['is_active'] ?? $user->is_active,
-                'email' => $validatedData['email'] ?? $user->email,
+                // 'email' => $validatedData['email'] ?? $user->email,
                 'company_id' => $validatedData['company_id'] ?? $user->company_id,
             ]);
 

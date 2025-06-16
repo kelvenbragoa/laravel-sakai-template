@@ -123,27 +123,36 @@ const userMenu = () => {
 }
 
 const aplicationsMenu = () => {
-    return ({
-        label: 'Pre check',
-        icon: 'pi pi-fw pi-check-square',
-        items: [
-            {
-                label: "Lista",
-                icon: 'pi pi-list-check',
+    return (
+        {
+            
+                label: "Pre check",
+                icon: 'pi pi-fw pi-check-square',
                 to: '/precheck'
-            },
-            // {
-            //     label: "Pre check 1.0",
-            //     icon: 'pi pi-check',
-            //     to: '/precheck'
-            // },
-            {
-                label: "Form",
-                icon: 'pi pi-file-check',
-                to: '/precheck-form'
-            }
-        ]
-    })
+            
+        }
+    )
+    // return ({
+    //     label: 'Pre check',
+    //     icon: 'pi pi-fw pi-check-square',
+    //     items: [
+    //         {
+    //             label: "Lista",
+    //             icon: 'pi pi-list-check',
+    //             to: '/precheck'
+    //         },
+    //         // {
+    //         //     label: "Pre check 1.0",
+    //         //     icon: 'pi pi-check',
+    //         //     to: '/precheck'
+    //         // },
+    //         // {
+    //         //     label: "Form",
+    //         //     icon: 'pi pi-file-check',
+    //         //     to: '/precheck-form'
+    //         // }
+    //     ]
+    // })
 }
 
 const homeMenu = () => {
@@ -773,14 +782,14 @@ const buildMenu = async () => {
         }
 
         //para precheck
-        // if (acessRouters.value.precheck) {
-        //     if (cgatePages.value?.['items'] == null) {
-        //         cgatePages.value['items'] = aplicationsMenu()
-        //     } else {
-        //         cgatePages.value['items'].push(aplicationsMenu())
-        //     }
+        if (acessRouters.value.precheck) {
+            if (cgatePages.value?.['items'] == null) {
+                cgatePages.value['items'] = aplicationsMenu()
+            } else {
+                cgatePages.value['items'].push(aplicationsMenu())
+            }
 
-        // }
+        }
 
         // acessRouters.value.adminAcesseSuperAdmin = true
 

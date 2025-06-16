@@ -27,7 +27,8 @@ class UserController extends Controller
                 'permissions', 
                 'roles',
                 'gate',
-                'applications'
+                'applications',
+                'company'
                 ])
             ->orderBy('user_full_name', 'asc')
             ->paginate(50);
@@ -172,6 +173,7 @@ class UserController extends Controller
         //
         $user = User::with([
             'permissions', 
+            'company',
             'roles',
             'gate',
             'applications.application_name',

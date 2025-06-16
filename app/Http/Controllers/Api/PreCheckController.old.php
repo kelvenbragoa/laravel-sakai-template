@@ -16,17 +16,17 @@ class PreCheckController extends Controller
     {
         //
 
-        $searchQuery = request('query');
-        $precheck = PreCheck::query()
-            ->when(request('query'), function ($query, $searchQuery) {
-                $query->where('number', 'like', "%{$searchQuery}%");
-            })
-            ->orderBy('number', 'asc')
-            ->paginate(50);
+        try {
+            $precheckdata = DB::connection('sqlsrv2')->table('cdms_commercial.preadvise')->orderBy('number','desc')->paginate(100);
 
-        return response()->json([
-            'data' => $precheck
-        ]);
+            return response()->json([
+                'data' => $precheckdata
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'Database connection failed or query error: ' . $th->getMessage()
+            ], 500);
+        }
         
     }
 

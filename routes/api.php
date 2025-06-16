@@ -81,7 +81,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('cdms')->group(function () {
         Route::resource('precheck',PreCheckController::class);
         Route::post('/checkappointment', [PreCheckController::class, 'checkappointment'])->name('cdms.precheck.checkappointment');
+    });
 
+    Route::prefix('precheck')->group(function () {
+        Route::get('/', [PreCheckController::class, 'index'])->name('cdms.precheck.index');
+        Route::post('/save_transaction', [PreCheckController::class, 'savetransaction'])->name('cdms.precheck.savetransaction');
     });
 
     // Route::resource('exceptions',ExceptionController::class);

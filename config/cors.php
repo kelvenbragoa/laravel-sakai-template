@@ -23,7 +23,11 @@ return [
         'http://127.0.0.1:8000',
         'http://localhost:5173',
         'http://10.0.8.57:8081',
-        'http://127.0.0.1:8081','*'
+        'http://127.0.0.1:8081',
+        'https://cgate.cornelder.co.mz',
+        'http://cgate.cornelder.co.mz',
+        '*',
+        
     ],
 
     'allowed_origins_patterns' => [],

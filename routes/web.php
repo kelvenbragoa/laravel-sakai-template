@@ -11,3 +11,7 @@ Route::get('/', function () {
 //Last route to overlap every route hitting laravel route
 
 Route::get('{view}', ApplicationController::class)->where('view','(.*)');
+
+Route::options('/{any}', function () {
+    return response()->json([], 204);
+})->where('any', '.*');

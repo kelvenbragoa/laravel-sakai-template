@@ -19,16 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
-        'http://127.0.0.1:8000',
-        'http://localhost:5173',
-        'http://10.0.8.57:8081',
-        'http://127.0.0.1:8081',
-        'https://cgate.cornelder.co.mz',
-        'http://cgate.cornelder.co.mz',
-        '*',
-        
-    ],
+    'allowed_origins' => [],
 
     'allowed_origins_patterns' => [],
 
@@ -38,8 +29,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];
-
-

@@ -30,6 +30,24 @@ class PreCheckController extends Controller
         
     }
 
+    public function indexold()
+    {
+        //
+
+        try {
+            $precheckdata = DB::connection('mysql3')->table('precheck')->orderBy('number','desc')->paginate(100);
+
+            return response()->json([
+                'data' => $precheckdata
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'Database connection failed or query error: ' . $th->getMessage()
+            ], 500);
+        }
+        
+    }
+
     public function checkappointment(Request $request)
     {
         try {

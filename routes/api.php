@@ -27,6 +27,7 @@ Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum
 Route::prefix('precheck')->group(function () {
         Route::get('/', [PreCheckController::class, 'index'])->name('cdms.precheck.index');
         Route::post('/save_transaction', [PreCheckController::class, 'savetransaction'])->name('cdms.precheck.savetransaction');
+        Route::get('/oldprecheck', [PreCheckController::class, 'oldprecheck']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {

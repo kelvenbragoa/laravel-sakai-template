@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\PreCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class PreCheckController extends Controller
 {
@@ -29,6 +31,40 @@ class PreCheckController extends Controller
         ]);
         
     }
+
+    public function oldprecheck(Request $request)
+    {
+        try {
+            
+            $response = Http::timeout(10)->get(
+                'http://102.133.182.163/cdm/api/v1/precheck/listTransactions',
+                $request->query()
+            );
+
+            // return $response->body();
+
+            // return response()->json($response->body(), $response->status());
+
+            $body = $response->body();
+
+            // Remove o "null" ou qualquer coisa extra depois do JSON válido
+            $body = preg_replace('/null$/', '', $body);
+
+            $json = json_decode($body, true);
+
+            return response()->json($json, $response->status());
+
+        } catch (\Exception $e) {
+            // Log do erro
+            Log::error('Erro na requisição oldprecheck: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => 'Não foi possível conectar ao serviço de pré-check.',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+    
 
     public function checkappointment(Request $request)
     {

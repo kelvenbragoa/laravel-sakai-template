@@ -83,6 +83,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::get('/dashboard', [Cgatev2Controller::class, 'dashboard'])->name('cgate2.dashboard');
 
+        Route::post('/update-check-manual/{id}', [Cgatev2Controller::class, 'changemanualcheck'])->name('cgate2.changemanualcheck');
+
+
     });
 
     Route::prefix('cdms')->group(function () {

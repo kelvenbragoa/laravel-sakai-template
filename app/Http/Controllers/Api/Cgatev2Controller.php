@@ -22,4 +22,11 @@ class Cgatev2Controller extends Controller
 
         return response()->json($response->json(), $response->status());
     }
+
+    public function changemanualcheck(Request $request, $id){
+        
+        $response = Http::post('http://20.87.9.35/api/v1/transacoes/update-check-manual/'.$id, $request->all());
+
+        return response()->json($response->json(), $response->status());
+    }
 }

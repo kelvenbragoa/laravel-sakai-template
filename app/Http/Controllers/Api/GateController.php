@@ -57,13 +57,16 @@ class GateController extends Controller
                 'name' => 'nullable|string',
                 'description' => 'nullable|string',
                 'permissions' => 'array',
-                
+                'navis_gate_id' => 'string',
+                'chassis_profile' => 'string',
             ]);
 
 
             $gate = Gate::create([
                 'name' => $registerApplicationData['name'],
                 'description' => $registerApplicationData['description'],
+                'navis_gate_id' => $registerApplicationData['navis_gate_id'],
+                'chassis_profile' => $registerApplicationData['chassis_profile'],
             ]);
 
             foreach ($registerApplicationData['permissions'] as $permission) {
@@ -121,12 +124,16 @@ class GateController extends Controller
                 'name' => 'nullable|string',
                 'description' => 'nullable|string',
                 'permissions' => 'array',
+                'navis_gate_id' => 'nullable|string',
+                'chassis_profile' => 'nullable|string',
             ]);
 
             // Atualizar o usuário
             $gate->update([
                 'name' => $validatedData['name'] ?? $gate->name,
                 'description' => $validatedData['description'] ?? $gate->description,
+                'navis_gate_id' => $validatedData['navis_gate_id'] ?? $gate->navis_gate_id,
+                'chassis_profile' => $validatedData['chassis_profile'] ?? $gate->chassis_profile,
             ]);
             // Atualizar as permissões
             if (isset($validatedData['permissions'])) {

@@ -15,33 +15,48 @@ class GateTableSeeder extends Seeder
     {
         //
         DB::table('gates')->insert([
+            // [
+            //     'name' => 'Portao 8A',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'Portao 11A',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'Portao 5',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'Portao 4',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'Portao 6',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'Saida 11A',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             [
-                'name' => 'Portao 8A',
+                'name' => 'Portao 1',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Portao 11A',
+                'name' => 'Portao 3',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Portao 5',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Portao 4',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Portao 6',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Saida 11A',
+                'name' => 'Portao 16',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

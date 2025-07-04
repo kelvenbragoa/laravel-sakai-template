@@ -15,12 +15,17 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(PermissionRolesTableSeeder::class);
         // $this->call(CompanyTableSeeder::class);
-        // $this->call(GateTableSeeder::class);
+        $this->call(GateTableSeeder::class);
         // $this->call(UserTableSeeder::class);
 
         // $this->call(ApplicationSeeder::class);
         // $this->call(GatePermissionTableSeeder::class);
 
         // $this->call(UserCagte12TableSeeder::class);
+
+        $this->call(CGateV2MovementTypesTableSeeder::class);
+        $this->call(CGateV2TransactionTypesTableSeeder::class);
+        $this->call(CGateV2TransactionStatusTableSeeder::class);
+
     }
 }

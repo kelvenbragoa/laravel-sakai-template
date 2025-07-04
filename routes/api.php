@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Cgatev2Controller;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ContainerTransactionController;
+use App\Http\Controllers\Api\ErrorLogsController;
 use App\Http\Controllers\Api\ExceptionController;
 use App\Http\Controllers\Api\GateController;
 use App\Http\Controllers\Api\Mobile\MobileContainerTransactionController;
@@ -23,6 +24,7 @@ Route::post('login',[AuthController::class,'login']);
 Route::post('updatepassword',[AuthController::class,'updatepassword'])->middleware('auth:sanctum');
 Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
 
+Route::resource('errorlogs',ErrorLogsController::class);
 
 Route::prefix('precheck')->group(function () {
         Route::get('/', [PreCheckController::class, 'index'])->name('cdms.precheck.index');
@@ -84,8 +86,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/dashboard', [Cgatev2Controller::class, 'dashboard'])->name('cgate2.dashboard');
 
         Route::post('/update-check-manual/{id}', [Cgatev2Controller::class, 'changemanualcheck'])->name('cgate2.changemanualcheck');
-
-
     });
 
     Route::prefix('cdms')->group(function () {

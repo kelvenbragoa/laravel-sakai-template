@@ -14,8 +14,9 @@ class ContainerTransactionController extends Controller
         //
         $searchQuery = request('query');
         $gateQuery = request('gate');
+        $noPagination = request('no_pagination');
 
-        $transaction = ContainerTransaction::query()
+        $transactionQuery = ContainerTransaction::query()
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('driver_license_number', 'like', "{$searchQuery}%")
                 ->orWhere('driver_license_number_overwrite', 'like', "{$searchQuery}%")
@@ -39,11 +40,16 @@ class ContainerTransactionController extends Controller
             ->when(request('gate'), function ($query, $gateQuery) {
                 $query->where('gate','like', "%{$gateQuery}%");
             })
-            ->orderBy('created_at', 'desc')
-            ->paginate(50);
+            ->orderBy('created_at', 'desc');
+            // ->paginate(50);
+            if ($noPagination) {
+                $transactions = $transactionQuery->get();
+            } else {
+                $transactions = $transactionQuery->paginate(50);
+            }
 
         return response()->json([
-            'data' => $transaction
+            'data' => $transactions
         ]);
     }
 

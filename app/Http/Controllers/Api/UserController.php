@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendMailRegisteredUser;
 use App\Models\ApplicationPermission;
 use App\Models\User;
 use App\Models\UserApplication;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -105,6 +107,7 @@ class UserController extends Controller
                 'user_name' => $registerUserData['user_name'],
                 'email' => $registerUserData['email'] ? strtolower($registerUserData['email']) : null,
                 'is_active' => 1,
+                'force_password_change' => 1,
                 'password' => Hash::make($registerUserData['password']),
             ]);
 
@@ -152,6 +155,7 @@ class UserController extends Controller
             }
             $updatedUser = User::with(['permissions', 'roles','gate','applications'])->findOrFail($user->id);
 
+            $this->sendEmailNotificationChangePassword($user, $registerUserData['password'], 'create_user');
 
             return response()->json([
                 'data' => $updatedUser
@@ -312,6 +316,7 @@ class UserController extends Controller
                 'user_full_name' => 'nullable|string|max:255',
                 'user_name' => 'nullable|max:255|unique:users,user_name,' . $user->id,
                 // 'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
+                'force_password_change' => 'nullable',
                 'gate_id' => 'nullable',
                 'company_id' => 'nullable',
                 'is_active' => 'nullable',
@@ -333,7 +338,14 @@ class UserController extends Controller
 
             if (!empty($validatedData['password'])) {
                 $user->password = Hash::make($validatedData['password']);
+                $user->password_changed_at = now();
+                $user->force_password_change = $validatedData['force_password_change'] ?? 0; 
                 $user->save();
+
+                if($user->force_password_change == 1){
+                    $this->sendEmailNotificationChangePassword($user, $validatedData['password'], 'update_user');
+                }
+
             }
 
             // Sincronizar roles, se fornecido
@@ -427,5 +439,17 @@ class UserController extends Controller
         return response()->json([
             'data' => $filteredUsers
         ]);
+    }
+
+    public function sendEmailNotificationChangePassword(User $user, String $password, String $type_email)
+    {
+        $list_email_cc[] = 'kelvenbragoa@hotmail.com';
+        $list_email_cc[] = 'development.trainee8@cornelder.co.mz';
+
+        try {
+                Mail::to('kelven.bragoa@cornelder.co.mz')->cc($list_email_cc)->queue(new SendMailRegisteredUser($user, $password, $type_email));
+            } catch (\Throwable $th) {
+                    return response()->json($th->getMessage());
+            }
     }
 }

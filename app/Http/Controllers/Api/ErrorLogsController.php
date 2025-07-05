@@ -20,6 +20,7 @@ class ErrorLogsController extends Controller
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('error_type', 'like', "%{$searchQuery}%");
             })
+            ->with('error_type')
             ->orderBy('id', 'desc')
             ->paginate(50);
 
@@ -47,7 +48,7 @@ class ErrorLogsController extends Controller
                 'appointment_number' => 'required|string|max:255',
                 'error_code' => 'nullable|string|max:255',
                 'error_message' => 'nullable|string',
-                'error_type' => 'nullable|string|max:255',
+                'error_type_id' => 'nullable',
                 'logged_user' => 'nullable|string|max:255',
                 'error_n4' => 'nullable|string',
             ]);
@@ -56,7 +57,7 @@ class ErrorLogsController extends Controller
                 'appointment_number' => $validatedData['appointment_number'] ?? null,
                 'error_code' => $validatedData['error_code'] ?? null,
                 'error_message' => $validatedData['error_message'] ?? null,
-                'error_type' => $validatedData['error_type'] ?? null,
+                'error_type_id' => $validatedData['error_type_id'] ?? null,
                 'logged_user' => $validatedData['logged_user'] ?? null,
                 'error_n4' => $validatedData['error_n4'] ?? null,
 

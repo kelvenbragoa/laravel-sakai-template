@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('appointment_number')->nullable();
             $table->string('error_code')->nullable();
             $table->string('error_message')->nullable();
-            $table->string('error_type')->nullable();
+            $table->unsignedBigInteger('error_type_id')->nullable();
             $table->string('logged_user')->nullable();
             $table->text('error_n4')->nullable();
             $table->timestamps();

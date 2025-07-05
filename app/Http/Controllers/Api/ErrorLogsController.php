@@ -49,6 +49,7 @@ class ErrorLogsController extends Controller
                 'error_code' => 'nullable|string|max:255',
                 'error_message' => 'nullable|string',
                 'error_type_id' => 'nullable',
+                'error_type' => 'nullable',
                 'logged_user' => 'nullable|string|max:255',
                 'error_n4' => 'nullable|string',
             ]);
@@ -58,6 +59,7 @@ class ErrorLogsController extends Controller
                 'error_code' => $validatedData['error_code'] ?? null,
                 'error_message' => $validatedData['error_message'] ?? null,
                 'error_type_id' => $validatedData['error_type_id'] ?? null,
+                'error_type' => $validatedData['error_type'] ?? null,
                 'logged_user' => $validatedData['logged_user'] ?? null,
                 'error_n4' => $validatedData['error_n4'] ?? null,
 

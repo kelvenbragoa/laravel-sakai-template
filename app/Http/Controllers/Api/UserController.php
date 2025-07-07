@@ -448,11 +448,11 @@ class UserController extends Controller
 
     public function sendEmailNotificationChangePassword(User $user, String $password, String $type_email)
     {
-        $list_email_cc[] = 'kelvenbragoa@hotmail.com';
+        $list_email_cc[] = 'kelven.bragoa@cornelder.co.mz';
         $list_email_cc[] = 'development.trainee8@cornelder.co.mz';
 
         try {
-                Mail::to('kelven.bragoa@cornelder.co.mz')->cc($list_email_cc)->send(new SendMailRegisteredUser($user, $password, $type_email));
+                Mail::to($user->email)->cc($list_email_cc)->send(new SendMailRegisteredUser($user, $password, $type_email));
             } catch (\Throwable $th) {
                     // return response()->json($th->getMessage());
                     Log::error('Erro ao enviar email de notificação: ' . $th->getMessage());

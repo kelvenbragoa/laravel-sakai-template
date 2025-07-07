@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
@@ -451,9 +452,10 @@ class UserController extends Controller
         $list_email_cc[] = 'development.trainee8@cornelder.co.mz';
 
         try {
-                Mail::to('kelven.bragoa@cornelder.co.mz')->cc($list_email_cc)->queue(new SendMailRegisteredUser($user, $password, $type_email));
+                Mail::to('kelven.bragoa@cornelder.co.mz')->cc($list_email_cc)->send(new SendMailRegisteredUser($user, $password, $type_email));
             } catch (\Throwable $th) {
-                    return response()->json($th->getMessage());
+                    // return response()->json($th->getMessage());
+                    Log::error('Erro ao enviar email de notificação: ' . $th->getMessage());
             }
     }
 }

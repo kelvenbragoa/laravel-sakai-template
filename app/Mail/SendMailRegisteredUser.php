@@ -12,7 +12,8 @@ use Illuminate\Queue\SerializesModels;
 
 class SendMailRegisteredUser extends Mailable
 {
-    use Queueable, SerializesModels;
+    // use Queueable, SerializesModels;
+    use SerializesModels;
 
     private User $user;
     private String $password;

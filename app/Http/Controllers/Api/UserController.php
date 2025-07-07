@@ -387,8 +387,10 @@ class UserController extends Controller
                 
             }
 
+            $updatedUser = User::with(['permissions', 'roles','gate','applications'])->findOrFail($user->id);
+
             return response()->json([
-                'data' => $user
+                'data' => $updatedUser
             ], 200);
         } catch (\Exception $e) {
             // Retorna o erro detalhado para debugging

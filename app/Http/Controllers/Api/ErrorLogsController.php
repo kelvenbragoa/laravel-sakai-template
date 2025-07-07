@@ -18,7 +18,9 @@ class ErrorLogsController extends Controller
         $searchQuery = request('query');
         $errorlogs = CGateV2ErrorLogs::query()
             ->when(request('query'), function ($query, $searchQuery) {
-                $query->where('error_type', 'like', "%{$searchQuery}%");
+                $query->where('appointment_number', 'like', "%{$searchQuery}%")
+                ->orWhere('error_code', 'like', "%{$searchQuery}%")
+                ->orWhere('error_message', 'like', "%{$searchQuery}%");
             })
             ->with('error_type')
             ->orderBy('id', 'desc')

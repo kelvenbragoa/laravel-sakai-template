@@ -186,4 +186,20 @@ class PreCheckController extends Controller
             ], 500);
         }
     }
+
+    public function listpreadvices()
+    {
+        //
+        try {
+            $precheckdata = DB::connection('sqlsrv2')->table('cdms_commercial.preadvise')->orderBy('number','desc')->paginate(50);
+
+            return response()->json([
+                'data' => $precheckdata
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'Database connection failed or query error: ' . $th->getMessage()
+            ], 500);
+        }
+    }
 }

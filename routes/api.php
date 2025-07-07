@@ -91,6 +91,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('cdms')->group(function () {
         Route::resource('precheck',PreCheckController::class);
         Route::post('/checkappointment', [PreCheckController::class, 'checkappointment'])->name('cdms.precheck.checkappointment');
+        Route::get('/listpreadvices', [PreCheckController::class, 'listpreadvices'])->name('cdms.precheck.listpreadvices');
     });
 
     

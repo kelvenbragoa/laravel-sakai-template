@@ -187,11 +187,18 @@ class PreCheckController extends Controller
         }
     }
 
-    public function listpreadvices()
+    public function listpreadvices(Request $request)
     {
-        //
         try {
-            $precheckdata = DB::connection('sqlsrv2')->table('cdms_commercial.preadvise')->orderBy('number','desc')->paginate(50);
+            $queryResult = DB::connection('sqlsrv2')->table('cdms_commercial.preadvise')->orderBy('number', 'desc');
+
+            $searchQuery = $request->input('query');
+
+            if (!empty($searchQuery)) {
+                $queryResult->where('number', $searchQuery);
+            }
+
+            $precheckdata = $queryResult->paginate(50);
 
             return response()->json([
                 'data' => $precheckdata

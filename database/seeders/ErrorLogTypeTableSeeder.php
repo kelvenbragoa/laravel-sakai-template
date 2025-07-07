@@ -16,11 +16,18 @@ class ErrorLogTypeTableSeeder extends Seeder
         //
             DB::table('error_log_types')->insert([
 
-            [
-                'name' => 'Erro de Validação',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+                // [
+                //     'name' => 'Erro de Validação',
+                //     'created_at' => now(),
+                //     'updated_at' => now(),
+                // ],
+                [
+                    "name" => 'Erro de Exceção',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            
+            
+            ]);
     }
 }

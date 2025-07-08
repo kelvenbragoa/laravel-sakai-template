@@ -192,7 +192,7 @@ class PreCheckController extends Controller
         try {
             $queryResult = DB::connection('sqlsrv2')->table('cdms_commercial.preadvise')->orderBy('number', 'desc');
 
-            $searchQuery = $request->input('query');
+            $searchQuery = $request->input('number');
 
             if (!empty($searchQuery)) {
                 $queryResult->where('number', $searchQuery);

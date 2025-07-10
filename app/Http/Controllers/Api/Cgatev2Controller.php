@@ -29,4 +29,6 @@ class Cgatev2Controller extends Controller
 
         return response()->json($response->json(), $response->status());
     }
+
+    
 }

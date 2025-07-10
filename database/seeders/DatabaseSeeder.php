@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(UserTableSeeder::class);
 
         // $this->call(ApplicationSeeder::class);
-        // $this->call(GatePermissionTableSeeder::class);
+        $this->call(GatePermissionTableSeeder::class);
 
         // $this->call(UserCagte12TableSeeder::class);
 
@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(CGateV2TransactionTypesTableSeeder::class);
         // $this->call(CGateV2TransactionStatusTableSeeder::class);
 
-        $this->call(ErrorLogTypeTableSeeder::class);
+        // $this->call(ErrorLogTypeTableSeeder::class);
 
     }
 }

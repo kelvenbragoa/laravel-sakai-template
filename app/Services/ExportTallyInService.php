@@ -10,16 +10,30 @@ use Illuminate\Support\Facades\Log;
 class ExportTallyIn{
     public function tallyInForExport(Request $request)
     {
+        $data = $request->all();
+        $gateId = 'BEIRA-A';
+        $transactionType = 'RE'; //EXPORT
+        $appointmentData = $data['appointment'];
+        $transactionData = $data['appointment'];
+
         $refNumber = '';
         $aptNumber = '';
         $tvKey = '';
         $tmpAptNumber = '';
 
+        appointmentDate = DateFormat.n4DateFormat(),
+                gateId = "BEIRA-A",
+                driverCardId = transaction?.driverLicenseNumber,
+                truckLicenseNbr = transaction?.truckLicensePlateNumber,
+                line = appointment?.shippingLine,
+                tranType = TransactionType.EXPORT,
+                bookingNbr = appointment?.bookingNumber,
+                containerEqid = transaction?.containerNumber1,
+
         try {
             $transaction = CGateV2Transaction::findOrFail($request->input('transaction_id'));
             $appointment = Appointment::find($request->input('appointment_id'));
 
-            // Gera uma refNumber (pode criar método no service para isso)
             $refNumber = $this->generateRefNumber();
 
             // 1. Criar container appointment

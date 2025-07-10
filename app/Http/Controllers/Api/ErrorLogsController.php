@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\CGateV2ErrorLogs;
 use App\Models\PreCheck;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ErrorLogsController extends Controller
@@ -16,15 +17,28 @@ class ErrorLogsController extends Controller
     {
         //
         $searchQuery = request('query');
-        $errorlogs = CGateV2ErrorLogs::query()
+        $noPagination = request('no_pagination');
+
+        $errorlogsQuery = CGateV2ErrorLogs::query()
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('appointment_number', 'like', "%{$searchQuery}%")
                 ->orWhere('error_code', 'like', "%{$searchQuery}%")
                 ->orWhere('error_message', 'like', "%{$searchQuery}%");
             })
+            ->when(request('startdatetime') && request('enddatetime'), function ($query) {
+                    $startDateTimeSearch = Carbon::parse(request('startdatetime'))->format('Y-m-d H:i:s');
+                    $endDateTimeSearch = Carbon::parse(request('enddatetime'))->format('Y-m-d H:i:s');
+        
+                    $query->whereBetween('created_at', [$startDateTimeSearch, $endDateTimeSearch]);
+            })
             ->with('error_type')
-            ->orderBy('id', 'desc')
-            ->paginate(50);
+            ->orderBy('id', 'desc');
+            // ->paginate(50);
+            if ($noPagination) {
+                $errorlogs = $errorlogsQuery->get();
+            } else {
+                $errorlogs = $errorlogsQuery->paginate(50);
+            }
 
         return response()->json([
             'data' => $errorlogs

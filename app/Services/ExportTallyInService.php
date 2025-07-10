@@ -21,14 +21,14 @@ class ExportTallyIn{
         $tvKey = '';
         $tmpAptNumber = '';
 
-        appointmentDate = DateFormat.n4DateFormat(),
-                gateId = "BEIRA-A",
-                driverCardId = transaction?.driverLicenseNumber,
-                truckLicenseNbr = transaction?.truckLicensePlateNumber,
-                line = appointment?.shippingLine,
-                tranType = TransactionType.EXPORT,
-                bookingNbr = appointment?.bookingNumber,
-                containerEqid = transaction?.containerNumber1,
+        // appointmentDate = DateFormat.n4DateFormat(),
+        //         gateId = "BEIRA-A",
+        //         driverCardId = transaction?.driverLicenseNumber,
+        //         truckLicenseNbr = transaction?.truckLicensePlateNumber,
+        //         line = appointment?.shippingLine,
+        //         tranType = TransactionType.EXPORT,
+        //         bookingNbr = appointment?.bookingNumber,
+        //         containerEqid = transaction?.containerNumber1,
 
         try {
             $transaction = CGateV2Transaction::findOrFail($request->input('transaction_id'));

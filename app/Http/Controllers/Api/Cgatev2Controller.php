@@ -11,7 +11,7 @@ class Cgatev2Controller extends Controller
     //
     public function transaction(Request $request)
     {
-        $response = Http::get('http://20.87.9.35/api/v1/transacoes/lista', $request->query());
+        $response = Http::timeout(120)->get('http://20.87.9.35/api/v1/transacoes/lista', $request->query());
 
         return response()->json($response->json(), $response->status());
     }
@@ -30,5 +30,5 @@ class Cgatev2Controller extends Controller
         return response()->json($response->json(), $response->status());
     }
 
-    
+
 }

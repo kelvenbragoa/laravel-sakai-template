@@ -13,7 +13,7 @@ class ExceptionController extends Controller
      */
     public function listar(Request $request)
     {
-        $response = Http::get('http://20.87.9.35/api/v1/excepcoes/lista', $request->query());
+        $response = Http::timeout(120)->get('http://20.87.9.35/api/v1/excepcoes/lista', $request->query());
 
         return response()->json($response->json(), $response->status());
     }

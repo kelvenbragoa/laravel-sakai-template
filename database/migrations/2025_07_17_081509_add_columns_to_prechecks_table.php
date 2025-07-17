@@ -29,6 +29,8 @@ return new class extends Migration
             $table->string("container_number_cutout_photo")->nullable();
             $table->string("container_seal_number")->nullable();
             $table->string("seal_cutout_photo")->nullable();
+            $table->string("status_comment")->nullable();
+            
         });
     }
 
@@ -55,6 +57,7 @@ return new class extends Migration
             $table->dropColumn("container_number_cutout_photo")->nullable();
             $table->dropColumn("container_seal_number")->nullable();
             $table->dropColumn("seal_cutout_photo")->nullable();
+            $table->dropColumn("status_comment")->nullable();
         });
     }
 };

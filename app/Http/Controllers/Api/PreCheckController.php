@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class PreCheckController extends Controller
 {
@@ -154,6 +157,56 @@ class PreCheckController extends Controller
         //
     }
 
+    public function uploadprecheckimage(Request $request){
+
+        try {
+            $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+                'format' => 'required|string',
+                'id' => 'required|string',
+            ]);
+            $data = $request->all();
+
+    
+            $folderName = now()->format('m_Y');
+    
+            
+            $path = "uploads/precheck/".now()->format('Y')."/".now()->format('m')."/".$data['id']."/".$data['format'];
+
+            $imageName = Str::uuid() . '.' . $request->file('image')->getClientOriginalExtension();
+
+            $filePath = $request->file('image')->storeAs($path, $imageName, 'public');
+
+            $url = Storage::url($filePath);
+    
+            return response()->json(
+                [
+                    'error' => [],
+                    'message' => [
+                        'successfull'
+                    ],
+                    'result' => [
+                        $url
+                    ],
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'error' => [
+                        
+                    ],
+                    'message' => $th->getMessage(),
+                    'result' => [],
+                ],
+                400
+            );
+        }
+
+        
+    }
+
     public function savetransaction(Request $request)
     {
         try {
@@ -162,6 +215,25 @@ class PreCheckController extends Controller
                 'status' => 'nullable|string|max:255',
                 'user_name' => 'nullable|string|max:255',
                 'booking_number' => 'nullable|string|max:255',
+
+                'first_last_name' => 'nullable|string|max:255',
+                'first_last_name_overwrite' => 'nullable|string|max:255',
+
+                'driver_license_number' => 'nullable|string|max:255',
+                'driver_license_number_overwrite' => 'nullable|string|max:255',
+                'driver_license_cutout_photo' => 'nullable|string|max:255',
+
+                'main_plate_overwrite' => 'nullable|string|max:255',
+                'main_plate_cutout_photo' => 'nullable|string|max:255',
+
+                'container_number' => 'nullable|string|max:255',
+                'container_number_overwrite' => 'nullable|string|max:255',
+                'container_number_cutout_photo' => 'nullable|string|max:255',
+                'container_seal_number' => 'nullable|string|max:255',
+                'seal_cutout_photo' => 'nullable|string|max:255',
+
+                'status_comment' => 'nullable|string|max:255',
+
             ]);
 
             $precheck = PreCheck::create([
@@ -169,6 +241,19 @@ class PreCheckController extends Controller
                 'status' => $validatedData['status'] ?? null,
                 'user_name' => $validatedData['user_name'] ?? null,
                 'booking_number' => $validatedData['booking_number'] ?? null,
+                'first_last_name' => $validatedData['first_last_name'] ?? null,
+                'first_last_name_overwrite' => $validatedData['first_last_name_overwrite'] ?? null,
+                'driver_license_number' => $validatedData['driver_license_number'] ?? null,
+                'driver_license_number_overwrite' => $validatedData['driver_license_number_overwrite'] ?? null,
+                'driver_license_cutout_photo' => $validatedData['driver_license_cutout_photo'] ?? null,
+                'main_plate_overwrite' => $validatedData['main_plate_overwrite'] ?? null,
+                'main_plate_cutout_photo' => $validatedData['main_plate_cutout_photo'] ?? null,
+                'container_number' => $validatedData['container_number'] ?? null,
+                'container_number_overwrite' => $validatedData['container_number_overwrite'] ?? null,
+                'container_number_cutout_photo' => $validatedData['container_number_cutout_photo'] ?? null,
+                'container_seal_number' => $validatedData['container_seal_number'] ?? null,
+                'seal_cutout_photo' => $validatedData['seal_cutout_photo'] ?? null,
+                'status_comment' => $validatedData['status_comment'] ?? null,
             ]);
 
             return response()->json([

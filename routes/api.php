@@ -30,6 +30,9 @@ Route::prefix('precheck')->group(function () {
         Route::get('/', [PreCheckController::class, 'index'])->name('cdms.precheck.index');
         Route::post('/save_transaction', [PreCheckController::class, 'savetransaction'])->name('cdms.precheck.savetransaction');
         Route::get('/oldprecheck', [PreCheckController::class, 'oldprecheck']);
+        Route::post('/uploadimage', [PreCheckController::class, 'uploadprecheckimage']);
+
+        
 });
 
 Route::prefix('n4')->group(function () {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Mobile;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContainerTransaction;
+use App\Services\ExportTallyInService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +15,7 @@ class MobileContainerTransactionController extends Controller
 
     protected $transaction;
 
-    public function __construct(ContainerTransaction $cGateContainerTransaction)
+    public function __construct(ContainerTransaction $cGateContainerTransaction, private readonly ExportTallyInService $exportTallyService)
     {
         $this->transaction = $cGateContainerTransaction;
     }
@@ -239,15 +240,67 @@ class MobileContainerTransactionController extends Controller
         
     }
 
+        public function uploadv2image(Request $request){
 
-    public function tallyInForExport(){
+        try {
+            $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+                'format' => 'required|string',
+                'id' => 'required|string',
+            ]);
+            $data = $request->all();
 
+            // dd($data); //teste dps dadps qie vem da request
+    
+            $folderName = now()->format('m_Y');
+    
+            
+            $path = "uploads/cgate_v2/".now()->format('Y')."/".now()->format('m')."/".$data['id']."/".$data['format'];
+
+            $imageName = Str::uuid() . '.' . $request->file('image')->getClientOriginalExtension();
+
+            $filePath = $request->file('image')->storeAs($path, $imageName, 'public');
+
+            $url = Storage::url($filePath);
+    
+            return response()->json(
+                [
+                    'error' => [],
+                    'message' => [
+                        'successfull'
+                    ],
+                    'result' => [
+                        $url
+                    ],
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'error' => [
+                        
+                    ],
+                    'message' => $th->getMessage(),
+                    'result' => [],
+                ],
+                400
+            );
+        }
+
+        
     }
 
 
-
-    //createContainerAppointment
-    // n4integration/general_integration/create_container_appointment
-
+    public function tallyInForExport(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $response = $this->exportTallyService->tallyInForExport($data);
+            return $response;
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 
 }

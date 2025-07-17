@@ -32,6 +32,10 @@ Route::prefix('precheck')->group(function () {
         Route::get('/oldprecheck', [PreCheckController::class, 'oldprecheck']);
 });
 
+Route::prefix('n4')->group(function () {
+    Route::post('/tallyin/export', [MobileContainerTransactionController::class, 'tallyInForExport'])->name('api.v1.c_gate.n4.tallyinexport');
+});
+
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/users/{userId}/update', [UserController::class, 'updateuser'])->name('users.updateuser');
@@ -74,7 +78,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/details_transaction/{id}', [MobileContainerTransactionController::class, 'show'])->name('api.v1.c_gate.container.details_transaction');
         Route::post('/update_transaction/{id}', [MobileContainerTransactionController::class, 'update'])->name('api.v1.c_gate.container.update_transaction');
         Route::post('/upload-image', [MobileContainerTransactionController::class, 'uploadimage'])->name('api.v1.c_gate.container.uploadimage');
+        Route::post('/upload-image-cgatev2', [MobileContainerTransactionController::class, 'uploadv2image'])->name('api.v1.c_gate_v2.container.uploadv2image');
     });
+
+
 
     Route::prefix('cgate2')->group(function () {
         Route::get('/transaction', [Cgatev2Controller::class, 'transaction'])->name('cgate2.transaction');

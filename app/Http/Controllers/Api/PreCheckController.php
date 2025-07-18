@@ -26,7 +26,7 @@ class PreCheckController extends Controller
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('number', 'like', "%{$searchQuery}%");
             })
-            ->orderBy('number', 'asc')
+            ->orderBy('id', 'desc')
             ->paginate(50);
 
         return response()->json([

@@ -216,6 +216,8 @@ class PreCheckController extends Controller
                 'user_name' => 'nullable|string|max:255',
                 'booking_number' => 'nullable|string|max:255',
 
+                'appointment_type' => 'nullable|string|max:255',
+
                 'first_last_name' => 'nullable|string|max:255',
                 'first_last_name_overwrite' => 'nullable|string|max:255',
 
@@ -254,6 +256,7 @@ class PreCheckController extends Controller
                 'container_seal_number' => $validatedData['container_seal_number'] ?? null,
                 'seal_cutout_photo' => $validatedData['seal_cutout_photo'] ?? null,
                 'status_comment' => $validatedData['status_comment'] ?? null,
+                'appointment_type' => $validatedData['appointment_type'] ?? null,
             ]);
 
             return response()->json([

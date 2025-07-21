@@ -24,7 +24,13 @@ class PreCheckController extends Controller
         $searchQuery = request('query');
         $precheck = PreCheck::query()
             ->when(request('query'), function ($query, $searchQuery) {
-                $query->where('number', 'like', "%{$searchQuery}%");
+                $query->where('number', 'like', "%{$searchQuery}%")
+                    ->orWhere('booking_number', 'like', "%{$searchQuery}%")
+                    ->orWhere('first_last_name', 'like', "%{$searchQuery}%")
+                    ->orWhere('driver_license_number', 'like', "%{$searchQuery}%")
+                    ->orWhere('container_number', 'like', "%{$searchQuery}%")
+                    ->orWhere('container_seal_number', 'like', "%{$searchQuery}%")
+                    ->orWhere('main_plate', 'like', "%{$searchQuery}%");
             })
             ->orderBy('id', 'desc')
             ->paginate(50);

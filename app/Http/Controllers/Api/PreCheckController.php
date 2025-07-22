@@ -241,6 +241,7 @@ class PreCheckController extends Controller
                 'seal_cutout_photo' => 'nullable|string|max:255',
 
                 'status_comment' => 'nullable|string|max:255',
+                'bill_of_lading_number' => 'nullable|string|max:255',
 
             ]);
 
@@ -263,6 +264,7 @@ class PreCheckController extends Controller
                 'seal_cutout_photo' => $validatedData['seal_cutout_photo'] ?? null,
                 'status_comment' => $validatedData['status_comment'] ?? null,
                 'appointment_type' => $validatedData['appointment_type'] ?? null,
+                'bill_of_lading_number' => $validatedData['bill_of_lading_number'] ?? null,
             ]);
 
             return response()->json([

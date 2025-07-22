@@ -38,13 +38,12 @@ class PreCheckController extends Controller
         return response()->json([
             'data' => $precheck
         ]);
-        
     }
 
     public function oldprecheck(Request $request)
     {
         try {
-            
+
             $response = Http::timeout(10)->get(
                 'http://102.133.182.163/cdm/api/v1/precheck/listTransactions',
                 $request->query()
@@ -62,7 +61,6 @@ class PreCheckController extends Controller
             $json = json_decode($body, true);
 
             return response()->json($json, $response->status());
-
         } catch (\Exception $e) {
             // Log do erro
             Log::error('Erro na requisição oldprecheck: ' . $e->getMessage());
@@ -73,7 +71,7 @@ class PreCheckController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function checkappointment(Request $request)
     {
@@ -86,17 +84,18 @@ class PreCheckController extends Controller
 
             DB::connection('sqlsrv2')->table('cdms_commercial.preadvise')
                 ->where('number', $precheckId)
-                ->update(['status' => 'Pre-Check Completed','updated_by'=> auth()->user()->user_full_name,]);
-                // ->update([
-                //     'status' => 'Pending',
-                //     'updated_by'=> auth()->user()->user_full_name,
-                // ]);
+                ->update(['status' => 'Pre-Check Completed', 'updated_by' => auth()->user()->user_full_name,]);
+            // ->update([
+            //     'status' => 'Pending',
+            //     'updated_by'=> auth()->user()->user_full_name,
+            // ]);
 
 
             return response()->json(
                 [
                     'message' => 'Pre-check status updated successfully',
-                ]);
+                ]
+            );
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => 'Database connection failed or query error: ' . $th->getMessage()
@@ -127,7 +126,7 @@ class PreCheckController extends Controller
     {
         //
         try {
-            $precheckdata = DB::connection('sqlsrv2')->table('cdms_commercial.preadvise')->orderBy('number','desc')->where('number',$id)->first();
+            $precheckdata = DB::connection('sqlsrv2')->table('cdms_commercial.preadvise')->orderBy('number', 'desc')->where('number', $id)->first();
 
             return response()->json([
                 'data' => $precheckdata
@@ -163,7 +162,8 @@ class PreCheckController extends Controller
         //
     }
 
-    public function uploadprecheckimage(Request $request){
+    public function uploadprecheckimage(Request $request)
+    {
 
         try {
             $request->validate([
@@ -173,18 +173,18 @@ class PreCheckController extends Controller
             ]);
             $data = $request->all();
 
-    
+
             $folderName = now()->format('m_Y');
-    
-            
-            $path = "uploads/precheck/".now()->format('Y')."/".now()->format('m')."/".$data['id']."/".$data['format'];
+
+
+            $path = "uploads/precheck/" . now()->format('Y') . "/" . now()->format('m') . "/" . $data['id'] . "/" . $data['format'];
 
             $imageName = Str::uuid() . '.' . $request->file('image')->getClientOriginalExtension();
 
             $filePath = $request->file('image')->storeAs($path, $imageName, 'public');
 
             $url = Storage::url($filePath);
-    
+
             return response()->json(
                 [
                     'error' => [],
@@ -200,17 +200,13 @@ class PreCheckController extends Controller
         } catch (\Throwable $th) {
             return response()->json(
                 [
-                    'error' => [
-                        
-                    ],
+                    'error' => [],
                     'message' => $th->getMessage(),
                     'result' => [],
                 ],
                 400
             );
         }
-
-        
     }
 
     public function savetransaction(Request $request)
@@ -255,6 +251,7 @@ class PreCheckController extends Controller
                 'driver_license_number' => $validatedData['driver_license_number'] ?? null,
                 'driver_license_number_overwrite' => $validatedData['driver_license_number_overwrite'] ?? null,
                 'driver_license_cutout_photo' => $validatedData['driver_license_cutout_photo'] ?? null,
+                'main_plate' => $validatedData['main_plate'] ?? null,
                 'main_plate_overwrite' => $validatedData['main_plate_overwrite'] ?? null,
                 'main_plate_cutout_photo' => $validatedData['main_plate_cutout_photo'] ?? null,
                 'container_number' => $validatedData['container_number'] ?? null,
@@ -272,8 +269,6 @@ class PreCheckController extends Controller
                 'message'   => [],
                 'result'    => $precheck,
             ], 200);
-            
-
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),

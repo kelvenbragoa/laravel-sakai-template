@@ -42,7 +42,7 @@ class TerminalDashboardController extends Controller
         $logValues = [];
 
         foreach ($logChartData as $log) {
-            $logLabels[] = $log->error ?? 'Sem erro';
+            $logLabels[] = $log->error_message ?? 'Sem erro';
             $logValues[] = $log->total;
         }
 

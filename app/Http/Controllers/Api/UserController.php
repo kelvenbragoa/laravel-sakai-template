@@ -34,7 +34,7 @@ class UserController extends Controller
                 'company'
                 ])
             ->orderBy('user_full_name', 'asc')
-            ->paginate(50);
+            ->paginate(400);
 
         return response()->json([
             'data' => $user

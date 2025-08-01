@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Mobile\MobileContainerTransactionController;
 use App\Http\Controllers\Api\PermissionsController;
 use App\Http\Controllers\Api\PreCheckController;
 use App\Http\Controllers\Api\RolesController;
+use App\Http\Controllers\Api\TerminalDashboardController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -96,6 +97,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/dashboard', [Cgatev2Controller::class, 'dashboard'])->name('cgate2.dashboard');
 
         Route::post('/update-check-manual/{id}', [Cgatev2Controller::class, 'changemanualcheck'])->name('cgate2.changemanualcheck');
+
+        Route::get('/userdashboard', [TerminalDashboardController::class, 'dashboard'])->name('cgate2.user.dashboard');
+
     });
 
     Route::prefix('cdms')->group(function () {

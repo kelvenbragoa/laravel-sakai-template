@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ContainerTransactionController;
 use App\Http\Controllers\Api\ErrorLogsController;
 use App\Http\Controllers\Api\ExceptionController;
 use App\Http\Controllers\Api\GateController;
+use App\Http\Controllers\Api\Mobile\CfmSacController;
 use App\Http\Controllers\Api\Mobile\MobileContainerTransactionController;
 use App\Http\Controllers\Api\PermissionsController;
 use App\Http\Controllers\Api\PreCheckController;
@@ -27,13 +28,15 @@ Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum
 
 Route::resource('errorlogs',ErrorLogsController::class);
 
+Route::prefix('cfmsac')->group(function () {
+        Route::post('/crosscheck', [CfmSacController::class, 'crosscheck'])->name('cfmsac.crosscheck');
+});
+
 Route::prefix('precheck')->group(function () {
         Route::get('/', [PreCheckController::class, 'index'])->name('cdms.precheck.index');
         Route::post('/save_transaction', [PreCheckController::class, 'savetransaction'])->name('cdms.precheck.savetransaction');
         Route::get('/oldprecheck', [PreCheckController::class, 'oldprecheck']);
-        Route::post('/uploadimage', [PreCheckController::class, 'uploadprecheckimage']);
-
-        
+        Route::post('/uploadimage', [PreCheckController::class, 'uploadprecheckimage']);     
 });
 
 Route::prefix('n4')->group(function () {

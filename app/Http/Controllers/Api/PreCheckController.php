@@ -241,6 +241,16 @@ class PreCheckController extends Controller
 
             ]);
 
+            $exists = PreCheck::where('number', $validatedData['number'])->first();
+
+            if ($exists) {
+                return response()->json([
+                    'error'     => 'PreCheck with this number already exists.',
+                    'message'   => [],
+                    'result'    => [],
+                ], 400);
+            }
+
             $precheck = PreCheck::create([
                 'number' => $validatedData['number'],
                 'status' => $validatedData['status'] ?? null,

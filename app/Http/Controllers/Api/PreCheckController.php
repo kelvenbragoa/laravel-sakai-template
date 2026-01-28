@@ -247,8 +247,8 @@ class PreCheckController extends Controller
                 return response()->json([
                     'error'     => 'PreCheck with this number already exists.',
                     'message'   => [],
-                    'result'    => [],
-                ], 400);
+                    'result'    => $exists,
+                ], 200);
             }
 
             $precheck = PreCheck::create([

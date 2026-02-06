@@ -248,7 +248,7 @@ class PreCheckController extends Controller
                     'error'     => 'PreCheck with this number already exists.',
                     'message'   => [],
                     'result'    => $exists,
-                ], 200);
+                ], 409);
             }
 
             $precheck = PreCheck::create([
@@ -297,6 +297,10 @@ class PreCheckController extends Controller
 
             if (!empty($searchQuery)) {
                 $queryResult->where('number', $searchQuery);
+            }
+
+            if($request->has('startdatetime') && $request->has('enddatetime')) {
+                $queryResult->whereBetween('date_created', [$request->input('startdatetime'), $request->input('enddatetime')]);
             }
 
             $precheckdata = $queryResult->paginate(50);

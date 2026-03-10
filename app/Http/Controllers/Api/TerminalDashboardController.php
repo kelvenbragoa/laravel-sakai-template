@@ -53,7 +53,7 @@ class TerminalDashboardController extends Controller
         $queryParams['user'] = $userQuery;
         $queryParams['gate'] = $gateQuery;
 
-        $response = Http::get('http://20.87.9.35/api/v1/transacoes/dashboarduser', $queryParams);
+        $response = Http::withoutVerifying()->get('https://cdmapi.cornelder.co.mz/cgate20/api/v1/transacoes/dashboarduser', $queryParams);
 
         $responseData = $response->json();
 

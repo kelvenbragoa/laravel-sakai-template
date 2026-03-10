@@ -13,7 +13,7 @@ class ExceptionController extends Controller
      */
     public function listar(Request $request)
     {
-        $response = Http::timeout(120)->get('http://20.87.9.35/api/v1/excepcoes/lista', $request->query());
+        $response = Http::withoutVerifying()->timeout(120)->get('https://cdmapi.cornelder.co.mz/cgate20/api/v1/excepcoes/lista', $request->query());
 
         return response()->json($response->json(), $response->status());
     }
@@ -21,7 +21,7 @@ class ExceptionController extends Controller
     public function actualizar(Request $request, $id)
     {
         
-        $response = Http::post('http://20.87.9.35/api/v1/excepcoes/actualizar/'.$id, $request->all());
+        $response = Http::withoutVerifying()->post('https://cdmapi.cornelder.co.mz/cgate20/api/v1/excepcoes/actualizar/'.$id, $request->all());
 
         return response()->json($response->json(), $response->status());
     }

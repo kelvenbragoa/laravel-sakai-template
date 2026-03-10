@@ -22,6 +22,7 @@ class UserController extends Controller
     {
         //
         $searchQuery = request('query');
+        $per_page = request('per_page', 50); // Define o número de itens por página, padrão é 15
         $user = User::query()
             ->when(request('query'), function ($query, $searchQuery) {
                 $query->where('user_full_name', 'like', "%{$searchQuery}%")->orWhere('user_name', 'like', "%{$searchQuery}%");
@@ -34,7 +35,7 @@ class UserController extends Controller
                 'company'
                 ])
             ->orderBy('user_full_name', 'asc')
-            ->paginate(400);
+            ->paginate($per_page);
 
         return response()->json([
             'data' => $user

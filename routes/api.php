@@ -56,7 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/roles/{roleId}/rolepermission', [RolesController::class, 'storeRolePermission'])->name('roles.storeRolePermission')->middleware('role:Super Admin|Admin');
     Route::get('/roles/{roleId}/rolepermission', [RolesController::class, 'addRolePermission'])->name('roles.addRolePermission')->middleware('role:Super Admin|Admin');
     Route::resource('permissions',PermissionsController::class)->middleware('role:Super Admin|Admin');
-    Route::resource('users',UserController::class)->middleware('role:Super Admin|Admin|Manager|Security|Tally');
+    Route::resource('users',UserController::class)->middleware('role:Super Admin|Admin');
     Route::get('getuserbyrole/{roleid}',[UserController::class, 'getUserByRole'])->middleware('role:Super Admin|Admin');
     Route::post('/users/{userId}/roles', [RolesController::class, 'storeRoleToUser'])->name('users.storeRoleUser')->middleware('role:Super Admin|Admin');
     Route::get('/users/{userId}/roles', [RolesController::class, 'addRoleToUser'])->name('users.addRoleUser')->middleware('role:Super Admin|Admin');

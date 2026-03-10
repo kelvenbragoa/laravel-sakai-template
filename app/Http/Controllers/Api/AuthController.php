@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -44,6 +45,21 @@ class AuthController extends Controller
     //         'message' => 'Usuario/Password incorrectos'
     //     ], 401);
     // }
+    public function me()
+    {
+        $user = Auth::user();
+        $user->load('gate.gate_name', 'company', 'applications.application_name', 'applications.userApplicationPermissions.permission');
+        // $userData = $user->toArray();
+        $userData['roles'] = $user->roles->map(fn($role) => [
+            'id' => $role->id,
+            'name' => $role->name,
+        ]);
+        $userData['permissions'] = $user->getAllPermissions()->pluck('name');
+
+        return response()->json([
+            'user' => $userData,
+        ], 200);
+    }
     public function login(Request $request)
     {
         $loginUserData = $request->validate([

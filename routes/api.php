@@ -25,6 +25,8 @@ Route::get('/user', function (Request $request) {
 Route::post('login',[AuthController::class,'login']);
 Route::post('updatepassword',[AuthController::class,'updatepassword'])->middleware('auth:sanctum');
 Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
+Route::get('/me',[AuthController::class,'me'])->middleware('auth:sanctum');
+
 
 Route::resource('errorlogs',ErrorLogsController::class);
 

@@ -45,7 +45,7 @@ Route::prefix('n4')->group(function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
-    Route::post('/users/{userId}/update', [UserController::class, 'updateuser'])->name('users.updateuser')->middleware('role:Super Admin|Admin');
+    Route::post('/users/{userId}/update', [UserController::class, 'updateuser'])->name('users.updateuser')->middleware('role:Super Admin|Admin|Manager|Security|Tally');
     Route::post('/users/{userId}/delete', [UserController::class, 'deleteuser'])->name('users.deleteuser')->middleware('role:Super Admin|Admin');
 
     Route::post('/companies/{companyId}/update', [CompanyController::class, 'updatecompany'])->name('companies.update')->middleware('role:Super Admin|Admin');

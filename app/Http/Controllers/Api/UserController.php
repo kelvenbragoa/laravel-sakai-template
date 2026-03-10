@@ -260,6 +260,9 @@ class UserController extends Controller
                 $user->save();
             }
 
+            if(Auth::user()->hasRole('Super Admin|Admin')){
+                
+            
             // Sincronizar roles, se fornecido
             if (isset($validatedData['roles'])) {
                 $user->syncRoles($validatedData['roles']);
@@ -295,6 +298,7 @@ class UserController extends Controller
                     ]);
                 }
                 
+            }
             }
 
             $updatedUser = User::with(['permissions', 'roles','gate','applications'])->findOrFail($user->id);
@@ -352,6 +356,9 @@ class UserController extends Controller
 
             }
 
+            
+            
+            if(Auth::user()->hasRole('Super Admin|Admin')){
             // Sincronizar roles, se fornecido
             if (isset($validatedData['roles'])) {
                 $user->syncRoles($validatedData['roles']);
@@ -388,6 +395,7 @@ class UserController extends Controller
                 }
                 
             }
+            }
 
             $updatedUser = User::with(['permissions', 'roles','gate','applications'])->findOrFail($user->id);
 
@@ -409,9 +417,15 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
-        $user = User::findOrFail($id);
+        if(Auth::user()->hasRole('Super Admin|Admin')){
+            $user = User::findOrFail($id);
 
-        $user->delete();
+            $user->delete();
+        }else{
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 403);
+        }
 
         return response()->noContent();
     }
@@ -419,9 +433,15 @@ class UserController extends Controller
     public function deleteuser(string $id)
     {
         //
+        if(Auth::user()->hasRole('Super Admin|Admin')){
         $user = User::findOrFail($id);
 
         $user->delete();
+        }else{
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 403);
+        }
 
         return response()->noContent();
     }

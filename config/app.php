@@ -15,6 +15,10 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'navis_api_url' => env('NAVIS_API_URL', 'Laravel'),
+    'navis_api_username' => env('N4_API_DATABASE_USERNAME', 'Laravel'),
+    'name_api_password' => env('N4_API_DATABASE_PASSWORD', 'Laravel'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

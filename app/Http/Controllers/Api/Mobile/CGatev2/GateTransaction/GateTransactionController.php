@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Mobile\CGatev2\GateTransaction;
 use App\Http\Controllers\Controller;
 use App\Models\CGateV2\CGateExcpetion;
 use App\Models\CGateV2\GateTransaction;
+use App\Models\CGateV2ErrorLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -363,7 +364,7 @@ class GateTransactionController extends Controller
         $transactions = DB::connection('cgatev2')->table('gate_transactions')
             ->select(DB::raw("MONTH(created_at) as month_number"), DB::raw("COUNT(*) as total"))
             ->whereYear('created_at', $year)
-            ->groupBy('month_number')
+            ->groupByRaw('MONTH(created_at)')
             ->get()
             ->pluck('total', 'month_number');
     
@@ -372,7 +373,7 @@ class GateTransactionController extends Controller
             ->select(DB::raw("MONTH(created_at) as month_number"), DB::raw("COUNT(*) as total"))
             ->whereYear('created_at', $year)
             ->where('status', 'LIKE','%cargo%')
-            ->groupBy('month_number')
+            ->groupByRaw('MONTH(created_at)')
             ->get()
             ->pluck('total', 'month_number');
         
@@ -380,7 +381,7 @@ class GateTransactionController extends Controller
             ->select(DB::raw("MONTH(created_at) as month_number"), DB::raw("COUNT(*) as total"))
             ->whereYear('created_at', $year)
             ->where('status', 'LIKE','%container%')
-            ->groupBy('month_number')
+            ->groupByRaw('MONTH(created_at)')
             ->get()
             ->pluck('total', 'month_number');
     
@@ -549,6 +550,24 @@ class GateTransactionController extends Controller
         $exceptionData[] = $row->total;
     }
 
+
+     $logChartData = CGateV2ErrorLogs::query()
+            ->select('error_message', DB::raw('COUNT(*) as total'))
+            ->when($userQuery, fn($query) => $query->where('logged_user', $userQuery))
+            ->whereBetween('created_at', [$startDate, $endDate])
+            // ->where('gate_id', $gateQuery)
+            ->groupBy('error_message')
+            ->orderByDesc('total')
+            ->get();
+
+        $logLabels = [];
+        $logValues = [];
+
+        foreach ($logChartData as $log) {
+            $logLabels[] = $log->error_message ?? 'Sem erro';
+            $logValues[] = $log->total;
+        }
+
     return response()->json([
         'error' => [],
         'message' => 'success',
@@ -579,8 +598,17 @@ class GateTransactionController extends Controller
                     ],
                 ],
             ],
-            'types' => $transactionsByType
+            'types' => $transactionsByType,
+
+            'chart_validation_log' => [
+                'labels' => $logLabels,
+                'datasets' => [
+                    [
+                        'label' => 'Ocorrências por Tipo de Erro',
+                        'data' => $logValues,
+                    ]
+                ]
         ]
-    ]);
+    ]]);
 }
 }

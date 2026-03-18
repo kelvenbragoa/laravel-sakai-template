@@ -178,12 +178,43 @@ class N4DocumentsController extends Controller
             $doctranCtrPosition = $xml->xpath('//argo:tranCtrPosition')[0];
             $doctrkTransaction = $xml->xpath('//argo:trkTransaction')[0];
 
+            
+            $messageNode = $xml->xpath('//argo:Messages/argo:Message/message')[0] ?? null;
+            $errorKeyNode = $xml->xpath('//argo:Messages/argo:Message/errKey')[0] ?? null;
+            $severityNode = $xml->xpath('//argo:Messages/argo:Message/severity')[0] ?? null;
+
             $documentName = (string)$docDescription->docName;
             $truckPlannedPosition = (string)$doctranCtrPosition->posLocId;
             $isoCode = (string)$doctrkTransaction->tranCtrTypeId;
 
+            
+            $message = $messageNode ? (string)$messageNode : null;
+            $errorKey = $errorKeyNode ? (string)$errorKeyNode : null;
+            $severity = $severityNode ? (string)$severityNode : null;
+
             $bookingNumber = $xml->xpath('//argo:tranUnitBls')[0] ?? NULL;
            // dd($bookingNumber);
+
+           if($documentName === "TROUBLE"){
+                $tid = [
+                        'document_type' =>"TID",
+                        'user' => 'Admin',
+                        'operation_date' => date("Y-m-d H:i:s"),
+                        'transaction_number' => $transactionData['transactionNumber'], 
+                        'transaction_type' => $transactionData['subType'], 
+                        'location'  => $truckPlannedPosition,
+                        'iso_code' => $isoCode,
+                        'trucking_company' => $truckVisitData['truckCompanyName'],
+                        'license_plate' => $truckVisitData['truckLicense'],
+                        'driver_name' => $truckVisitData['driverName'],
+                        'driver_license' => $truckVisitData['driverLicense'],
+                        'status' => "TROUBLE",
+                        'message'=> $severity.' '.$message,
+                        
+                    ];
+
+                    $tid_doc[] = $tid;
+           }
 
             if ($documentName === "TID") {
                 $tid = [

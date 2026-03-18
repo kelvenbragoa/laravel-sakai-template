@@ -7,6 +7,7 @@ use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use PDO;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class CGatePrecheckController extends Controller
 {
@@ -15,9 +16,7 @@ class CGatePrecheckController extends Controller
     //
     private static function conexao()
     {
-        $con = new PDO("sqlsrv:Server=10.0.4.46; Database=cdms_commercial", "cdms2", "shD?fk9PGEqpw&3n");
-        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $con;
+        return DB::connection('sqlsrv2')->getPdo();
     }
 
     public function check_holds_and_impediments(Request $request)

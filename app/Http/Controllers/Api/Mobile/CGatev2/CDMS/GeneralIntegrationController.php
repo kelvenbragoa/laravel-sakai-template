@@ -7,6 +7,7 @@ use App\Traits\HttpResponses;
 use Exception;
 use PDO;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use PDOException;
@@ -18,21 +19,12 @@ class GeneralIntegrationController extends Controller
     //All appointment features on API's
     private static function conexao()
     {
-        $con = new PDO("sqlsrv:Server=10.0.4.46; Database=cdms_commercial", "cdms2", "shD?fk9PGEqpw&3n");
-        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $con;
+        return DB::connection('sqlsrv2')->getPdo();
     }
+
     private static function conexao_n4()
     {
-        try {
-            // Estabelece a conexão com o banco de dados
-            $con = new PDO("sqlsrv:Server=10.0.4.26; Database=N4DB", "n4db", "S47#urn@09");
-            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $con;
-        } catch (PDOException $e) {
-            // Em caso de erro na conexão, lança uma exceção
-            throw new Exception("Connection failed: " . $e->getMessage());
-        }
+        return DB::connection('n4db')->getPdo();
     }
 
     public function seal_cross_check()

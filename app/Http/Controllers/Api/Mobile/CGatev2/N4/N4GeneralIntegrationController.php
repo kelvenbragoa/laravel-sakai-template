@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use SoapClient;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use SimpleXMLElement;
 use PDO;
 use PDOException;
@@ -24,31 +25,12 @@ class N4GeneralIntegrationController extends Controller
         $this->pass = config('app.name_api_password');
     }
     
+
     private static function conexao()
     {
-        try {
-            // Estabelece a conexão com o banco de dados
-            $con = new PDO("sqlsrv:Server=10.0.4.26; Database=N4DB", "n4db", "S47#urn@09");
-            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $con;
-        } catch (PDOException $e) {
-            // Em caso de erro na conexão, lança uma exceção
-            throw new Exception("Connection failed: " . $e->getMessage());
-        }
+        return DB::connection('n4db')->getPdo();
     }
 
-    private static function conexaoTest()
-    {
-        try {
-            // Estabelece a conexão com o banco de dados
-            $con = new PDO("sqlsrv:Server=10.0.3.11; Database=N4DB", "sa", "M@#r7e08");
-            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $con;
-        } catch (PDOException $e) {
-            // Em caso de erro na conexão, lança uma exceção
-            throw new Exception("Connection failed: " . $e->getMessage());
-        }
-    }
     //convert xml to JSON
     function convert_xml_to_json($xmlString)
     {
@@ -70,7 +52,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL and N4 Credentials
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params
@@ -194,7 +176,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL and N4 Credentials
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params
@@ -332,7 +314,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL and N4 Credentials
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params
@@ -459,7 +441,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL and N4 Credentials
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params
@@ -589,7 +571,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL and N4 Credentials
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params
@@ -664,7 +646,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params
@@ -791,7 +773,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params
@@ -920,7 +902,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params
@@ -1053,7 +1035,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params
@@ -1140,7 +1122,7 @@ class N4GeneralIntegrationController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params

@@ -49,7 +49,7 @@ class ExportFullInController extends Controller
         try {
             
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
 
@@ -190,7 +190,7 @@ class ExportFullInController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
 
@@ -291,7 +291,7 @@ class ExportFullInController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
 
@@ -394,7 +394,7 @@ class ExportFullInController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
             //N4 Scope Params

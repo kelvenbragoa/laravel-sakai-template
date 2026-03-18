@@ -9,9 +9,7 @@ use SimpleXMLElement;
 use Illuminate\Support\Facades\Mail;
 use App\Service\N4\SendMailService;
 use Barryvdh\DomPDF\Facade\Pdf;
-
-
-
+use Illuminate\Support\Facades\DB;
 
 class N4DocumentsController extends Controller
 {
@@ -25,9 +23,7 @@ class N4DocumentsController extends Controller
 
     private static function conexao()
     {
-        $con = new PDO("sqlsrv:Server=10.0.4.26; Database=N4DB", "n4db", "S47#urn@09");
-        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $con;
+        return DB::connection('n4db')->getPdo();
     }
 
     public function get_delivery_note1(){

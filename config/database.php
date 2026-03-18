@@ -188,6 +188,17 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+        'n4db' => [ 
+            'driver' => 'sqlsrv',
+            'host' => env('DB_N4_HOST', 'localhost'),
+            'port' => env('DB_N4_PORT', '1433'),
+            'database' => env('DB_N4_DATABASE', ''),
+            'username' => env('DB_N4_USERNAME', ''),
+            'password' => env('DB_N4_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
 
     ],
 

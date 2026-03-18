@@ -32,7 +32,7 @@ class SendMailService
                     $license_plate   = $dn['license_plate'] ?? null;
 
                     // Busca o preadvice relacionado pelo container ou pela matrícula do camião.
-                    $preadvice = DB::connection('sqlsrv4')
+                    $preadvice = DB::connection('sqlsrv2')
                         ->table('cdms_commercial.preadvise')
                         ->when($container_number, function($q) use ($container_number) {
                             $q->orWhere('container_number', $container_number);
@@ -100,7 +100,7 @@ class SendMailService
         //         Log::info("First document booking number: " . ($deliveryNote[0]['bookink_number'] ?? 'N/A'));
         //         $booking_number = $deliveryNote[0]['bookink_number'];
         //         // $booking_number = 'EBKG14242073';
-        //         $preadvice = DB::connection('sqlsrv4')->table('cdms_commercial.preadvise')->where('booking_number',$booking_number)->first();
+        //         $preadvice = DB::connection('sqlsrv2')->table('cdms_commercial.preadvise')->where('booking_number',$booking_number)->first();
                 
         //         $email = 'kelven.bragoa@cornelder.co.mz';
         //         $list_cc[] ='gerson.houane@cornelder.co.mz'; 

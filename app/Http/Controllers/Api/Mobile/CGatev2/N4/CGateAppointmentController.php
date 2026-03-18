@@ -7,25 +7,22 @@ use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use PDO;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class CGateAppointmentController extends Controller
 {
     //
     use HttpResponses;
     //All appointment features on API's
+
     private static function conexao()
     {
-        $con = new PDO("sqlsrv:Server=10.0.4.46; Database=cdms_commercial", "cdms2", "shD?fk9PGEqpw&3n");
-        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $con;
+        return DB::connection('sqlsrv2')->getPdo();
     }
 
     private static function conexaon4()
     {
-        // $con = new PDO("sqlsrv:Server=10.0.4.26; Database=N4DB", "n4db", "P0rt0$");
-        $conn4 = new PDO("sqlsrv:Server=10.0.4.26; Database=N4DB", "n4db", "S47#urn@09");
-        $conn4->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $conn4;
+        return DB::connection('n4db')->getPdo();
     }
 
     public function appointments()

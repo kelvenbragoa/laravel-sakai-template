@@ -12,7 +12,7 @@ use PDO;
 use PDOException;
 use Illuminate\Support\Facades\Log;
 use App\Service\N4\SendMailService;
-
+use Illuminate\Support\Facades\DB;
 
 class EmptyOutController extends Controller
 {
@@ -33,29 +33,10 @@ class EmptyOutController extends Controller
     }
     private static function conexao()
     {
-        try {
-            // Estabelece a conexão com o banco de dados
-            $con = new PDO("sqlsrv:Server=10.0.4.26; Database=N4DB", "n4db", "S47#urn@09");
-            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $con;
-        } catch (PDOException $e) {
-            // Em caso de erro na conexão, lança uma exceção
-            throw new Exception("Connection failed: " . $e->getMessage());
-        }
+        return DB::connection('n4db')->getPdo();
     }
 
-    private static function conexaoTest()
-    {
-        try {
-            // Estabelece a conexão com o banco de dados
-            $con = new PDO("sqlsrv:Server=10.0.3.10; Database=N4DB", "sa", "M@#r7e08");
-            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $con;
-        } catch (PDOException $e) {
-            // Em caso de erro na conexão, lança uma exceção
-            throw new Exception("Connection failed: " . $e->getMessage());
-        }
-    }
+
     //convert xml to JSON
     function convert_xml_to_json($xmlString)
     {
@@ -77,7 +58,7 @@ class EmptyOutController extends Controller
     {
         try {
             //API WSDL URL
-            $url      = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url      = $this->url;
             $user     = $this->user;
             $pass     = $this->pass;
             //N4 Scope Params
@@ -205,7 +186,7 @@ class EmptyOutController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
 
@@ -305,7 +286,7 @@ class EmptyOutController extends Controller
     {
         try {
             //API WSDL URL
-            $url = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url = $this->url;
             $user = $this->user;
             $pass = $this->pass;
 
@@ -418,7 +399,7 @@ class EmptyOutController extends Controller
             $container3 = true;
 
             //API WSDL URL
-            $url      = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+            $url      = $this->url;
             $user     = $this->user;
             $pass     = $this->pass;
             //N4 Scope Params
@@ -780,7 +761,7 @@ class EmptyOutController extends Controller
     // {
     //     try {
     //         //API WSDL URL
-    //         $url      = "https://cap.cornelder.co.mz/apex/services/argobasicservice?wsdl";
+    //         $url      = $this->url;
     //         $user     = $this->user;
     //         $pass     = $this->pass;
     //         //N4 Scope Params

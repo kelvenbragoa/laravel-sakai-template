@@ -174,23 +174,28 @@ class N4DocumentsController extends Controller
 
 
 
-            $docDescription = $xml->xpath('//argo:docDescription')[0];
-            $doctranCtrPosition = $xml->xpath('//argo:tranCtrPosition')[0];
-            $doctrkTransaction = $xml->xpath('//argo:trkTransaction')[0];
+            $docDescription = $xml->xpath('//argo:docDescription')[0] ?? null;
 
-            
+            $doctranCtrPosition = $xml->xpath('//argo:tranCtrPosition')[0] ?? null;
+
+            $doctrkTransaction = $xml->xpath('//argo:trkTransaction')[0] ?? null;
+
             $messageNode = $xml->xpath('//argo:Messages/argo:Message/message')[0] ?? null;
             $errorKeyNode = $xml->xpath('//argo:Messages/argo:Message/errKey')[0] ?? null;
             $severityNode = $xml->xpath('//argo:Messages/argo:Message/severity')[0] ?? null;
 
-            $documentName = (string)$docDescription->docName;
-            $truckPlannedPosition = (string)$doctranCtrPosition->posLocId;
-            $isoCode = (string)$doctrkTransaction->tranCtrTypeId;
 
-            
+
+            $documentName = $docDescription ? (string)$docDescription->docName : null;
+            $truckPlannedPosition = $doctranCtrPosition ? (string)$doctranCtrPosition : null;
+            $isoCode = $doctrkTransaction ? (string)$doctrkTransaction->tranCtrTypeId : null;
+
+
             $message = $messageNode ? (string)$messageNode : null;
             $errorKey = $errorKeyNode ? (string)$errorKeyNode : null;
             $severity = $severityNode ? (string)$severityNode : null;
+
+
 
             $bookingNumber = $xml->xpath('//argo:tranUnitBls')[0] ?? NULL;
            // dd($bookingNumber);

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class CGateExcpetion extends Model
 {
     //
+    protected $guarded = [];
+    
     protected $connection = 'cgatev2';
     protected $table = 'exceptions';    
     public $timestamps = true;

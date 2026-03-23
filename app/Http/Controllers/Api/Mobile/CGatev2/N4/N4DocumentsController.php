@@ -183,7 +183,7 @@ class N4DocumentsController extends Controller
 
 
             $documentName = $docDescription ? (string)$docDescription->docName : null;
-            $truckPlannedPosition = $doctranCtrPosition ? (string)$doctranCtrPosition : null;
+            $truckPlannedPosition = $doctranCtrPosition ? (string)$doctranCtrPosition->posLocId : null;
             $isoCode = $doctrkTransaction ? (string)$doctrkTransaction->tranCtrTypeId : null;
 
 

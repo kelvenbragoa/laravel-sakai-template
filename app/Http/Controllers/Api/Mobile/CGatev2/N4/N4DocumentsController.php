@@ -254,6 +254,8 @@ class N4DocumentsController extends Controller
                 }
 
                 $trkTransaction = $xml->xpath('//argo:trkTransaction')[0];
+
+
                 $line = (string) $trkTransaction->tranLineId;
                 $destination = (string) $trkTransaction->tranDestination;
                 $origin = (string) $trkTransaction->tranOrigin;
@@ -501,10 +503,17 @@ class N4DocumentsController extends Controller
 
                 $tranCarrierVisit = $xml->xpath('//argo:tranCarrierVisit')[0] ?? null;
                 // dd($tranCarrierVisit);
+
+                $tranDamage = $xml->xpath('//argo:tranCtrDmg')[0] ?? null;
+                
+                // dd($tranDamage);
+
                 if($tranCarrierVisit){
                     $vessel = (string) $tranCarrierVisit->cvCvdCarrierVehicleName ?? NULL;
                     $voyageNumber = (string) $tranCarrierVisit->cvCvdCarrierIbVygNbr ?? null;
                 }
+
+               
 
                 
 
@@ -539,6 +548,9 @@ class N4DocumentsController extends Controller
                     'driver_license' => $truckVisitData['driverLicense'],
                     // 'weighth1' => $grossWeight,
                     // 'weighth2' => $tareWeight,
+                    'damage_component' => $tranDamage ? (string) $tranDamage->dmgitemComponentId : null,
+                    'damage_type' => $tranDamage ? (string) $tranDamage->dmgitemType : null,
+                    'damage_severity' => $tranDamage ? (string) $tranDamage->dmgitemSeverity : null,
 
 
                 ];

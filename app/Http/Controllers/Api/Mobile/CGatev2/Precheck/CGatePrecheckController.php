@@ -170,18 +170,21 @@ class CGatePrecheckController extends Controller
                 $photoPathOther = "";
             }
 
+            $date_updated = date('Y-m-d H:i:s');
+
             //conditions to UPDATE in CDMS 2.0
             if ($status == "Pre Check Completed") {
                 $status = "Pre-Check Completed";
                 $sql = "UPDATE [cdms_commercial].[cdms_commercial].[preadvise] 
-                    SET 
+                    SET
                     [cdms_commercial].[cdms_commercial].[preadvise].[status] = '$status',
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathFront] = '$photoPathFront',
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathBack] = '$photoPathBack',
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathRight] = '$photoPathRight',
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathLeft] = '$photoPathLeft',
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathSuperior] = '$photoPathSuperior',
-                    [cdms_commercial].[cdms_commercial].[preadvise].[photoPathOther] = '$photoPathOther'
+                    [cdms_commercial].[cdms_commercial].[preadvise].[photoPathOther] = '$photoPathOther',
+                    [cdms_commercial].[cdms_commercial].[preadvise].[precheck_date] = '$date_updated'
                     WHERE [cdms_commercial].[cdms_commercial].[preadvise].[number] = '$number'";
                 $sql = self::conexao()->prepare($sql);
                 $sql->execute();
@@ -199,7 +202,8 @@ class CGatePrecheckController extends Controller
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathLeft] = '$photoPathLeft',
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathSuperior] = '$photoPathSuperior',
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathOther] = '$photoPathOther',
-                    [cdms_commercial].[cdms_commercial].[preadvise].[notes] = '$notes' 
+                    [cdms_commercial].[cdms_commercial].[preadvise].[notes] = '$notes',
+                    [cdms_commercial].[cdms_commercial].[preadvise].[precheck_date] = '$date_updated'
                     WHERE [cdms_commercial].[cdms_commercial].[preadvise].[number] = '$number'";
                 $sql = self::conexao()->prepare($sql);
                 $sql->execute();
@@ -214,7 +218,8 @@ class CGatePrecheckController extends Controller
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathRight] = '$photoPathRight',
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathLeft] = '$photoPathLeft',
                     [cdms_commercial].[cdms_commercial].[preadvise].[photoPathSuperior] = '$photoPathSuperior',
-                    [cdms_commercial].[cdms_commercial].[preadvise].[photoPathOther] = '$photoPathOther'
+                    [cdms_commercial].[cdms_commercial].[preadvise].[photoPathOther] = '$photoPathOther',
+                    [cdms_commercial].[cdms_commercial].[preadvise].[precheck_date] = '$date_updated'
                     WHERE [cdms_commercial].[cdms_commercial].[preadvise].[number] = '$number'";
                 $sql = self::conexao()->prepare($sql);
                 $sql->execute();

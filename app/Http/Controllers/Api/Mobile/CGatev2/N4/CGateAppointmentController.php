@@ -51,9 +51,9 @@ class CGateAppointmentController extends Controller
     public function check_appointment_by_number(Request $request)
     {
         try {
-            $request->validate([
-                'appointment_number' => ['required', 'string', 'max:10'],
-            ]);
+            // $request->validate([
+            //     'appointment_number' => ['required', 'string', 'max:10'],
+            // ]);
             $number = $request->appointment_number;
 
             // $sql = "SELECT * FROM [cdms_commercial].[cdms_commercial].[preadvise] WHERE [cdms_commercial].[cdms_commercial].[preadvise].[number] ='$number'";
@@ -87,9 +87,9 @@ class CGateAppointmentController extends Controller
     public function check_appointment_by_container_number(Request $request)
     {
         try {
-            $request->validate([
-                'container_number' => ['required', 'string', 'max:15'],
-            ]);
+            // $request->validate([
+            //     'container_number' => ['required', 'string', 'max:15'],
+            // ]);
 
             $container_number = $request->container_number;
             // $sql = "SELECT TOP 1 * FROM [cdms_commercial].[cdms_commercial].[preadvise] WHERE [cdms_commercial].[cdms_commercial].[preadvise].[container_number] = '$container_number' ORDER BY [cdms_commercial].[cdms_commercial].[preadvise].[date_updated] DESC";
@@ -136,9 +136,9 @@ class CGateAppointmentController extends Controller
     public function check_appointment_by_license_plate_number(Request $request)
     {
         try {
-            $request->validate([
-                'license_plate_number' => ['required', 'string', 'max:15'],
-            ]);
+            // $request->validate([
+            //     'license_plate_number' => ['required', 'string', 'max:15'],
+            // ]);
 
             $license_plate_number = $request->license_plate_number;
             $sql = "SELECT TOP 1 p.*, t.id as 'trucking_company_id' FROM [cdms_commercial].[cdms_commercial].[preadvise] AS p LEFT JOIN [cdms_commercial].[dbo].[trucking_company_n4] AS t ON p.[trucking_company] = t.[name] WHERE p.[truck_license_number] LIKE '%$license_plate_number%' ORDER BY p.[number] DESC;";
@@ -232,9 +232,9 @@ class CGateAppointmentController extends Controller
      */
     public function checkImpediments(Request $request)
     {
-        $request->validate([
-            'container_number' => ['required', 'string', 'max:15'],
-        ]);
+        // $request->validate([
+        //     'container_number' => ['required', 'string', 'max:15'],
+        // ]);
 
         if ($request->has('container_number')) {
             $value = $request->input('container_number');
@@ -265,9 +265,9 @@ class CGateAppointmentController extends Controller
 
     public function checkImpedimentsEmptyIn(Request $request)
     {
-        $request->validate([
-                'container_number' => ['required', 'string', 'max:15'],
-            ]);
+        // $request->validate([
+        //         'container_number' => ['required', 'string', 'max:15'],
+        //     ]);
         if (isset($_POST)) {
             $value = $_POST['container_number'];
             // $sql = "SELECT TOP 1 stopped_vessel, stopped_rail, stopped_road, imped_rail, imped_vessel, imped_road  FROM inv_unit WHERE id = '$value' AND visit_state = '2ADVISED' OR  visit_state = '1ACTIVE'";
@@ -299,9 +299,9 @@ class CGateAppointmentController extends Controller
 
     public function checkImpedimentsEmptyInTest(Request $request)
     {
-        $request->validate([
-                'container_number' => ['required', 'string', 'max:15'],
-            ]);
+        // $request->validate([
+        //         'container_number' => ['required', 'string', 'max:15'],
+        //     ]);
         if (isset($_POST)) {
             $value = $_POST['container_number'];
             $sql = "SELECT TOP 1 stopped_vessel, stopped_rail, stopped_road, imped_rail, imped_vessel, imped_road  FROM inv_unit WHERE id = '$value' AND visit_state = '2ADVISED' OR  visit_state = '1ACTIVE' ORDER BY gkey DESC";
@@ -332,9 +332,9 @@ class CGateAppointmentController extends Controller
 
     public function checkHazardous(Request $request)
     {
-        $request->validate([
-                'container_number' => ['required', 'string', 'max:15'],
-            ]);
+        // $request->validate([
+        //         'container_number' => ['required', 'string', 'max:15'],
+        //     ]);
         if ($request->has('container_number')) {
             $value = $request->input('container_number');
             $sql = "SELECT INVU.gkey, INVU.goods, INVU.id, INVU.visit_state, INVG.hazardous FROM inv_unit AS INVU INNER JOIN inv_goods AS INVG ON INVU.goods = INVG.gkey WHERE INVU.id = '$value' AND INVU.visit_state = '1ACTIVE' AND INVG.hazardous = '1'";

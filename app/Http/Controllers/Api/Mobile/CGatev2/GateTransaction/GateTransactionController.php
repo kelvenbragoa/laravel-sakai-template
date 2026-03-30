@@ -472,7 +472,8 @@ class GateTransactionController extends Controller
     }
 
     // Base da query para reutilizar filtros
-    $baseQuery = DB::connection('cgatev2')->table('gate_transactions')->where('movement_type', 'Tally In');
+    $baseQuery = DB::connection('cgatev2')->table('gate_transactions');
+    //->where('movement_type', 'Tally In');
     $exceptionBaseQuery = DB::connection('cgatev2')->table('exceptions')
         ->join('gate_transactions', 'exceptions.transaction_id', '=', 'gate_transactions.id')
         ->select('exceptions.logged_user', DB::raw('COUNT(*) as total'))

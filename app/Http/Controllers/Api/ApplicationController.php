@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 class ApplicationController extends Controller
 {
@@ -136,5 +138,61 @@ class ApplicationController extends Controller
         // $app->delete();
 
         return response()->noContent();
+    }
+
+    public function application_manual()
+    {
+        try {
+            $filePath = 'cgatev2manual.pdf';
+            
+            // Verifica se o arquivo existe
+            if (!Storage::disk('local')->exists($filePath)) {
+                return response()->json([
+                    'error' => 'Manual não encontrado.'
+                ], 404);
+            }
+            
+            // Gera URL assinada válida por 5 minutos
+            $url = URL::temporarySignedRoute(
+                'application.manual.download',
+                now()->addMinutes(5)
+            );
+            
+            return response()->json([
+                'url' => $url,
+                'expires_in' => '5 minutes'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erro ao gerar link: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function download_manual(Request $request)
+    {
+        // Valida a assinatura da URL
+        if (!$request->hasValidSignature()) {
+            return response()->json([
+                'error' => 'Link expirado ou inválido.'
+            ], 403);
+        }
+
+        $filePath = 'cgatev2manual.pdf';
+        
+        if (!Storage::disk('local')->exists($filePath)) {
+            return response()->json([
+                'error' => 'Manual não encontrado.'
+            ], 404);
+        }
+
+        // Retorna o arquivo para download ou visualização
+        return response()->file(
+            Storage::disk('local')->path($filePath),
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="CGateV2-Manual.pdf"'
+            ]
+        );
     }
 }

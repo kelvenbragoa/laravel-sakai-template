@@ -85,6 +85,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('containertransaction',ContainerTransactionController::class)->middleware('role:Super Admin|Admin|Manager|Security|Tally');
     Route::resource('companies',CompanyController::class)->middleware('role:Super Admin|Admin');
     Route::resource('gates',GateController::class)->middleware('role:Super Admin|Admin');
+    Route::get('/applications/manual', [ApplicationController::class, 'application_manual'])->name('gate.application_manual');
+    Route::get('/applications/manual/download', [ApplicationController::class, 'download_manual'])->name('application.manual.download');
     Route::resource('applications',ApplicationController::class)->middleware('role:Super Admin|Admin');
 
     Route::get('/gatepermissions', [GateController::class, 'gatepermissions'])->name('gate.gatepermissions')->middleware('role:Super Admin|Admin');

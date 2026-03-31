@@ -163,6 +163,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 //container appointment
                 Route::get('/list_transactions', [GeneralCargoTransactionController::class, 'index'])->name('api.v1.c_gate.general_cargo.list_transactions');
                 Route::post('/save_transaction', [GeneralCargoTransactionController::class, 'store'])->name('api.v1.c_gate.general_cargo.save_transaction');
+                
+                Route::put('/update_transaction/{id}', [GeneralCargoTransactionController::class, 'update'])->name('api.v1.c_gate.general_cargo.update_transaction');
+
                 Route::get('/details_transaction/{id}', [GeneralCargoTransactionController::class, 'show'])->name('api.v1.c_gate.general_cargo.details_transaction');
 
                 Route::get('/list_all_transactions', [GeneralCargoTransactionController::class, 'indexWithoutAuth'])->name('api.v1.c_gate.general_cargo.list_all_transactions');

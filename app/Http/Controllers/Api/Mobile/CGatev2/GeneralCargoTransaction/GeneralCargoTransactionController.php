@@ -251,6 +251,45 @@ class GeneralCargoTransactionController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        try {
+
+            $data = $request->all();
+            $transaction = $this->transaction::find($id);
+            if (!$updated = $transaction->update($data)){
+                return response()->json(
+                    [
+                        'error' => [],
+                        'message' => 'error',
+                        'result' => [],
+                    ],
+                    400
+                );
+            }
+
+            return response()->json(
+                [
+                    'error' => [],
+                    'message' => [
+                        'successfull'
+                    ],
+                    'result' => [
+                        $updated
+                    ],
+                ],
+                200
+            );
+            
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'error' => [],
+                    'message' => $th->getMessage(),
+                    'result' => [],
+                ],
+                400
+            );
+        }
+        
     }
 
     /**

@@ -716,14 +716,19 @@ class N4DocumentsController extends Controller
                 $pdf = PDF::loadView('pdf_template.tid', ['tid' => $tid])->output();
                 $recipient = 'gerson.houane@cornelder.co.mz';
 
-                Mail::send('mails_template.tid_mail', ['tid' => $tid], function ($m) use ($recipient, $pdf, $tid) {
-                    $m->from('noreply@cornelder.co.mz', 'C-GATE 2.0');
-                    $m->to($recipient)->cc(['kelven.bragoa@cornelder.co.mz','keven.goncalves@cornelder.co.mz','atumane.momade@cornelder.co.mz','ivan.goncalves@cornelder.co.mz','artur.muguiviza@cornelder.co.mz', 'gateout@cornelder.co.mz'])->subject('C-GATE 2.0');
-                    $m->to($recipient)->subject('C-GATE 2.0');
-                    $m->attachData($pdf, 'TID' . ' - ' . $tid['operation_date'] . '-.pdf', [
-                        'mime' => 'application/pdf',
-                    ]);
-                });
+                try {
+                    Mail::send('mails_template.tid_mail', ['tid' => $tid], function ($m) use ($recipient, $pdf, $tid) {
+                        $m->from('noreply@cornelder.co.mz', 'C-GATE 2.0');
+                        $m->to($recipient)->cc(['kelven.bragoa@cornelder.co.mz','keven.goncalves@cornelder.co.mz','atumane.momade@cornelder.co.mz','ivan.goncalves@cornelder.co.mz','artur.muguiviza@cornelder.co.mz', 'gateout@cornelder.co.mz'])->subject('C-GATE 2.0');
+                        $m->to($recipient)->subject('C-GATE 2.0');
+                        $m->attachData($pdf, 'TID' . ' - ' . $tid['operation_date'] . '-.pdf', [
+                            'mime' => 'application/pdf',
+                        ]);
+                    });
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+                
                 
                 return response()->json(
                     [
@@ -794,14 +799,19 @@ class N4DocumentsController extends Controller
                 $pdf = PDF::loadView('pdf_template.delivery_note', ['dn' => $delivery_node])->output();
                 $recipient = 'gerson.houane@cornelder.co.mz';
 
-                Mail::send('mails_template.delivery_note_mail', ['dn' => $delivery_node], function ($m) use ($recipient, $pdf, $delivery_node) {
-                    $m->from('noreply@cornelder.co.mz', 'C-GATE 2.0');
-                    $m->to($recipient)->cc(['kelven.bragoa@cornelder.co.mz','keven.goncalves@cornelder.co.mz','atumane.momade@cornelder.co.mz','ivan.goncalves@cornelder.co.mz','artur.muguiviza@cornelder.co.mz', 'gateout@cornelder.co.mz'])->subject('C-GATE 2.0');
-                    $m->to($recipient)->subject('C-GATE 2.0');
-                    $m->attachData($pdf, 'DELIVERY NOTE' . ' - ' . $delivery_node['operation_date']. '.pdf', [
-                        'mime' => 'application/pdf',
-                    ]);
-                });
+                try {
+                    Mail::send('mails_template.delivery_note_mail', ['dn' => $delivery_node], function ($m) use ($recipient, $pdf, $delivery_node) {
+                        $m->from('noreply@cornelder.co.mz', 'C-GATE 2.0');
+                        $m->to($recipient)->cc(['kelven.bragoa@cornelder.co.mz','keven.goncalves@cornelder.co.mz','atumane.momade@cornelder.co.mz','ivan.goncalves@cornelder.co.mz','artur.muguiviza@cornelder.co.mz', 'gateout@cornelder.co.mz'])->subject('C-GATE 2.0');
+                        $m->to($recipient)->subject('C-GATE 2.0');
+                        $m->attachData($pdf, 'DELIVERY NOTE' . ' - ' . $delivery_node['operation_date']. '.pdf', [
+                            'mime' => 'application/pdf',
+                        ]);
+                    });
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+                
                 return response()->json(
                     [
                         'error' => [],
@@ -834,11 +844,16 @@ class N4DocumentsController extends Controller
         $send_to = $request->send_to ?? 'gerson.houane@cornelder.co.mz';
         $appointment_number = $request->appointment_number;
 
-        $send_email = Mail::send('appointments.created', ['appointment_number' => $appointment_number], function ($m) use ($send_to, $appointment_number) {
-            $m->from('codigo.memo@cornelder.co.mz', 'C-Gate 2.0 Notification - Appointment creation #' . $appointment_number);
-            $m->to($send_to)->cc(['kelven.bragoa@cornelder.co.mz','keven.goncalves@cornelder.co.mz','atumane.momade@cornelder.co.mz','ivan.goncalves@cornelder.co.mz','artur.muguiviza@cornelder.co.mz', 'gateout@cornelder.co.mz'])->subject('C-GATE 2.0 Appointment creation. Appointment Number - #' . $appointment_number);
-            // $m->to($send_to)->subject('Appointment creation. Appointment Number - #' . $appointment_number);
-        });
+        try {
+            $send_email = Mail::send('appointments.created', ['appointment_number' => $appointment_number], function ($m) use ($send_to, $appointment_number) {
+                $m->from('codigo.memo@cornelder.co.mz', 'C-Gate 2.0 Notification - Appointment creation #' . $appointment_number);
+                $m->to($send_to)->cc(['kelven.bragoa@cornelder.co.mz','keven.goncalves@cornelder.co.mz','atumane.momade@cornelder.co.mz','ivan.goncalves@cornelder.co.mz','artur.muguiviza@cornelder.co.mz', 'gateout@cornelder.co.mz'])->subject('C-GATE 2.0 Appointment creation. Appointment Number - #' . $appointment_number);
+                // $m->to($send_to)->subject('Appointment creation. Appointment Number - #' . $appointment_number);
+            });
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
 
         return response()->json(
             [

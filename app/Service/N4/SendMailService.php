@@ -78,10 +78,14 @@ class SendMailService
                 Log::info('Encontradas ' . count($deliveryNote) . ' delivery notes. Enviando 1 email para os destinatários únicos.');
 
                 $createdBy = $toEmails[0] ?? '';
-
-                Mail::to($toEmails)
+                try {
+                    Mail::to($toEmails)
                     ->cc($ccEmails)
                     ->send(new SendDeliveryNote($transaction, $deliveryNote, $createdBy));
+                } catch (\Throwable $th) {
+                    Log::error('Falha ao enviar delivery note email: ' . $th->getMessage());
+                }
+                
 
                 Log::info('Delivery note email enviado para: ' . implode(', ', $toEmails));
 

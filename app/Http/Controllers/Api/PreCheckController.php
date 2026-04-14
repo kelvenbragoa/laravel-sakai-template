@@ -31,7 +31,10 @@ class PreCheckController extends Controller
                     ->orWhere('container_number', 'like', "%{$searchQuery}%")
                     ->orWhere('container_seal_number', 'like', "%{$searchQuery}%")
                     ->orWhere('main_plate', 'like', "%{$searchQuery}%");
+            })->when(request('startdatetime') && request('enddatetime'), function ($query) {
+                $query->whereBetween('created_at', [request('startdatetime'), request('enddatetime')]);
             })
+            
             ->orderBy('id', 'desc')
             ->paginate(50);
 

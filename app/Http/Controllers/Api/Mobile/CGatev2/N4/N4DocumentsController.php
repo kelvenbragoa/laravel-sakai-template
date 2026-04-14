@@ -133,6 +133,8 @@ class N4DocumentsController extends Controller
             // Extrair dados da transação
             $transaction = $xml->xpath('//argo:trkTransaction')[0];
 
+            
+
             $transactionData = [
                 'transactionNumber' => (string) $transaction->tranNbr,
                 'subType' => (string) $transaction->tranSubType,
@@ -167,6 +169,8 @@ class N4DocumentsController extends Controller
                 ];
             }
 
+            
+
 
 
 
@@ -191,10 +195,10 @@ class N4DocumentsController extends Controller
             $errorKey = $errorKeyNode ? (string)$errorKeyNode : null;
             $severity = $severityNode ? (string)$severityNode : null;
 
-
+            
 
             $bookingNumber = $xml->xpath('//argo:tranUnitBls')[0] ?? NULL;
-           // dd($bookingNumber);
+           // dd($bookingNumber);           
 
            if($documentName === "TROUBLE"){
                 $tid = [
@@ -216,6 +220,8 @@ class N4DocumentsController extends Controller
 
                     $tid_doc[] = $tid;
            }
+
+              
 
             if ($documentName === "TID") {
                 $tid = [
@@ -248,12 +254,12 @@ class N4DocumentsController extends Controller
                 $bookingNumber = $xml->xpath('//argo:tranUnitBls')[0] ?? NULL;
                 if ($bookingNumber == null){
                     $xml->registerXPathNamespace('argo', $namespaces['argo']);
-                    $bookingNumber = (string) $xml->xpath('//argo:tranEqo/eqboNbr')[0];
+                    $bookingNumber = (string) $xml->xpath('//argo:tranEqo/eqboNbr')[0] ?? null;
                 }else{
                     $bookingNumber = (string) $bookingNumber->blNbr ?? NULL;
                 }
 
-                $trkTransaction = $xml->xpath('//argo:trkTransaction')[0];
+                $trkTransaction = $xml->xpath('//argo:trkTransaction')[0] ?? null;
 
 
                 $line = (string) $trkTransaction->tranLineId;
@@ -287,7 +293,7 @@ class N4DocumentsController extends Controller
                     'seal_number_1' => $transactionData['sealNumber'],
                     'vessel' => $vessel ?? null,
                     'voyage' => $voyageNumber ?? null,
-                    'imdg' => (string) $truckVisit->xpath('//tranIsHazard')[0],
+                    'imdg' => (string) $truckVisit->xpath('//tranIsHazard')[0] ?? null,
                     'iso_code' => $isoCode,
                     'destination' => $destination,
                     'origin' => $origin,
@@ -315,7 +321,7 @@ class N4DocumentsController extends Controller
             }
               
             }
-
+        
             return response()->json(
                 [
                     'error'=> [],

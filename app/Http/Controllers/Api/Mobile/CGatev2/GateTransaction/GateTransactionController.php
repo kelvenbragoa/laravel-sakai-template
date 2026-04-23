@@ -76,9 +76,18 @@ class GateTransactionController extends Controller
         ->when(
             $user,
             function ($query, $user) {
-                $query->where('logged_user', 'like', "%{$user}%")->orWhere('logged_user_gate_out', 'like', "%{$user}%");
+                $query->where(function ($q) use ($user) {
+                    $q->where('logged_user', 'like', "%{$user}%")
+                    ->orWhere('logged_user_gate_out', 'like', "%{$user}%");
+                });
             }
         )
+        // ->when(
+        //     $user,
+        //     function ($query, $user) {
+        //         $query->where('logged_user', 'like', "%{$user}%")->orWhere('logged_user_gate_out', 'like', "%{$user}%");
+        //     }
+        // )
          ->when(request('startdatetime') && request('enddatetime'), function ($query) {
                     $startDateTimeSearch = Carbon::parse(request('startdatetime'))->format('Y-m-d H:i:s');
                     $endDateTimeSearch = Carbon::parse(request('enddatetime'))->format('Y-m-d H:i:s');

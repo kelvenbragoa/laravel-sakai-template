@@ -72,6 +72,10 @@ class CGatePrecheckController extends Controller
 
         public function checkAppointment(Request $request)
         {
+            // $request->validate([
+            // 'appointment_number' => 'nullable|integer',
+            // ]);
+
             $number = $request->input('appointment_number');
 
             // $sql = "SELECT [number] ,[category] ,[shipping_line] ,[agent] ,[booking_number] ,[bill_lading_number] ,[shipping_line_release_order_number] ,[vessel_visit] ,[vessel_voyage_number] ,[quantity_containers] ,[quantity_container_20] ,[quantity_container_40] ,[container_type] ,[container_number] ,[seal_number] ,[vgm_weight_check] ,[weight] ,[vgm_weight] ,[trucking_company] ,[truck_license_number] ,[driver_name] ,[driver_license_number] ,[local_transit_type] ,[destination] ,[origin] ,[commodity] ,[created_by] ,[date_created] ,[updated_by] ,[date_updated] ,[status] ,[notes] ,[attachment_weight_slip] ,[attachment_vgm_weight] ,[appointment_qr_code] ,[appointment_date] ,[appointment_time_slot] ,[appointment_pin_number] ,[stack_open_date] ,[stack_close_date] ,[hold_status] ,[terms_conditions_confirmation] FROM [cdms_commercial].[cdms_commercial].[preadvise] WHERE [cdms_commercial].[cdms_commercial].[preadvise].[number] = $number";
@@ -95,6 +99,9 @@ class CGatePrecheckController extends Controller
 
         public function checkAppointmentByContainer(Request $request)
         {
+            // $request->validate([
+            //     'container_number' => 'nullable|string|max:20',
+            // ]);
 
             $container_number = $request->input('container_number');
 

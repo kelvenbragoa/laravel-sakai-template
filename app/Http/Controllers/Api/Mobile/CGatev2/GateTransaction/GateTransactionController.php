@@ -76,7 +76,7 @@ class GateTransactionController extends Controller
         ->when(
             $user,
             function ($query, $user) {
-                $query->where('logged_user', 'like', "%{$user}%");
+                $query->where('logged_user', 'like', "%{$user}%")->orWhere('logged_user_gate_out', 'like', "%{$user}%");
             }
         )
          ->when(request('startdatetime') && request('enddatetime'), function ($query) {

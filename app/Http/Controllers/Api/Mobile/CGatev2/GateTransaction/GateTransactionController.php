@@ -216,11 +216,12 @@ class GateTransactionController extends Controller
         if ($gateTransaction = $this->gateTransaction->find($id)) {
             $data = $request->all();
             if ($updatedTransaction = $gateTransaction->update($request->all())) {
-
-                $dataTransactionHistory = $data;
-                $dataTransactionHistory['gate_transaction_id'] = $updatedTransaction->id;
-                $transactionHistory = $this->gateTransactionHistory->create($dataTransactionHistory);
-                $transactionHistory->save();
+                if (isset($data['movement_type'])) {
+                    $dataTransactionHistory = $data;
+                    $dataTransactionHistory['gate_transaction_id'] = $updatedTransaction->id;
+                    $transactionHistory = $this->gateTransactionHistory->create($dataTransactionHistory);
+                    $transactionHistory->save();
+                }
 
 
                 return response()->json(

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Mobile\CGatev2\GateTransaction;
 use App\Http\Controllers\Controller;
 use App\Models\CGateV2\CGateExcpetion;
 use App\Models\CGateV2\GateTransaction;
+use App\Models\CGateV2\GateTransactionHistory;
 use App\Models\CGateV2ErrorLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,10 +16,12 @@ use Illuminate\Support\Facades\DB;
 class GateTransactionController extends Controller
 {
     private $gateTransaction;
+    private $gateTransactionHistory;
 
-    public function __construct(GateTransaction $gateTransaction)
+    public function __construct(GateTransaction $gateTransaction, GateTransactionHistory $gateTransactionHistory)
     {
         $this->gateTransaction = $gateTransaction;
+        $this->gateTransactionHistory = $gateTransactionHistory;
     }
     /**
      * Display a listing of the resource.
@@ -141,8 +144,14 @@ class GateTransactionController extends Controller
             );
         }
         Log::info('Transacao nao existe. criando uma nova transacao...');
-        $saveTransaction = $this->gateTransaction->create($request->all());
+
+        $saveTransaction = $this->gateTransaction->create($data);
+
         if ($saveTransaction->save()) {
+            $dataTransactionHistory = $data;
+            $dataTransactionHistory['gate_transaction_id'] = $saveTransaction->id;
+            $transactionHistory = $this->gateTransactionHistory->create($dataTransactionHistory);
+            $transactionHistory->save();
 
             return response()->json(
                 [
@@ -205,7 +214,15 @@ class GateTransactionController extends Controller
     {
         //update
         if ($gateTransaction = $this->gateTransaction->find($id)) {
-            if ($gateTransaction->update($request->all())) {
+            $data = $request->all();
+            if ($updatedTransaction = $gateTransaction->update($request->all())) {
+
+                $dataTransactionHistory = $data;
+                $dataTransactionHistory['gate_transaction_id'] = $updatedTransaction->id;
+                $transactionHistory = $this->gateTransactionHistory->create($dataTransactionHistory);
+                $transactionHistory->save();
+
+
                 return response()->json(
                     [
                         'error' => [],

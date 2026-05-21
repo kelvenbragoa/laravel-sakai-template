@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Mobile\CGatev2\N4;
+namespace App\Http\Controllers\Api\Mobile\CGatev2\N4\V2;
 
 use App\Http\Controllers\Controller;
 use App\Traits\HttpResponses;
@@ -13,8 +13,9 @@ use PDOException;
 use Illuminate\Support\Facades\Log;
 use App\Service\N4\SendMailService;
 use Illuminate\Support\Facades\DB;
+use SoapParam;
 
-class EmptyOutController extends Controller
+class EmptyOutV2Controller extends Controller
 {
     use HttpResponses;
 
@@ -122,11 +123,24 @@ class EmptyOutController extends Controller
             //Attach to invoke and create appointment
             $basicInvoke  = array('scopeCoordinateIds' => $scopeIDS, 'xmlDoc' => $xmlDoc);
             //Client WSDL call API to send Informations
-            $client       = new SoapClient($url, array("trace" => 1, "exception" => 0, "login" => $user, "password" => $pass));
+            $client = new SoapClient(null, [
+                'location' => $url,
+                'uri' => $url,
+                'trace' => true,
+                'exceptions' => true,
+                'soap_version' => SOAP_1_1,
+                'login' => $user,
+                'password' => $pass,
+            ]);
             //Webservice send data
-            $wsParam      = $client->basicInvoke($basicInvoke);
+            $params = [
+                new SoapParam($scopeIDS, 'scopeCoordinateIds'),
+                new SoapParam($xmlDoc, 'xmlDoc')
+            ];
+            $wsParam = $client->__soapCall('basicInvoke', $params);
+
             //Result to get information from navis
-            $xml_result       = $wsParam->basicInvokeResponse;
+            $xml_result = $wsParam;
             //condition when SHED16 "Appointment not created"
             $result = $this->convert_xml_to_json($xml_result);
             $result = json_decode($result, true);
@@ -222,11 +236,24 @@ class EmptyOutController extends Controller
             //Attach to invoke and create appointment
             $basicInvoke = array('scopeCoordinateIds' => $scopeIDS, 'xmlDoc' => $xmlDoc);
             //Client WSDL call API to send Informations
-            $client = new SoapClient($url, array("trace" => 1, "exception" => 0, "login" => $user, "password" => $pass));
+            $client = new SoapClient(null, [
+                'location' => $url,
+                'uri' => $url,
+                'trace' => true,
+                'exceptions' => true,
+                'soap_version' => SOAP_1_1,
+                'login' => $user,
+                'password' => $pass,
+            ]);
             //Webservice send data
-            $wsParam = $client->basicInvoke($basicInvoke);
+            $params = [
+                new SoapParam($scopeIDS, 'scopeCoordinateIds'),
+                new SoapParam($xmlDoc, 'xmlDoc')
+            ];
+            $wsParam = $client->__soapCall('basicInvoke', $params);
+
             //Result to get information from navis
-            $result_xml = $wsParam->basicInvokeResponse;
+            $result_xml = $wsParam;
             //condition when SHED16 "Appointment not created"
             $result = $this->convert_xml_to_json($result_xml);
             $result = json_decode($result, true);
@@ -325,11 +352,24 @@ class EmptyOutController extends Controller
             //Attach to invoke and create appointment
             $basicInvoke = array('scopeCoordinateIds' => $scopeIDS, 'xmlDoc' => $xmlDoc);
             //Client WSDL call API to send Informations
-            $client = new SoapClient($url, array("trace" => 1, "exception" => 0, "login" => $user, "password" => $pass));
+            $client = new SoapClient(null, [
+                'location' => $url,
+                'uri' => $url,
+                'trace' => true,
+                'exceptions' => true,
+                'soap_version' => SOAP_1_1,
+                'login' => $user,
+                'password' => $pass,
+            ]);
             //Webservice send data
-            $wsParam = $client->basicInvoke($basicInvoke);
+            $params = [
+                new SoapParam($scopeIDS, 'scopeCoordinateIds'),
+                new SoapParam($xmlDoc, 'xmlDoc')
+            ];
+            $wsParam = $client->__soapCall('basicInvoke', $params);
+
             //Result to get information from navis
-            $result_xml = $wsParam->basicInvokeResponse;
+            $result_xml = $wsParam;
             //condition when SHED16 "Appointment not created"
             $result = $this->convert_xml_to_json($result_xml);
             $result = json_decode($result, true);
@@ -531,12 +571,25 @@ class EmptyOutController extends Controller
 
             //Attach to invoke and create appointment
             $basicInvoke  = array('scopeCoordinateIds' => $scopeIDS, 'xmlDoc' => $xmlDoc);
-            //Client WSDL call API to send Informations
-            $client       = new SoapClient($url, array("trace" => 1, "exception" => 0, "login" => $user, "password" => $pass));
+            //Client Non-WSDL call API to send Informations
+            $client = new SoapClient(null, [
+                'location' => $url,
+                'uri' => $url,
+                'trace' => true,
+                'exceptions' => true,
+                'soap_version' => SOAP_1_1,
+                'login' => $user,
+                'password' => $pass,
+            ]);
             //Webservice send data
-            $wsParam      = $client->basicInvoke($basicInvoke);
+            $params = [
+                new SoapParam($scopeIDS, 'scopeCoordinateIds'),
+                new SoapParam($xmlDoc, 'xmlDoc')
+            ];
+            $wsParam = $client->__soapCall('basicInvoke', $params);
+
             //Result to get information from navis
-            $xml_result       = $wsParam->basicInvokeResponse;
+            $xml_result = $wsParam;
             //condition when SHED16 "Appointment not created"
             $result = $this->convert_xml_to_json($xml_result);
             $result = json_decode($result, true);
@@ -757,4 +810,3 @@ class EmptyOutController extends Controller
         }
     }
 }
-

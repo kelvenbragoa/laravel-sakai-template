@@ -21,6 +21,11 @@ use App\Http\Controllers\Api\Mobile\CGatev2\N4\ExportFullInController;
 use App\Http\Controllers\Api\Mobile\CGatev2\N4\ImportFullOutController;
 use App\Http\Controllers\Api\Mobile\CGatev2\N4\N4DocumentsController;
 use App\Http\Controllers\Api\Mobile\CGatev2\N4\N4GeneralIntegrationController;
+use App\Http\Controllers\Api\Mobile\CGatev2\N4\V2\EmptyInV2Controller;
+use App\Http\Controllers\Api\Mobile\CGatev2\N4\V2\EmptyOutV2Controller;
+use App\Http\Controllers\Api\Mobile\CGatev2\N4\V2\ExportFullInV2Controller;
+use App\Http\Controllers\Api\Mobile\CGatev2\N4\V2\ImportFullOutV2Controller;
+use App\Http\Controllers\Api\Mobile\CGatev2\N4\V2\N4GeneralIntegrationV2Controller;
 use App\Http\Controllers\Api\Mobile\CGatev2\Precheck\CGatePrecheckController;
 use App\Http\Controllers\Api\Mobile\MobileContainerTransactionController;
 use App\Http\Controllers\Api\PermissionsController;
@@ -222,6 +227,24 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::post('/update_seal', [N4GeneralIntegrationController::class, 'update_seal'])->name('api.v1.n4integration.general_integration.update_seal_number_based_on_container');
                     //CrossChecks
 
+                    Route::prefix('v2')->group(function () {
+                        //container appointment
+                        Route::post('/create_container_appointment', [N4GeneralIntegrationV2Controller::class, 'create_container_appointment'])->name('api.v1.n4integration.general_integration_v2.create_container_appointment');
+                        Route::post('/update_container_appointment', [N4GeneralIntegrationV2Controller::class, 'update_container_appointment'])->name('api.v1.n4integration.general_integration_v2.update_container_appointment');
+                        //truck visit appointment
+                        Route::post('/create_truck_visit_appointment', [N4GeneralIntegrationV2Controller::class, 'create_truck_visit_appointment'])->name('api.v1.n4integration.general_integration_v2.create_truck_visit_appointment');
+                        Route::post('/update_truck_visit_appointment', [N4GeneralIntegrationV2Controller::class, 'update_truck_visit_appointment'])->name('api.v1.n4integration.general_integration_v2.update_truck_visit_appointment');
+                        Route::post('/cancel_truck_visit_appointment', [N4GeneralIntegrationV2Controller::class, 'cancel_truck_visit_appointment'])->name('api.v1.n4integration.general_integration_v2.cancel_truck_visit_appointment');
+                        //truck visit
+                        Route::post('/create_truck_visit', [N4GeneralIntegrationV2Controller::class, 'create_truck_visit'])->name('api.v1.n4integration.general_integration_v2.create_truck_visit');
+                        Route::post('/create_truck_visit_exception', [N4GeneralIntegrationV2Controller::class, 'create_truck_visit_exception'])->name('api.v1.n4integration.general_integration_v2.create_truck_visit_exception');
+                        Route::post('/update_truck_visit', [N4GeneralIntegrationV2Controller::class, 'update_truck_visit'])->name('api.v1.n4integration.general_integration_v2.update_truck_visit');
+                        Route::post('/cancel_truck_visit', [N4GeneralIntegrationV2Controller::class, 'cancel_truck_visit'])->name('api.v1.n4integration.general_integration_v2.cancel_truck_visit');
+                        //pickup appointments
+                        Route::post('/pickup_appointments', [N4GeneralIntegrationV2Controller::class, 'pickup_appointments'])->name('api.v1.n4integration.general_integration_v2.pickup_appointments');
+                    });
+
+
                 });
                 //export full in
                 Route::prefix('export_full_in')->group(function () {
@@ -233,6 +256,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::post('/stage_done', [ExportFullInController::class, 'stage_done'])->name('api.v1.n4integration.export_full_in.stage_done');
                     //Gate Out
                     Route::post('/gate_out', [ExportFullInController::class, 'gate_out'])->name('api.v1.n4integration.export_full_in.gate_out');
+
+                    Route::prefix('v2')->group(function () {
+                         //Gate In Stage
+                        Route::post('/gate_in', [ExportFullInV2Controller::class, 'gate_in'])->name('api.v1.n4integration.export_full_in_v2.gate_in');
+                        //submit transaction
+                        Route::post('/submit_transaction', [ExportFullInV2Controller::class, 'submit_transaction'])->name('api.v1.n4integration.export_full_in_v2.submit_transaction');
+                        //Stage Done
+                        Route::post('/stage_done', [ExportFullInV2Controller::class, 'stage_done'])->name('api.v1.n4integration.export_full_in_v2.stage_done');
+                        //Gate Out
+                        Route::post('/gate_out', [ExportFullInV2Controller::class, 'gate_out'])->name('api.v1.n4integration.export_full_in_v2.gate_out');
+                    });
                 });
                 //Empty In
                 Route::prefix('empty_in')->group(function () {
@@ -244,6 +278,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::post('/stage_done', [EmptyInController::class, 'stage_done'])->name('api.v1.n4integration.empty_in.stage_done');
                     //Gate Out
                     Route::post('/gate_out', [EmptyInController::class, 'gate_out'])->name('api.v1.n4integration.empty_in.gate_out');
+
+                    Route::prefix('v2')->group(function () {
+                        //Gate In Stage
+                        Route::post('/gate_in', [EmptyInV2Controller::class, 'gate_in'])->name('api.v1.n4integration.empty_in_v2.gate_in');
+                        //submit transaction
+                        Route::post('/submit_transaction', [ExportFullInV2Controller::class, 'submit_transaction'])->name('api.v1.n4integration.export_full_in.submit_transaction');
+                        //Stage Done
+                        Route::post('/stage_done', [EmptyInV2Controller::class, 'stage_done'])->name('api.v1.n4integration.empty_in_v2.stage_done');
+                        //Gate Out
+                        Route::post('/gate_out', [EmptyInV2Controller::class, 'gate_out'])->name('api.v1.n4integration.empty_in_v2.gate_out');
+                    });
                 });
                 //Import Full Out
                 Route::prefix('import_full_out')->group(function () {
@@ -255,6 +300,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::post('/stage_done', [ImportFullOutController::class, 'stage_done'])->name('api.v1.n4integration.import_full_out.stage_done');
                     //Gate Out
                     Route::post('/gate_out', [ImportFullOutController::class, 'gate_out'])->name('api.v1.n4integration.import_full_out.gate_out');
+
+                    Route::prefix('v2')->group(function () {
+                        Route::post('/gate_in', [ImportFullOutV2Controller::class, 'gate_in'])->name('api.v1.n4integration.import_full_out_v2.gate_in');
+                        //submit transaction
+                        Route::post('/submit_transaction', [ExportFullInV2Controller::class, 'submit_transaction'])->name('api.v1.n4integration.export_full_in_v2.submit_transaction');
+                        //Stage Done
+                        Route::post('/stage_done', [ImportFullOutV2Controller::class, 'stage_done'])->name('api.v1.n4integration.import_full_out_v2.stage_done');
+                        //Gate Out
+                        Route::post('/gate_out', [ImportFullOutV2Controller::class, 'gate_out'])->name('api.v1.n4integration.import_full_out_v2.gate_out');
+                    });
                 });
                 //Empty Out
                 Route::prefix('empty_out')->group(function () {
@@ -266,6 +321,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::post('/stage_done', [EmptyOutController::class, 'stage_done'])->name('api.v1.n4integration.empty_out.stage_done');
                     //Gate Out
                     Route::post('/gate_out', [EmptyOutController::class, 'gate_out'])->name('api.v1.n4integration.empty_out.gate_out');
+
+                    Route::prefix('v2')->group(function () {
+                        //Gate In Stage
+                        Route::post('/gate_in', [EmptyOutV2Controller::class, 'gate_in'])->name('api.v1.n4integration.empty_out_v2.gate_in');
+                        //submit transaction
+                        Route::post('/submit_transaction', [ExportFullInV2Controller::class, 'submit_transaction'])->name('api.v1.n4integration.export_full_in_v2.submit_transaction');
+                        //Stage Done
+                        Route::post('/stage_done', [EmptyOutV2Controller::class, 'stage_done'])->name('api.v1.n4integration.empty_out_v2.stage_done');
+                        //Gate Out
+                        Route::post('/gate_out', [EmptyOutV2Controller::class, 'gate_out'])->name('api.v1.n4integration.empty_out_v2.gate_out');
+                    });
                 });
 
             });

@@ -56,6 +56,11 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
+        'network' => [
+            'driver' => 'local',
+            'root' => '\\\\10.0.4.40\\cgate-files',
+            // 'root' => '\\\\CDM-C-CGATEDB\\cgate-files',
+        ],
 
     ],
 

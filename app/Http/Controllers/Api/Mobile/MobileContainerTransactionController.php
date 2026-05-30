@@ -208,9 +208,10 @@ class MobileContainerTransactionController extends Controller
 
             $imageName = Str::uuid() . '.' . $request->file('image')->getClientOriginalExtension();
 
-            $filePath = $request->file('image')->storeAs($path, $imageName, 'public');
+            // $filePath = $request->file('image')->storeAs($path, $imageName, 'public');
+            $filePath = $request->file('image')->storeAs($path, $imageName, 'network');
 
-            $url = Storage::url($filePath);
+            // $url = Storage::url($filePath);
     
             return response()->json(
                 [
@@ -219,7 +220,7 @@ class MobileContainerTransactionController extends Controller
                         'successfull'
                     ],
                     'result' => [
-                        $url
+                        $filePath
                     ],
                 ],
                 200

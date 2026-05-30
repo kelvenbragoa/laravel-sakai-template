@@ -43,7 +43,7 @@ class ImageUploadController extends Controller
                 'error' => [],
                 'message' => 'success',
                 'result' => [
-                    ['image' => $fullPath],
+                    ['image' => $storedPath],
                 ],
             ], 200);
 

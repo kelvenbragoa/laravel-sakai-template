@@ -208,8 +208,8 @@ class MobileContainerTransactionController extends Controller
 
             $imageName = Str::uuid() . '.' . $request->file('image')->getClientOriginalExtension();
 
-            $filePath = $request->file('image')->storeAs($path, $imageName, 'public');
-            // $filePath = $request->file('image')->storeAs($path, $imageName, 'network');
+            // $filePath = $request->file('image')->storeAs($path, $imageName, 'public');
+            $filePath = $request->file('image')->storeAs($path, $imageName, 'network');
 
             // $url = Storage::url($filePath);
     

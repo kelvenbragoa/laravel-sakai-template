@@ -35,9 +35,9 @@ class ImageUploadController extends Controller
 
             $path = "uploads/cgatev2/" . now()->format('Y') . "/" . now()->format('m');
 
-            // $url = $image->store($path, 'public'); // storage/app/public/uploads/cgatev2/...
-            $storedPath = $image->store($path, 'network'); // returns path like uploads/cgatev2/2026/05/abcd1234.jpg
-            $fullPath = Storage::disk('network')->path($storedPath);
+            $storedPath = $image->store($path, 'public'); // storage/app/public/uploads/cgatev2/...
+            // $storedPath = $image->store($path, 'network'); // returns path like uploads/cgatev2/2026/05/abcd1234.jpg
+            // $fullPath = Storage::disk('network')->path($storedPath);
 
             return response()->json([
                 'error' => [],

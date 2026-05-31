@@ -162,6 +162,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
             Route::group(['prefix' => 'images'], function () {
                 Route::post('upload', [ImageUploadController::class, 'upload'])->name('v1.images.upload');
+                Route::post('uploadv2', [ImageUploadController::class, 'uploadv2'])->name('v1.images.uploadv2');
             });
 
             Route::prefix('general_cargo')->group(function () {

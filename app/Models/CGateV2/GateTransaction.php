@@ -15,7 +15,7 @@ class GateTransaction extends Model
 
     public function history()
     {
-        return $this->hasOne(GateTransactionHistory::class, 'id', 'gate_transaction_id');
+        return $this->hasOne(GateTransactionHistory::class, 'gate_transaction_id', 'id');
     }
     
 

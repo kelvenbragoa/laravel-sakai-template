@@ -97,6 +97,7 @@ class GateTransactionController extends Controller
         
                     $query->whereBetween('created_at', [$startDateTimeSearch, $endDateTimeSearch]);
             })
+        ->with('history')
         ->orderBy('id', 'desc');
         // ->paginate($limit);
 
@@ -182,7 +183,7 @@ class GateTransactionController extends Controller
     public function show($id)
     {
         //show specific transaction
-        if ($gateTransaction = $this->gateTransaction->find($id)) {
+        if ($gateTransaction = $this->gateTransaction->with('history')->find($id)) {
             return response()->json(
                 [
                     'error' => [],

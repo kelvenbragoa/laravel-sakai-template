@@ -12,6 +12,11 @@ class GateTransaction extends Model
     protected $connection = 'cgatev2';
     protected $table = 'gate_transactions';    
     public $timestamps = true;
+
+    public function history()
+    {
+        return $this->hasOne(GateTransactionHistory::class, 'id', 'gate_transaction_id');
+    }
     
 
 }
